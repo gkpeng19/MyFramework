@@ -3,3 +3,15 @@ D:\Work\MyFrameWork\HQTZ\EntityLibrary\bin\Debug\EntityLibrary.pdb
 D:\Work\MyFrameWork\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.csprojResolveAssemblyReference.cache
 D:\Work\MyFrameWork\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.dll
 D:\Work\MyFrameWork\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.pdb
+E:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\EntityLibrary.dll
+E:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\EntityLibrary.pdb
+E:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\mscorlib.dll
+E:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\zh-Hans\mscorlib.resources.dll
+E:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\normidna.nlp
+E:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\normnfc.nlp
+E:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\normnfd.nlp
+E:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\normnfkc.nlp
+E:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\normnfkd.nlp
+E:\Work\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.csprojResolveAssemblyReference.cache
+E:\Work\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.dll
+E:\Work\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.pdb
