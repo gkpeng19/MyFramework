@@ -1,0 +1,488 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <script src="GoogleChart/js/jsapi.js"></script>
+    <script src="Scripts/json2.js"></script>
+    <script src="Scripts/layer/layer.js"></script>
+    <script src="Scripts/GExtension.js"></script>
+    <script src="Scripts/site.js"></script>
+    <link href="GoogleChart/css/orgchart.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            font-family: 'Microsoft YaHei UI';
+            font-size: 14px;
+            margin: 0px;
+            padding: 5px;
+        }
+
+        fieldset {
+            padding: 5px;
+        }
+
+        fieldset {
+            margin-top: 15px;
+        }
+
+        .temp {
+            display: none;
+        }
+
+        .simple_layer {
+            padding: 20px 20px 0px;
+        }
+
+        table .td-title {
+            width: 6em;
+        }
+
+        .chart {
+            margin: 5px 0px;
+            border: solid 2px #b5d9ea;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .selectchart {
+            border: solid 2px #e3ca4b;
+        }
+
+        .bindchart {
+            margin: 5px 0px;
+            border: solid 2px #b5d9ea;
+            padding: 5px;
+            cursor: pointer;
+            width: 20%;
+            float: left;
+        }
+
+            .bindchart:nth-of-type(2n+2) {
+                margin: 5px;
+            }
+
+        #div_forTable table {
+            border: solid 2px #b5d9ea;
+            cursor: pointer;
+            padding: 5px;
+            width: 49%;
+            margin: 5px 5px 0px 0px;
+            float: left;
+            margin-left: 5px;
+        }
+
+            #div_forTable table th:last-child {
+                width: 60px;
+            }
+
+            #div_forTable table:nth-of-type(2n) {
+            }
+
+            #div_forTable table.select {
+                border: solid 2px #e3ca4b;
+            }
+    </style>
+</head>
+<body>
+    <div class="template">
+        <table id="json_objectName" class="temp simple_layer">
+            <tr>
+                <td class="td-title">对象名称：</td>
+                <td><input type="text" id="txt_jsonObjectName" /> </td>
+            </tr>
+            <tr>
+                <td class="td-title">Url：</td>
+                <td><input type="text" id="txt_jsonUrl" /> </td>
+            </tr>
+        </table>
+
+        <!--用于新增Json-->
+        <table id="json_propertyName" class="temp simple_layer">
+            <tr>
+                <td class="td-title">属性名称：</td>
+                <td><input type="text" id="txt_jsonPropertyName" /> </td>
+            </tr>
+        </table>
+        <!--用于新增Form控件节点-->
+        <table id="form_propertyName" class="temp simple_layer">
+            <tr>
+                <td class="td-title">属性名称：</td>
+                <td><input type="text" id="txt_formPropertyName" /> </td>
+            </tr>
+            <tr>
+                <td class="td-title">显示名称：</td>
+                <td><input type="text" id="txt_formShowName" /> </td>
+            </tr>
+            <tr>
+                <td class="td-title">验证信息：</td>
+                <td>
+                    <table id="form_tab_validate">
+                        <tr>
+                            <td><input type="checkbox" name="required"  id="validate_1" /> <label for="validate_1">非空</label></td>
+                            <td><input type="checkbox" name="number" id="validate_2" /> <label for="validate_2">数字</label></td>
+                            <td><input type="checkbox" name="numint" id="validate_3" /> <label for="validate_3">整数</label></td>
+                            <td><input type="checkbox" name="email" id="validate_4" /> <label for="validate_4">Email邮箱</label></td>
+                            <td><input type="checkbox" name="ipaddress" id="validate_5" /> <label for="validate_5">IP地址</label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="postcode" id="validate_6" /> <label for="validate_6">邮政编码</label></td>
+                            <td><input type="checkbox" name="telnum" id="validate_7" /> <label for="validate_7">电话号码</label></td>
+                            <td><input type="checkbox" name="idcard" id="validate_8" /> <label for="validate_8">身份证</label></td>
+                            <td><input type="checkbox" name="lenvalidate"  id="validate_9" /> <label for="validate_9">长度限制</label></td>
+                            <td><input type="checkbox" name="regvalidate" id="validate_10" /> <label for="validate_10">正则</label></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <!--用于新增Form Root节点-->
+        <table id="form_primaryKey" class="temp simple_layer">
+            <tr>
+                <td class="td-title">主键名称：</td>
+                <td><input type="text" id="txt_formPrimaryKey" /> </td>
+            </tr>
+            <tr>
+                <td class="td-title">隐藏表单：</td>
+                <td><input type="checkbox" id="cbx_hiddenForm" /> 是否隐藏</td>
+            </tr>
+        </table>
+
+        <!--用于维护长度验证的长度-->
+        <table id="form_validateLength" class="temp simple_layer">
+            <tr>
+                <td class="td-title">最小长度：</td>
+                <td><input type="number" id="txt_validateMinLength" /> </td>
+            </tr>
+            <tr>
+                <td class="td-title">最大长度：</td>
+                <td><input type="number" id="txt_validateMaxLength" /></td>
+            </tr>
+        </table>
+        <!--用于维护长度验证的正则表达式-->
+        <table id="form_validateReg" class="temp simple_layer">
+            <tr>
+                <td class="td-title">正则表达式：</td>
+                <td><input type="number" id="txt_validateRegString" /> </td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <input type="button" value="添加表格" onclick="AddTable()" />
+        <input type="button" value="添加全局数据" onclick="AddJsonData()" />
+        <input type="button" value="添加Form" onclick="AddFormData()" />
+        <input type="button" value="添加绑定" onclick="AddDataBind()" />
+    </div>
+
+    <fieldset>
+        <legend>表格</legend>
+        <div id="div_forTable"></div>
+        <div style="clear:both;"></div>
+    </fieldset>
+    <fieldset>
+        <legend>全局数据</legend>
+        <div id="div_forJson"></div>
+    </fieldset>
+    <fieldset>
+        <legend>表单</legend>
+        <div id="div_forForm"></div>
+    </fieldset>
+    <fieldset>
+        <legend>数据绑定</legend>
+        <div id="div_forBind"></div>
+    </fieldset>
+
+    <script type="text/javascript">
+        var layerTable = null;
+        function AddTable() {
+            layerTable = layer.open({
+                title: ['添加表格配置'],
+                type: 2,
+                area: ['700px', '530px'],
+                fix: false, //不固定
+                maxmin: false,
+                content: 'AddTableConfig.html'
+            });
+        }
+
+        var temptables = [];
+        function AddTableSubmit(tablejson) {
+            var tid = Math.random().toString().split('.')[1];
+            var table = $('<table id="tbl_' + tid + '" cellpadding="0" cellspacing="0"><thead><tr></tr></thead></table>');
+            for (var i in tablejson.headers) {
+                table.find("tr").append("<th>" + tablejson.headers[i].header + "</th>");
+            }
+
+            var removeBtn = $("<input type='button' value='移除表格' />");
+            $(removeBtn).bind("click", function () {
+                RemoveTable(tid);
+            });
+            table.find("tr").append($("<th></th>").append(removeBtn));
+
+            $("#div_forTable").append(table);
+
+            temptables.push({ id: tid, data: tablejson });
+
+            $("#div_forTable table").each(function () {
+                if (!this.onclick) {
+                    $(this).bind("click", function () {
+                        var target = this;
+                        $("#div_forTable table").each(function () {
+                            if (target != this) {
+                                $(this).removeClass("select");
+                            }
+                            else {
+                                if (!$(this).hasClass("select")) {
+                                    $(this).addClass("select");
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+
+            layer.close(layerTable);
+        }
+
+        function RemoveTable(tid) {
+            if (confirm("确定要移除该表格吗？")) {
+                for (var i in temptables) {
+                    if (temptables[i].id == tid) {
+                        temptables[i].data = undefined;
+                        $("#tbl_" + tid).remove();
+                        return;
+                    }
+                }
+            }
+        }
+
+        function AddJsonData() {
+            $("#json_objectName").open("设置Json对象名称", function () {
+                var name = $.trim($("#txt_jsonObjectName").val());
+                var url = $.trim($("#txt_jsonUrl").val());
+                if (name.length == 0) {
+                    alert("请输入对象名称！");
+                    return false;
+                }
+                if (url.length == 0) {
+                    alert("请输入获取对象Url！");
+                    return false;
+                }
+
+                $("#txt_jsonObjectName").val("");
+                $("#txt_jsonUrl").val("");
+                var id = Math.random().toString().split('.')[1];
+                var selector = "chart_" + id;
+                var chardiv = $("<div id='" + selector + "' class='chart'></div>");
+                chardiv.attr("data-url", url);
+                $("#div_forJson").append(chardiv);
+                new jsonconfig('#' + selector, id, name + " {}");
+
+                BindChartContentEvent();
+            });
+        }
+
+        function AddFormData() {
+            $("#form_primaryKey").open("设置主键名称", function () {
+                var name = $.trim($("#txt_formPrimaryKey").val());
+                if (name.length == 0) {
+                    alert("请输入主键名称！");
+                    return false;
+                }
+
+                $("#txt_formPrimaryKey").val("");
+                var id = Math.random().toString().split('.')[1];
+                var selector = "chart_" + id;
+                var isshow = $("#cbx_hiddenForm")[0].checked ? 0 : 1;
+                $("#div_forForm").append($("<div id='" + selector + "' class='chart'></div>"));
+                var form = new formconfig('#' + selector, id, name, isshow);
+                form.beforeRemoveForm = function (fid) {
+
+                    var existstable = false;
+                    //检查是否存在表格绑定到该Form
+                    $(temptables).each(function () {
+                        $(this.data.headers).each(function () {
+                            if (this.type == "2") {
+                                $(this.actionbtns).each(function () {
+                                    if (this.formdataid == id) {
+                                        alert("删除失败，存在Table操作项绑定到该Form！");
+                                        existstable = true;
+                                    }
+                                });
+                            }
+                        });
+                    });
+
+                    if (existstable) {
+                        return false;
+                    }
+
+                    //检查绑定
+                    $("#div_forBind .bindchart").each(function () {
+                        var bind = $(this).bconfig();
+                        if (bind.formid == id) {
+                            var yes = confirm("该Form存在数据绑定，是否同时删除该数据绑定？");
+                            if (yes) {
+                                bind.btn_remove.click();
+                            }
+                        }
+                    });
+
+                    return true;
+                };
+
+                BindChartContentEvent();
+            });
+        }
+
+        function AddDataBind() {
+            var jchart = $("#div_forJson .selectchart");
+            if (jchart.length == 0) {
+                alert("请选中数据源区域！");
+                return;
+            }
+            var fchart = $("#div_forForm .selectchart");
+            if (fchart.length == 0) {
+                alert("请选中目标控件区域！");
+                return;
+            }
+
+            jchart = $("#" + jchart[0].id).jconfig();
+            fchart = $("#" + fchart[0].id).fconfig();
+            if (!jchart.selectNode) {
+                alert("请选中数据源区域节点！");
+                return;
+            }
+            if (!fchart.selectNode) {
+                alert("请选中目标控件区域节点！");
+                return;
+            }
+
+            if ((jchart.selectNode.type == 1 || jchart.selectNode.type == -1) && fchart.selectNode.type == -1) {
+                var id = Math.random().toString().split('.')[1];
+                var selector = "chart_" + id;
+                $("#div_forBind").append($("<div id='" + selector + "' class='bindchart'></div>"));
+                //对象绑定到div
+                new bindconfig(jchart.selectNode, fchart.selectNode, "#" + selector, 1);
+            }
+            else if (jchart.selectNode.type == 2 && fchart.selectNode.type == 1) {
+                var id = Math.random().toString().split('.')[1];
+                var selector = "chart_" + id;
+                $("#div_forBind").append($("<div id='" + selector + "' class='bindchart'></div>"));
+                //数组绑定到select控件
+                new bindconfig(jchart.selectNode, fchart.selectNode, "#" + selector, 2);
+            }
+            else {
+                alert("选中的节点类型不匹配！");
+                return;
+            }
+        }
+
+        function BindChartContentEvent() {
+            $("#div_forJson .chart").each(function () {
+                if (!this.onclick) {
+                    $(this).bind('click', function () {
+                        $("#div_forJson .chart").each(function () {
+                            if ($(this).hasClass("selectchart")) {
+                                $(this).removeClass("selectchart");
+                            }
+                        });
+
+                        $(this).addClass("selectchart");
+                    });
+                }
+            });
+            $("#div_forForm .chart").each(function () {
+                if (!this.onclick) {
+                    $(this).bind('click', function () {
+                        $("#div_forForm .chart").each(function () {
+                            if ($(this).hasClass("selectchart")) {
+                                $(this).removeClass("selectchart");
+                            }
+                        });
+
+                        $(this).addClass("selectchart");
+                    });
+                }
+            });
+        }
+
+        function Save() {
+            //构造页面数据
+            var content = { tables: [], jsons: [], forms: [], binds: [] };
+            for (var i in temptables) {
+                if (temptables[i].data) {
+                    content.tables.push(temptables[i]);
+                }
+            }
+
+            $("#div_forJson .chart").each(function () {
+                var id = this.id.split('_')[1];
+                var url = $(this).attr("data-url");
+                var data = JSON.parse($(this).jconfig().data.toJSON()).rows;
+                content.jsons.push({ id: id, url: url, data: data });
+            });
+
+            $("#div_forForm .chart").each(function () {
+                var id = this.id.split('_')[1];
+                var chart = $(this).fconfig();
+                var data = JSON.parse(chart.data.toJSON()).rows;
+                content.forms.push({ id: id, isshow: chart.isshow, data: data, extdata: chart.extData });
+            });
+
+            $("#div_forBind .bindchart").each(function () {
+                var id = this.id.split('_')[1];
+                var chart = $(this).bconfig();
+                var data = JSON.parse(chart.data.toJSON()).rows;
+                content.binds.push({ id: id, data: data, type: chart.type });
+            });
+
+            window.external.SaveToFile(JSON.stringify(content));
+        }
+
+        $(function () {
+            $("#validate_9").bind("click", function () {
+                var ctr = this;
+                if (this.checked) {
+                    $("#form_validateLength").open("维护最小最大长度", function () {
+                        var minlen = 0;
+                        var maxlen = 0;
+                        try {
+                            minlen = parseInt($.trim($("txt_validateMinLength").val()));
+                            maxlen = parseInt($.trim($("txt_validateMaxLength").val()));
+                        } catch (ee) { }
+                        $("txt_validateMinLength").val("");
+                        $("txt_validateMaxLength").val("");
+
+                        $(ctr).attr("data-minlen", minlen);
+                        $(ctr).attr("data-maxlen", maxlen);
+                    }, function () {
+                        ctr.checked = false;
+                    }, true, false);
+                }
+                else {
+                    $(this).removeAttr("data-minlen");
+                    $(this).removeAttr("data-maxlen");
+                }
+            });
+
+            $("#validate_10").bind("click", function () {
+                var ctr = this;
+                if (this.checked) {
+                    $("#form_validateReg").open("维护正则表达式", function () {
+                        var regstr = $.trim($("#txt_validateRegString").val());
+                        $("#txt_validateRegString").val("");
+                        $(ctr).attr("data-reg", regstr);
+                    }, function () {
+                        ctr.checked = false;
+                    }, true, false);
+                }
+                else {
+                    $(this).removeAttr("data-reg");
+                }
+            });
+        });
+    </script>
+    <input type="button" onclick="Save()" value="Save" />
+</body>
+</html>

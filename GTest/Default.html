@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="Styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="Styles/GExtension.css" rel="stylesheet" />
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript">
+
+        $.post("/Home/GetJsonData", { ran: Math.random() }, function (r) {
+            $(function () {
+                BindToSelect(r);
+                BindToDiv(r);
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <div>
+        <table id="858323124886246" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th data-option="{checkbox:true}">全选</th>
+                    <th data-option="{sequence:true}">序号</th>
+                    <th data-option="{bind:'Code'}">编码</th>
+                    <th data-option="{bind:'Name'}">名称</th>
+                    <th data-option="{bind:'Gender_G'}">性别</th>
+                    <th data-option="{bind:'Desc'}">描述</th>
+                    <th data-option="{edit:true,del:true}">操作</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+
+    <div id="5008878300292566">
+        <input type="hidden" name="ID" />
+        <input type="text" name="Code" />
+        <input type="text" name="Name" />
+        <select name="Gender" id="29666622930779607" data-exname="Gender_G"></select>
+        <textarea rows="3" name="Desc"></textarea>
+    </div>
+
+    <script src="Scripts/layer/layer.js"></script>
+    <script src="Scripts/GExtension.js"></script>
+    <script type="text/javascript">
+
+        function BindToSelect(data) {
+
+            var sel = $("#29666622930779607");
+            var items = data.Genders;
+            for (var i in items) {
+                sel.append("<option value='" + items[i].v + "'>" + items[i].k + "</option>");
+            }
+
+        }
+
+        function BindToDiv(data) {
+        }
+
+        $(function () {
+
+            $("#858323124886246").datagrid({ url: "/Home/GetStudents", psize: 10 });
+
+
+            $("#858323124886246").datagrid("onEdit", function () {
+                var json = $("#858323124886246").datagrid("getCurrData");
+                $("#5008878300292566").bindEntity(json);
+                var win = $("#5008878300292566").open("编辑", function () {
+                    var update = $("#5008878300292566").getContext();
+                    $.post("/Home/Edit", update, function (r) {
+                        if (r > 0) {
+                            $("#858323124886246").datagrid("updateRow", json, update);
+                            layer.close(win);
+                        }
+                        else {
+                            alert("保存失败，请重试！");
+                        }
+
+                    });
+
+                    return false;
+                });
+            });
+
+
+            $("#858323124886246").datagrid("onDelete", function () {
+                if (confirm("确定要删除吗？")) {
+                    var json = $("#858323124886246").datagrid("getCurrData");
+                    $.post("/Home/Delete", { ID: json["ID"] }, function (r) {
+                        if (r > 0) {
+                            $("#858323124886246").datagrid("removeCurrRow");
+                        }
+                        else {
+                            alert("删除失败，请重试！");
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>

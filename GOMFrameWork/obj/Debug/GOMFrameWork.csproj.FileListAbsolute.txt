@@ -1,0 +1,5 @@
+D:\Work\MyFrameWork\GOMFrameWork\bin\Debug\GOMFrameWork.dll
+D:\Work\MyFrameWork\GOMFrameWork\bin\Debug\GOMFrameWork.pdb
+D:\Work\MyFrameWork\GOMFrameWork\obj\Debug\GOMFrameWork.csprojResolveAssemblyReference.cache
+D:\Work\MyFrameWork\GOMFrameWork\obj\Debug\GOMFrameWork.dll
+D:\Work\MyFrameWork\GOMFrameWork\obj\Debug\GOMFrameWork.pdb

@@ -1,0 +1,5 @@
+D:\Work\MyFrameWork\HQTZ\EntityLibrary\bin\Debug\EntityLibrary.dll
+D:\Work\MyFrameWork\HQTZ\EntityLibrary\bin\Debug\EntityLibrary.pdb
+D:\Work\MyFrameWork\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.csprojResolveAssemblyReference.cache
+D:\Work\MyFrameWork\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.dll
+D:\Work\MyFrameWork\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.pdb

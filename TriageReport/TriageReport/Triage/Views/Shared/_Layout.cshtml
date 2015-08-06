@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @RenderSection("styles", required: false)
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Scripts/jquery-easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Scripts/jquery-easyui/themes/icon.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="margin: 0px auto; width: 1000px;">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/GOMFrameWork.js"></script>
+    <script src="~/Scripts/layer/layer.min.js"></script>
+    <script src="~/Scripts/jquery-easyui/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/jquery-easyui/jquery.cextend.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,40 @@
+﻿@foreach(var table in Model.tables)
+{
+<div>
+    <table id="@table.id">
+        <thead>
+            <tr>
+                @foreach(var h in table.data.headers)
+                {
+                if(h.type=="1")
+                {
+                <th data-option="{sequence:true}">@h.header</th>
+                }
+                else if(h.type=="0")
+                {
+                <th data-option="{bind:'@h.bindproperty'}">@h.header</th>
+                }
+                else if(h.type=="2")
+                {
+                if(h.actionbtns.Count==2)
+                {
+                <th data-option="{edit:true,del:true}">@h.header</th>
+                }
+                else if(h.actionbtns.Count==1)
+                {
+                if(h.actionbtns[0].type=="edit")
+                {
+                <th data-option="{edit:true,del:false}">@h.header</th>
+                }
+                else
+                {
+                <th data-option="{edit:false,del:true}">@h.header</th>
+                }
+                }
+                }
+                }
+            </tr>
+        </thead>
+    </table>
+</div>
+}

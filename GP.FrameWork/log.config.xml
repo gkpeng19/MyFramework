@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<log4net>
+	<appender name="LRPFileLog" type="log4net.Appender.RollingFileAppender">
+		<file value="log\\LRP.txt"  />
+		<appendToFile value="true" />
+		<rollingStyle value="Date" />
+		<datePattern value="yyyy-MMd-d" />
+		<layout type="log4net.Layout.PatternLayout">
+			<conversionPattern value="%date [%thread](%file:%line) %-5level %logger [%property{NDC}] - %message%newline" />
+		</layout>
+	</appender>
+
+	<appender name="LRPXMLLog" type="log4net.Appender.RollingFileAppender">
+		<file value="log\\LRP.xml"  />
+		<appendToFile value="true" />
+		<rollingStyle value="Date" />
+		<datePattern value="yyyy-MMd-d" />
+		<layout type="log4net.Layout.XmlLayoutSchemaLog4j">
+		</layout>
+	</appender>
+
+	<appender name="LRPConsoleLog" type="log4net.Appender.ConsoleAppender" >
+		<layout type="log4net.Layout.PatternLayout">
+			<conversionPattern value="%date [%thread] %-5level %logger [%property{NDC}] - %message%newline" />
+		</layout>
+	</appender>
+
+	<appender name="LRPEventLog" type="log4net.Appender.EventLogAppender">
+		<layout type="log4net.Layout.PatternLayout">
+			<conversionPattern value="%date [%thread] %-5level %logger [%property{NDC}] - %message%newline" />
+		</layout>
+	</appender>
+
+	<root>
+		<appender-ref ref="LRPXMLLog" />
+		<appender-ref ref="LRPFileLog" />
+		<appender-ref ref="LRPConsoleLog"/>
+		<appender-ref ref="LRPEventLog"/>
+	</root>
+
+</log4net>

@@ -1,0 +1,33 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/GOMFrameWork.js"></script>
+</head>
+<body>
+    <div>
+        <input type="text" id="txt_userName" />
+        <input type="password" id="txt_psw" />
+        <input type="button" value="登录" onclick="Login()" />
+    </div>
+    <script type="text/javascript">
+        function Login() {
+            $.post("/Login/LoginIn", { uname: $("#txt_userName").val(), psw: $("#txt_psw").val(), ran: Math.random() }, function (r) {
+                if (r.result == 1) {
+                    alert("success");
+                }
+                else {
+                    alert(r.result);
+                    alert("errror");
+                }
+            });
+        }
+    </script>
+</body>
+</html>

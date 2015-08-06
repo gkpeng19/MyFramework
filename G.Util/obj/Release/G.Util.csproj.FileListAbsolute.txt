@@ -1,0 +1,17 @@
+D:\Work\MyFrameWork\G.Util\bin\Release\WebScript\GOMFrameWork.js
+D:\Work\MyFrameWork\G.Util\bin\Release\log.config.xml
+D:\Work\MyFrameWork\G.Util\bin\Release\G.Util.dll
+D:\Work\MyFrameWork\G.Util\bin\Release\G.Util.pdb
+D:\Work\MyFrameWork\G.Util\bin\Release\ExcelLibrary.dll
+D:\Work\MyFrameWork\G.Util\bin\Release\GOMFrameWork.dll
+D:\Work\MyFrameWork\G.Util\bin\Release\log4net.dll
+D:\Work\MyFrameWork\G.Util\bin\Release\Newtonsoft.Json.dll
+D:\Work\MyFrameWork\G.Util\bin\Release\System.Web.Mvc.dll
+D:\Work\MyFrameWork\G.Util\bin\Release\GOMFrameWork.pdb
+D:\Work\MyFrameWork\G.Util\bin\Release\ExcelLibrary.pdb
+D:\Work\MyFrameWork\G.Util\bin\Release\log4net.xml
+D:\Work\MyFrameWork\G.Util\bin\Release\Newtonsoft.Json.xml
+D:\Work\MyFrameWork\G.Util\bin\Release\System.Web.Mvc.xml
+D:\Work\MyFrameWork\G.Util\obj\Release\G.Util.csprojResolveAssemblyReference.cache
+D:\Work\MyFrameWork\G.Util\obj\Release\G.Util.dll
+D:\Work\MyFrameWork\G.Util\obj\Release\G.Util.pdb

@@ -1,0 +1,16 @@
+D:\Work\MyFrameWork\G.Util\obj\Debug\G.Util.csprojResolveAssemblyReference.cache
+D:\Work\MyFrameWork\G.Util\bin\Debug\log.config.xml
+D:\Work\MyFrameWork\G.Util\bin\Debug\G.Util.dll
+D:\Work\MyFrameWork\G.Util\bin\Debug\G.Util.pdb
+D:\Work\MyFrameWork\G.Util\bin\Debug\ExcelLibrary.dll
+D:\Work\MyFrameWork\G.Util\bin\Debug\GOMFrameWork.dll
+D:\Work\MyFrameWork\G.Util\bin\Debug\log4net.dll
+D:\Work\MyFrameWork\G.Util\bin\Debug\Newtonsoft.Json.dll
+D:\Work\MyFrameWork\G.Util\bin\Debug\System.Web.Mvc.dll
+D:\Work\MyFrameWork\G.Util\bin\Debug\GOMFrameWork.pdb
+D:\Work\MyFrameWork\G.Util\bin\Debug\ExcelLibrary.pdb
+D:\Work\MyFrameWork\G.Util\bin\Debug\log4net.xml
+D:\Work\MyFrameWork\G.Util\bin\Debug\Newtonsoft.Json.xml
+D:\Work\MyFrameWork\G.Util\bin\Debug\System.Web.Mvc.xml
+D:\Work\MyFrameWork\G.Util\obj\Debug\G.Util.dll
+D:\Work\MyFrameWork\G.Util\obj\Debug\G.Util.pdb
