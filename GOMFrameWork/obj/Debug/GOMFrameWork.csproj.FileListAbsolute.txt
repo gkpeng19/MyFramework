@@ -3,3 +3,8 @@ D:\Work\MyFrameWork\GOMFrameWork\bin\Debug\GOMFrameWork.pdb
 D:\Work\MyFrameWork\GOMFrameWork\obj\Debug\GOMFrameWork.csprojResolveAssemblyReference.cache
 D:\Work\MyFrameWork\GOMFrameWork\obj\Debug\GOMFrameWork.dll
 D:\Work\MyFrameWork\GOMFrameWork\obj\Debug\GOMFrameWork.pdb
+E:\Work\MyFramework\GOMFrameWork\bin\Debug\GOMFrameWork.dll
+E:\Work\MyFramework\GOMFrameWork\bin\Debug\GOMFrameWork.pdb
+E:\Work\MyFramework\GOMFrameWork\obj\Debug\GOMFrameWork.csprojResolveAssemblyReference.cache
+E:\Work\MyFramework\GOMFrameWork\obj\Debug\GOMFrameWork.dll
+E:\Work\MyFramework\GOMFrameWork\obj\Debug\GOMFrameWork.pdb
