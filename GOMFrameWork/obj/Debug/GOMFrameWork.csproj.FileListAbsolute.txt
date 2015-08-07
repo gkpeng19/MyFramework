@@ -8,3 +8,8 @@ E:\Work\MyFramework\GOMFrameWork\bin\Debug\GOMFrameWork.pdb
 E:\Work\MyFramework\GOMFrameWork\obj\Debug\GOMFrameWork.csprojResolveAssemblyReference.cache
 E:\Work\MyFramework\GOMFrameWork\obj\Debug\GOMFrameWork.dll
 E:\Work\MyFramework\GOMFrameWork\obj\Debug\GOMFrameWork.pdb
+D:\Gkpeng\MyFramework\GOMFrameWork\bin\Debug\GOMFrameWork.dll
+D:\Gkpeng\MyFramework\GOMFrameWork\bin\Debug\GOMFrameWork.pdb
+D:\Gkpeng\MyFramework\GOMFrameWork\obj\Debug\GOMFrameWork.csprojResolveAssemblyReference.cache
+D:\Gkpeng\MyFramework\GOMFrameWork\obj\Debug\GOMFrameWork.dll
+D:\Gkpeng\MyFramework\GOMFrameWork\obj\Debug\GOMFrameWork.pdb
