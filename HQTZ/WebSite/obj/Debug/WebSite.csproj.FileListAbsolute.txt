@@ -1,4 +1,3 @@
-D:\Work\MyFrameWork\HQTZ\WebSite\bin\WebSite.dll.config
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\WebSite.dll
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\WebSite.pdb
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\EntityLibrary.dll
@@ -74,3 +73,4 @@ E:\Work\MyFramework\HQTZ\WebSite\bin\normnfkd.nlp
 E:\Work\MyFramework\HQTZ\WebSite\obj\Debug\WebSite.csprojResolveAssemblyReference.cache
 E:\Work\MyFramework\HQTZ\WebSite\obj\Debug\WebSite.dll
 E:\Work\MyFramework\HQTZ\WebSite\obj\Debug\WebSite.pdb
+D:\Work\MyFramework\HQTZ\WebSite\bin\WebSite.dll.config
