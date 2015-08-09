@@ -128,7 +128,7 @@ $.fn.extend({
             html += "<a class='normal' href='javascript:void(0);' data-page='" + (parseInt(pageindex) + 1) + "'>»</a>";
         }
 
-        $(this)[0].innerHTML = html;
+        $(this).html(html);
         if (onPageChanged) {
             $(this).find("a.normal").each(function () {
                 $(this).bind("click", function () {
@@ -143,7 +143,7 @@ $.fn.extend({
 var datatable = function (table, psize) {
     this.datagrid = table;
     this.psize = psize ? psize : 10;
-    this.trIdentity = "_dtr_c";
+    this.trIdentity = "_dtr_g";
 
     this.currIdentity = -1;
 
@@ -197,10 +197,10 @@ datatable.prototype.initByData = function (data, page, pagecount) {
     this.datagrid.append(tbody);
 
     var html = "";
-    for (var j in this.datasource) {
+    for (var j = 0; j < this.datasource.length; ++j) {
         html += this.initLineHtml(this.datasource[j], j);
     }
-    tbody[0].innerHTML = html;
+    tbody.html(html);
 
     //序列赋值
     tbody.find(".sequence").each(function (index) {
@@ -268,28 +268,39 @@ datatable.prototype.initLineHtml = function (json, identity) {
     json[this.trIdentity] = identity;
 
     var html = "<tr id='" + identity + this.trIdentity + "'>";
-    for (var h in this.headers) {
+    for (var h = 0; h < this.headers.length; ++h) {
         var option = this.headers[h];
         if (option.sequence) {
             html += "<td><span class='sequence'></span></td>";
         }
-        else if (option.checkbox) {
+        else if (option.checkbox && !option.bind) {
             html += "<td><input type='checkbox' class='ckbox' /></td>";
         }
         else {
             var vhtm = "";
             if (option.edit || option.del) {
                 if (option.edit) {
-                    vhtm += "<a href='javascript:void(0)' class='edit'>编辑</a>";
+                    vhtm += ' <a href="javascript:void(0)" class="edit btn btn-minier btn-primary">编辑</a> ';
                 }
 
                 if (option.del) {
-                    vhtm += "<a href='javascript:void(0)' class='delete'>删除</a>";
+                    vhtm += ' <a href="javascript:void(0)"  class="delete btn btn-minier btn-danger">删除</a> ';
                 }
             }
             else {
                 if (option.bind) {
-                    vhtm = option.format ? option.format(json[option.bind]) : json[option.bind];
+                    vhtm = json[option.bind];
+                    if (vhtm == undefined) {
+                        vhtm = "";
+                    }
+
+                    if (option.format) {
+                        vhtm = option.format(vhtm);
+                    }
+                }
+
+                if (option.checkbox) {
+                    vhtm = '<input type="checkbox" disabled="disabled" ' + (vhtm == 1 ? 'checked="checked"' : '') + '/><span class="lbl"></span>';
                 }
 
                 if (option.onload) {
@@ -439,7 +450,7 @@ datatable.prototype.updateRow = function (oldjson, newjson) {
 
 datatable.prototype.getSelected = function () {
     var items = [];
-    for (var i in this.datasource) {
+    for (var i = 0; i < this.datasource.length; ++i) {
         if (this.datasource[i].checked) {
             items.push(this.datasource[i]);
         }
@@ -514,13 +525,31 @@ $.fn.extend({
         //Bind Value To UI
         this.find("input,select,textarea").each(function () {
             var name = $(this).attr("name");
+            var tagName = $(this)[0].tagName;
             if (name != undefined) {
                 var value = json[name];
                 if (value != undefined) {
-                    $(this).val(value);
+                    if (tagName == "TEXTAREA") {
+                        if ($(this).prev().length > 0 && $(this).prev().hasClass("edui-body-container")) {
+                            UM.getEditor(this.id).setContent(value);
+                        }
+                        else {
+                            $(this).val(value);
+                        }
+                    }
+                    else if ($(this).attr("type") == "checkbox") {
+                        if (value == 1) {
+                            this.checked = true;
+                        }
+                        else {
+                            this.checked = false;
+                        }
+                    }
+                    else {
+                        $(this).val(value);
+                    }
                 }
                 else {
-                    var tagName = $(this)[0].tagName;
                     if (tagName == "SELECT") {
                         if ($(this).find("option").length > 0) {
                             $(this)[0].options[0].selected = true;
@@ -533,6 +562,11 @@ $.fn.extend({
                     }
                     else {
                         $(this).val("");
+                        if (tagName == "TEXTAREA") {
+                            if ($(this).prev().length > 0 && $(this).prev().hasClass("edui-body-container")) {
+                                UM.getEditor(this.id).setContent("");
+                            }
+                        }
                     }
                 }
             }
@@ -541,8 +575,9 @@ $.fn.extend({
         temps[this.selector] = json;
     },
     getContext: function () {
-        var oldjson = temps[this.selector];
         var newjson = {};
+
+        var oldjson = temps[this.selector];
         for (var item in oldjson) {
             if (typeof (oldjson[item]) != "object") {
                 newjson[item] = oldjson[item];
@@ -552,7 +587,17 @@ $.fn.extend({
         this.find("input,textarea").each(function () {
             var name = $(this).attr("name");
             if (name != undefined) {
-                newjson[name] = $.trim($(this).val());
+                if ($(this).attr("type") == "checkbox") {
+                    if (this.checked) {
+                        newjson[name] = 1;
+                    }
+                    else {
+                        newjson[name] = 0;
+                    }
+                }
+                else {
+                    newjson[name] = $.trim($(this).val());
+                }
             }
         });
 
@@ -647,7 +692,7 @@ $.fn.extend({
             content: this,
             yes: function (index) {
                 if (yes) {
-                    var v = yes();
+                    var v = yes(index);
                     if (v == undefined || v == true) {
                         layer.close(index);
                     }
@@ -655,7 +700,7 @@ $.fn.extend({
             },
             cancel: function (index) {
                 if (no) {
-                    var v = no();
+                    var v = no(index);
                     if (v == undefined || v == true) {
                         layer.close(index);
                     }
@@ -673,9 +718,35 @@ $.fn.extend({
             btns[btns.length] = "取消";
         }
 
-        this.show();
+        var editorheight = 0;
 
-        var height = this[0].clientHeight + 46 + 20;
+        this.show();
+        /*设置弹出层中的Editor开始*/
+        this.find(".text_editor_hide").each(function () {
+            var star = $(this).parent().find(".talentReqStar");
+            if (!star.hasClass("starReady")) {
+                UM.getEditor(this.id);
+                var target = this;
+                var timeout = setTimeout(function () {
+                    clearTimeout(timeout);
+                    var editor = $(target).prev();
+                    var classnames = editor[0].className.split(' ');
+                    for (var i = 0; i < classnames.length; ++i) {
+                        if (classnames[i].indexOf("span") == 0) {
+                            editor.removeClass(classnames[i]);
+                            return;
+                        }
+                    }
+                }, 50);
+                star.remove();
+                star.addClass("starReady");
+                $(this).parent().append(star);
+                editorheight += 20;
+            }
+        });
+        /*设置弹出层中的Editor结束*/
+
+        var height = this[0].clientHeight + 46 + 20 + editorheight;
 
         if (btns.length > 0) {
             options.btn = btns;

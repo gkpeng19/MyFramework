@@ -1,7 +1,7 @@
 ﻿@foreach(var table in Model.tables)
 {
-<div>
-    <table id="@table.id">
+<div class="row-fluid">
+    <table id="@table.id" class=" table table-striped table-bordered table-hover">
         <thead>
             <tr>
                 @foreach(var h in table.data.headers)

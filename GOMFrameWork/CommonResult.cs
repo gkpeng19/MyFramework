@@ -11,7 +11,7 @@ namespace GOMFrameWork
         public string Message { get; set; }
     }
 
-    public class CommonResult<T> : IEnumerable<T> where T : new()
+    public class CommonResult<T>  where T : new()
     {
         List<T> _data = null;
         public List<T> Data
@@ -34,23 +34,5 @@ namespace GOMFrameWork
 
         public int PageCount { get; set; }
         public int PageIndex { get; set; }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return Data.GetEnumerator();
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return Data.GetEnumerator();
-        }
-
-        public T this[int index]
-        {
-            get
-            {
-                return Data[index];
-            }
-        }
     }
 }

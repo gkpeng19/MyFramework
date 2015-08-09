@@ -44,10 +44,6 @@ namespace G.Util.Mvc
                 {
                     eid = controllerContext.RouteData.Values["id"];
                 }
-                else if (!pkey.Equals("id") && controllerContext.RouteData.Values.ContainsKey(pkey))
-                {
-                    eid = controllerContext.RouteData.Values[pkey];
-                }
 
                 if (eid != null && eid.ToString().Length > 0)
                 {
@@ -60,7 +56,7 @@ namespace G.Util.Mvc
 
             foreach (string key in ValueCollection.Keys)
             {
-                if (key.Length == 0 || key.EndsWith("_c", StringComparison.OrdinalIgnoreCase))
+                if (key.Length == 0 || key.EndsWith("_g", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }

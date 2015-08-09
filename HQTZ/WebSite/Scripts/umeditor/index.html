@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html>
 <head>
 
@@ -114,9 +114,9 @@
 <h1>UMEDITOR 完整demo</h1>
 
 <!--style给定宽度可以影响编辑器的最终宽度-->
-<script type="text/plain" id="myEditor" style="width:1000px;height:240px;">
+<textarea id="myEditor" style="width:1000px;height:240px;">
     <p>这里我可以写一些输入提示</p>
-</script>
+</textarea>
 
 
 <div class="clear"></div>
@@ -175,6 +175,9 @@
     });
     um.addListener('focus',function(){
         $('#focush2').html('')
+    });
+um.addListener('change',function(){
+        alert(1);
     });
     //按钮的操作
     function insertHtml() {

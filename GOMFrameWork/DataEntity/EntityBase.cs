@@ -10,6 +10,7 @@ using System.Text;
 using GOMFrameWork.Utils;
 using GOMFrameWork.DBContext;
 using System.Transactions;
+using Newtonsoft.Json;
 
 namespace GOMFrameWork.DataEntity
 {
@@ -108,9 +109,11 @@ namespace GOMFrameWork.DataEntity
     /// </summary>
     public class EntityBase : DataBase
     {
+        [JsonIgnore]
         public string TableName { get; protected set; }
 
         private string _primaryKey = null;
+        [JsonIgnore]
         public string PrimaryKey
         {
             get { return _primaryKey == null ? "ID" : _primaryKey; }
@@ -528,6 +531,12 @@ namespace GOMFrameWork.DataEntity
                     entityProvider.Close();
                 }
             }
+
+            if (this._id == 0 && id > 0)
+            {
+                this.ID = id;
+            }
+
             return id;
         }
 

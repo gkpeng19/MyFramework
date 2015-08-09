@@ -210,7 +210,7 @@ namespace WinTemplate
 
             var tab = tabControl.AddNewTab(name, path);
             WebBrowser browser = new WebBrowser();
-            browser.Url = new Uri("http://localhost:8081/Default.html");
+            browser.Url = new Uri("http://localhost/Default.html");
             browser.ObjectForScripting = this;
             browser.Dock = DockStyle.Fill;
             tab.Container.Controls.Add(browser);
@@ -249,7 +249,7 @@ namespace WinTemplate
 
             Razor.Compile(table, "tables");
 
-            var data = JSON.JsonBack<GContent>(File.ReadAllText(@"D:\GTemplateDemo\GSolution\TemplateDemo\formdemo.json"));
+            var data = JSON.JsonBack<GContent>(File.ReadAllText(@"D:\GTemplateDemo\SSS\PPP\context.json"));
             var result = Razor.Parse(html, data);
         }
 

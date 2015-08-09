@@ -349,7 +349,7 @@ namespace GOMFrameWork.DBContext
                 }
                 else
                 {
-                    sbsql.Append(",row_number() over(" + order + ") row from " + entity.SearchID + " where 1=1");
+                    sbsql.Append(",row_number() over(" + order + ") row_g from " + entity.SearchID + " where 1=1");
                 }
 
                 #region 初始化Where
@@ -380,7 +380,7 @@ namespace GOMFrameWork.DBContext
                 }
                 else
                 {
-                    sbsql.Append(")r where r.row>" + (entity.PageIndex - 1) * entity.PageSize + " and r.row<=" + entity.PageIndex * entity.PageSize);
+                    sbsql.Append(")r where r.row_g>" + (entity.PageIndex - 1) * entity.PageSize + " and r.row_g<=" + entity.PageIndex * entity.PageSize);
                     sbsql.Append(";select @outcount=count(1) from " + entity.SearchID + " where 1=1");
                     sbsql.Append(where);
                 }
@@ -529,7 +529,7 @@ namespace GOMFrameWork.DBContext
                 }
                 else
                 {
-                    sql = string.Format("select * from (select {0},row_number() over({1}) row from {2} where 1=1 {3})r where r.row>{4} and r.row<={5};select :outcount=count(1) from {2} where 1=1 {3}",
+                    sql = string.Format("select * from (select {0},row_number() over({1}) row_g from {2} where 1=1 {3})r where r.row_g>{4} and r.row_g<={5};select :outcount=count(1) from {2} where 1=1 {3}",
                         search, order, entity.SearchID, sbwhere.ToString(), (entity.PageIndex - 1) * entity.PageSize, entity.PageIndex * entity.PageSize);
                 }
 

@@ -45,7 +45,7 @@
                     {
                     if(exd!=null&&exd.dataid==d.c[0].v)
                     {
-                    <text>@exd.showname</text>
+                    <text>@exd.showname：</text>
                     break;
                     }
                     }
@@ -176,9 +176,10 @@
                                         var update=$("#@btn.formdataid").getContext();
                                         $.post("@btn.action",update,function(r)
                                         {
-                                            if(r>0)
+                                            r = $.toJsResult(r);
+                                            if(r.ID>0)
                                             {
-                                                $("#@table.id").datagrid("updateRow",json,update);
+                                                $("#@table.id").datagrid("updateRow",json,r);
                                                 layer.close(win);
                                             }
                                             else

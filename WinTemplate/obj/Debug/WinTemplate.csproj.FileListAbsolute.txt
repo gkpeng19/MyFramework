@@ -21,7 +21,6 @@ D:\Work\MyFrameWork\WinTemplate\bin\Debug\Newtonsoft.Json.xml
 D:\Work\MyFrameWork\WinTemplate\bin\Debug\log4net.xml
 D:\Work\MyFrameWork\WinTemplate\bin\Debug\ExcelLibrary.pdb
 D:\Work\MyFrameWork\WinTemplate\bin\Debug\RazorEngine.dll
-D:\Work\MyFrameWork\WinTemplate\bin\Debug\System.Web.Razor.dll
 D:\Work\MyFrameWork\WinTemplate\bin\Debug\template\content.html
 D:\Work\MyFrameWork\WinTemplate\bin\Debug\template\table.html
 D:\Work\MyFrameWork\WinTemplate\obj\Debug\WinTemplate.Form1.resources
@@ -29,3 +28,4 @@ D:\Work\MyFrameWork\WinTemplate\obj\Debug\WinTemplate.UControl.KryptonTabControl
 D:\Work\MyFrameWork\WinTemplate\obj\Debug\WinTemplate.UControl.LayerWindow.resources
 D:\Work\MyFrameWork\WinTemplate\obj\Debug\WinTemplate.NewItemWin.resources
 D:\Work\MyFrameWork\WinTemplate\obj\Debug\WinTemplate.NewFileWin.resources
+D:\Work\MyFramework\WinTemplate\bin\Debug\ComponentFactory.Krypton.Toolkit.dll
