@@ -1,93 +1,78 @@
-﻿<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-    <link href="Scripts/validate/css/validate.css" rel="stylesheet" />
-    <script src="Scripts/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript">
-        @foreach(var json in Model.jsons)
-        {
-            <text>
-            $.post("@json.url",{ran:Math.random()},function(r)
-            {
-                $(function()
-                {
-                    BindToSelect(r);
-                    BindToDiv(r);
-                });
-            });
-            </text>
-        }
-    </script>
-</head>
-<body>
-    @Include("tables",Model)
+﻿@Include("tables",Model)
 
-    @foreach(var fm in Model.forms)
-    {
+@foreach(var fm in Model.forms)
+{
     var style=fm.isshow=="0"?"display:none;":"";
-    <form name="@fm.id" id="@fm.id" style="@style">
-        <input type="hidden" name="@fm.data[1].c[0].fld" />
-        <table class="form-table">
-            @for(var index=2;index<fm.data.Count;++index) 
+	var hide=fm.isshow=="0"?"_hide":"";
+	<div class="row-fluid">
+		<div class="span@fm.size">
+			<form  name="@fm.id" id="@fm.id" class="form-layer" style="@style">
+				<div>
+					<input type="hidden" name="@fm.data[1].c[0].fld" />
+					<div class="row-fluid">
+					@for(var index=2;index<fm.data.Count;++index) 
+					{
+						var d=fm.data[index];
+						var t=d.c[2].t;
+						foreach(var exd in fm.extdata.extdatas)
+						{
+							if(exd!=null&&exd.dataid==d.c[0].v)
+							{
+								<div class="span@exd.size">
+								<label>@exd.showname</label>
+								@if(t=="0")
+								{
+								<input type="text" name="@d.c[0].fld" id="@d.c[0].v" class="span11" />
+								}
+								else if(t=="1")
+								{
+								<select name="@d.c[0].fld" id="@d.c[0].v" class="span11"></select>
+								}
+								else if(t=="2")
+								{
+								<input type="text" name="@d.c[0].fld" id="@d.c[0].v" class="span11" />
+								}
+								else if(t=="3")
+								{
+								<textarea rows="3" name="@d.c[0].fld" id="@d.c[0].v" class="span11"></textarea>
+								}
+								else if(t=="4")
+								{
+								<input type="checkbox" name="@d.c[0].fld" id="@d.c[0].v"/><span class="lbl"></span>
+								}
+								else if(t=="5")
+								{
+								<textarea name="@d.c[0].fld" id="@d.c[0].v" class="span12 text_editor@hide"></textarea>
+								}
+								</div>
+								break;
+							}
+						}
+					}
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+}
+
+
+<script type="text/javascript">
+	@foreach(var json in Model.jsons)
+	{
+		<text>
+		$.post("@json.url",{ran:Math.random()},function(r)
+		{
+			$(function()
 			{
-                var d=fm.data[index];
-                var t=d.c[2].t;
-                var idfy=(index-2)%fm.extdata.layer;
-                @if(idfy==0)
-                {
-					<text><tr></text>
-                }
-
-                <td class="td-title">
-                    @foreach(var exd in fm.extdata.extdatas)
-                    {
-                    if(exd!=null&&exd.dataid==d.c[0].v)
-                    {
-                    <text>@exd.showname：</text>
-                    break;
-                    }
-                    }
-                </td>
-                <td>
-                    @if(t=="0")
-                    {
-                    <input type="text" name="@d.c[0].fld" id="@d.c[0].v" />
-                    }
-                    else if(t=="1")
-                    {
-                    <select name="@d.c[0].fld" id="@d.c[0].v"></select>
-                    }
-                    else if(t=="2")
-                    {
-                    <input type="text" name="@d.c[0].fld" id="@d.c[0].v" />
-                    }
-                    else if(t=="3")
-                    {
-                    <textarea rows="3" name="@d.c[0].fld" id="@d.c[0].v"></textarea>
-                    }
-                </td>
-
-                @if(idfy+1==fm.extdata.layer)
-                {
-                <text>
-                </tr>
-                }
-                else if(index==fm.data.Count-1)
-                {
-                    <text></tr></text>
-                }
-            }
-        </table>
-    </form>
-    }
-
-    <script src="Scripts/layer/layer.js"></script>
-    <script src="Scripts/GExtension.js"></script>
-    <script src="Scripts/validate/talent-validate-all-init.js"></script>
-    <script type="text/javascript">
-		@* 优先初始化select控件的option *@
+				BindToSelect(r);
+				BindToDiv(r);
+			});
+		});
+		</text>
+	}
+	
+	@* 优先初始化select控件的option *@
 		function BindToSelect(data)
 		{
 			@foreach(var bind in Model.binds)
@@ -103,15 +88,13 @@
 		                        <text>
 								var sel=$("#@(bind.data[1].c[0].v)");
 		                        var items=data.@d.c[0].fld;
-		                        for(var i in items)
-		                        {
-		                            sel.append("<option value='"+items[i].v+"'>"+items[i].k+"</option>");
-		                        }
+								$(items).each(function () {
+									sel.append("<option value='"+this.v+"'>"+this.k+"</option>");
+								});
 		                        </text>
 		                    }
 		                }
 		            }
-
 		        }
 		    }
 		}
@@ -164,6 +147,33 @@
                             if(btn.type=="edit")
                             {
                                 <text>
+								$("#@table.id").parent().find(".btn-table-add").bind('click',function()
+								{
+									$("#@btn.formdataid").bindEntity({});
+									$("#@btn.formdataid").open("新增",function(win)
+                                    {
+                                        if(!tt.validateForm("@btn.formdataid"))
+                                        {
+                                            return false;
+                                        }
+                                        var update=$("#@btn.formdataid").getContext();
+                                        $.post("@btn.action",update,function(r)
+                                        {
+                                            r = $.toJsResult(r);
+                                            if(r.ID>0)
+                                            {
+                                                $("#@table.id").datagrid("addRow",r);
+                                                layer.close(win);
+                                            }
+                                            else
+                                            {
+                                                $.error("保存失败，请重试！");
+                                            }
+                                        });
+
+                                        return false;
+                                    });
+								});
                                 $("#@table.id").datagrid("onEdit", function () {
                                     var json = $("#@table.id").datagrid("getCurrData");
                                     $("#@btn.formdataid").bindEntity(json);
@@ -171,7 +181,7 @@
                                     {
                                         if(!tt.validateForm("@btn.formdataid"))
                                         {
-                                            return;
+                                            return false;
                                         }
                                         var update=$("#@btn.formdataid").getContext();
                                         $.post("@btn.action",update,function(r)
@@ -184,9 +194,8 @@
                                             }
                                             else
                                             {
-                                                alert("保存失败，请重试！");
+                                                $.error("保存失败，请重试！");
                                             }
-
                                         });
 
                                         return false;
@@ -198,9 +207,9 @@
                             {
                                 <text>
                                 $("#@table.id").datagrid("onDelete", function () {
-                                    if(confirm("确定要删除吗？"))
-                                    {
-                                        var json = $("#@table.id").datagrid("getCurrData");
+									$.confirm("确定要删除吗？",function()
+									{
+										var json = $("#@table.id").datagrid("getCurrData");
                                         $.post("@btn.action",{@table.data.pkey:json["@table.data.pkey"]},function(r)
                                         {
                                             if(r>0)
@@ -208,10 +217,10 @@
                                                 $("#@table.id").datagrid("removeCurrRow");
                                             }
                                             else{
-                                                alert("删除失败，请重试！");
+                                                $.error("删除失败，请重试！");
                                             }
                                         });
-                                }
+									});
                                 });
                             </text>
                         }
@@ -226,45 +235,48 @@
         {
             foreach(var exd in fm.extdata.extdatas)
             {
-                foreach(var validate in exd.validates)
+				<text>
+				var f@(exd.dataid)=new tt.Field("@exd.showname","","@exd.dataid").setMsgId("layer-error-msg");
+				</text>
+                @foreach(var validate in exd.validates)
                 {
-                    switch(validate.type)
+					switch(validate.type)
                     {
                         case "required":
-                            <text>tt.vf.req.addId("@exd.dataid");</text>
+                            <text>
+							tt.vf.req.add(f@(exd.dataid));
+							</text>
                             break;
                         case "number":
-                            <text>tt.vf.num.addId("@exd.dataid");</text>
+                            <text>tt.vf.num.add(f@(exd.dataid));</text>
                             break;
                         case "numint":
-                            <text>tt.vf.int.addId("@exd.dataid");</text>
+                            <text>tt.vf.int.add(f@(exd.dataid));</text>
                             break;
                         case "email":
-                            <text>tt.vf.email.addId("@exd.dataid");</text>
+                            <text>tt.vf.email.add(f@(exd.dataid));</text>
                             break;
                         case "ipaddress":
-                            <text>tt.vf.ip.addId("@exd.dataid");</text>
+                            <text>tt.vf.ip.add(f@(exd.dataid));</text>
                             break;
                         case "postcode":
-                            <text>tt.vf.postcode.addId("@exd.dataid");</text>
+                            <text>tt.vf.postcode.add(f@(exd.dataid));</text>
                             break;
                         case "telnum":
-                            <text>tt.vf.tel.addId("@exd.dataid");</text>
+                            <text>tt.vf.tel.add(f@(exd.dataid));</text>
                             break;
                         case "idcard":
-                            <text>tt.vf.idcard.addId("@exd.dataid");</text>
+                            <text>tt.vf.idcard.add(f@(exd.dataid));</text>
                             break;
                         case "lenvalidate":
-                            <text>tt.LV().set(@validate.minlen, @validate.maxlen).addId("@exd.dataid");</text>
+                            <text>new tt.LV().set(@validate.minlen, @validate.maxlen).add(f@(exd.dataid));</text>
                             break;
                         case "regvalidate":
-                            <text>tt.RV().set(new RegExp("@validate.regstr"),"输入数据格式错误" ).addId("@exd.dataid");</text>
+                            <text>new tt.RV().set(new RegExp("@validate.regstr"),"输入数据格式错误" ).add(f@(exd.dataid));</text>
                             break;
                     }
                 }
             }
         }
-        /*增加验证信息----------End*/
-    </script>
-</body>
-</html>
+        /*增加验证信息----------End*/	
+</script>

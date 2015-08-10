@@ -249,7 +249,7 @@ namespace WinTemplate
 
             Razor.Compile(table, "tables");
 
-            var data = JSON.JsonBack<GContent>(File.ReadAllText(@"D:\GTemplateDemo\SSS\PPP\context.json"));
+            var data = JSON.JsonBack<GContent>(File.ReadAllText(@"D:\GTemplateDemo\SSS\PPP\test.json"));
             var result = Razor.Parse(html, data);
         }
 

@@ -762,7 +762,10 @@ $.fn.extend({
         }
         options.area[1] = height + "px";
 
+        var win = layer.open(options);
 
-        return layer.open(options);
+        this.parent().parent().find(".layui-layer-btn").append("<span id='layer-error-msg'></span>");
+
+        return win;
     }
 });

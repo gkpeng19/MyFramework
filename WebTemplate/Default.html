@@ -35,7 +35,8 @@
         }
 
         table .td-title {
-            width: 6em;
+            width: 5em;
+            text-align: right;
         }
 
         .chart {
@@ -119,7 +120,7 @@
                 <td>
                     <table id="form_tab_validate">
                         <tr>
-                            <td><input type="checkbox" name="required"  id="validate_1" /> <label for="validate_1">非空</label></td>
+                            <td><input type="checkbox" name="required" id="validate_1" /> <label for="validate_1">非空</label></td>
                             <td><input type="checkbox" name="number" id="validate_2" /> <label for="validate_2">数字</label></td>
                             <td><input type="checkbox" name="numint" id="validate_3" /> <label for="validate_3">整数</label></td>
                             <td><input type="checkbox" name="email" id="validate_4" /> <label for="validate_4">Email邮箱</label></td>
@@ -129,11 +130,15 @@
                             <td><input type="checkbox" name="postcode" id="validate_6" /> <label for="validate_6">邮政编码</label></td>
                             <td><input type="checkbox" name="telnum" id="validate_7" /> <label for="validate_7">电话号码</label></td>
                             <td><input type="checkbox" name="idcard" id="validate_8" /> <label for="validate_8">身份证</label></td>
-                            <td><input type="checkbox" name="lenvalidate"  id="validate_9" /> <label for="validate_9">长度限制</label></td>
+                            <td><input type="checkbox" name="lenvalidate" id="validate_9" /> <label for="validate_9">长度限制</label></td>
                             <td><input type="checkbox" name="regvalidate" id="validate_10" /> <label for="validate_10">正则</label></td>
                         </tr>
                     </table>
                 </td>
+            </tr>
+            <tr>
+                <td class="td-title">尺  寸：</td>
+                <td><input type="number" id="txt_formCtrSize" value="6" /> </td>
             </tr>
         </table>
         <!--用于新增Form Root节点-->
@@ -145,6 +150,10 @@
             <tr>
                 <td class="td-title">隐藏表单：</td>
                 <td><input type="checkbox" id="cbx_hiddenForm" /> 是否隐藏</td>
+            </tr>
+            <tr>
+                <td class="td-title">尺  寸：</td>
+                <td><input type="number" id="txt_formSize" value="6" /></td>
             </tr>
         </table>
 
@@ -290,12 +299,23 @@
                     return false;
                 }
 
+
+                var size = 0;
+                try {
+                    size = parseInt($.trim($("#txt_formSize").val()));
+                }
+                catch (e) {
+                    alert("请输入表单尺寸！");
+                    return false;
+                }
+
+
                 $("#txt_formPrimaryKey").val("");
                 var id = Math.random().toString().split('.')[1];
                 var selector = "chart_" + id;
                 var isshow = $("#cbx_hiddenForm")[0].checked ? 0 : 1;
                 $("#div_forForm").append($("<div id='" + selector + "' class='chart'></div>"));
-                var form = new formconfig('#' + selector, id, name, isshow);
+                var form = new formconfig('#' + selector, id, name, isshow, size);
                 form.beforeRemoveForm = function (fid) {
 
                     var existstable = false;
@@ -427,7 +447,7 @@
                 var id = this.id.split('_')[1];
                 var chart = $(this).fconfig();
                 var data = JSON.parse(chart.data.toJSON()).rows;
-                content.forms.push({ id: id, isshow: chart.isshow, data: data, extdata: chart.extData });
+                content.forms.push({ id: id, isshow: chart.isshow, size: chart.size, data: data, extdata: chart.extData });
             });
 
             $("#div_forBind .bindchart").each(function () {
