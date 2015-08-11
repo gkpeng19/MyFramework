@@ -157,6 +157,7 @@
     <Content Include="Areas\Biz\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Biz\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Biz\Views\Context\Index.cshtml" />
+    <Content Include="Areas\Biz\Views\Admin\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -316,6 +317,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Biz\BizAreaRegistration.cs" />
+    <Compile Include="Areas\Biz\Controllers\AdminController.cs" />
     <Compile Include="Areas\Biz\Controllers\ContextController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />

@@ -145,9 +145,10 @@ $.fn.extend({
         return fConfig["#" + this[0].id];
     }
 });
-var formconfig = function (selector, id, pkey, isshow) {
+var formconfig = function (selector, id, pkey, isshow, size) {
     this.id = id;
     this.isshow = isshow;
+    this.size = size;
 
     fConfig[selector] = this;
 
@@ -159,6 +160,8 @@ var formconfig = function (selector, id, pkey, isshow) {
     this.btn_select = $('<input type="button" value="添加 Select" data-type="1" />');
     this.btn_datetime = $('<input type="button" value="添加 DateTime" data-type="2" />');
     this.btn_textarea = $('<input type="button" value="添加 TextArea" data-type="3" />');
+    this.btn_cbx = $('<input type="button" value="添加 CheckBox" data-type="4" />');
+    this.btn_editor = $('<input type="button" value="添加 HtmlEditor" data-type="5" />');
     this.btn_removeNode = $("<input type='button' value='移除' style='display:none;' />");
     this.btn_removeCon = $("<input type='button' value='移除该对象' />");
     this.chartCon.append(this.btn_input).append(this.btn_select).append(this.btn_datetime).append(this.btn_textarea).append(this.btn_removeNode).append(this.btn_removeCon);
@@ -181,10 +184,20 @@ var formconfig = function (selector, id, pkey, isshow) {
                 alert("请维护显示名称！");
                 return false;
             }
+
+            var size = 0;
+            try {
+                size = parseInt($.trim($("#txt_formCtrSize").val()));
+            } catch (e) {
+                alert("请维护控件尺寸！");
+                return false;
+            }
+
             /*初始化额外数据--------Start*/
             var extData = {};
             extData.showname = showname;
             extData.validates = [];
+            extData.size = size;
             $("#form_tab_validate input[type=checkbox]").each(function () {
                 if (this.checked) {
                     var name = $(this).attr("name");
@@ -211,12 +224,14 @@ var formconfig = function (selector, id, pkey, isshow) {
         });
     };
 
-    this.ctrTypes = ['I', 'S', 'DT', 'TA', '', '', '', '', '', 'PK'];
+    this.ctrTypes = ['I', 'S', 'DT', 'TA', 'CB', 'HE', '', '', '', 'PK'];
 
     this.btn_input.bind('click', function () { click_func(0); });
     this.btn_select.bind('click', function () { click_func(1); });
     this.btn_datetime.bind('click', function () { click_func(2); });
     this.btn_textarea.bind('click', function () { click_func(3); });
+    this.btn_cbx.bind('click', function () { click_func(4); });
+    this.btn_editor.bind('click', function () { click_func(5); });
 
     this.btn_removeNode.bind('click', function () {
         if (!target.selectNode) {
@@ -239,8 +254,6 @@ var formconfig = function (selector, id, pkey, isshow) {
                 target.chartCon.remove();
             }
         }
-
-
     });
 
     this.chartCon.append("<div class='chart_div'></div>");

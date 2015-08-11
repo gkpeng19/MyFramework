@@ -41,12 +41,22 @@
 
 /*LayerOut*/
 .form-layer {
-    display: none;
-    padding: 10px 0px 0px 20px;
+    padding: 10px 5px 0px 20px;
 }
 
+    .form-layer .row-fluid [class*="span"] {
+        margin-left: 0px;
+    }
+
 .text_editor, .text_editor_hide {
-    max-height: 300px;
-    min-height: 300px;
-    height: 300px;
+    max-height: 250px;
+    min-height: 250px;
+    height: 250px;
+}
+
+
+#layer-error-msg
+{
+    float:left;
+    padding-left:10px;
 }

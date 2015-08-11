@@ -110,6 +110,8 @@ namespace WinTemplate
 
         public string isshow { get; set; }
 
+        public int size { get; set; }
+
         public List<GFormC> data { get; set; }
 
         public GFormExData extdata { get; set; }
@@ -149,9 +151,34 @@ namespace WinTemplate
 
     public class GFormValidate
     {
+        string _minlen = string.Empty;
+        string _maxlen = string.Empty;
+
         public string type { get; set; }
-        public string minlen { get; set; }
-        public string maxlen { get; set; }
+        public string minlen
+        {
+            get
+            {
+                if (_minlen.Length == 0)
+                {
+                    _minlen = "--";
+                }
+                return _minlen;
+            }
+            set { _minlen = value; }
+        }
+        public string maxlen
+        {
+            get
+            {
+                if (_maxlen.Length == 0)
+                {
+                    _maxlen = "++";
+                }
+                return _maxlen;
+            }
+            set { _maxlen = value; }
+        }
         public string regstr { get; set; }
     }
 
