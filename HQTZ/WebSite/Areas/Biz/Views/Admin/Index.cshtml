@@ -113,9 +113,9 @@
                     }
                     var update = $("#5066728374840266").getContext();
                     $.post("/Biz/Admin/SaveAdmin", update, function (r) {
-                        r = $.toJsResult(r);
+                        var newjson=$.updateJson(json,$.toJsResult(r));
                         if (r.ID > 0) {
-                            $("#5276602330016288").datagrid("updateRow", json, r);
+                            $("#5276602330016288").datagrid("updateRow", json, newjson);
                             layer.close(win);
                         }
                         else {
@@ -147,7 +147,7 @@
         /*增加验证信息----------Start*/
         var f8278440976706824 = new tt.Field("用户名", "", "8278440976706824").setMsgId("layer-error-msg");
         tt.vf.req.add(f8278440976706824);
-        new tt.LV().set(6, '++').add(f8278440976706824);
+        new tt.LV().set(5, '++').add(f8278440976706824);
 
         var f6574967512304366 = new tt.Field("角 色", "", "6574967512304366").setMsgId("layer-error-msg");
 

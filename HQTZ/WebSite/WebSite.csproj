@@ -319,6 +319,7 @@
     <Compile Include="Areas\Biz\BizAreaRegistration.cs" />
     <Compile Include="Areas\Biz\Controllers\AdminController.cs" />
     <Compile Include="Areas\Biz\Controllers\ContextController.cs" />
+    <Compile Include="CommonUtil.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">

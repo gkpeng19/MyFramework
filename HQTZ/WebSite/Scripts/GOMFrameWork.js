@@ -519,7 +519,7 @@ $.extend({
 
 
 /*------GOMFrameWork常用方法扩展-------------------------------------------------------------*/
-var temps = {};
+//var temps = {};
 $.fn.extend({
     bindEntity: function (json) {
         //Bind Value To UI
@@ -572,17 +572,17 @@ $.fn.extend({
             }
         });
 
-        temps[this.selector] = json;
+        //temps[this.selector] = json;
     },
     getContext: function () {
         var newjson = {};
 
-        var oldjson = temps[this.selector];
-        for (var item in oldjson) {
-            if (typeof (oldjson[item]) != "object") {
-                newjson[item] = oldjson[item];
-            }
-        }
+        //var oldjson = temps[this.selector];
+        //for (var item in oldjson) {
+        //    if (typeof (oldjson[item]) != "object") {
+        //        newjson[item] = oldjson[item];
+        //    }
+        //}
 
         this.find("input,textarea").each(function () {
             var name = $(this).attr("name");
@@ -655,6 +655,30 @@ $.extend({
         }
 
         return data;
+    },
+    updateJson: function (oldjson, newjson) {
+        var json = {};
+        for (var item in oldjson) {
+            if (typeof (oldjson[item]) != "object") {
+                json[item] = oldjson[item];
+            }
+        }
+
+        for (var item in newjson) {
+            if (typeof (newjson[item]) != "object") {
+                var index = item.indexOf("_G");
+                if (index > 0) {
+                    var str = item.substring(0, index);
+                    if (newjson[str]) {
+                        json[item] = newjson[item];
+                    }
+                }
+                else {
+                    json[item] = newjson[item];
+                }
+            }
+        }
+        return json;
     }
 });
 
@@ -664,10 +688,11 @@ $.extend({
     success: function (msg) { layer.alert(msg, { icon: 1 }); },
     error: function (msg) { layer.alert(msg, { icon: 2 }); },
     confirm: function (msg, yes, no) {
-        layer.confirm(msg, { btn: ['确定', '取消'] /*按钮*/ }, function () {
+        layer.confirm(msg, { btn: ['确定', '取消'] /*按钮*/ }, function (index) {
             if (yes) {
                 yes();
             }
+            layer.close(index);
         }, function () {
             if (no) {
                 no();

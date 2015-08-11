@@ -9,30 +9,30 @@ namespace EntityLibrary
 {
     public enum ContextTypeEnum : int
     {
-        Context,
-        Info,
-        Advert
+        Context = 1,
+        Info = 2,
+        Advert = 3
     }
 
     public enum CategoryTypeEnum : int
     {
-        Product,
-        Info,
-        ImageBook
+        Product = 1,
+        Info = 2,
+        ImageBook = 3
     }
 
     public enum MessageTypeEnum : int
     {
-        AskPrice,
-        AskPriceRes,
-        Message,
-        MessageRes
+        AskPrice = 1,
+        AskPriceRes = 2,
+        Message = 3,
+        MessageRes = 4
     }
 
     //====业务相关===============
     public enum UserRoleEnum : int
     {
         [EnumDescription(Description = "管理员")]
-        Admin
+        Admin = 1
     }
 }

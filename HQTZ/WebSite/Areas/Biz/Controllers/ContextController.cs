@@ -53,9 +53,9 @@ namespace WebSite.Areas.Biz.Controllers
             return this.JsonNet(new { ID = 0 });
         }
 
-        public int DeleteContext(int id)
+        public long DeleteContext(HZ_Context entity)
         {
-            return 0;
+            return base.DeleteEntity(entity);
         }
     }
 }
