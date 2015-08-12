@@ -1,4 +1,5 @@
 ﻿using G.Util.Account;
+using GOMFrameWork.DataEntity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,12 @@ namespace WebSite
             {
                 return HttpContext.User.Identity as LoginInfo;
             }
+        }
+
+        public long DeleteEntity(EntityBase entity)
+        {
+            entity["IsDelete"] = 1;
+            return entity.Save();
         }
     }
 }
