@@ -18,7 +18,7 @@ namespace EntityLibrary.SearchEntities
             this.IsDelete = 0;
         }
 
-        [Search(Operator=SearchOperator.IsNullZeroEqual)]
+        [Search(Operator = SearchOperator.IsNullZeroEqual)]
         public int IsDelete
         {
             set { SetValue("IsDelete", value); }
@@ -27,6 +27,12 @@ namespace EntityLibrary.SearchEntities
         public int CType
         {
             set { SetValue("CType", value); }
+        }
+
+        [Search(Field = "CategoryID", Operator = SearchOperator.In)]
+        public string CategoryIds
+        {
+            set { SetValue("CategoryIds", value); }
         }
     }
 }

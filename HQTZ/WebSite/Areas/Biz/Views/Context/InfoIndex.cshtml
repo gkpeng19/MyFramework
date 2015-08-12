@@ -4,13 +4,14 @@
 }
 
 <div class="row-fluid">
-    <div class="span4">
+    <div class="span3">
         <div class="row-fluid header blue btn-header">
-            <button class="btn btn-primary btn-small btn-addcategory">新增根节点</button>
+            <button class="btn btn-primary btn-small btn-addroot">新增根节点</button>
+            <button class="btn btn-primary btn-small btn-addchild">新增</button>
         </div>
         <div id="tree_category"></div>
     </div>
-    <div class="span8">
+    <div class="span9">
         <div class="row-fluid header blue btn-header">
             <button class="btn btn-primary btn-small btn-table-add">新 增</button>
         </div>
@@ -91,25 +92,42 @@
             }
         });
 
-        $('#tree_category').on("loaded.jstree", function () {
-            var tree = $('#tree_category').jstree(true);
-            tree.select_node(0);
-           
-        });
-
         var selectedNode = {};
         $('#tree_category').on("changed.jstree", function (e, data) {
             if (data.selected.length) {
-                selectedNode = data.instance.get_node(data.selected[0]);
-
-                //刷新右边表格
-                $("#6690632095343458").datagrid({ url: "/Biz/Context/LoadInfo", psize: 10, search: { categoryid: selectedNode.id } });
+                var node = data.instance.get_node(data.selected[0]);
+                if (node.id != selectedNode.id) {
+                    selectedNode = node;
+                    //刷新右边表格
+                    var cids = selectedNode.id;
+                    $(selectedNode.children_d).each(function () {
+                        cids += (',' + this);
+                    });
+                    $("#6690632095343458").datagrid({ url: "/Biz/Context/LoadInfo", psize: 10, search: { categoryids: cids } });
+                }
             }
         });
 
         /*For分类树开始*/
-        $(".btn-addcategory").bind("click", function () {
+        $(".btn-addroot").bind("click", function () {
+            var ref = $('#tree_category').jstree(true),
+			sel = ref.get_selected();
+            if (!sel.length) { return false; }
+            sel = sel[0];
+            sel = ref.create_node(sel, { "type": "file" });
+            if (sel) {
+                ref.edit(sel);
+            }
+            return;
+            $("#fm_category").bindEntity({});
+            AddNode();
+        });
+        $(".btn-addchild").bind("click", function () {
             $("#fm_category").bindEntity({ ParentID: selectedNode.id });
+            AddNode();
+        });
+
+        function AddNode() {
             $("#fm_category").open("新增分类", function (win) {
                 if (!tt.validateForm("fm_category")) {
                     return false;
@@ -119,6 +137,7 @@
                     r = $.toJsResult(r);
                     if (r.ID > 0) {
                         //更新树
+
                         layer.close(win);
                     }
                     else {
@@ -128,8 +147,7 @@
 
                 return false;
             });
-        });
-
+        }
         /*For分类树结束*/
 
         function BindToSelect(data) {
@@ -142,66 +160,67 @@
 
             //$("#6690632095343458").datagrid({ url: "/Biz/Context/LoadInfo", psize: 10 });
 
+            function initDataGrid()
+            {
+                $("#6690632095343458").parent().find(".btn-table-add").bind('click', function () {
+                    $("#08991986788186862").bindEntity({});
+                    $("#08991986788186862").open("新增", function (win) {
+                        if (!tt.validateForm("08991986788186862")) {
+                            return false;
+                        }
+                        var update = $("#08991986788186862").getContext();
+                        $.post("/Biz/Context/SaveInfo", update, function (r) {
+                            r = $.toJsResult(r);
+                            if (r.ID > 0) {
+                                $("#6690632095343458").datagrid("addRow", r);
+                                layer.close(win);
+                            }
+                            else {
+                                $.error("保存失败，请重试！");
+                            }
+                        });
 
-            $("#6690632095343458").parent().find(".btn-table-add").bind('click', function () {
-                $("#08991986788186862").bindEntity({});
-                $("#08991986788186862").open("新增", function (win) {
-                    if (!tt.validateForm("08991986788186862")) {
                         return false;
-                    }
-                    var update = $("#08991986788186862").getContext();
-                    $.post("/Biz/Context/SaveInfo", update, function (r) {
-                        r = $.toJsResult(r);
-                        if (r.ID > 0) {
-                            $("#6690632095343458").datagrid("addRow", r);
-                            layer.close(win);
-                        }
-                        else {
-                            $.error("保存失败，请重试！");
-                        }
                     });
-
-                    return false;
                 });
-            });
-            $("#6690632095343458").datagrid("onEdit", function () {
-                var json = $("#6690632095343458").datagrid("getCurrData");
-                $("#08991986788186862").bindEntity(json);
-                $("#08991986788186862").open("编辑", function (win) {
-                    if (!tt.validateForm("08991986788186862")) {
-                        return false;
-                    }
-                    var update = $("#08991986788186862").getContext();
-                    $.post("/Biz/Context/SaveInfo", update, function (r) {
-                        var newjson = $.updateJson(json, $.toJsResult(r));
-                        if (r.ID > 0) {
-                            $("#6690632095343458").datagrid("updateRow", json, newjson);
-                            layer.close(win);
-                        }
-                        else {
-                            $.error("保存失败，请重试！");
-                        }
-                    });
-
-                    return false;
-                });
-            });
-
-
-            $("#6690632095343458").datagrid("onDelete", function () {
-                $.confirm("确定要删除吗？", function () {
+                $("#6690632095343458").datagrid("onEdit", function () {
                     var json = $("#6690632095343458").datagrid("getCurrData");
-                    $.post("/Biz/Context/DeleteContext", { ID: json["ID"] }, function (r) {
-                        if (r > 0) {
-                            $("#6690632095343458").datagrid("removeCurrRow");
+                    $("#08991986788186862").bindEntity(json);
+                    $("#08991986788186862").open("编辑", function (win) {
+                        if (!tt.validateForm("08991986788186862")) {
+                            return false;
                         }
-                        else {
-                            $.error("删除失败，请重试！");
-                        }
+                        var update = $("#08991986788186862").getContext();
+                        $.post("/Biz/Context/SaveInfo", update, function (r) {
+                            var newjson = $.updateJson(json, $.toJsResult(r));
+                            if (r.ID > 0) {
+                                $("#6690632095343458").datagrid("updateRow", json, newjson);
+                                layer.close(win);
+                            }
+                            else {
+                                $.error("保存失败，请重试！");
+                            }
+                        });
+
+                        return false;
                     });
                 });
-            });
 
+                $("#6690632095343458").datagrid("onDelete", function () {
+                    $.confirm("确定要删除吗？", function () {
+                        var json = $("#6690632095343458").datagrid("getCurrData");
+                        $.post("/Biz/Context/DeleteContext", { ID: json["ID"] }, function (r) {
+                            if (r > 0) {
+                                $("#6690632095343458").datagrid("removeCurrRow");
+                            }
+                            else {
+                                $.error("删除失败，请重试！");
+                            }
+                        });
+                    });
+                });
+            }
+            
         });
 
         /*增加验证信息----------Start*/

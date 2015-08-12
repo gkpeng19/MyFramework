@@ -112,14 +112,11 @@ namespace WebSite.Areas.Biz.Controllers
 
         #endregion
 
-        public JsonResult LoadInfo(int page, int psize = 10, int categoryid = 0)
+        public JsonResult LoadInfo(int page, string categoryids, int psize = 10)
         {
             Sh_HZ_Context sh = new Sh_HZ_Context();
             sh.CType = (int)ContextTypeEnum.Info;
-            if (categoryid > 0)
-            {
-                sh["categoryid"] = categoryid;
-            }
+            sh.CategoryIds = categoryids;
             sh.PageIndex = page;
             sh.PageSize = psize;
             sh.OrderBy("IsTop", EnumOrderBy.Desc);
