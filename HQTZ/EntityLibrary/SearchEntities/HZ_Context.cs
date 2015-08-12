@@ -23,5 +23,10 @@ namespace EntityLibrary.SearchEntities
         {
             set { SetValue("IsDelete", value); }
         }
+
+        public int CType
+        {
+            set { SetValue("CType", value); }
+        }
     }
 }

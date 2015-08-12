@@ -60,3 +60,9 @@
     float:left;
     padding-left:10px;
 }
+
+.btn-header
+{
+    margin-top:0px;
+    margin-bottom:5px;
+}

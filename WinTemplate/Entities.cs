@@ -134,7 +134,6 @@ namespace WinTemplate
         {
             extdatas = new List<GFormExDataItem>();
         }
-        public int layer { get; set; }
         public List<GFormExDataItem> extdatas { get; set; }
     }
 
@@ -146,6 +145,7 @@ namespace WinTemplate
         }
         public string dataid { get; set; }
         public string showname { get; set; }
+        public string size { get; set; }
         public List<GFormValidate> validates { get; set; }
     }
 

@@ -164,7 +164,9 @@ var formconfig = function (selector, id, pkey, isshow, size) {
     this.btn_editor = $('<input type="button" value="添加 HtmlEditor" data-type="5" />');
     this.btn_removeNode = $("<input type='button' value='移除' style='display:none;' />");
     this.btn_removeCon = $("<input type='button' value='移除该对象' />");
-    this.chartCon.append(this.btn_input).append(this.btn_select).append(this.btn_datetime).append(this.btn_textarea).append(this.btn_removeNode).append(this.btn_removeCon);
+    this.chartCon.append(this.btn_input).append(this.btn_select).append(this.btn_datetime).append(this.btn_textarea)
+        .append(this.btn_cbx).append(this.btn_editor)
+        .append(this.btn_removeNode).append(this.btn_removeCon);
 
     var target = this;
     var click_func = function (type) {
@@ -185,9 +187,9 @@ var formconfig = function (selector, id, pkey, isshow, size) {
                 return false;
             }
 
-            var size = 0;
+            var csize = 0;
             try {
-                size = parseInt($.trim($("#txt_formCtrSize").val()));
+                csize = parseInt($.trim($("#txt_formCtrSize").val()));
             } catch (e) {
                 alert("请维护控件尺寸！");
                 return false;
@@ -197,7 +199,7 @@ var formconfig = function (selector, id, pkey, isshow, size) {
             var extData = {};
             extData.showname = showname;
             extData.validates = [];
-            extData.size = size;
+            extData.size = csize;
             $("#form_tab_validate input[type=checkbox]").each(function () {
                 if (this.checked) {
                     var name = $(this).attr("name");
@@ -218,7 +220,7 @@ var formconfig = function (selector, id, pkey, isshow, size) {
 
             $("#txt_formPropertyName").val('');
             $("#txt_formShowName").val('');
-
+            $("#txt_formCtrSize").val('');
 
             target.AddNode(type, name, extData);
         });
@@ -320,7 +322,7 @@ formconfig.prototype.AddNode = function (type, text, exData) {
     this.bindNodeSelectEvent();
     this.selectNode = null;
 
-    this.extData.extdatas.push({ dataid: v, showname: exData.showname, validates: exData.validates });
+    this.extData.extdatas.push({ dataid: v, showname: exData.showname, size: exData.size, validates: exData.validates });
 };
 
 formconfig.prototype.RemoveSelectNode = function () {

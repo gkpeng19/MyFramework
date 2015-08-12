@@ -465,14 +465,17 @@
                 var ctr = this;
                 if (this.checked) {
                     $("#form_validateLength").open("维护最小最大长度", function () {
-                        var minlen = 0;
-                        var maxlen = 0;
-                        try {
-                            minlen = parseInt($.trim($("txt_validateMinLength").val()));
-                            maxlen = parseInt($.trim($("txt_validateMaxLength").val()));
-                        } catch (ee) { }
-                        $("txt_validateMinLength").val("");
-                        $("txt_validateMaxLength").val("");
+                        var minlen = parseInt($.trim($("#txt_validateMinLength").val()));
+                        if (!minlen) {
+                            minlen = '--';
+                        }
+                        var maxlen = parseInt($.trim($("#txt_validateMaxLength").val()));
+                        if (!maxlen) {
+                            maxlen = '++';
+                        }
+
+                        $("#txt_validateMinLength").val("");
+                        $("#txt_validateMaxLength").val("");
 
                         $(ctr).attr("data-minlen", minlen);
                         $(ctr).attr("data-maxlen", maxlen);

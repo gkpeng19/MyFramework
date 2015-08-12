@@ -5,7 +5,7 @@
     var style=fm.isshow=="0"?"display:none;":"";
 	var hide=fm.isshow=="0"?"_hide":"";
 	<div class="row-fluid">
-		<div class="span@fm.size">
+		<div class="span@(fm.size)">
 			<form  name="@fm.id" id="@fm.id" class="form-layer" style="@style">
 				<div>
 					<input type="hidden" name="@fm.data[1].c[0].fld" />
@@ -18,7 +18,7 @@
 						{
 							if(exd!=null&&exd.dataid==d.c[0].v)
 							{
-								<div class="span@exd.size">
+								<div class="span@(exd.size)">
 								<label>@exd.showname</label>
 								@if(t=="0")
 								{
@@ -42,7 +42,7 @@
 								}
 								else if(t=="5")
 								{
-								<textarea name="@d.c[0].fld" id="@d.c[0].v" class="span12 text_editor@hide"></textarea>
+								<textarea name="@d.c[0].fld" id="@d.c[0].v" class="span12 text_editor@(hide)"></textarea>
 								}
 								</div>
 								break;
@@ -56,7 +56,8 @@
 	</div>
 }
 
-
+@{var varchar="@{";}
+@varchar
 <script type="text/javascript">
 	@foreach(var json in Model.jsons)
 	{
@@ -186,10 +187,10 @@
                                         var update=$("#@btn.formdataid").getContext();
                                         $.post("@btn.action",update,function(r)
                                         {
-                                            r = $.toJsResult(r);
+											var newjson = $.updateJson(json, $.toJsResult(r));
                                             if(r.ID>0)
                                             {
-                                                $("#@table.id").datagrid("updateRow",json,r);
+                                                $("#@table.id").datagrid("updateRow",json,newjson);
                                                 layer.close(win);
                                             }
                                             else
@@ -235,9 +236,19 @@
         {
             foreach(var exd in fm.extdata.extdatas)
             {
-				<text>
-				var f@(exd.dataid)=new tt.Field("@exd.showname","","@exd.dataid").setMsgId("layer-error-msg");
-				</text>
+				if(fm.isshow=="0")
+				{
+					<text>
+					var f@(exd.dataid)=new tt.Field("@exd.showname","","@exd.dataid").setMsgId("layer-error-msg");
+					</text>
+				}
+				else
+				{
+					<text>
+					var f@(exd.dataid)=new tt.Field("@exd.showname","","@exd.dataid");
+					</text>
+				}
+				
                 @foreach(var validate in exd.validates)
                 {
 					switch(validate.type)
@@ -280,3 +291,4 @@
         }
         /*增加验证信息----------End*/	
 </script>
+<text>}</text>

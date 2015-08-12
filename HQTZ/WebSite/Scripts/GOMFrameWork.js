@@ -560,6 +560,9 @@ $.fn.extend({
                             }
                         }
                     }
+                    else if ($(this).attr("type") == "checkbox") {
+                        this.checked = false;
+                    }
                     else {
                         $(this).val("");
                         if (tagName == "TEXTAREA") {
