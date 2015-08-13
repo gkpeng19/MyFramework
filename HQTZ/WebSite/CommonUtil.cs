@@ -45,7 +45,6 @@ namespace WebSite
                     }
                 }
             }
-            orderNodes[0].state = new HtmlTreeNode.HtmlTreeNodeState() { selected = true };
             return orderNodes;
         }
     }

@@ -25,14 +25,5 @@ namespace EntityLibrary
         public int parentid { get; set; }
 
         public List<HtmlTreeNode> children { get; set; }
-
-        public class HtmlTreeNodeState
-        {
-            public bool selected { get; set; }
-            public bool disabled { get; set; }
-            public bool opened { get; set; }
-        }
-
-        public HtmlTreeNodeState state { get; set; }
     }
 }

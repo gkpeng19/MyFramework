@@ -1,4 +1,4 @@
-﻿var gExtends = { datagrid: {} };
+﻿var gExtends = { datagrid: {}, gtree: {} };
 
 $.fn.extend({
     /*----DataGrid---------------------------*/
@@ -485,7 +485,313 @@ datatable.prototype.onLoadFooter = function (func) {
     }
 };
 
+/*-----树形插件---------------------------------------------------------------*/
+$.fn.extend({
+    gtree: function (a, b, c) {
+        if (typeof (a) == "object") {
+            var tree = new gtree(this);
+            if (a.url && a.url.length > 0) {
+                tree.initByUrl(a.url);
+            }
+            else if (a.data.length > 0) {
+                tree.initByData(a.data);
+            }
 
+            gExtends.gtree[this.selector] = tree;
+        }
+        else {
+            var tree = gExtends.gtree[this.selector];
+            if (tree) {
+                return tree[a](b, c);
+            }
+        }
+    }
+});
+
+
+var gtree = function (target) {
+    this.nodes = null;
+
+    target.html("");
+    target.attr("class", "jstree jstree-default");
+    this.container = $('<ul class="jstree-container-ul jstree-children">');
+    target.append(this.container);
+
+    var tree = this;
+
+    this.tool = {};
+    this.tool.getNode = function (nid) {
+        for (var t = 0; t < tree.nodes.length; ++t) {
+            var cnode = tree.nodes[t];
+            if (cnode) {
+                var node = tree.tool.getNodeFromNode(nid, cnode);
+                if (node) {
+                    return node;
+                }
+            }
+        }
+        return null;
+    };
+
+    //nid:查找节点的id；nd:在哪个节点中查找(包含其子节点)
+    this.tool.getNodeFromNode = function (nid, nd) {
+        if (nd.id == nid) {
+            return nd;
+        }
+        else if (nd.children.length > 0) {
+            for (var j = 0; j < nd.children.length; ++j) {
+                var cnode = nd.children[j];
+                if (cnode) {
+                    var node = tree.tool.getNodeFromNode(nid, cnode);
+                    if (node) {
+                        return node;
+                    }
+                }
+            }
+        }
+        return null;
+    };
+
+    this.tool.initTreeNodeChildren_D = function (node) {
+        if (!node) {
+            return;
+        }
+
+        node.children_d = [];
+        node.children_d.push(node.id);
+
+        $(node.children).each(function () {
+            if (this) {
+                var ids = tree.tool.initTreeNodeChildren_D(this);
+                for (var i = 0; i < ids.length; ++i) {
+                    node.children_d.push(ids[i]);
+                }
+            }
+        });
+
+        return node.children_d;
+    };
+
+    this.tool.initTreeNodeHtml = function (node, isselected, isopen, isend) {
+        if (!node) {
+            return '';
+        }
+
+        var html = '';
+        var endclass = '';
+        if (isend) {
+            endclass = 'jstree-last';
+        }
+
+        var pid = node.parentid > 0 ? node.parentid : 0;
+        if (node.children.length > 0) {
+            if (isopen) {
+                html += '<li id="' + node.id + '" data-pid="' + pid + '" class="jstree-node jstree-open ' + endclass + '">';
+            }
+            else {
+                html += '<li id="' + node.id + '" data-pid="' + pid + '" class="jstree-node  jstree-closed ' + endclass + '">';
+            }
+        }
+        else {
+            html += '<li id="' + node.id + '" data-pid="' + pid + '" class="jstree-node jstree-leaf ' + endclass + '">';
+        }
+
+
+        html += '<i class="jstree-icon jstree-ocl"></i>';
+        if (isselected) {
+            html += '<a class="jstree-anchor jstree-clicked" href="javascript:void(0)"><i class="jstree-icon jstree-themeicon"></i><span>' + node.text + '</span></a>';
+        }
+        else {
+            html += '<a class="jstree-anchor" href="javascript:void(0)"><i class="jstree-icon jstree-themeicon"></i></span>' + node.text + '</span></a>';
+        }
+
+        if (node.children.length > 0 && isopen) {
+            html += '<ul class="jstree-children">';
+            for (var i = 0; i < node.children.length - 1; ++i) {
+                html += tree.tool.initTreeNodeHtml(node.children[i], false, false, false);
+            }
+            html += tree.tool.initTreeNodeHtml(node.children[node.children.length - 1], false, false, true);
+            html += "</ul>";
+        }
+
+        html += '</li>';
+        return html;
+    };
+
+    this.tool.initTreeEvent = function () {
+        tree.container.find(".jstree-open>.jstree-icon").each(function () {
+            if (!this.onclick) {
+                $(this).bind('click', function () {
+                    //关闭
+                    var li = $(this).parent();
+                    var islast = li.hasClass("jstree-last");
+                    var node = tree.tool.getNode(li.attr("id"));
+                    if (node) {
+                        var isselected = false;
+                        if (li.find(".jstree-clicked").length > 0) {
+                            isselected = true;
+                        }
+                        li.replaceWith(tree.tool.initTreeNodeHtml(node, isselected, false, islast));
+                        tree.tool.initTreeEvent();
+
+                        if (tree.onSelectChanged) {
+                            tree.onSelectChanged(tree.getSelected());
+                        }
+                    }
+                });
+            }
+        });
+
+        tree.container.find(".jstree-closed>.jstree-icon").each(function () {
+            if (!this.onclick) {
+                $(this).bind('click', function () {
+                    //打开
+                    var li = $(this).parent();
+                    var islast = li.hasClass("jstree-last");
+                    var node = tree.tool.getNode(li.attr("id"));
+                    if (node) {
+                        var isselected = false;
+                        if (li.find(".jstree-clicked").length > 0) {
+                            isselected = true;
+                        }
+                        li.replaceWith(tree.tool.initTreeNodeHtml(node, isselected, true, islast));
+                        tree.tool.initTreeEvent();
+
+                        if (tree.onSelectChanged) {
+                            tree.onSelectChanged(tree.getSelected());
+                        }
+                    }
+                });
+            }
+        });
+
+        tree.container.find(".jstree-anchor").each(function () {
+            if (!this.onclick) {
+                $(this).bind('click', function () {
+                    if ($(this).hasClass("jstree-clicked")) {
+                        return;
+                    }
+
+                    tree.container.find(".jstree-clicked").removeClass("jstree-clicked");
+                    $(this).addClass("jstree-clicked");
+
+                    if (tree.onSelectChanged) {
+                        tree.onSelectChanged(tree.getSelected());
+                    }
+                });
+            }
+        });
+    };
+};
+
+gtree.prototype.initByUrl = function (url) {
+    var tree = this;
+    $.post(url, { ran: Math.random() }, function (r) {
+        tree.initByData(r);
+    });
+};
+
+gtree.prototype.initByData = function (nodes) {
+    var tree = this;
+    this.nodes = nodes;
+    var html = '';
+
+    $(nodes).each(function (index) {
+        var isfirst = false;
+        var islast = false;
+        tree.tool.initTreeNodeChildren_D(this);
+        if (index == 0) {
+            isfirst = true;
+        }
+        if (index == nodes.length - 1) {
+            islast = true;
+        }
+        html += tree.tool.initTreeNodeHtml(this, isfirst, isfirst, islast);
+    });
+
+    tree.container.html(html);
+
+    tree.tool.initTreeEvent();
+
+    //选中改变事件发生(因为默认选中第一项)
+    if (this.onSelectChanged) {
+        this.onSelectChanged(this.getSelected());
+    }
+};
+
+gtree.prototype.getSelected = function () {
+    var clicked = this.container.find(".jstree-clicked");
+    if (clicked.length > 0) {
+        var id = clicked.parent().attr("id");
+        return this.tool.getNode(id);
+    }
+    return null;
+};
+
+gtree.prototype.selectChanged = function (event) {
+    this.onSelectChanged = event;
+};
+
+gtree.prototype.addRootNode = function (node) {
+    node.children = [];
+    this.tool.initTreeNodeChildren_D(node);
+    var isselected = false;
+    if (this.nodes.length == 0) {
+        isselected = true;
+    }
+    var html = this.tool.initTreeNodeHtml(node, isselected, false, true);
+    this.container.parent().find("ul.jstree-container-ul>li:last-child").removeClass("jstree-last");
+    this.container.append(html);
+    this.nodes.push(node);
+    this.tool.initTreeEvent();
+}
+
+gtree.prototype.addChildNode = function (node) {
+    node.children = [];
+    var snode = this.getSelected();
+    snode.children.push(node);
+    this.tool.initTreeNodeChildren_D(snode);
+    this.tool.initTreeNodeChildren_D(node);
+
+    $(".jstree-clicked").parent().replaceWith(this.tool.initTreeNodeHtml(snode, true, true, $(".jstree-clicked").parent().hasClass("jstree-last")));
+    this.tool.initTreeEvent();
+}
+
+gtree.prototype.removeSelectNode = function () {
+    var node = this.getSelected();
+    if (node.children.length > 0) {
+        $.error("请先删除子节点！");
+        return false;
+    }
+
+    var pid = node.parentid;
+    node = null;
+    var nextid = 0;
+    if (pid > 0) {
+        var pnode = this.tool.getNode(pid);
+        this.tool.initTreeNodeChildren_D(pnode);
+        nextid = pnode.id;
+    }
+    else {
+        nextid = this.nodes[0].id;
+    }
+
+    var li = this.container.find(".jstree-clicked").parent();
+    if (li.hasClass("jstree-last")) {
+        li.prev().addClass("jstree-last");
+    }
+    li.remove();
+
+    this.container.find("#" + nextid + ">a.jstree-anchor").click();
+
+    return true;
+};
+
+gtree.prototype.updateSelectNode = function (node) {
+    var snode = this.getSelected();
+    snode.text = node.text;
+    this.container.find(".jstree-clicked span").text(node.text);
+};
 
 /*-----Json数组的二分查找------------------------------------------------------*/
 $.extend({
@@ -795,5 +1101,17 @@ $.fn.extend({
         this.parent().parent().find(".layui-layer-btn").append("<span id='layer-error-msg'></span>");
 
         return win;
+    },
+    loading: function () {
+        var top = this.offset().top;
+        var left = this.offset().left;
+        var width = this.width();
+        var height = this.height();
+        top += height / 2;
+        left += width / 2;
+        var index = layer.load(2);
+        var loading = $("#layui-layer" + index)[0];
+        loading.style.left = left;
+        loading.style.top = top;
     }
 });

@@ -77,6 +77,7 @@ namespace WebSite.Areas.Biz.Controllers
             Sh_HZ_Catagory sh = new Sh_HZ_Catagory();
             sh["ctype"] = (int)CategoryTypeEnum.Info;
             sh.OrderBy("parentid", EnumOrderBy.Asc);
+            sh.OrderBy("createon", EnumOrderBy.Desc);
 
             var r = sh.Load<HZ_Catagory>();
             List<HtmlTreeNode> treeNodes = new List<HtmlTreeNode>();
@@ -189,6 +190,11 @@ namespace WebSite.Areas.Biz.Controllers
         #endregion
 
         public long DeleteContext(HZ_Context entity)
+        {
+            return base.DeleteEntity(entity);
+        }
+
+        public long DeleteCategory(HZ_Catagory entity)
         {
             return base.DeleteEntity(entity);
         }
