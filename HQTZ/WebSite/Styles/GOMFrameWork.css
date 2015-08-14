@@ -55,19 +55,23 @@
 }
 
 
-#layer-error-msg
-{
-    float:left;
-    padding-left:10px;
+#layer-error-msg {
+    float: left;
+    padding-left: 10px;
 }
 
-.btn-header
-{
-    margin-top:0px;
-    margin-bottom:5px;
+.btn-header {
+    margin-top: 0px;
+    margin-bottom: 5px;
 }
 
-.table
-{
-    min-height:300px;
+.table-container {
+    min-height: 300px;
+}
+
+
+.loading {
+    width: 32px;
+    height: 32px;
+    position: absolute;
 }

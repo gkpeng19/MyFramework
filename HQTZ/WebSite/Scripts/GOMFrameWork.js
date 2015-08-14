@@ -166,6 +166,8 @@ datatable.prototype.onCustomPager = null;
 datatable.prototype.url = null;
 datatable.prototype.search = null;
 datatable.prototype.initByUrl = function (url, search, page) {
+    this.datagrid.loading();
+
     this.url = url;
     this.search = search;
 
@@ -183,6 +185,8 @@ datatable.prototype.initByUrl = function (url, search, page) {
     var dg = this;
     $.post(url, search, function (r) {
         dg.initByData($.toJsResult(r.Data), page, r.PageCount);
+
+        dg.datagrid.loaded();
     });
 };
 
@@ -1103,15 +1107,33 @@ $.fn.extend({
         return win;
     },
     loading: function () {
-        var top = this.offset().top;
-        var left = this.offset().left;
-        var width = this.width();
-        var height = this.height();
-        top += height / 2;
-        left += width / 2;
-        var index = layer.load(2);
-        var loading = $("#layui-layer" + index)[0];
-        loading.style.left = left;
-        loading.style.top = top;
+        var tagName = this[0].tagName;
+        var container = null;
+        if (tagName == "TABLE") {
+            container = this.parent();
+        }
+        else {
+            container = this;
+        }
+        var top = container.offset().top;
+        var left = container.offset().left;
+        var width = container.width();
+        var height = container.height();
+
+        var ling = $('<div class="layui-layer-loading loading"><div class="layui-layer-content layui-layer-loading2"></div><span class="layui-layer-setwin"></span></div>');
+        container.append(ling);
+        ling[0].style.left = (left + width / 2) + "px";
+        ling[0].style.top = (top + height / 2 - 32) + "px";
+    },
+    loaded: function () {
+        var tagName = this[0].tagName;
+        var container = null;
+        if (tagName == "TABLE") {
+            container = this.parent();
+        }
+        else {
+            container = this;
+        }
+        container.find(".loading").remove();
     }
 });

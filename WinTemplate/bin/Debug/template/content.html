@@ -56,7 +56,7 @@
 	</div>
 }
 
-@{var varchar="@{";}
+@{var varchar="@section scripts{";}
 @varchar
 <script type="text/javascript">
 	@foreach(var json in Model.jsons)
@@ -187,10 +187,10 @@
                                         var update=$("#@btn.formdataid").getContext();
                                         $.post("@btn.action",update,function(r)
                                         {
-                                            r = $.toJsResult(r);
+											var newjson = $.updateJson(json, $.toJsResult(r));
                                             if(r.ID>0)
                                             {
-                                                $("#@table.id").datagrid("updateRow",json,r);
+                                                $("#@table.id").datagrid("updateRow",json,newjson);
                                                 layer.close(win);
                                             }
                                             else
@@ -291,4 +291,4 @@
         }
         /*增加验证信息----------End*/	
 </script>
-<text>}</text>
+}
