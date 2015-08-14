@@ -20,8 +20,8 @@ namespace WinTemplate
     {
         public Main()
         {
-            GenerateHtml();
-            return;
+            //GenerateHtml();
+            //return;
             InitializeComponent();
             this.Load += Main_Load;
         }
@@ -29,22 +29,6 @@ namespace WinTemplate
         void Main_Load(object sender, EventArgs e)
         {
             fileTree.ImageList = treeImgList;
-
-            #region 组合键Control+S保存
-
-            this.KeyUp += (ss, ee) =>
-            {
-                if (ee.Control && ee.KeyCode == Keys.S)
-                {
-                    if (tabControl.SelectedTab != null)
-                    {
-                        var browser = tabControl.SelectedTab.Container.Controls[0] as WebBrowser;
-                        browser.Document.InvokeScript("Save ", new string[] { });
-                    }
-                }
-            };
-
-            #endregion
 
             #region 树右键菜单
 

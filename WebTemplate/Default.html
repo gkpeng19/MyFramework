@@ -177,10 +177,20 @@
         </table>
     </div>
     <div>
-        <input type="button" value="添加表格" onclick="AddTable()" />
-        <input type="button" value="添加全局数据" onclick="AddJsonData()" />
-        <input type="button" value="添加Form" onclick="AddFormData()" />
-        <input type="button" value="添加绑定" onclick="AddDataBind()" />
+        <table width="100%">
+            <tr>
+                <td>
+                    <input type="button" value="添加表格" onclick="AddTable()" />
+                    <input type="button" value="添加全局数据" onclick="AddJsonData()" />
+                    <input type="button" value="添加Form" onclick="AddFormData()" />
+                    <input type="button" value="添加绑定" onclick="AddDataBind()" />
+                </td>
+                <td align="right">
+                    <input type="button" value="保存" onclick="Save()" />
+                </td>
+            </tr>
+        </table>
+        
     </div>
 
     <fieldset>
@@ -506,6 +516,5 @@
             });
         });
     </script>
-    <input type="button" onclick="Save()" value="Save" />
 </body>
 </html>

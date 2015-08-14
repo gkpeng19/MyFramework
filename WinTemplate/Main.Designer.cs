@@ -34,9 +34,13 @@ namespace WinTemplate
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.kryptonSplitContainer1 = new ComponentFactory.Krypton.Toolkit.KryptonSplitContainer();
             this.kryptonPanel1 = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
+            this.tabControl = new WinTemplate.UControl.KryptonTabControl();
             this.kryptonHeaderGroup1 = new ComponentFactory.Krypton.Toolkit.KryptonHeaderGroup();
             this.fileTree = new ComponentFactory.Krypton.Toolkit.KryptonTreeView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.sbtnAddSulution = new System.Windows.Forms.ToolStripButton();
+            this.sbtnSave = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.solutionCMenu = new ComponentFactory.Krypton.Toolkit.KryptonContextMenu();
             this.kryptonContextMenuItems1 = new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItems();
             this.cMItemAddProject = new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem();
@@ -47,11 +51,7 @@ namespace WinTemplate
             this.folderCMenu = new ComponentFactory.Krypton.Toolkit.KryptonContextMenu();
             this.kryptonContextMenuItems3 = new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItems();
             this.cMItemAddFile2 = new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem();
-            this.tabControl = new WinTemplate.UControl.KryptonTabControl();
             this.treeImgList = new System.Windows.Forms.ImageList(this.components);
-            this.sbtnAddSulution = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -105,7 +105,7 @@ namespace WinTemplate
             this.kryptonSplitContainer1.Panel2.Controls.Add(this.kryptonHeaderGroup1);
             this.kryptonSplitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(0, 6, 0, 0);
             this.kryptonSplitContainer1.Size = new System.Drawing.Size(784, 437);
-            this.kryptonSplitContainer1.SplitterDistance = 550;
+            this.kryptonSplitContainer1.SplitterDistance = 600;
             this.kryptonSplitContainer1.TabIndex = 0;
             // 
             // kryptonPanel1
@@ -114,8 +114,16 @@ namespace WinTemplate
             this.kryptonPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.kryptonPanel1.Location = new System.Drawing.Point(0, 6);
             this.kryptonPanel1.Name = "kryptonPanel1";
-            this.kryptonPanel1.Size = new System.Drawing.Size(550, 431);
+            this.kryptonPanel1.Size = new System.Drawing.Size(600, 431);
             this.kryptonPanel1.TabIndex = 1;
+            // 
+            // tabControl
+            // 
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.Size = new System.Drawing.Size(600, 431);
+            this.tabControl.TabIndex = 0;
             // 
             // kryptonHeaderGroup1
             // 
@@ -128,7 +136,7 @@ namespace WinTemplate
             // kryptonHeaderGroup1.Panel
             // 
             this.kryptonHeaderGroup1.Panel.Controls.Add(this.fileTree);
-            this.kryptonHeaderGroup1.Size = new System.Drawing.Size(229, 431);
+            this.kryptonHeaderGroup1.Size = new System.Drawing.Size(179, 431);
             this.kryptonHeaderGroup1.TabIndex = 0;
             this.kryptonHeaderGroup1.ValuesPrimary.Heading = "解决方案资源管理器";
             this.kryptonHeaderGroup1.ValuesPrimary.Image = null;
@@ -142,7 +150,7 @@ namespace WinTemplate
             this.fileTree.ItemStyle = ComponentFactory.Krypton.Toolkit.ButtonStyle.ListItem;
             this.fileTree.Location = new System.Drawing.Point(0, 0);
             this.fileTree.Name = "fileTree";
-            this.fileTree.Size = new System.Drawing.Size(227, 407);
+            this.fileTree.Size = new System.Drawing.Size(177, 407);
             this.fileTree.TabIndex = 0;
             // 
             // toolStrip1
@@ -151,12 +159,40 @@ namespace WinTemplate
             this.toolStrip1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.sbtnAddSulution,
-            this.toolStripButton2,
+            this.sbtnSave,
             this.toolStripButton3});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(81, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(112, 25);
             this.toolStrip1.TabIndex = 0;
+            // 
+            // sbtnAddSulution
+            // 
+            this.sbtnAddSulution.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.sbtnAddSulution.Image = ((System.Drawing.Image)(resources.GetObject("sbtnAddSulution.Image")));
+            this.sbtnAddSulution.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.sbtnAddSulution.Name = "sbtnAddSulution";
+            this.sbtnAddSulution.Size = new System.Drawing.Size(23, 22);
+            this.sbtnAddSulution.Text = "新建解决方案";
+            this.sbtnAddSulution.Click += new System.EventHandler(this.sbtnAddSulution_Click);
+            // 
+            // sbtnSave
+            // 
+            this.sbtnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.sbtnSave.Image = ((System.Drawing.Image)(resources.GetObject("sbtnSave.Image")));
+            this.sbtnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.sbtnSave.Name = "sbtnSave";
+            this.sbtnSave.Size = new System.Drawing.Size(23, 22);
+            this.sbtnSave.Text = "保存";
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton3.Text = "toolStripButton3";
             // 
             // solutionCMenu
             // 
@@ -205,14 +241,6 @@ namespace WinTemplate
             // 
             this.cMItemAddFile2.Text = "新建文件";
             // 
-            // tabControl
-            // 
-            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 0);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.Size = new System.Drawing.Size(550, 431);
-            this.tabControl.TabIndex = 0;
-            // 
             // treeImgList
             // 
             this.treeImgList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("treeImgList.ImageStream")));
@@ -221,34 +249,6 @@ namespace WinTemplate
             this.treeImgList.Images.SetKeyName(1, "project.png");
             this.treeImgList.Images.SetKeyName(2, "folder.png");
             this.treeImgList.Images.SetKeyName(3, "document.png");
-            // 
-            // sbtnAddSulution
-            // 
-            this.sbtnAddSulution.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.sbtnAddSulution.Image = ((System.Drawing.Image)(resources.GetObject("sbtnAddSulution.Image")));
-            this.sbtnAddSulution.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.sbtnAddSulution.Name = "sbtnAddSulution";
-            this.sbtnAddSulution.Size = new System.Drawing.Size(23, 22);
-            this.sbtnAddSulution.Text = "toolStripButton1";
-            this.sbtnAddSulution.Click += new System.EventHandler(this.sbtnAddSulution_Click);
-            // 
-            // toolStripButton2
-            // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Text = "toolStripButton2";
-            // 
-            // toolStripButton3
-            // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton3.Text = "toolStripButton3";
             // 
             // Main
             // 
@@ -287,7 +287,7 @@ namespace WinTemplate
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton sbtnAddSulution;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton sbtnSave;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private ComponentFactory.Krypton.Toolkit.KryptonSplitContainer kryptonSplitContainer1;
         private ComponentFactory.Krypton.Toolkit.KryptonHeaderGroup kryptonHeaderGroup1;
