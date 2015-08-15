@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 
-namespace G.Util
+namespace G.Util.Extension
 {
     public class XmlKeyAttribute : Attribute { }
     public class XmlEntityAttribute : Attribute { }

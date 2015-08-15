@@ -25,7 +25,7 @@
 
 <div class="row-fluid">
     <div class="span6">
-        <form name="5066728374840266" id="5066728374840266" class="form-layer" style="display:none;">
+        <form name="5066728374840266" id="5066728374840266" class="layerout form-layer">
             <div>
                 <input type="hidden" name="ID" />
                 <div class="row-fluid">
@@ -78,7 +78,7 @@
             $("#5276602330016288").datagrid({ url: "/Biz/Admin/LoadAdmin", psize: 10 });
 
 
-            $("#5276602330016288").parent().find(".btn-table-add").bind('click', function () {
+            $(".btn-table-add").bind('click', function () {
                 $("#5066728374840266").bindEntity({});
                 $("#5066728374840266").open("新增", function (win) {
                     if (!tt.validateForm("5066728374840266")) {

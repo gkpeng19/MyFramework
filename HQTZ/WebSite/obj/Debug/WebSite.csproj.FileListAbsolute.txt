@@ -109,3 +109,6 @@ D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\zh-Hans\System.Web.WebPages.Razor.resourc
 D:\Gkpeng\MyFramework\HQTZ\WebSite\obj\Debug\WebSite.csprojResolveAssemblyReference.cache
 D:\Gkpeng\MyFramework\HQTZ\WebSite\obj\Debug\WebSite.dll
 D:\Gkpeng\MyFramework\HQTZ\WebSite\obj\Debug\WebSite.pdb
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Scripts\umeditor\net\UMeditorUploader.cs
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Scripts\umeditor\net\getContent.ashx
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Scripts\umeditor\net\imageUp.ashx

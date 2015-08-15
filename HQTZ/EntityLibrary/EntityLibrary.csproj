@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssistEntity.cs" />
     <Compile Include="Entities\HZ_Admin.cs" />
     <Compile Include="Entities\HZ_Catagory.cs" />
     <Compile Include="Entities\HZ_Context.cs" />

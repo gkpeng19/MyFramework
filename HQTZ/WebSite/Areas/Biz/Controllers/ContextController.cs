@@ -111,6 +111,19 @@ namespace WebSite.Areas.Biz.Controllers
             return this.JsonNet(new { ID = 0 });
         }
 
+        public int TransferInfo(EntityContextInfos entity)
+        {
+            try
+            {
+                entity.Save();
+            }
+            catch
+            {
+                return 0;
+            }
+            return 1;
+        }
+
         #endregion
 
         public JsonResult LoadInfo(int page, string categoryids, int psize = 10)

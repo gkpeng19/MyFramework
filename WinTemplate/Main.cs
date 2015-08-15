@@ -1,5 +1,5 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
-using G.Util;
+using G.Util.Tool;
 using mshtml;
 using RazorEngine;
 using System;
@@ -20,8 +20,8 @@ namespace WinTemplate
     {
         public Main()
         {
-            //GenerateHtml();
-            //return;
+            GenerateHtml();
+            return;
             InitializeComponent();
             this.Load += Main_Load;
         }
@@ -233,7 +233,7 @@ namespace WinTemplate
 
             Razor.Compile(table, "tables");
 
-            var data = JSON.JsonBack<GContent>(File.ReadAllText(@"D:\GTemplateDemo\SSS\PPP\info.json"));
+            var data = JSON.JsonBack<GContent>(File.ReadAllText(@"D:\GTemplateDemo\SSS\PPP\User.json"));
             var result = Razor.Parse(html, data);
         }
 

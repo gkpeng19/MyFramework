@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace G.Util
+namespace G.Util.Tool
 {
     public class Verifier
     {

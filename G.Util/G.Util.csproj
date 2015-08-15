@@ -56,23 +56,23 @@
   <ItemGroup>
     <Compile Include="Account\ILoginInfo.cs" />
     <Compile Include="Account\LoginInfo.cs" />
-    <Compile Include="EnumExtension.cs" />
-    <Compile Include="ExcelHelper.cs" />
-    <Compile Include="HttpRequester.cs" />
-    <Compile Include="JsonConverter.cs" />
-    <Compile Include="LogHelper.cs" />
+    <Compile Include="Extension\EnumExtension.cs" />
+    <Compile Include="Tool\ExcelHelper.cs" />
+    <Compile Include="Tool\JsonConverter.cs" />
+    <Compile Include="Tool\LogHelper.cs" />
     <Compile Include="Mvc\EntityModelBinder.cs" />
     <Compile Include="Mvc\ExController.cs" />
     <Compile Include="Mvc\JsonNetResult.cs" />
     <Compile Include="Mvc\ViewHelper.cs" />
-    <Compile Include="Pager.cs" />
+    <Compile Include="Tool\Pager.cs" />
     <Compile Include="Mvc\Permission\LoginVerify.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Random.cs" />
-    <Compile Include="Verifier.cs">
+    <Compile Include="Tool\Random.cs" />
+    <Compile Include="Tool\ImageUtil.cs" />
+    <Compile Include="Tool\Verifier.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="XmlExtension.cs" />
+    <Compile Include="Extension\XmlExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GOMFrameWork\GOMFrameWork.csproj">

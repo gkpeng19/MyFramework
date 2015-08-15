@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
-using G.Util;
+using G.Util.Extension;
 
 namespace EntityLibrary.Entities
 {

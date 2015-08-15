@@ -156,6 +156,74 @@ var datatable = function (table, psize) {
     });
     this.headers = hers;
 
+    var dg = this;
+
+    this.tool = {};
+    this.tool.initThCbx = function () {
+        /*------------初始化全选按钮功能开始------------*/
+        var cbkTh = dg.datagrid.find("th.th-ckbox");
+        cbkTh.html("<input type='checkbox' /><span class='lbl'></span>");
+        cbkTh.find("input[type=checkbox]").bind("change", function () {
+            if (this.checked) {
+                table.find(".ckbox").each(function () {
+                    if (!this.checked) {
+                        this.click();
+                    }
+                });
+            }
+            else {
+                table.find(".ckbox").each(function () {
+                    if (this.checked) {
+                        this.click();
+                    }
+                });
+            }
+        });
+        /*------------初始化全选按钮功能结束------------*/
+    };
+
+    this.tool.bindCheckBoxEvent = function (cbxs, json) {
+        var source = null;
+        if (json.length > 0) {
+            source = json;
+        }
+        else {
+            source = [];
+            source.push(json);
+        }
+
+        cbxs.each(function (index) {
+            $(this).bind('change', function () {
+                if (this.checked) {
+                    source[index].checked_g = true;
+                    //当所有都勾选时，勾选全选按钮
+                    var isCheck = true;
+                    dg.datagrid.find(".ckbox").each(function () {
+                        if (!this.checked) {
+                            isCheck = false;
+                            return;
+                        }
+                    });
+                    dg.datagrid.find('.th-ckbox input[type=checkbox]')[0].checked = isCheck;
+                }
+                else {
+                    source[index].checked_g = false;
+                    //当所有勾选取消时，取消勾选全选按钮
+                    var isCheck = false;
+                    dg.datagrid.find(".ckbox").each(function () {
+                        if (this.checked) {
+                            isCheck = true;
+                            return;
+                        }
+                    });
+                    dg.datagrid.find('.th-ckbox input[type=checkbox]')[0].checked = isCheck;
+                }
+            });
+        });
+    };
+
+    this.tool.initThCbx();
+
     return this;
 }
 
@@ -211,6 +279,7 @@ datatable.prototype.initByData = function (data, page, pagecount) {
         $(this).text(index + 1);
     });
 
+    //选中索引赋值
     var dg = this;
     tbody.find("tr").each(function () {
         var identity = $(this)[0].id.split("_")[0];
@@ -218,6 +287,13 @@ datatable.prototype.initByData = function (data, page, pagecount) {
             dg.currIdentity = identity;
         });
     });
+
+    //复选框勾选、取消勾选事件
+    var olddsource = [];
+    $(this.datasource).each(function () {
+        olddsource.push(this);
+    });
+    dg.tool.bindCheckBoxEvent(tbody.find(".ckbox"), olddsource);
 
     //绑定编辑、删除事件
     tbody.find(".edit").each(function () {
@@ -278,7 +354,7 @@ datatable.prototype.initLineHtml = function (json, identity) {
             html += "<td><span class='sequence'></span></td>";
         }
         else if (option.checkbox && !option.bind) {
-            html += "<td><input type='checkbox' class='ckbox' /></td>";
+            html += "<td><input type='checkbox' class='ckbox' " + (json.checked_g ? "checked='checked' " : '') + "/><span class='lbl'></span></td>";
         }
         else {
             var vhtm = "";
@@ -322,9 +398,8 @@ datatable.prototype.initDataGridLine = function (json) {
     json[this.trIdentity] = this.maxIdentity;
     var tr = $(this.initLineHtml(json, this.maxIdentity));
 
-    tr.find("ckbox").bind('click', function () {
-        json.checked = true;
-    });
+    //绑定复选框勾选、取消勾选事件
+    this.tool.bindCheckBoxEvent(tr.find(".ckbox"), json);
 
     var dg = this;
     var maxIdy = this.maxIdentity;
@@ -455,11 +530,16 @@ datatable.prototype.updateRow = function (oldjson, newjson) {
 datatable.prototype.getSelected = function () {
     var items = [];
     for (var i = 0; i < this.datasource.length; ++i) {
-        if (this.datasource[i].checked) {
+        var json = this.datasource[i];
+        if (json && json.checked_g) {
             items.push(this.datasource[i]);
         }
     }
     return items;
+};
+
+datatable.prototype.refresh = function () {
+    this.initByUrl(this.url, this.search, this.search.page);
 };
 
 //-----------------------------------------------------------------------------------
@@ -624,22 +704,28 @@ var gtree = function (target) {
 
     this.tool.initTreeEvent = function () {
         tree.container.find(".jstree-open>.jstree-icon").each(function () {
-            if (!this.onclick) {
+            if (!$(this).attr("data-event")) {
+                $(this).attr("data-event", 1);
                 $(this).bind('click', function () {
                     //关闭
                     var li = $(this).parent();
+                    var clickId = li.attr("id");
                     var islast = li.hasClass("jstree-last");
-                    var node = tree.tool.getNode(li.attr("id"));
+                    var node = tree.tool.getNode(clickId);
                     if (node) {
                         var isselected = false;
+                        var oldId = 0;
                         if (li.find(".jstree-clicked").length > 0) {
                             isselected = true;
+                            oldId = li.find(".jstree-clicked").parent().attr("id");
                         }
                         li.replaceWith(tree.tool.initTreeNodeHtml(node, isselected, false, islast));
                         tree.tool.initTreeEvent();
 
-                        if (tree.onSelectChanged) {
-                            tree.onSelectChanged(tree.getSelected());
+                        if (oldId != 0) {
+                            if (oldId != clickId && tree.onSelectChanged) {
+                                tree.onSelectChanged(tree.getSelected());
+                            }
                         }
                     }
                 });
@@ -647,7 +733,8 @@ var gtree = function (target) {
         });
 
         tree.container.find(".jstree-closed>.jstree-icon").each(function () {
-            if (!this.onclick) {
+            if (!$(this).attr("data-event")) {
+                $(this).attr("data-event", 1);
                 $(this).bind('click', function () {
                     //打开
                     var li = $(this).parent();
@@ -660,17 +747,14 @@ var gtree = function (target) {
                         }
                         li.replaceWith(tree.tool.initTreeNodeHtml(node, isselected, true, islast));
                         tree.tool.initTreeEvent();
-
-                        if (tree.onSelectChanged) {
-                            tree.onSelectChanged(tree.getSelected());
-                        }
                     }
                 });
             }
         });
 
         tree.container.find(".jstree-anchor").each(function () {
-            if (!this.onclick) {
+            if (!$(this).attr("data-event")) {
+                $(this).attr("data-event", 1);
                 $(this).bind('click', function () {
                     if ($(this).hasClass("jstree-clicked")) {
                         return;
@@ -716,6 +800,7 @@ gtree.prototype.initByData = function (nodes) {
     tree.container.html(html);
 
     tree.tool.initTreeEvent();
+
 
     //选中改变事件发生(因为默认选中第一项)
     if (this.onSelectChanged) {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace G.Util
+namespace G.Util.Tool
 {
     public static class LogHelper
     {

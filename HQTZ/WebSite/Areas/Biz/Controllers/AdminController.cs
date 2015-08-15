@@ -1,5 +1,4 @@
 ﻿using EntityLibrary;
-using G.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Web.Mvc;
 using G.Util.Mvc;
 using EntityLibrary.Entities;
 using EntityLibrary.SearchEntities;
+using G.Util.Extension;
 
 namespace WebSite.Areas.Biz.Controllers
 {

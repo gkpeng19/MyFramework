@@ -186,7 +186,7 @@ namespace System.Runtime.CompilerServices
     public class ExtensionAttribute : Attribute { }
 }
 
-namespace G.Util
+namespace G.Util.Tool
 {
     /// <summary>
     /// 使用Json.Net类库

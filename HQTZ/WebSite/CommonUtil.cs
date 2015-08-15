@@ -1,4 +1,5 @@
 ﻿using EntityLibrary;
+using G.Util.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,16 @@ namespace WebSite
                 }
             }
             return orderNodes;
+        }
+
+        public static List<HtmlSelectItem> GetHtmlSelectItems(Type enumType)
+        {
+            List<HtmlSelectItem> list = new List<HtmlSelectItem>();
+            foreach (var item in EnumExtension.GetEnumCollection(enumType))
+            {
+                list.Add(new HtmlSelectItem() { k = item.Description, v = item.Value });
+            }
+            return list;
         }
     }
 }

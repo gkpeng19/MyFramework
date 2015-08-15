@@ -59,7 +59,8 @@
                 <tr data-type="normal">
                     <td>
                         <select name="type" onchange="OnTableHeaderTypeChanged(this)">
-                            <option value="0">普通</option>
+                            <option value="0" selected="selected">普通</option>
+                            <option value="3">全选</option>
                             <option value="1">序列</option>
                             <option value="2">操作项</option>
                         </select>
@@ -71,22 +72,36 @@
                     <td>
                         <select name="type" onchange="OnTableHeaderTypeChanged(this)">
                             <option value="0">普通</option>
+                            <option value="3">全选</option>
                             <option value="1" selected="selected">序列</option>
                             <option value="2">操作项</option>
                         </select>
                     </td>
-                    <td><input type="text" name="header" /></td>
+                    <td><input type="text" name="header" value="序号" /></td>
+                    <td></td>
+                </tr>
+                <tr data-type="checkbox">
+                    <td>
+                        <select name="type" onchange="OnTableHeaderTypeChanged(this)">
+                            <option value="0">普通</option>
+                            <option value="3" selected="selected">全选</option>
+                            <option value="1">序列</option>
+                            <option value="2">操作项</option>
+                        </select>
+                    </td>
+                    <td></td>
                     <td></td>
                 </tr>
                 <tr data-type="operator">
                     <td>
                         <select name="type" onchange="OnTableHeaderTypeChanged(this)">
                             <option value="0">普通</option>
+                            <option value="3">全选</option>
                             <option value="1">序列</option>
                             <option value="2" selected="selected">操作项</option>
                         </select>
                     </td>
-                    <td><input type="text" name="header" /></td>
+                    <td><input type="text" name="header" value="操作" /></td>
                     <td style="font-size:12px;">
                         <input name="btns" value="{btns:[]}" style="display:none;" />
                         <input type="checkbox" onclick="AddTableEdit(this)" id="cbx_addEdit" />
@@ -251,14 +266,30 @@
                 $("#s_table tbody tr").each(function () {
                     var select = $(this).find('select[name=type]');
                     if (select.val() == 2 && src != select[0]) {
-                        alert("只能存在一个操作项！");
                         type = 0;
+                        $(src).val(type);
+                        alert("只能存在一个操作项！");
                         return;
                     }
                 })
             }
 
-            var tr_type = type == 0 ? "normal" : (type == 1 ? "sequence" : "operator");
+            var tr_type = "";
+            switch(type)
+            {
+                case "0":
+                    tr_type = "normal";
+                    break;
+                case "1":
+                    tr_type = "sequence";
+                    break;
+                case "2":
+                    tr_type = "operator";
+                    break;
+                case "3":
+                    tr_type = "checkbox";
+                    break;
+            }
 
             $(src).parent().parent().after($("#tr_table tr[data-type=" + tr_type + "]")[0].outerHTML);
             $(src).parent().parent().remove();

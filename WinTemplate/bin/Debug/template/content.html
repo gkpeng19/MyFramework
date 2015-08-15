@@ -6,52 +6,51 @@
 	var hide=fm.isshow=="0"?"_hide":"";
 	<div class="row-fluid">
 		<div class="span@(fm.size)">
-			<form  name="@fm.id" id="@fm.id" class="form-layer" style="@style">
-				<div>
-					<input type="hidden" name="@fm.data[1].c[0].fld" />
-					<div class="row-fluid">
-					@for(var index=2;index<fm.data.Count;++index) 
-					{
-						var d=fm.data[index];
-						var t=d.c[2].t;
-						foreach(var exd in fm.extdata.extdatas)
-						{
-							if(exd!=null&&exd.dataid==d.c[0].v)
-							{
-								<div class="span@(exd.size)">
-								<label>@exd.showname</label>
-								@if(t=="0")
-								{
-								<input type="text" name="@d.c[0].fld" id="@d.c[0].v" class="span11" />
-								}
-								else if(t=="1")
-								{
-								<select name="@d.c[0].fld" id="@d.c[0].v" class="span11"></select>
-								}
-								else if(t=="2")
-								{
-								<input type="text" name="@d.c[0].fld" id="@d.c[0].v" class="span11" />
-								}
-								else if(t=="3")
-								{
-								<textarea rows="3" name="@d.c[0].fld" id="@d.c[0].v" class="span11"></textarea>
-								}
-								else if(t=="4")
-								{
-								<input type="checkbox" name="@d.c[0].fld" id="@d.c[0].v"/><span class="lbl"></span>
-								}
-								else if(t=="5")
-								{
-								<textarea name="@d.c[0].fld" id="@d.c[0].v" class="span12 text_editor@(hide)"></textarea>
-								}
-								</div>
-								break;
-							}
-						}
-					}
-					</div>
-				</div>
-			</form>
+            <form name="@fm.id" id="@fm.id" class="layerout form-layer" style="@style">
+                <div>
+                    <input type="hidden" name="@fm.data[1].c[0].fld" />
+                    <div class="row-fluid">
+                        @for(var index=2;index<fm.data.count;++index) {
+                                                                      var d=fm.data[index];
+                                                                      var t=d.c[2].t;
+                                                                      foreach(var exd in fm.extdata.extdatas)
+                                                                      {
+                                                                      if(exd!=null&&exd.dataid = =d.c[0].v)
+                                                                      {
+                            <div class="span@(exd.size)">
+                                <label>@exd.showname</label>
+                                @if(t=="0")
+                                {
+                                <input type="text" name="@d.c[0].fld" id="@d.c[0].v" class="span11" />
+                                }
+                                else if(t=="1")
+                                {
+                                <select name="@d.c[0].fld" id="@d.c[0].v" class="span11"></select>
+                                }
+                                else if(t=="2")
+                                {
+                                <input type="text" name="@d.c[0].fld" id="@d.c[0].v" class="span11" />
+                                }
+                                else if(t=="3")
+                                {
+                                <textarea rows="3" name="@d.c[0].fld" id="@d.c[0].v" class="span11"></textarea>
+                                }
+                                else if(t=="4")
+                                {
+                                <input type="checkbox" name="@d.c[0].fld" id="@d.c[0].v" /><span class="lbl"></span>
+                                }
+                                else if(t=="5")
+                                {
+                                <textarea name="@d.c[0].fld" id="@d.c[0].v" class="span12 text_editor@(hide)"></textarea>
+                                }
+                            </div>
+                            break;
+                            }
+                            }
+                            }
+                    </div>
+                </div>
+            </form>
 		</div>
 	</div>
 }
@@ -148,7 +147,7 @@
                             if(btn.type=="edit")
                             {
                                 <text>
-								$("#@table.id").parent().find(".btn-table-add").bind('click',function()
+								$(".btn-table-add").bind('click',function()
 								{
 									$("#@btn.formdataid").bindEntity({});
 									$("#@btn.formdataid").open("新增",function(win)

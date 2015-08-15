@@ -1,4 +1,4 @@
-﻿using G.Util;
+﻿using G.Util.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,5 +34,23 @@ namespace EntityLibrary
     {
         [EnumDescription(Description = "管理员")]
         Admin = 1
+    }
+
+    public enum UserLevelEnum : int
+    {
+        [EnumDescription(Description = "初学一级")]
+        Primary = 1,
+        [EnumDescription(Description = "菜鸟一级")]
+        Medium = 2,
+        [EnumDescription(Description = "老鸟一级")]
+        High = 3
+    }
+
+    public enum UserTypeEnum : int
+    {
+        [EnumDescription(Description = "普通会员")]
+        Normal = 1,
+        [EnumDescription(Description = "Vip会员")]
+        Vip = 2
     }
 }

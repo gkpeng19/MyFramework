@@ -15,3 +15,5 @@ D:\Gkpeng\MyFramework\GOMFrameWork\obj\Debug\GOMFrameWork.dll
 D:\Gkpeng\MyFramework\GOMFrameWork\obj\Debug\GOMFrameWork.pdb
 D:\Work\MyFramework\GOMFrameWork\bin\Debug\Newtonsoft.Json.dll
 D:\Work\MyFramework\GOMFrameWork\bin\Debug\Newtonsoft.Json.xml
+D:\Gkpeng\MyFramework\GOMFrameWork\bin\Debug\Newtonsoft.Json.dll
+D:\Gkpeng\MyFramework\GOMFrameWork\bin\Debug\Newtonsoft.Json.xml

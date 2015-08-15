@@ -1,4 +1,12 @@
-﻿/*Pager*/
+﻿body {
+    font-family: 'Microsoft YaHei','Microsoft JhengHei UI','Microsoft Tai Le','Microsoft YaHei UI';
+}
+
+.btn {
+    font-family: 'Microsoft YaHei','Microsoft JhengHei UI','Microsoft Tai Le','Microsoft YaHei UI';
+}
+
+/*Pager*/
 .pager a {
     font-family: 'Microsoft YaHei';
     padding: 6px 12px;
@@ -40,13 +48,14 @@
     }
 
 /*LayerOut*/
-.form-layer {
+.layerout {
     padding: 10px 5px 0px 20px;
+    display: none;
 }
 
-    .form-layer .row-fluid [class*="span"] {
-        margin-left: 0px;
-    }
+.form-layer .row-fluid [class*="span"] {
+    margin-left: 0px;
+}
 
 .text_editor, .text_editor_hide {
     max-height: 250px;
@@ -66,7 +75,6 @@
 }
 
 .table-container {
-    min-height: 300px;
 }
 
 

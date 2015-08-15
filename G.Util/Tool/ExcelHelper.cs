@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace G.Util
+namespace G.Util.Tool
 {
     public static class ExcelHelper
     {

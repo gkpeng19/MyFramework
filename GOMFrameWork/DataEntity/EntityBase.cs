@@ -518,11 +518,18 @@ namespace GOMFrameWork.DataEntity
                     }
                     else
                     {
-                        id = entityProvider.ExcuteInsert(this);
+                        if (this.Collection.Count > 0)
+                        {
+                            id = entityProvider.ExcuteInsert(this);
+                        }
                     }
 
                     #endregion
                 }
+            }
+            catch
+            {
+                throw;
             }
             finally
             {

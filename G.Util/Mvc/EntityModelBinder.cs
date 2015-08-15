@@ -60,7 +60,7 @@ namespace G.Util.Mvc
                 {
                     continue;
                 }
-                if (key.IndexOf('.') <= 0 || key.IndexOf('[') <= 0)
+                if (key.IndexOf('.') <= 0 && key.IndexOf('[') <= 0)
                 {
                     (target as DataBase).SetUIValue(key, ValueCollection[key]);
                 }
@@ -72,33 +72,42 @@ namespace G.Util.Mvc
                     }
 
                     string[] strs = key.Split('.', '[', ']');
-                    if (!instanceDic.ContainsKey(strs[0]))
+                    var keyList = new List<string>();
+                    foreach (var str in strs)
                     {
-                        thisInstance = SetPropertyObject(target, strs[0]);
-                        instanceDic[strs[0]] = thisInstance;
+                        if (str.Length > 0)
+                        {
+                            keyList.Add(str);
+                        }
+                    }
+
+                    if (!instanceDic.ContainsKey(keyList[0]))
+                    {
+                        thisInstance = SetPropertyObject(target, keyList[0]);
+                        instanceDic[keyList[0]] = thisInstance;
                     }
 
                     int index = 1;
-                    for (index = 1; index <= strs.Length - 2; ++index)
+                    for (index = 1; index <= keyList.Count - 2; ++index)
                     {
-                        if (!instanceDic.ContainsKey(strs[index]))
+                        if (!instanceDic.ContainsKey(keyList[index]))
                         {
-                            preInstance = instanceDic[strs[index - 1]];
+                            preInstance = instanceDic[keyList[index - 1]];
                             if (preInstance == null)
                             {
                                 throw new Exception("对象构建失败：Name属性设置有误！");
                             }
-                            thisInstance = SetPropertyObject(preInstance, strs[index]);
-                            instanceDic[strs[index]] = thisInstance;
+                            thisInstance = SetPropertyObject(preInstance, keyList[index]);
+                            instanceDic[keyList[index]] = thisInstance;
                         }
                     }
 
-                    preInstance = instanceDic[strs[index - 1]];
+                    preInstance = instanceDic[keyList[index - 1]];
                     if (preInstance == null)
                     {
                         throw new Exception("对象构建失败：Name属性设置有误！");
                     }
-                    (preInstance as DataBase).SetUIValue(strs[index], ValueCollection[key]);
+                    (preInstance as DataBase).SetUIValue(keyList[index], ValueCollection[key]);
                 }
             }
 

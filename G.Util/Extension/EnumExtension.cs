@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace G.Util
+namespace G.Util.Extension
 {
     public class EnumItem
     {

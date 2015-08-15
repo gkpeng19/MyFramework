@@ -26,8 +26,8 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span8">
-        <form name="23083348615572768" id="23083348615572768" class="form-layer" style="display:none;">
+    <div class="span10">
+        <form name="23083348615572768" id="23083348615572768" class="layerout form-layer">
             <div>
                 <input type="hidden" name="ID" />
                 <div class="row-fluid">
@@ -51,7 +51,7 @@
 @section scripts
 {
     <script type="text/javascript">
-        
+
         function BindToSelect(data) {
         }
 
@@ -59,7 +59,7 @@
         }
 
         $(function () {
-        
+
             $("#5308584827791714").datagrid({ url: "/Biz/Context/LoadContext", psize: 10 });
 
             $("#5308584827791714").datagrid("onEdit", function () {
@@ -71,9 +71,9 @@
                     }
                     var update = $("#23083348615572768").getContext();
                     $.post("/Biz/Context/SaveContext", update, function (r) {
-                        r = $.toJsResult(r);
+                        var newjson = $.updateJson(json, $.toJsResult(r));
                         if (r.ID > 0) {
-                            $("#5308584827791714").datagrid("updateRow", json, r);
+                            $("#5308584827791714").datagrid("updateRow", json, newjson);
                             layer.close(win);
                         }
                         else {
