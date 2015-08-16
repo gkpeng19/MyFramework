@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using G.Util.Mvc;
+using EntityLibrary.SearchEntities;
+using EntityLibrary.Entities;
 
 namespace WebSite.Controllers
 {
@@ -15,18 +17,29 @@ namespace WebSite.Controllers
             return View();
         }
 
-        public JsonResult LoginIn(string uname, string psw)
+        public JsonResult LoginIn(string uname, string psw, int remember)
         {
-            if (uname == "admin" && psw == "admin")
+            Sh_HZ_Admin sh = new Sh_HZ_Admin();
+            sh["UserName"] = uname;
+            var user = sh.LoadEntity<HZ_Admin>();
+            if (user != null)
             {
-                LoginInfo user = new LoginInfo(uname);
-                user.UserID = 1;
-                user.UserType = 1;
-                user.UserRole = 1;
-                LoginInfo.SetLoginToken(user, true);
-                return this.JsonNet(new { result = 1, url = "" });
+                if (user.UPassword.Equals(CommonUtil.GetMD5(psw)))
+                {
+                    LoginInfo loginInfo = new LoginInfo(uname);
+                    loginInfo.UserID = user.ID;
+                    loginInfo.UserRole = user.UserRole;
+                    LoginInfo.SetLoginToken(loginInfo, remember == 1 ? true : false);
+                    return this.JsonNet(new { result = 1, url = "" });
+                }
             }
+
             return this.JsonNet(new { result = 0 });
+        }
+
+        public void LoginOut()
+        {
+            LoginInfo.LoginOut();
         }
     }
 }

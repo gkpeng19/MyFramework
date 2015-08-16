@@ -171,5 +171,19 @@ namespace EntityLibrary.Entities
                 SetValue("CategoryID", value);
             }
         }
+
+        [JsonIgnore]
+        public String InfoCategory_G
+        {
+            get
+            {
+                return GetString("InfoCategory_G");
+            }
+            set
+            {
+                SetValue("InfoCategory_G", value);
+            }
+        }
+
     }
 }

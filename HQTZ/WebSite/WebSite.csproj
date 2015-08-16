@@ -96,14 +96,32 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="avatars\avatar.png" />
-    <Content Include="avatars\avatar1.png" />
-    <Content Include="avatars\avatar2.png" />
-    <Content Include="avatars\avatar3.png" />
-    <Content Include="avatars\avatar4.png" />
-    <Content Include="avatars\user.jpg" />
     <Content Include="Global.asax" />
     <Content Include="HtmlPage1.html" />
+    <Content Include="Images\hand.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\left-handing.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\left_hand.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\password.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\right_hand.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\right_handing.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\tou.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\username.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\ace\ace-elements.min.js" />
     <Content Include="Scripts\ace\ace.min.js" />
     <Content Include="Scripts\ace\css\ace-responsive.min.css" />
@@ -161,6 +179,8 @@
     <Content Include="Areas\Biz\Views\Admin\Index.cshtml" />
     <Content Include="Areas\Biz\Views\Context\InfoIndex.cshtml" />
     <Content Include="Areas\Biz\Views\User\Index.cshtml" />
+    <Content Include="Areas\Biz\Views\Context\AdvertIndex.cshtml" />
+    <Content Include="Areas\Biz\Views\Product\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -332,6 +352,7 @@
     <Compile Include="Areas\Biz\BizAreaRegistration.cs" />
     <Compile Include="Areas\Biz\Controllers\AdminController.cs" />
     <Compile Include="Areas\Biz\Controllers\ContextController.cs" />
+    <Compile Include="Areas\Biz\Controllers\ProductController.cs" />
     <Compile Include="Areas\Biz\Controllers\UserController.cs" />
     <Compile Include="CommonUtil.cs" />
     <Compile Include="Controllers\HomeController.cs" />

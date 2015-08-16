@@ -28,6 +28,23 @@ namespace EntityLibrary.SearchEntities
         {
             set { SetValue("CType", value); }
         }
+    }
+
+
+    public class Sh_HZ_Info : SearchEntity
+    {
+        public Sh_HZ_Info()
+        {
+            base.SearchID = "uv_hz_info";
+            this.IsDelete = 0;
+            this["CType"] = (int)ContextTypeEnum.Info;
+        }
+
+        [Search(Operator = SearchOperator.IsNullZeroEqual)]
+        public int IsDelete
+        {
+            set { SetValue("IsDelete", value); }
+        }
 
         [Search(Field = "CategoryID", Operator = SearchOperator.In)]
         public string CategoryIds

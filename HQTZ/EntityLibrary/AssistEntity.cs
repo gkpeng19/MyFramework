@@ -16,4 +16,11 @@ namespace EntityLibrary
     {
         public List<HZ_Context> Contexts { get; set; }
     }
+
+    [ModelBinder(typeof(EntityModelBinder))]
+    [EntityChildren("Products")]
+    public class EntityProducts:EntityBase
+    {
+        public List<HZ_Product> Products { get; set; }
+    }
 }

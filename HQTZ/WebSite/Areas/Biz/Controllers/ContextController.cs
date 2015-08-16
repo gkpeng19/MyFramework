@@ -128,8 +128,7 @@ namespace WebSite.Areas.Biz.Controllers
 
         public JsonResult LoadInfo(int page, string categoryids, int psize = 10)
         {
-            Sh_HZ_Context sh = new Sh_HZ_Context();
-            sh.CType = (int)ContextTypeEnum.Info;
+            Sh_HZ_Info sh = new Sh_HZ_Info();
             sh.CategoryIds = categoryids;
             sh.PageIndex = page;
             sh.PageSize = psize;
