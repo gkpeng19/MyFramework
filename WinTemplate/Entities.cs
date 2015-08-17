@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using G.Util.Extension;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -292,60 +293,97 @@ namespace WinTemplate
         File = 4
     }
 
-    public class GTreeNode
+    [XmlEntity]
+    public class GTreeNode : GOMFrameWork.DataEntity.EntityBase
     {
-        public string Text { get; set; }
+        [XmlKey]
+        public string Text
+        {
+            get { return GetString("Text"); }
+            set { SetValue("Text", value); }
+        }
+
         public TreeNodeEnum Type { get; protected set; }
 
-        public string SPath { get; protected set; }
+        [XmlKey]
+        public string SPath
+        {
+            get { return GetString("SPath"); }
+            set { SetValue("SPath", value); }
+        }
     }
 
+    [XmlEntity]
     public class GFile : GTreeNode
     {
-        public GFile(string spath)
+        public GFile()
         {
-            base.SPath = spath;
             this.Type = TreeNodeEnum.File;
         }
 
-        [JsonIgnore]
+        public GFile(string spath)
+            : this()
+        {
+            base.SPath = spath;
+        }
+
         public KryptonTab Tab { get; set; }
     }
 
+    [XmlEntity]
     public class GFolder : GTreeNode
     {
-        public GFolder(string spath)
+        public GFolder()
         {
-            base.SPath = spath;
             this.Type = TreeNodeEnum.Folder;
             Files = new List<GFile>();
         }
+        public GFolder(string spath)
+            : this()
+        {
+            base.SPath = spath;
+        }
+
+        [XmlList]
         public List<GFile> Files { get; set; }
     }
 
+    [XmlEntity]
     public class GProject : GTreeNode
     {
-        public GProject(string spath)
+        public GProject()
         {
-            base.SPath = spath;
             this.Type = TreeNodeEnum.Project;
             Files = new List<GFile>();
             Folders = new List<GFolder>();
         }
+        public GProject(string spath)
+            : this()
+        {
+            base.SPath = spath;
+        }
 
+        [XmlList]
         public List<GFile> Files { get; set; }
+        [XmlList]
         public List<GFolder> Folders { get; set; }
     }
 
+    [XmlEntity]
     public class GSolution : GTreeNode
     {
-        public GSolution(string spath)
+        public GSolution()
         {
-            base.SPath = spath;
             this.Type = TreeNodeEnum.Solution;
             this.Projects = new List<GProject>();
         }
+        public GSolution(string spath)
+            : this()
+        {
+            base.SPath = spath;
+        }
 
+        [XmlList]
         public List<GProject> Projects { get; set; }
     }
 

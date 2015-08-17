@@ -37,10 +37,6 @@ namespace WinTemplate
             this.tabControl = new WinTemplate.UControl.KryptonTabControl();
             this.kryptonHeaderGroup1 = new ComponentFactory.Krypton.Toolkit.KryptonHeaderGroup();
             this.fileTree = new ComponentFactory.Krypton.Toolkit.KryptonTreeView();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.sbtnAddSulution = new System.Windows.Forms.ToolStripButton();
-            this.sbtnSave = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.solutionCMenu = new ComponentFactory.Krypton.Toolkit.KryptonContextMenu();
             this.kryptonContextMenuItems1 = new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItems();
             this.cMItemAddProject = new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem();
@@ -52,6 +48,16 @@ namespace WinTemplate
             this.kryptonContextMenuItems3 = new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItems();
             this.cMItemAddFile2 = new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem();
             this.treeImgList = new System.Windows.Forms.ImageList(this.components);
+            this.openSolutionDialog = new System.Windows.Forms.OpenFileDialog();
+            this.fileCMenu = new ComponentFactory.Krypton.Toolkit.KryptonContextMenu();
+            this.kryptonContextMenuItems4 = new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItems();
+            this.cMItemGenerateHtml = new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem();
+            this.sluFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.sbtnAddSulution = new System.Windows.Forms.ToolStripButton();
+            this.sbtnOpen = new System.Windows.Forms.ToolStripButton();
+            this.sbtnSave = new System.Windows.Forms.ToolStripButton();
+            this.sbtnSaveAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -153,47 +159,6 @@ namespace WinTemplate
             this.fileTree.Size = new System.Drawing.Size(177, 407);
             this.fileTree.TabIndex = 0;
             // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sbtnAddSulution,
-            this.sbtnSave,
-            this.toolStripButton3});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(112, 25);
-            this.toolStrip1.TabIndex = 0;
-            // 
-            // sbtnAddSulution
-            // 
-            this.sbtnAddSulution.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.sbtnAddSulution.Image = ((System.Drawing.Image)(resources.GetObject("sbtnAddSulution.Image")));
-            this.sbtnAddSulution.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.sbtnAddSulution.Name = "sbtnAddSulution";
-            this.sbtnAddSulution.Size = new System.Drawing.Size(23, 22);
-            this.sbtnAddSulution.Text = "新建解决方案";
-            this.sbtnAddSulution.Click += new System.EventHandler(this.sbtnAddSulution_Click);
-            // 
-            // sbtnSave
-            // 
-            this.sbtnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.sbtnSave.Image = ((System.Drawing.Image)(resources.GetObject("sbtnSave.Image")));
-            this.sbtnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.sbtnSave.Name = "sbtnSave";
-            this.sbtnSave.Size = new System.Drawing.Size(23, 22);
-            this.sbtnSave.Text = "保存";
-            // 
-            // toolStripButton3
-            // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton3.Text = "toolStripButton3";
-            // 
             // solutionCMenu
             // 
             this.solutionCMenu.Items.AddRange(new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItemBase[] {
@@ -250,6 +215,74 @@ namespace WinTemplate
             this.treeImgList.Images.SetKeyName(2, "folder.png");
             this.treeImgList.Images.SetKeyName(3, "document.png");
             // 
+            // openSolutionDialog
+            // 
+            this.openSolutionDialog.FileName = "openSolutionDialog";
+            // 
+            // fileCMenu
+            // 
+            this.fileCMenu.Items.AddRange(new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItemBase[] {
+            this.kryptonContextMenuItems4});
+            // 
+            // kryptonContextMenuItems4
+            // 
+            this.kryptonContextMenuItems4.Items.AddRange(new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItemBase[] {
+            this.cMItemGenerateHtml});
+            // 
+            // cMItemGenerateHtml
+            // 
+            this.cMItemGenerateHtml.Text = "生成Html";
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.toolStrip1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sbtnAddSulution,
+            this.sbtnOpen,
+            this.sbtnSave,
+            this.sbtnSaveAll});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(104, 25);
+            this.toolStrip1.TabIndex = 1;
+            // 
+            // sbtnAddSulution
+            // 
+            this.sbtnAddSulution.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.sbtnAddSulution.Image = global::WinTemplate.Properties.Resources.nnew;
+            this.sbtnAddSulution.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.sbtnAddSulution.Name = "sbtnAddSulution";
+            this.sbtnAddSulution.Size = new System.Drawing.Size(23, 22);
+            this.sbtnAddSulution.Text = "新建解决方案";
+            // 
+            // sbtnOpen
+            // 
+            this.sbtnOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.sbtnOpen.Image = global::WinTemplate.Properties.Resources.open;
+            this.sbtnOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.sbtnOpen.Name = "sbtnOpen";
+            this.sbtnOpen.Size = new System.Drawing.Size(23, 22);
+            this.sbtnOpen.Text = "打开解决方案";
+            // 
+            // sbtnSave
+            // 
+            this.sbtnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.sbtnSave.Image = global::WinTemplate.Properties.Resources.save;
+            this.sbtnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.sbtnSave.Name = "sbtnSave";
+            this.sbtnSave.Size = new System.Drawing.Size(23, 22);
+            this.sbtnSave.Text = "保存";
+            // 
+            // sbtnSaveAll
+            // 
+            this.sbtnSaveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.sbtnSaveAll.Image = global::WinTemplate.Properties.Resources.saveall;
+            this.sbtnSaveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.sbtnSaveAll.Name = "sbtnSaveAll";
+            this.sbtnSaveAll.Size = new System.Drawing.Size(23, 22);
+            this.sbtnSaveAll.Text = "保存全部";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -285,10 +318,6 @@ namespace WinTemplate
         #endregion
 
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton sbtnAddSulution;
-        private System.Windows.Forms.ToolStripButton sbtnSave;
-        private System.Windows.Forms.ToolStripButton toolStripButton3;
         private ComponentFactory.Krypton.Toolkit.KryptonSplitContainer kryptonSplitContainer1;
         private ComponentFactory.Krypton.Toolkit.KryptonHeaderGroup kryptonHeaderGroup1;
         private ComponentFactory.Krypton.Toolkit.KryptonTreeView fileTree;
@@ -305,6 +334,16 @@ namespace WinTemplate
         private ComponentFactory.Krypton.Toolkit.KryptonContextMenuItems kryptonContextMenuItems3;
         private ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem cMItemAddFile2;
         private System.Windows.Forms.ImageList treeImgList;
+        private System.Windows.Forms.OpenFileDialog openSolutionDialog;
+        private ComponentFactory.Krypton.Toolkit.KryptonContextMenu fileCMenu;
+        private ComponentFactory.Krypton.Toolkit.KryptonContextMenuItems kryptonContextMenuItems4;
+        private ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem cMItemGenerateHtml;
+        private System.Windows.Forms.FolderBrowserDialog sluFolderBrowserDialog;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton sbtnAddSulution;
+        private System.Windows.Forms.ToolStripButton sbtnOpen;
+        private System.Windows.Forms.ToolStripButton sbtnSave;
+        private System.Windows.Forms.ToolStripButton sbtnSaveAll;
 
 
 

@@ -53,9 +53,9 @@ D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\log4net.xml
 D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\ExcelLibrary.pdb
 D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.csprojResolveAssemblyReference.cache
 D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.NewFileWin.resources
-D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.NewItemWin.resources
 D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.UControl.KryptonTabControl.resources
 D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.Main.resources
 D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.Properties.Resources.resources
 D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.UControl.LayerWindow.resources
 D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.csproj.GenerateResource.Cache
+D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.NewSluWin.resources

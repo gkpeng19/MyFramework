@@ -71,11 +71,11 @@
     <Compile Include="NewFileWin.Designer.cs">
       <DependentUpon>NewFileWin.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewItemWin.cs">
+    <Compile Include="NewSluWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewItemWin.Designer.cs">
-      <DependentUpon>NewItemWin.cs</DependentUpon>
+    <Compile Include="NewSluWin.Designer.cs">
+      <DependentUpon>NewSluWin.cs</DependentUpon>
     </Compile>
     <Compile Include="UControl\KryptonTabControl.cs">
       <SubType>UserControl</SubType>
@@ -100,8 +100,8 @@
     <EmbeddedResource Include="NewFileWin.resx">
       <DependentUpon>NewFileWin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewItemWin.resx">
-      <DependentUpon>NewItemWin.cs</DependentUpon>
+    <EmbeddedResource Include="NewSluWin.resx">
+      <DependentUpon>NewSluWin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UControl\KryptonTabControl.resx">
       <DependentUpon>KryptonTabControl.cs</DependentUpon>
@@ -141,16 +141,21 @@
       <Project>{b709e93d-a721-4985-89e3-5486fa47d86f}</Project>
       <Name>G.Util</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GOMFrameWork\GOMFrameWork.csproj">
+      <Project>{88be7db6-73ac-45ba-beb0-01cdac27ff20}</Project>
+      <Name>GOMFrameWork</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="GTemplate.ico" />
-    <None Include="Resources\add.png" />
-    <None Include="Resources\msenv.dll%286810%29.png" />
-    <None Include="Resources\msenv.dll%286815%29.png" />
     <None Include="Resources\project.png" />
     <None Include="Resources\solution.png" />
     <None Include="Resources\folder.png" />
     <None Include="Resources\document.png" />
+    <None Include="Resources\saveall.png" />
+    <None Include="Resources\save.png" />
+    <None Include="Resources\open.png" />
+    <Content Include="Resources\nnew.png" />
     <Content Include="template\content.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

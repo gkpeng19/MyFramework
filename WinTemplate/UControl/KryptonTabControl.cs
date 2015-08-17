@@ -14,6 +14,10 @@ namespace WinTemplate.UControl
     public partial class KryptonTabControl : UserControl
     {
         public KryptonTab SelectedTab { get; private set; }
+        public List<KryptonTab> Tabs
+        {
+            get { return _allTabs; }
+        }
 
         private List<KryptonTab> _allTabs = null;
         public KryptonTabControl()
@@ -22,7 +26,7 @@ namespace WinTemplate.UControl
             _allTabs = new List<KryptonTab>();
         }
 
-        public KryptonTab AddNewTab(string name,string fpath)
+        public KryptonTab AddNewTab(string name, string fpath)
         {
             if (SelectedTab != null)
             {
@@ -43,6 +47,8 @@ namespace WinTemplate.UControl
 
             tabHeader.ButtonSpecs.Add(tab.TabTag);
             tabBody.Controls.Add(tab.Container);
+
+            _allTabs.Add(tab);
 
             return tab;
         }
@@ -78,7 +84,7 @@ namespace WinTemplate.UControl
     public class KryptonTab
     {
         public event Action OnSelecting;
-        public KryptonTab(string name,string fpath)
+        public KryptonTab(string name, string fpath)
         {
             this.FPath = fpath;
 

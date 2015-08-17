@@ -185,12 +185,10 @@
                     <input type="button" value="添加Form" onclick="AddFormData()" />
                     <input type="button" value="添加绑定" onclick="AddDataBind()" />
                 </td>
-                <td align="right">
-                    <input type="button" value="保存" onclick="Save()" />
-                </td>
+                <td align="right"></td>
             </tr>
         </table>
-        
+
     </div>
 
     <fieldset>
@@ -468,6 +466,11 @@
             });
 
             window.external.SaveToFile(JSON.stringify(content));
+        }
+
+        function InitUI(jsonstr) {
+            var json = JSON.parse(jsonstr);
+            //恢复界面
         }
 
         $(function () {

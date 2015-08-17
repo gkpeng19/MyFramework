@@ -1,4 +1,5 @@
 ﻿using ComponentFactory.Krypton.Toolkit;
+using G.Util.Extension;
 using G.Util.Tool;
 using mshtml;
 using RazorEngine;
@@ -12,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WinTemplate.UControl;
 
 namespace WinTemplate
 {
@@ -20,15 +22,27 @@ namespace WinTemplate
     {
         public Main()
         {
-            GenerateHtml();
-            return;
             InitializeComponent();
             this.Load += Main_Load;
+            this.FormClosed += Main_FormClosed;
         }
 
         void Main_Load(object sender, EventArgs e)
         {
             fileTree.ImageList = treeImgList;
+
+            #region 组合键保存
+
+            this.KeyPreview = true;
+            this.KeyDown += (ss, ee) =>
+                {
+                    if (ee.Control && ee.KeyCode == Keys.S)
+                    {
+                        sbtnSave_Click(null, null);
+                    }
+                };
+
+            #endregion
 
             #region 树右键菜单
 
@@ -53,6 +67,10 @@ namespace WinTemplate
                         {
                             ShowTreeRightMenu(currentNode.TreeView, folderCMenu);
                         }
+                        else if (currentNode.Tag is GFile)
+                        {
+                            ShowTreeRightMenu(currentNode.TreeView, fileCMenu);
+                        }
                     }
                 }
             };
@@ -70,8 +88,22 @@ namespace WinTemplate
                         {
                             fileTree.SelectedNode = currNode;
 
-                            var tab = (currNode.Tag as GFile).Tab;
-                            tabControl.SelectTab(tab);
+                            var gFile = currNode.Tag as GFile;
+                            var tab = gFile.Tab;
+                            if (tab != null)
+                            {
+                                tabControl.SelectTab(tab);
+                            }
+                            else
+                            {
+                                tab = tabControl.AddNewTab(gFile.Text, gFile.SPath);
+                                WebBrowser browser = new WebBrowser();
+                                browser.Url = new Uri("http://localhost/Default.html");
+                                browser.ObjectForScripting = this;
+                                browser.Dock = DockStyle.Fill;
+                                tab.Container.Controls.Add(browser);
+                                browser.Document.InvokeScript("InitUI", new string[] { File.ReadAllText(gFile.SPath + ".json") });
+                            }
                         }
                     }
                 };
@@ -124,7 +156,20 @@ namespace WinTemplate
                 win.ShowDialog(this);
             };
 
+            cMItemGenerateHtml.Click += (ss, ee) =>
+                {
+                    GenerateHtml((fileTree.SelectedNode.Tag as GFile).SPath + ".json");
+                };
+
             #endregion
+        }
+
+        void Main_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (_solution != null)
+            {
+                XmlExtension.SaveToXml(_solution, _solution.SPath + "\\" + _solution.Text + ".xml");
+            }
         }
 
         GSolution _solution = null;
@@ -217,14 +262,22 @@ namespace WinTemplate
             fileTree.SelectedNode = node;
         }
 
+        KryptonTab _toSaveTab = null;
         public void SaveToFile(string json)
         {
-            var sw = File.CreateText(tabControl.SelectedTab.FPath + ".json");
+            if (_toSaveTab == null)
+            {
+                _toSaveTab = tabControl.SelectedTab;
+            }
+            var sw = File.CreateText(_toSaveTab.FPath + ".json");
+
+            _toSaveTab = null;
+
             sw.Write(json);
             sw.Close();
         }
 
-        void GenerateHtml()
+        void GenerateHtml(string filePath)
         {
             string htmlpath = System.Environment.CurrentDirectory + @"\template\content.html";
             string tablepath = System.Environment.CurrentDirectory + @"\template\table.html";
@@ -233,7 +286,7 @@ namespace WinTemplate
 
             Razor.Compile(table, "tables");
 
-            var data = JSON.JsonBack<GContent>(File.ReadAllText(@"D:\GTemplateDemo\SSS\PPP\User.json"));
+            var data = JSON.JsonBack<GContent>(File.ReadAllText(filePath));
             var result = Razor.Parse(html, data);
         }
 
@@ -242,15 +295,108 @@ namespace WinTemplate
             kcm.Show(c.RectangleToScreen(c.ClientRectangle), KryptonContextMenuPositionH.Left, KryptonContextMenuPositionV.Below);
         }
 
+        private TreeNode AddTreeNode(TreeNode pNode, GTreeNode entity)
+        {
+            var node = new TreeNode(entity.Text) { Tag = entity };
+            var nType = entity.Type;
+            ImageListEnum imgIndex = ImageListEnum.File;
+            switch (nType)
+            {
+                case TreeNodeEnum.Folder:
+                    imgIndex = ImageListEnum.Folder;
+                    break;
+                case TreeNodeEnum.Project:
+                    imgIndex = ImageListEnum.Project;
+                    break;
+                case TreeNodeEnum.Solution:
+                    imgIndex = ImageListEnum.Solution;
+                    break;
+            }
+
+            node.ImageIndex = (int)imgIndex;
+            node.SelectedImageIndex = node.ImageIndex;
+
+            if (pNode != null)
+            {
+                pNode.Nodes.Add(node);
+            }
+            else
+            {
+                fileTree.Nodes.Add(node);
+            }
+            return node;
+        }
+
+        #region 工具栏按钮事件
+
         private void sbtnAddSulution_Click(object sender, EventArgs e)
         {
-            NewFileWin win = new NewFileWin() { Text = "新建解决方案" };
-            win.OnSubmit += (name) =>
-                {
-                    AddSolution(name, @"D:\GTemplateDemo");
-                    return true;
-                };
+            NewSluWin win = new NewSluWin();
+            win.OnSubmit += (name, path) =>
+            {
+                AddSolution(name, path);
+                return true;
+            };
             win.ShowDialog(this);
         }
+
+        private void sbtnOpen_Click(object sender, EventArgs e)
+        {
+            openSolutionDialog.Filter = "Xml文件|*.xml";
+            if (openSolutionDialog.ShowDialog() == DialogResult.OK)
+            {
+                _solution = XmlExtension.ReadToEntity<GSolution>(openSolutionDialog.FileName);
+                var snode = AddTreeNode(null, _solution);
+                foreach (var p in _solution.Projects)
+                {
+                    var pnode = AddTreeNode(snode, p);
+                    foreach (var f in p.Folders)
+                    {
+                        var fnode = AddTreeNode(pnode, f);
+                        foreach (var fn in f.Files)
+                        {
+                            AddTreeNode(fnode, fn);
+                        }
+                    }
+                    foreach (var fn in p.Files)
+                    {
+                        AddTreeNode(pnode, fn);
+                    }
+                }
+            }
+        }
+
+        protected void sbtnSave_Click(object sender, System.EventArgs e)
+        {
+            if (tabControl.SelectedTab != null)
+            {
+                var browser = tabControl.SelectedTab.Container.Controls[0] as WebBrowser;
+                browser.Document.InvokeScript("Save");
+            }
+        }
+
+        private void sbtnSaveAll_Click(object sender, EventArgs e)
+        {
+            var index = 0;
+            Timer timer = new Timer();
+            timer.Interval = 1000;
+            timer.Tick += (ss, ee) =>
+            {
+                if (index + 1 == tabControl.Tabs.Count)
+                {
+                    timer.Stop();
+                }
+
+                _toSaveTab = tabControl.Tabs[index];
+                var browser = _toSaveTab.Container.Controls[0] as WebBrowser;
+                ++index;
+
+                browser.Document.InvokeScript("Save");
+            };
+
+            timer.Start();
+        }
+
+        #endregion
     }
 }
