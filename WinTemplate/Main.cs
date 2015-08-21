@@ -97,12 +97,22 @@ namespace WinTemplate
                             else
                             {
                                 tab = tabControl.AddNewTab(gFile.Text, gFile.SPath);
+                                gFile.Tab = tab;
+
                                 WebBrowser browser = new WebBrowser();
                                 browser.Url = new Uri("http://localhost/Default.html");
                                 browser.ObjectForScripting = this;
                                 browser.Dock = DockStyle.Fill;
                                 tab.Container.Controls.Add(browser);
-                                browser.Document.InvokeScript("InitUI", new string[] { File.ReadAllText(gFile.SPath + ".json") });
+
+                                Timer timer = new Timer();
+                                timer.Interval = 1000;
+                                timer.Tick += (sss, eee) =>
+                                    {
+                                        timer.Stop();
+                                        browser.Document.InvokeScript("InitUI", new string[] { File.ReadAllText(gFile.SPath + ".json") });
+                                    };
+                                timer.Start();
                             }
                         }
                     }
@@ -275,6 +285,7 @@ namespace WinTemplate
 
             sw.Write(json);
             sw.Close();
+            sw.Dispose();
         }
 
         void GenerateHtml(string filePath)
@@ -342,6 +353,8 @@ namespace WinTemplate
 
         private void sbtnOpen_Click(object sender, EventArgs e)
         {
+            fileTree.Nodes.Clear();
+
             openSolutionDialog.Filter = "Xml文件|*.xml";
             if (openSolutionDialog.ShowDialog() == DialogResult.OK)
             {

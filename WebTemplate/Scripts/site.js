@@ -85,6 +85,8 @@ var jsonconfig = function (selector, id, root) {
     this.chart.draw(this.data, { allowHtml: true, allowCollapse: true, size: "large" });
 
     this.bindNodeSelectEvent();
+
+    return this;
 };
 
 jsonconfig.prototype.selectNode = null;
@@ -301,6 +303,8 @@ formconfig.prototype.bindNodeSelectEvent = function () {
                 target.btn_select.show();
                 target.btn_datetime.show();
                 target.btn_textarea.show();
+                target.btn_cbx.show();
+                target.btn_editor.show();
                 target.btn_removeNode.hide();
             }
             else if (target.selectNode.level == 1) {
@@ -308,6 +312,8 @@ formconfig.prototype.bindNodeSelectEvent = function () {
                 target.btn_select.hide();
                 target.btn_datetime.hide();
                 target.btn_textarea.hide();
+                target.btn_cbx.hide();
+                target.btn_editor.hide();
                 target.btn_removeNode.show();
             }
         }
@@ -359,10 +365,8 @@ $.fn.extend({
 });
 
 //type==1：对象绑定到div，2：数组绑定到select控件
-var bindconfig = function (jnode, fnode, selector, type) {
+var bindconfig = function (jnodeid, fnodeid, jnodetext, fnodetext, jnodetype, fnodetype, selector, type) {
     this.type = type;
-    this.dataid = jnode.id;
-    this.formid = fnode.id;
 
     bConfig[selector] = this;
     this.chartCon = $(selector);
@@ -385,12 +389,14 @@ var bindconfig = function (jnode, fnode, selector, type) {
     this.data.addColumn('string', 'title');
 
     this.data.addRows([
-     [{ v: jnode.id, f: jnode.text }, '', jnode.type.toString()],
-     [{ v: fnode.id, f: fnode.text }, jnode.id, fnode.type.toString()]
+     [{ v: jnodeid, f: jnodetext }, '', jnodetype.toString()],
+     [{ v: fnodeid, f: fnodetext }, jnodeid, fnodetype.toString()]
     ]);
 
     this.chart = new google.visualization.OrgChart(this.chartCon.find(".chart_div")[0]);
     this.chart.draw(this.data, { allowHtml: true, allowCollapse: true, size: "large" });
+
+    return this;
 }
 
 /*-------重绘chart------------------------------------------------------------------*/

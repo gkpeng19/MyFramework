@@ -289,14 +289,21 @@
                 $("#txt_jsonObjectName").val("");
                 $("#txt_jsonUrl").val("");
                 var id = Math.random().toString().split('.')[1];
-                var selector = "chart_" + id;
-                var chardiv = $("<div id='" + selector + "' class='chart'></div>");
-                chardiv.attr("data-url", url);
-                $("#div_forJson").append(chardiv);
-                new jsonconfig('#' + selector, id, name + " {}");
 
-                BindChartContentEvent();
+                AddJsonDataSubmit(id, url, name);
             });
+        }
+
+        function AddJsonDataSubmit(id, url, name) {
+            var selector = "chart_" + id;
+            var chardiv = $("<div id='" + selector + "' class='chart'></div>");
+            chardiv.attr("data-url", url);
+            $("#div_forJson").append(chardiv);
+            var chart = new jsonconfig('#' + selector, id, name + " {}");
+
+            BindChartContentEvent();
+
+            return chart;
         }
 
         function AddFormData() {
@@ -320,47 +327,53 @@
 
                 $("#txt_formPrimaryKey").val("");
                 var id = Math.random().toString().split('.')[1];
-                var selector = "chart_" + id;
                 var isshow = $("#cbx_hiddenForm")[0].checked ? 0 : 1;
-                $("#div_forForm").append($("<div id='" + selector + "' class='chart'></div>"));
-                var form = new formconfig('#' + selector, id, name, isshow, size);
-                form.beforeRemoveForm = function (fid) {
 
-                    var existstable = false;
-                    //检查是否存在表格绑定到该Form
-                    $(temptables).each(function () {
-                        $(this.data.headers).each(function () {
-                            if (this.type == "2") {
-                                $(this.actionbtns).each(function () {
-                                    if (this.formdataid == id) {
-                                        alert("删除失败，存在Table操作项绑定到该Form！");
-                                        existstable = true;
-                                    }
-                                });
-                            }
-                        });
-                    });
+                AddFormDataSubmit(id, isshow, name, size);
+            });
+        }
 
-                    if (existstable) {
-                        return false;
-                    }
-
-                    //检查绑定
-                    $("#div_forBind .bindchart").each(function () {
-                        var bind = $(this).bconfig();
-                        if (bind.formid == id) {
-                            var yes = confirm("该Form存在数据绑定，是否同时删除该数据绑定？");
-                            if (yes) {
-                                bind.btn_remove.click();
-                            }
+        function AddFormDataSubmit(id, isshow, name, size) {
+            var selector = "chart_" + id;
+            $("#div_forForm").append($("<div id='" + selector + "' class='chart'></div>"));
+            var form = new formconfig('#' + selector, id, name, isshow, size);
+            form.beforeRemoveForm = function (fid) {
+                var existstable = false;
+                //检查是否存在表格绑定到该Form
+                $(temptables).each(function () {
+                    $(this.data.headers).each(function () {
+                        if (this.type == "2") {
+                            $(this.actionbtns).each(function () {
+                                if (this.formdataid == id) {
+                                    alert("删除失败，存在Table操作项绑定到该Form！");
+                                    existstable = true;
+                                }
+                            });
                         }
                     });
+                });
 
-                    return true;
-                };
+                if (existstable) {
+                    return false;
+                }
 
-                BindChartContentEvent();
-            });
+                //检查绑定
+                $("#div_forBind .bindchart").each(function () {
+                    var bind = $(this).bconfig();
+                    if (bind.formid == id) {
+                        var yes = confirm("该Form存在数据绑定，是否同时删除该数据绑定？");
+                        if (yes) {
+                            bind.btn_remove.click();
+                        }
+                    }
+                });
+
+                return true;
+            };
+
+            BindChartContentEvent();
+
+            return form;
         }
 
         function AddDataBind() {
@@ -388,22 +401,36 @@
 
             if ((jchart.selectNode.type == 1 || jchart.selectNode.type == -1) && fchart.selectNode.type == -1) {
                 var id = Math.random().toString().split('.')[1];
-                var selector = "chart_" + id;
-                $("#div_forBind").append($("<div id='" + selector + "' class='bindchart'></div>"));
-                //对象绑定到div
-                new bindconfig(jchart.selectNode, fchart.selectNode, "#" + selector, 1);
+                AddDataBindSubmit(id, jchart, fchart, 1);
             }
             else if (jchart.selectNode.type == 2 && fchart.selectNode.type == 1) {
                 var id = Math.random().toString().split('.')[1];
-                var selector = "chart_" + id;
-                $("#div_forBind").append($("<div id='" + selector + "' class='bindchart'></div>"));
-                //数组绑定到select控件
-                new bindconfig(jchart.selectNode, fchart.selectNode, "#" + selector, 2);
+                AddDataBindSubmit(id, jchart, fchart, 2);
             }
             else {
                 alert("选中的节点类型不匹配！");
                 return;
             }
+        }
+
+        function AddDataBindSubmit(id, jchart, fchart, type) {
+            var selector = "chart_" + id;
+            $("#div_forBind").append($("<div id='" + selector + "' class='bindchart'></div>"));
+            //数组绑定到select控件
+            var jnid = '', fnid = '', jntext = '', fntext = '', jntype = '', fntype = '';
+            if (jchart) {
+                jnid = jchart.selectNode.id;
+                jntext = jchart.selectNode.text;
+                jntype = jchart.selectNode.type;
+            }
+            if (fchart) {
+                fnid = fchart.selectNode.id;
+                fntext = fchart.selectNode.text;
+                fntype = fchart.selectNode.type;
+            }
+
+            var chart = new bindconfig(jnid, fnid, jntext, fntext, jntype, fntype, "#" + selector, type);
+            return chart;
         }
 
         function BindChartContentEvent() {
@@ -470,7 +497,47 @@
 
         function InitUI(jsonstr) {
             var json = JSON.parse(jsonstr);
-            //恢复界面
+            $(json.tables).each(function () {
+                AddTableSubmit(this.data);
+            });
+
+            $(json.jsons).each(function () {
+                var chart = AddJsonDataSubmit(this.id, this.url, "");
+                var data = InitChartData(this.data);
+                chart.data = data;
+                chart.chart.draw(data, { allowHtml: true, allowCollapse: true, size: "large" });
+                chart.bindNodeSelectEvent();
+            });
+
+            $(json.forms).each(function () {
+                var chart = AddFormDataSubmit(this.id, this.isshow, '', this.size);
+                chart.extData = this.extdata;
+                var data = InitChartData(this.data);
+                chart.data = data;
+                chart.chart.draw(data, { allowHtml: true, allowCollapse: true, size: "large" });
+                chart.bindNodeSelectEvent();
+            });
+
+            $(json.binds).each(function () {
+                var data = InitChartData(this.data);
+                var chart = AddDataBindSubmit(this.id, null, null, this.type);
+                chart.data = data;
+                chart.chart.draw(data, { allowHtml: true, allowCollapse: true, size: "large" });
+            });
+        }
+
+        function InitChartData(rows) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Name');
+            data.addColumn('string', 'Manager');
+            data.addColumn('string', 'title');
+
+            var nrows = [];
+            for (var i in rows) {
+                nrows[nrows.length] = [rows[i].c[0], rows[i].c[1].v, rows[i].c[2].v];
+            }
+            data.addRows(nrows);
+            return data;
         }
 
         $(function () {
@@ -518,6 +585,11 @@
                 }
             });
         });
+
+        //var chars = '{"tables":[{"id":"21843774763972168","data":{"url":"/Home/LoadIndex","pkey":"ID","pagesize":10,"headers":[{"type":"1","header":"序号"},{"type":"0","header":"编号","bindproperty":"Code"},{"type":"2","header":"操作","actionbtns":[{"type":"edit","formdataid":"8105569424959262","action":"/HOme/Edit"},{"type":"delete","formdataid":-1,"action":"/Home/Delete"}]}]}}],"jsons":[{"id":"47546895565913505","url":"/Home/LoadData","data":[{"c":[{"v":"47546895565913505","f":"CData {}"},{"v":"","f":null},{"v":"0_47546895565913505_-1","f":null}]},{"c":[{"v":"9474408892971668","f":"Genders []"},{"v":"47546895565913505","f":null},{"v":"1_9474408892971668_2","f":null}]}]}],"forms":[{"id":"8105569424959262","isshow":0,"size":6,"data":[{"c":[{"v":"8105569424959262","f":"{}"},{"v":"","f":null},{"v":"0_8105569424959262_-1","f":null}]},{"c":[{"v":"7847530640099583","f":"ID {PK}"},{"v":"8105569424959262","f":null},{"v":"1_7847530640099583_9","f":null}]},{"c":[{"v":"1552949559935609","f":"Code {I}"},{"v":"8105569424959262","f":null},{"v":"1_1552949559935609_0","f":null}]},{"c":[{"v":"26384656061167205","f":"Gender {S}"},{"v":"8105569424959262","f":null},{"v":"1_26384656061167205_1","f":null}]}],"extdata":{"layer":2,"extdatas":[{"dataid":"1552949559935609","showname":"编号","size":6,"validates":[{"type":"required"}]},{"dataid":"26384656061167205","showname":"性别","size":6,"validates":[{"type":"required"}]}]}}],"binds":[{"id":"4382461471670757","data":[{"c":[{"v":"9474408892971668","f":"Genders []"},{"v":"","f":null},{"v":"2","f":null}]},{"c":[{"v":"26384656061167205","f":"Gender {S}"},{"v":"9474408892971668","f":null},{"v":"1","f":null}]}],"type":2}]}';
+        //InitUI(chars);
+
+        //Save();
     </script>
 </body>
 </html>

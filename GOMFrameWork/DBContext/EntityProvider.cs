@@ -22,17 +22,17 @@ namespace GOMFrameWork.DBContext
 
         internal event OnProviderCompleted OnCompleted;
 
-        internal int ExcuteInsert(EntityBase entity)
+        internal virtual int ExcuteInsert(EntityBase entity)
         {
             return _dbProvider.ExecuteScalar(GetInsertSql(entity), GetInsertParameters(entity));
         }
 
-        internal void ExcuteUpdate(EntityBase entity)
+        internal virtual void ExcuteUpdate(EntityBase entity)
         {
             _dbProvider.ExecuteNonQuery(GetUpdateSql(entity), GetUpdateParameters(entity));
         }
 
-        internal CommonResult<T> ExcuteSearch<T>(SearchEntity entity) where T : EntityBase, new()
+        internal virtual CommonResult<T> ExcuteSearch<T>(SearchEntity entity) where T : EntityBase, new()
         {
             CommonResult<T> result = new CommonResult<T>();
 
@@ -57,7 +57,7 @@ namespace GOMFrameWork.DBContext
             return result;
         }
 
-        internal T ExcuteSearchEntity<T>(SearchEntity entity) where T : EntityBase, new()
+        internal virtual T ExcuteSearchEntity<T>(SearchEntity entity) where T : EntityBase, new()
         {
             DbParameter[] parameters = GetSearchParameters(entity);
             T data = null;
@@ -69,7 +69,7 @@ namespace GOMFrameWork.DBContext
             return data;
         }
 
-        internal CommonResult ExcuteProcResult(ProcEntity entity)
+        internal virtual CommonResult ExcuteProcResult(ProcEntity entity)
         {
             CommonResult result = new CommonResult();
 
@@ -90,7 +90,7 @@ namespace GOMFrameWork.DBContext
             return result;
         }
 
-        internal CommonResult<T> ExcuteProcResult<T>(ProcEntity entity) where T : EntityBase, new()
+        internal virtual CommonResult<T> ExcuteProcResult<T>(ProcEntity entity) where T : EntityBase, new()
         {
             CommonResult<T> result = new CommonResult<T>();
 
@@ -109,7 +109,7 @@ namespace GOMFrameWork.DBContext
             return result;
         }
 
-        internal T ExcuteProcData<T>(ProcEntity entity) where T : new()
+        internal virtual T ExcuteProcData<T>(ProcEntity entity) where T : new()
         {
             T obj = new T();
 
@@ -432,11 +432,73 @@ namespace GOMFrameWork.DBContext
             _dbProvider = new OracleProvider(connStr);
         }
 
+        internal override int ExcuteInsert(EntityBase entity)
+        {
+            var sql = GetInsertSql(entity);
+            bool isSaveOk = true;
+            try
+            {
+                _dbProvider.ExecuteNonQuery(sql, GetInsertParameters(entity));
+            }
+            catch
+            {
+                isSaveOk = false;
+                throw;
+            }
+
+            if (isSaveOk)
+            {
+                return _dbProvider.ExecuteScalar("select seq_" + entity.TableName + ".currval from dual", null);
+            }
+            return 0;
+        }
+
+        internal override CommonResult<T> ExcuteSearch<T>(SearchEntity entity)
+        {
+            var sqls = GetSearchSql(entity).Split(';');
+
+            CommonResult<T> result = new CommonResult<T>();
+            DbParameter[] parameters = GetSearchParameters(entity);
+            List<T> data = null;
+            using (DbDataReader reader = _dbProvider.ExcuteReader(sqls[0], parameters))
+            {
+                data = reader.ConvertToList<T>();
+            }
+
+            if (entity.PageIndex > 0)
+            {
+                int op = _dbProvider.ExecuteScalar(sqls[1], parameters);
+                result.PageIndex = entity.PageIndex;
+                result.PageCount = Convert.ToInt32(Math.Ceiling(op / double.Parse(entity.PageSize.ToString())));
+            }
+
+            result.Data = data;
+            return result;
+        }
+
         #region 接口成员
 
         public override string GetInsertSql(EntityBase entity)
         {
-            return base.GetInsertSql(entity);
+            string sql = string.Empty;
+            using (var sbk = new ExStringBuilder())
+            {
+                sbk.Append("insert into " + entity.TableName + "(" + entity.PrimaryKey);
+                using (var sbv = new ExStringBuilder())
+                {
+                    sbv.Append("seq_" + entity.TableName + ".nextval");
+                    foreach (string key in entity.Collection.Keys)
+                    {
+                        sbk.Append("," + key);
+                        sbv.Append(",:" + key);
+                    }
+                    sbk.Append(") values(");
+                    sbk.Append(sbv.ToString());
+                    sbk.Append(")");
+                }
+                sql = sbk.ToString();
+            }
+            return sql;
         }
 
         public override DbParameter[] GetInsertParameters(EntityBase entity)
@@ -461,7 +523,7 @@ namespace GOMFrameWork.DBContext
                     sb.Append(key + "=:" + key + ",");
                 }
                 string str = sb.ToString();
-                return string.Format("update {0} set {1} where " + entity.PrimaryKey + "=@id", entity.TableName, str.Substring(0, str.Length - 1));
+                return string.Format("update {0} set {1} where " + entity.PrimaryKey + "=:id", entity.TableName, str.Substring(0, str.Length - 1));
             }
         }
 
@@ -487,7 +549,7 @@ namespace GOMFrameWork.DBContext
                 order = "order by ";
                 foreach (var o in entity.Orders)
                 {
-                    order += string.Format("{0} {1},", o[0], o[1]);
+                    order += string.Format("s.{0} {1},", o[0], o[1]);
                 }
                 order = order.Substring(0, order.Length - 1);
             }
@@ -501,35 +563,35 @@ namespace GOMFrameWork.DBContext
             {
                 foreach (var str in entity.SearchItems)
                 {
-                    search += (str + ",");
+                    search += ("s." + str + ",");
                 }
                 search = search.Substring(0, search.Length - 1);
             }
             else
             {
-                search = "*";
+                search = "s.*";
             }
 
             using (var sbwhere = new ExStringBuilder())
             {
                 foreach (SearchItem item in entity.Collection)
                 {
-                    sbwhere.Append(" and " + item.ToString(":"));
+                    sbwhere.Append(" and s." + item.ToString(":"));
                 }
 
                 if (entity.ExtensionCondition != null && entity.ExtensionCondition.Length > 0)
                 {
-                    sbwhere.Append(" and " + entity.ExtensionCondition);
+                    sbwhere.Append(" and s." + entity.ExtensionCondition);
                 }
 
                 string sql = string.Empty;
                 if (entity.PageIndex <= 0)
                 {
-                    sql = string.Format("select {0} from {1} where 1=1 {2} {3}", search, entity.SearchID, sbwhere.ToString(), order);
+                    sql = string.Format("select {0} from {1} s where 1=1 {2} {3}", search, entity.SearchID, sbwhere.ToString(), order);
                 }
                 else
                 {
-                    sql = string.Format("select * from (select {0},row_number() over({1}) row_g from {2} where 1=1 {3})r where r.row_g>{4} and r.row_g<={5};select :outcount=count(1) from {2} where 1=1 {3}",
+                    sql = string.Format("select * from (select {0},row_number() over({1}) row_g from {2} s where 1=1 {3})r where r.row_g>{4} and r.row_g<={5};select count(1) from {2} s where 1=1 {3}",
                         search, order, entity.SearchID, sbwhere.ToString(), (entity.PageIndex - 1) * entity.PageSize, entity.PageIndex * entity.PageSize);
                 }
 
@@ -546,11 +608,6 @@ namespace GOMFrameWork.DBContext
                 {
                     parameters.Add(new OracleParameter(item.Key, item.Value));
                 }
-            }
-
-            if (entity.PageIndex > 0)
-            {
-                parameters.Add(new OracleParameter("outcount", 0) { Direction = ParameterDirection.Output });
             }
 
             return parameters.ToArray();

@@ -63,7 +63,10 @@ namespace GOMFrameWork.DBContext
             Cmd.CommandType = CommandType.Text;
             Cmd.CommandText = sqlstr;
             Cmd.Parameters.Clear();
-            Cmd.Parameters.AddRange(parameters);
+            if (parameters != null)
+            {
+                Cmd.Parameters.AddRange(parameters);
+            }
             try
             {
                 return Convert.ToInt32(Cmd.ExecuteScalar());

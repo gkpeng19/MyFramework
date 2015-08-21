@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GOMFrameWork", "GOMFrameWor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinTemplate", "WinTemplate\WinTemplate.csproj", "{AA62DE16-829F-40D5-87F0-46055A6B428F}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebTemplate", "http://localhost:47771", "{7D3AAFEB-A888-4C17-B782-3CCB0B5BA32A}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebTemplate(1)", "http://localhost:47771", "{7D3AAFEB-A888-4C17-B782-3CCB0B5BA32A}"
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
@@ -29,6 +29,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebTemplate", "http://local
 		Release.AspNetCompiler.Debug = "False"
 		SlnRelativePath = "WebTemplate\"
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication", "WebApplication\WebApplication.csproj", "{39C4777A-C69A-4436-9858-29942F53778C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{7D3AAFEB-A888-4C17-B782-3CCB0B5BA32A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D3AAFEB-A888-4C17-B782-3CCB0B5BA32A}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{7D3AAFEB-A888-4C17-B782-3CCB0B5BA32A}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{39C4777A-C69A-4436-9858-29942F53778C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39C4777A-C69A-4436-9858-29942F53778C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39C4777A-C69A-4436-9858-29942F53778C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39C4777A-C69A-4436-9858-29942F53778C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
