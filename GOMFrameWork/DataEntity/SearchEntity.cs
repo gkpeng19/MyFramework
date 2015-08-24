@@ -339,4 +339,47 @@ namespace GOMFrameWork.DataEntity
 
         #endregion
     }
+
+    #region ForOracle
+
+    public class OracleProcEntity : ProcEntity
+    {
+        public OracleProcEntity() { }
+        public OracleProcEntity(string procName)
+            : base(procName)
+        {
+        }
+    }
+
+    [OracleOutParam("o_cursor")]
+    public class OracleResultProcEntity : OracleProcEntity
+    {
+        public OracleResultProcEntity() { }
+        public OracleResultProcEntity(string procName)
+            : base(procName)
+        {
+        }
+    }
+
+    [OracleOutParam("o_cursor", "o_count")]
+    public class OraclePagerProcEntity : OracleProcEntity
+    {
+        public OraclePagerProcEntity() { }
+        public OraclePagerProcEntity(string procName)
+            : base(procName)
+        {
+        }
+    }
+
+    public class OracleOutParamAttribute : Attribute
+    {
+        public OracleOutParamAttribute(params string[] paramName)
+        {
+            OutParamNames = paramName;
+        }
+
+        public string[] OutParamNames { get; private set; }
+    }
+
+    #endregion
 }

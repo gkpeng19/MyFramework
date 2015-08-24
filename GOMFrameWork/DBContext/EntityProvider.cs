@@ -101,7 +101,7 @@ namespace GOMFrameWork.DBContext
                     result.Data = DataConverter.ConvertToList<T>(ds.Tables[0]);
                     if (ds.Tables.Count > 1)
                     {
-                        result.PageCount = (int)ds.Tables[1].Rows[0][0];
+                        result.PageCount = int.Parse(ds.Tables[1].Rows[0][0].ToString());
                     }
                 }
             }
@@ -476,6 +476,46 @@ namespace GOMFrameWork.DBContext
             return result;
         }
 
+        internal override T ExcuteProcData<T>(ProcEntity entity)
+        {
+            if (entity is OracleProcEntity)
+            {
+                T obj = new T();
+                using (DataSet ds = _dbProvider.ExcuteProc(entity.ProcName, GetProcParameters(entity)))
+                {
+                    if (ds.Tables.Count == 0)
+                    {
+                        return default(T);
+                    }
+
+                    List<string> outPNames = new List<string>();
+                    foreach (OracleOutParamAttribute attr in entity.GetType().GetCustomAttributes(typeof(OracleOutParamAttribute), true))
+                    {
+                        outPNames.AddRange(attr.OutParamNames);
+                    }
+
+                    for (var i = 0; i < ds.Tables.Count; ++i)
+                    {
+                        PropertyInfo pi = typeof(T).GetProperty(outPNames[i], BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+                        if (pi != null)
+                        {
+                            if (typeof(EntityBase).IsAssignableFrom(pi.PropertyType))
+                            {
+                                pi.SetValue(obj, DataConverter.ConvertToEntity(ds.Tables[i], pi.PropertyType), null);
+                            }
+                            else if (typeof(IList).IsAssignableFrom(pi.PropertyType))
+                            {
+                                pi.SetValue(obj, DataConverter.ConvertToEntityList(ds.Tables[i], pi.PropertyType), null);
+                            }
+                        }
+                    }
+                }
+                return obj;
+            }
+
+            return default(T);
+        }
+
         #region 接口成员
 
         public override string GetInsertSql(EntityBase entity)
@@ -615,12 +655,31 @@ namespace GOMFrameWork.DBContext
 
         public override DbParameter[] GetProcParameters(ProcEntity entity)
         {
-            DbParameter[] parameters = new OracleParameter[entity.Collection.Count];
+            List<string> outPNames = null;
+            if (entity is OracleProcEntity)
+            {
+                outPNames = new List<string>();
+                foreach (OracleOutParamAttribute attr in entity.GetType().GetCustomAttributes(typeof(OracleOutParamAttribute), false))
+                {
+                    outPNames.AddRange(attr.OutParamNames);
+                }
+            }
+
+            DbParameter[] parameters = new OracleParameter[entity.Collection.Count + (outPNames == null ? 0 : outPNames.Count)];
             int index = 0;
             foreach (EntityItem item in entity.Collection)
             {
                 parameters[index] = new OracleParameter(item.Key, item.Value);
                 ++index;
+            }
+
+            if (outPNames != null)
+            {
+                foreach (string name in outPNames)
+                {
+                    parameters[index] = new OracleParameter(name, OracleType.Cursor) { Direction = ParameterDirection.Output };
+                    ++index;
+                }
             }
 
             return parameters;
