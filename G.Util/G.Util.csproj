@@ -57,6 +57,9 @@
     <Compile Include="Account\ILoginInfo.cs" />
     <Compile Include="Account\LoginInfo.cs" />
     <Compile Include="Extension\EnumExtension.cs" />
+    <Compile Include="Html\HtmlSelect.cs" />
+    <Compile Include="Html\HtmlTree.cs" />
+    <Compile Include="Tool\Encryption.cs" />
     <Compile Include="Tool\ExcelHelper.cs" />
     <Compile Include="Tool\JsonConverter.cs" />
     <Compile Include="Tool\LogHelper.cs" />
