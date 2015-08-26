@@ -20,11 +20,23 @@ namespace WinTemplate
     [System.Runtime.InteropServices.ComVisibleAttribute(true)]
     public partial class Main : KryptonForm
     {
+        string _temhtml = string.Empty;
+        string _temtable = string.Empty;
+
         public Main()
         {
             InitializeComponent();
             this.Load += Main_Load;
             this.FormClosed += Main_FormClosed;
+
+            #region 初始化模版资源
+
+            string temhtmlpath = System.Environment.CurrentDirectory + @"\template\content.html";
+            string temtablepath = System.Environment.CurrentDirectory + @"\template\table.html";
+            _temhtml = System.IO.File.ReadAllText(temhtmlpath, Encoding.GetEncoding("GBK"));
+            _temtable = System.IO.File.ReadAllText(temtablepath, Encoding.GetEncoding("GBK"));
+
+            #endregion
         }
 
         void Main_Load(object sender, EventArgs e)
@@ -168,7 +180,7 @@ namespace WinTemplate
 
             cMItemGenerateHtml.Click += (ss, ee) =>
                 {
-                    GenerateHtml((fileTree.SelectedNode.Tag as GFile).SPath + ".json");
+                    GenerateHtml((fileTree.SelectedNode.Tag as GFile).SPath);
                 };
 
             #endregion
@@ -290,15 +302,41 @@ namespace WinTemplate
 
         void GenerateHtml(string filePath)
         {
-            string htmlpath = System.Environment.CurrentDirectory + @"\template\content.html";
-            string tablepath = System.Environment.CurrentDirectory + @"\template\table.html";
-            var html = System.IO.File.ReadAllText(htmlpath, Encoding.GetEncoding("GBK"));
-            var table = System.IO.File.ReadAllText(tablepath, Encoding.GetEncoding("GBK"));
+            Razor.Compile(_temtable, "tables");
 
-            Razor.Compile(table, "tables");
+            var data = JSON.JsonBack<GContent>(File.ReadAllText(filePath + ".json"));
+            var html_result = Razor.Parse(_temhtml, data);
 
-            var data = JSON.JsonBack<GContent>(File.ReadAllText(filePath));
-            var result = Razor.Parse(html, data);
+            #region 写入生成的Html
+
+            var findex = filePath.LastIndexOf('\\');
+            var html_path = filePath.Substring(0, findex);
+            var filename = filePath.Substring(findex + 1);
+            html_path = html_path.Substring(_solution.SPath.Length + 1);
+            findex = html_path.IndexOf('\\');
+            if (findex < 0)
+            {
+                html_path += "\\_source";
+            }
+            else
+            {
+                html_path = html_path.Insert(findex + 1, "_source\\");
+            }
+
+            html_path = _solution.SPath + "\\" + html_path;
+
+
+            if (!Directory.Exists(html_path))
+            {
+                Directory.CreateDirectory(html_path);
+            }
+
+            using (var sw = File.CreateText(html_path + "\\" + filename + ".cshtml"))
+            {
+                sw.Write(html_result);
+            }
+
+            #endregion
         }
 
         private void ShowTreeRightMenu(Control c, KryptonContextMenu kcm)

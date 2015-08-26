@@ -29,11 +29,11 @@ namespace WebSite.Areas.Biz.Controllers
             return this.JsonNet(new { URoles = list });
         }
 
-        public JsonResult LoadAdmin(int page,int psize)
+        public JsonResult LoadAdmin(int page_g,int psize_g)
         {
             Sh_HZ_Admin sh = new Sh_HZ_Admin();
-            sh.PageIndex = page;
-            sh.PageSize = psize;
+            sh.PageIndex = page_g;
+            sh.PageSize = psize_g;
             sh.OrderBy("createon", GOMFrameWork.DataEntity.EnumOrderBy.Desc);
             var r= sh.Load<HZ_Admin>();
             return this.JsonNet(r);

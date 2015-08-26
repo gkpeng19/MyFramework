@@ -18,16 +18,16 @@
             "<table class=\"edui-link-table\">" +
             "<tr>" +
             "<td><label for=\"href\"><%=lang_input_url%></label></td>" +
-            "<td><input class=\"edui-link-txt\" id=\"edui-link-Jhref\" type=\"text\" /></td>" +
+            "<td><input class=\"edui-link-txt\" id=\"edui-link-Jhref\" type=\"text\" style='width:220px;' /></td>" +
             "</tr>" +
             "<tr>" +
             "<td><label for=\"title\"><%=lang_input_title%></label></td>" +
-            "<td><input class=\"edui-link-txt\" id=\"edui-link-Jtitle\" type=\"text\"/></td>" +
+            "<td><input class=\"edui-link-txt\" id=\"edui-link-Jtitle\" type=\"text\" style='width:220px;'/></td>" +
             "</tr>" +
             "<tr>" +
             "<td colspan=\"2\">" +
             "<label for=\"target\"><%=lang_input_target%></label>" +
-            "<input id=\"edui-link-Jtarget\" type=\"checkbox\"/>" +
+            "<input id=\"edui-link-Jtarget\" type=\"checkbox\"/><span class='lbl'></span>" +
             "</td>" +
             "</tr>" +
 //            "<tr>" +

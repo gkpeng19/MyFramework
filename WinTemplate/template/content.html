@@ -1,4 +1,10 @@
-﻿@Include("tables",Model)
+﻿@{var varstarchar="@{";}
+@varstarchar
+    ViewBag.Title = "Title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Include("tables",Model)
 
 @foreach(var fm in Model.forms)
 {
@@ -54,6 +60,42 @@
             </form>
 		</div>
 	</div>
+}
+
+@if(Model.trees.Count>0)
+{
+	<div class="row-fluid">
+    <div class="span3">
+        <form name="fm_treeedit" id="fm_treeedit" class="layerout form-layer">
+            <div>
+                <input type="hidden" name="ID" />
+                <input type="hidden" name="ParentID" value="0" />
+                <div class="row-fluid">
+                    <div class="span12">
+                        <label>节点名称</label>
+                        <input type="text" name="Name" id="txt_treeNodeName" class="span11" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+	</div>
+
+	<div class="row-fluid">
+    <div class="span3">
+        <div id="targetTree" class="layerout" style="min-height:200px;"></div>
+    </div>
+	</div>
+}
+
+@{var stylechar="@section styles{";}
+@if(Model.trees.Count>0)
+{
+<text>
+@stylechar
+	<link href="~/Styles/gtree/themes/default/style.min.css" rel="stylesheet" />
+}
+</text>
 }
 
 @{var varchar="@section scripts{";}
@@ -134,11 +176,152 @@
 
         $(function()
         {
+			@foreach(var tree in Model.trees)
+			{
+				<text>
+				$("#@tree.id").gtree({ url: "@tree.loadurl" });
+				$("#@tree.id").gtree("beforeDeleteNode", function () {
+					if ($("#@tree.reftableid").datagrid("hasChildren")) {
+						$.error("请先删除该节点下的内容！");
+						return false;
+					}
+					$("#@tree.reftableid").datagrid("refresh");
+					if ($("#@tree.reftableid").datagrid("hasChildren")) {
+						$.error("请先删除该节点下的内容！");
+						return false;
+					}
+					return true;
+				});
+				$("#@tree.id").gtree("selectChanged", function (json) {
+					//刷新右边表格
+					var nids = '-1';
+					$(json.children_d).each(function () {
+						nids += (',' + this);
+					});
+					$("#@tree.reftableid").datagrid({ url: "/Biz/Context/LoadInfo", search: { nodeids: nids } });
+				});
+				
+				$("#@tree.id").prev().find(".btn-add-treeroot").bind("click", function () {
+					$("#fm_treeedit").bindEntity({});
+					EditTree@(tree.id)(true, true);
+				});
+				$("#@tree.id").prev().find(".btn-add-treechild").bind("click", function () {
+					var snode = $("#@tree.id").gtree("getSelected");
+					if (snode) {
+						$("#fm_treeedit").bindEntity({ ParentID: snode.id });
+						EditTree@(tree.id)(true, false);
+					}
+				});
+				$("#@tree.id").prev().find(".btn-edit-treenode").bind('click', function () {
+					var snode = $("#@tree.id").gtree("getSelected");
+					if (snode) {
+						$("#fm_treeedit").bindEntity({ ID: snode.id, ParentID: snode.parentid, Name: snode.text });
+						EditTree@(tree.id)(false, false);
+					}
+				});
+				$("#@tree.id").prev().find(".btn-del-treenode").bind('click', function () {
+					var snode = $("#@tree.id").gtree("getSelected");
+					if (snode) {
+						$.confirm("确定要删除该分类吗？", function () {
+							if ($("#@tree.id").gtree("removeSelectNode")) {
+								$.post("@tree.delurl", { ID: snode.id }, function (r) { });
+							}
+						});
+					}
+				});
+				
+				function EditTree@(tree.id)(isAdd, isRoot) {
+					$("#fm_treeedit").open("新增节点", function (win) {
+						if (!tt.validateForm("fm_treeedit")) {
+							return false;
+						}
+						var update = $("#fm_treeedit").getContext();
+						$.post("@tree.saveurl", update, function (r) {
+							r = $.toJsResult(r);
+							var node = { id: r.ID, parentid: r.ParentID, text: r.Name };
+							if (r.ID > 0) {
+								//更新树
+								if (isAdd) {
+									if (isRoot) {
+										$("#@tree.id").gtree("addRootNode", node);
+									}
+									else {
+										$("#@tree.id").gtree("addChildNode", node);
+									}
+								}
+								else {
+									$("#@tree.id").gtree("updateSelectNode", node);
+								}
+								layer.close(win);
+							}
+							else {
+								$.error("保存失败，请重试！");
+							}
+						});
+
+						return false;
+					});
+				}
+				</text>
+			}
+			
             @foreach(var table in Model.tables)
             {
-                <text>
-                $("#@table.id").datagrid({ url: "@table.data.url",psize:@table.data.pagesize });
-                </text>
+				var reftree="0";
+				foreach(var tree in Model.trees)
+				{
+					if(tree.reftableid==table.id)
+					{
+						reftree=tree.loadurl;
+						break;
+					}
+				}
+				
+				if(reftree=="0")
+				{
+				<text>
+				$("#@table.id").datagrid({ url: "@table.data.url",psize:@table.data.pagesize });
+				</text>
+				}
+				else
+				{
+				<text>
+				$("#@table.id").datagrid({ psize:@table.data.pagesize });
+				</text>
+				}
+				
+				if(reftree!="0")
+				{
+				<text>
+				$("#@table.id").parent().prev().find(".btn-more-move").bind('click', function () {
+					var sels = $("#@table.id").datagrid("getSelected");
+					if (sels.length == 0) {
+						$.error("请勾选资讯！");
+						return;
+					}
+
+					$("#targetTree").gtree({ url: '@reftree' });
+					$("#targetTree").open("选择节点", function (win) {
+						var snode = $("#targetTree").gtree("getSelected");
+						var json = [];
+						$(sels).each(function () {
+							json.push({ ID: this.ID, CategoryID: snode.id });
+						});
+						$.post("/Biz/Context/TransferContext", { Contexts: json }, function (r) {
+							if (r > 0) {
+								layer.close(win);
+								$("#@table.id").datagrid("refresh");
+							}
+							else {
+								$.error("批量转移失败，请重试！");
+							}
+						});
+						return false;
+					});
+				});
+				</text>
+				}
+                
                 @foreach(var h in table.data.headers)
                 {
                     if(h.type=="2")
@@ -148,7 +331,7 @@
                             if(btn.type=="edit")
                             {
                                 <text>
-								$(".btn-table-add").bind('click',function()
+								$("#@table.id").parent().prev().find(".btn-table-add").bind('click',function()
 								{
 									$("#@btn.formdataid").bindEntity({});
 									$("#@btn.formdataid").open("新增",function(win)
@@ -223,12 +406,12 @@
                                         });
 									});
                                 });
-                            </text>
-                        }
-                    }
-                }
-            }
-        }
+								</text>
+							}
+						}
+					}
+				}
+			}
         });
 
         /*增加验证信息----------Start*/
@@ -289,6 +472,14 @@
                 }
             }
         }
+		
+		@if(Model.trees.Count>0)
+		{
+			<text>
+			var vf_treenodeedit = new tt.Field("节点名称", "", "txt_treeNodeName").setMsgId("layer-error-msg");
+			tt.vf.req.add(vf_treenodeedit);
+			</text>
+		}
         /*增加验证信息----------End*/	
 </script>
 }

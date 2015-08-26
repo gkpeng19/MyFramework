@@ -66,12 +66,12 @@ namespace WebSite.Areas.Biz.Controllers
 
         #endregion
 
-        public JsonResult LoadInfo(int page, string categoryids, int psize = 10)
+        public JsonResult LoadInfo(int page_g, string categoryids, int psize_g = 10)
         {
             Sh_HZ_Product sh = new Sh_HZ_Product();
             sh.CategoryIds = categoryids;
-            sh.PageIndex = page;
-            sh.PageSize = psize;
+            sh.PageIndex = page_g;
+            sh.PageSize = psize_g;
             sh.OrderBy("Sort", EnumOrderBy.Desc);
             sh.OrderBy("CreateOn", EnumOrderBy.Desc);
             var result = sh.Load<HZ_Product>();

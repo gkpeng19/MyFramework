@@ -87,7 +87,7 @@
             });
 
             $("#5308584827791714").datagrid("onDelete", function () {
-                if (confirm("确定要删除吗？")) {
+                $.confirm("确定要删除吗？", function () {
                     var json = $("#5308584827791714").datagrid("getCurrData");
                     $.post("/Biz/Context/DeleteContext", { ID: json["ID"] }, function (r) {
                         if (r > 0) {
@@ -97,7 +97,7 @@
                             alert("删除失败，请重试！");
                         }
                     });
-                }
+                });
             });
 
             $(".add").bind('click', function () {

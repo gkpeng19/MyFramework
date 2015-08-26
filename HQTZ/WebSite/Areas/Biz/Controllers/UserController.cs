@@ -27,11 +27,11 @@ namespace WebSite.Areas.Biz.Controllers
             return this.JsonNet(new { UserLevels = userLevels, UserTypes = userTypes });
         }
 
-        public JsonResult LoadUsers(int page, int psize = 10)
+        public JsonResult LoadUsers(int page_g, int psize_g = 10)
         {
             Sh_HZ_User sh = new Sh_HZ_User();
-            sh.PageIndex = page;
-            sh.PageSize = psize;
+            sh.PageIndex = page_g;
+            sh.PageSize = psize_g;
             sh.OrderBy("CreateOn", GOMFrameWork.DataEntity.EnumOrderBy.Desc);
             return this.JsonNet(sh.Load<HZ_User>());
         }

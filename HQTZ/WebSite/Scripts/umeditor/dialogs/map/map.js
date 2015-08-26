@@ -24,7 +24,7 @@
             "<td><%=lang_address%>:</td>" +
             "<td><input class=\"edui-map-address\" type=\"text\" value=\"\" /></td>" +
             "<td><a class=\"edui-map-button\"><%=lang_search%></a></td>" +
-            "<td><label class=\"edui-map-dynamic-label\"><input class=\"edui-map-dynamic\" type=\"checkbox\" name=\"edui-map-dynamic\" /><span><%=lang_dynamicmap%></span></label></td>"+
+            "<td><label class=\"edui-map-dynamic-label\"><input class=\"edui-map-dynamic\" type=\"checkbox\" name=\"edui-map-dynamic\" /><span class='lbl'></span><span><%=lang_dynamicmap%></span></label></td>" +
             "</tr>" +
             "</table>" +
             "<div style=\"width:100%;height:340px;margin:5px auto;border:1px solid gray\" class=\"edui-map-container\"></div>" +
@@ -60,7 +60,7 @@
                 lang = editor.getLang(widgetName),
                 theme_url = editor.options.themePath + editor.options.theme;
 
-            if( me.inited ) {
+            if (me.inited) {
                 me.preventDefault();
                 return false;
             }
@@ -90,12 +90,12 @@
             } else {
 
                 $ifr = $('<iframe style="display: none;"></iframe>');
-                $ifr.appendTo( this.root() );
+                $ifr.appendTo(this.root());
 
-                $ifr = $ifr[ 0 ].contentWindow.document;
+                $ifr = $ifr[0].contentWindow.document;
 
                 $ifr.open();
-                $ifr.write( this.root().find(".edui-tpl-container").html().replace( /scr_ipt/g, 'script').replace('<<id>>',"'" + this.editor.id + "'") );
+                $ifr.write(this.root().find(".edui-tpl-container").html().replace(/scr_ipt/g, 'script').replace('<<id>>', "'" + this.editor.id + "'"));
 
             }
 
@@ -113,6 +113,17 @@
                 if (_src) {
                     $.getScript(_src, function () {
                         me.requestMapApi(src);
+                        var interval = null;
+                        interval = setInterval(function () {
+                            var markImg = $(".BMap_Marker img");
+                            if (markImg.length > 0) {
+                                clearInterval(interval);
+                                if (markImg) {
+                                    markImg.parent().width(39);
+                                }
+                                markImg = null;
+                            }
+                        }, 500);
                     });
                 } else {
                     me.requestMapApi(src);
@@ -175,7 +186,7 @@
                 onSearchComplete: function (results) {
                     if (results && results.getNumPois()) {
                         var points = [];
-                        for (var i = 0; i < results.getCurrentNumPois(); i++) {
+                        for (var i = 0; i < results.getCurrentNumPois() ; i++) {
                             points.push(results.getPoi(i).point);
                         }
                         if (points.length > 1) {
@@ -184,7 +195,7 @@
                             me.map.centerAndZoom(points[0], 13);
                         }
                         point = me.map.getCenter();
-                        me.marker.setPoint(point);
+                        me.marker.setPosition(point);
                     } else {
                         alert(me.lang.errorMsg);
                     }
@@ -196,7 +207,7 @@
             var reg = new RegExp(par + "=((\\d+|[.,])*)", "g");
             return reg.exec(str)[1];
         },
-        reset: function(){
+        reset: function () {
             this.map && this.map.reset();
         },
         initEvent: function () {
@@ -217,9 +228,9 @@
 
             $root.find(".edui-map-address").focus();
 
-            $root.on( "mousewheel DOMMouseScroll", function ( e ) {
+            $root.on("mousewheel DOMMouseScroll", function (e) {
                 return false;
-            } );
+            });
 
         },
         width: 580,
@@ -231,28 +242,32 @@
                         center = widget.map.getCenter(),
                         zoom = widget.map.getZoom(),
                         size = widget.map.getSize(),
-                        point = widget.marker.P;
+                        point = widget.marker.point;
 
-                    if (widget.root().find(".edui-map-dynamic")[0].checked) {
+                    var isDynamic = widget.root().find(".edui-map-dynamic")[0];
+                    if (isDynamic.checked) {
                         var URL = editor.getOpt('UMEDITOR_HOME_URL'),
-                            url = [URL + (/\/$/.test(URL) ? '':'/') + "dialogs/map/map.html" +
+                            url = [URL + (/\/$/.test(URL) ? '' : '/') + "dialogs/map/map.html" +
                                 '#center=' + center.lng + ',' + center.lat,
                                 '&zoom=' + zoom,
                                 '&width=' + size.width,
                                 '&height=' + size.height,
                                 '&markers=' + point.lng + ',' + point.lat].join('');
-                        editor.execCommand('inserthtml', '<iframe class="ueditor_baidumap" src="' + url + '" frameborder="0" width="' + (size.width+4) + '" height="' + (size.height+4) + '"></iframe>');
+                        editor.execCommand('inserthtml', '<iframe class="ueditor_baidumap" src="' + url + '" frameborder="0" width="' + (size.width + 4) + '" height="' + (size.height + 4) + '"></iframe>');
+                        isDynamic.checked = false;
                     } else {
                         url = "http://api.map.baidu.com/staticimage?center=" + center.lng + ',' + center.lat +
                             "&zoom=" + zoom + "&width=" + size.width + '&height=' + size.height + "&markers=" + point.lng + ',' + point.lat;
                         editor.execCommand('inserthtml', '<img width="' + size.width + '"height="' + size.height + '" src="' + url + '"' + (widget.imgcss ? ' style="' + widget.imgcss + '"' : '') + '/>', true);
                     }
-
+                    //labels=116.487812,40.017524|116.442968,39.797022&labelStyles=小吃AAAA,1,14,0xFF0000,0xffffff,1
                     widget.reset();
+
+
                 }
             },
             cancel: {
-                exec: function(editor){
+                exec: function (editor) {
                     editor.getWidgetData(widgetName).reset();
                 }
             }

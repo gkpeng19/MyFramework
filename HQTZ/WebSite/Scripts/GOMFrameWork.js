@@ -5,8 +5,23 @@ $.fn.extend({
     datagrid: function (a, b, c, d, e) {
         if (typeof (a) == "object") {
             //datagrid 初始化
-            var table = new datatable(this, a.psize);
-            gExtends.datagrid[this[0].id] = table;
+            var pageSize = 10;
+            var table = null;
+            if (!a) {
+                table = new datatable(this, pageSize);
+                gExtends.datagrid[this[0].id] = table;
+            }
+            else {
+                if (a.psize) {
+                    pageSize = a.psize;
+                }
+
+                table = gExtends.datagrid[this[0].id];
+                if (!table) {
+                    table = new datatable(this, pageSize);
+                    gExtends.datagrid[this[0].id] = table;
+                }
+            }
 
             if (a.url && a.url.length > 0) {
                 table.initByUrl(a.url, a.search, 1);
@@ -140,9 +155,9 @@ $.fn.extend({
 });
 
 /*-------DataTable-----------------------------------------------------*/
-var datatable = function (table, psize) {
+var datatable = function (table, pageSize) {
     this.datagrid = table;
-    this.psize = psize ? psize : 10;
+    this.psize = pageSize;
     this.trIdentity = "_dtr_g";
 
     this.currIdentity = -1;
@@ -248,8 +263,8 @@ datatable.prototype.initByUrl = function (url, search, page) {
         }
     }
     page = page ? page : 1;
-    search.page = page;
-    search.psize = this.psize;
+    search.page_g = page;
+    search.psize_g = this.psize;
     var dg = this;
     $.post(url, search, function (r) {
         dg.initByData($.toJsResult(r.Data), page, r.PageCount);
@@ -340,7 +355,7 @@ datatable.prototype.initByData = function (data, page, pagecount) {
         if (dg.onCustomPager) {
             dg.onCustomPager(newpage);
         }
-    }, dg.psize);
+    });
     /*----Init Pager End--------------------------*/
 };
 
@@ -382,11 +397,12 @@ datatable.prototype.initLineHtml = function (json, identity) {
                 if (option.checkbox) {
                     vhtm = '<input type="checkbox" disabled="disabled" ' + (vhtm == 1 ? 'checked="checked"' : '') + '/><span class="lbl"></span>';
                 }
-
-                if (option.onload) {
-                    vhtm = option.onload(vhtm);
-                }
             }
+
+            if (option.onload) {
+                vhtm = option.onload(vhtm);
+            }
+
             html += "<td>" + vhtm + "</td>";
         }
     }
@@ -540,6 +556,13 @@ datatable.prototype.getSelected = function () {
 
 datatable.prototype.refresh = function () {
     this.initByUrl(this.url, this.search, this.search.page);
+};
+
+datatable.prototype.hasChildren = function () {
+    if (this.length > 0) {
+        return true;
+    }
+    return false;
 };
 
 //-----------------------------------------------------------------------------------
@@ -853,13 +876,27 @@ gtree.prototype.removeSelectNode = function () {
         return false;
     }
 
+    if (this._beforeDeleteNode) {
+        $.ajaxSetup({ async: false });
+        var r = this._beforeDeleteNode();
+        $.ajaxSetup({ async: true });
+
+        if (!r) {
+            return false;
+        }
+    }
+
     var pid = node.parentid;
-    node = null;
     var nextid = 0;
     if (pid > 0) {
         var pnode = this.tool.getNode(pid);
         this.tool.initTreeNodeChildren_D(pnode);
         nextid = pnode.id;
+    }
+    else if (this.nodes[0] == node) {
+        if (this.nodes[1]) {
+            nextid = this.nodes[1].id;
+        }
     }
     else {
         nextid = this.nodes[0].id;
@@ -871,8 +908,9 @@ gtree.prototype.removeSelectNode = function () {
     }
     li.remove();
 
-    this.container.find("#" + nextid + ">a.jstree-anchor").click();
-
+    if (nextid != 0) {
+        this.container.find("#" + nextid + ">a.jstree-anchor").click();
+    }
     return true;
 };
 
@@ -880,6 +918,11 @@ gtree.prototype.updateSelectNode = function (node) {
     var snode = this.getSelected();
     snode.text = node.text;
     this.container.find(".jstree-clicked span").text(node.text);
+};
+
+gtree.prototype._beforeDeleteNode = null;
+gtree.prototype.beforeDeleteNode = function (event) {
+    this._beforeDeleteNode = event;
 };
 
 /*-----Json数组的二分查找------------------------------------------------------*/

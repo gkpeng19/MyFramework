@@ -13,17 +13,32 @@ namespace WinTemplate
     {
         public GContent()
         {
+            trees = new List<GTree>();
             tables = new List<GTable>();
             jsons = new List<GJson>();
             forms = new List<GForm>();
             binds = new List<GBind>();
         }
 
+        public List<GTree> trees { get; set; }
         public List<GTable> tables { get; set; }
         public List<GJson> jsons { get; set; }
         public List<GForm> forms { get; set; }
         public List<GBind> binds { get; set; }
     }
+
+    #region ForTree
+
+    public class GTree
+    {
+        public string id { get; set; }
+        public string loadurl { get; set; }
+        public string saveurl { get; set; }
+        public string delurl { get; set; }
+        public string reftableid { get; set; }
+    }
+
+    #endregion
 
     #region ForTable
 

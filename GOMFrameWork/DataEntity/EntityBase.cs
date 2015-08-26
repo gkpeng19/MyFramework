@@ -547,6 +547,12 @@ namespace GOMFrameWork.DataEntity
             return id;
         }
 
+        public long Delete()
+        {
+            this["IsDelete"] = 1;
+            return this.Save();
+        }
+
         #endregion
     }
 }

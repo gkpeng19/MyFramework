@@ -98,6 +98,7 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="HtmlPage1.html" />
+    <Content Include="Images\Flag.png" />
     <Content Include="Images\hand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -184,16 +185,16 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\gtree\themes\default-dark\32px.png" />
-    <Content Include="Scripts\gtree\themes\default-dark\40px.png" />
-    <Content Include="Scripts\gtree\themes\default-dark\style.css" />
-    <Content Include="Scripts\gtree\themes\default-dark\style.min.css" />
-    <Content Include="Scripts\gtree\themes\default-dark\throbber.gif" />
-    <Content Include="Scripts\gtree\themes\default\32px.png" />
-    <Content Include="Scripts\gtree\themes\default\40px.png" />
-    <Content Include="Scripts\gtree\themes\default\style.css" />
-    <Content Include="Scripts\gtree\themes\default\style.min.css" />
-    <Content Include="Scripts\gtree\themes\default\throbber.gif" />
+    <Content Include="Styles\gtree\themes\default-dark\32px.png" />
+    <Content Include="Styles\gtree\themes\default-dark\40px.png" />
+    <Content Include="Styles\gtree\themes\default-dark\style.css" />
+    <Content Include="Styles\gtree\themes\default-dark\style.min.css" />
+    <Content Include="Styles\gtree\themes\default-dark\throbber.gif" />
+    <Content Include="Styles\gtree\themes\default\32px.png" />
+    <Content Include="Styles\gtree\themes\default\40px.png" />
+    <Content Include="Styles\gtree\themes\default\style.css" />
+    <Content Include="Styles\gtree\themes\default\style.min.css" />
+    <Content Include="Styles\gtree\themes\default\throbber.gif" />
     <Content Include="Scripts\laydate\laydate.js" />
     <Content Include="Scripts\laydate\need\laydate.css" />
     <Content Include="Scripts\laydate\skins\dahong\icon.png" />

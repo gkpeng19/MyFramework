@@ -31,12 +31,12 @@ namespace WebSite.Areas.Biz.Controllers
 
         #region 内容管理
 
-        public JsonResult LoadContext(int page, int psize = 10)
+        public JsonResult LoadContext(int page_g, int psize_g = 10)
         {
             Sh_HZ_Context sh = new Sh_HZ_Context();
             sh.CType = (int)ContextTypeEnum.Context;
-            sh.PageIndex = page;
-            sh.PageSize = psize;
+            sh.PageIndex = page_g;
+            sh.PageSize = psize_g;
             sh.OrderBy("IsTop", EnumOrderBy.Desc);
             sh.OrderBy("CreateOn", EnumOrderBy.Desc);
             CommonResult<HZ_Context> result = sh.Load<HZ_Context>();
@@ -77,7 +77,7 @@ namespace WebSite.Areas.Biz.Controllers
             Sh_HZ_Catagory sh = new Sh_HZ_Catagory();
             sh["ctype"] = (int)CategoryTypeEnum.Info;
             sh.OrderBy("parentid", EnumOrderBy.Asc);
-            sh.OrderBy("createon", EnumOrderBy.Desc);
+            sh.OrderBy("createon");
 
             var r = sh.Load<HZ_Catagory>();
             List<HtmlTreeNode> treeNodes = new List<HtmlTreeNode>();
@@ -126,12 +126,12 @@ namespace WebSite.Areas.Biz.Controllers
 
         #endregion
 
-        public JsonResult LoadInfo(int page, string categoryids, int psize = 10)
+        public JsonResult LoadInfo(int page_g, string categoryids, int psize_g = 10)
         {
             Sh_HZ_Info sh = new Sh_HZ_Info();
             sh.CategoryIds = categoryids;
-            sh.PageIndex = page;
-            sh.PageSize = psize;
+            sh.PageIndex = page_g;
+            sh.PageSize = psize_g;
             sh.OrderBy("IsTop", EnumOrderBy.Desc);
             sh.OrderBy("CreateOn", EnumOrderBy.Desc);
             CommonResult<HZ_Context> result = sh.Load<HZ_Context>();
@@ -165,12 +165,12 @@ namespace WebSite.Areas.Biz.Controllers
 
         #region 广告管理
 
-        public JsonResult LoadAdvert(int page, int psize = 10)
+        public JsonResult LoadAdvert(int page_g, int psize_g = 10)
         {
             Sh_HZ_Context sh = new Sh_HZ_Context();
             sh.CType = (int)ContextTypeEnum.Advert;
-            sh.PageIndex = page;
-            sh.PageSize = psize;
+            sh.PageIndex = page_g;
+            sh.PageSize = psize_g;
             sh.OrderBy("CreateOn", EnumOrderBy.Desc);
             CommonResult<HZ_Context> result = sh.Load<HZ_Context>();
             return this.JsonNet(result);

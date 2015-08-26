@@ -1,13 +1,30 @@
-﻿@foreach(var table in Model.tables)
+﻿@if(Model.trees.Count>0)
 {
-<div class="row-fluid">
-    <div class="row-fluid header blue btn-header">
-        <button class="btn btn-primary btn-mini btn-table-add">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
-    </div>
-	<div class="table-container">
-    <table id="@table.id" class=" table table-striped table-bordered table-hover">
-        <thead>
-            <tr>
+	<div class="row-fluid">
+	@foreach(var tree in Model.trees)
+	{
+		<div class="span3">
+        <div class="row-fluid header blue btn-header">
+            <button class="btn btn-primary btn-mini btn-add-treeroot">新增根节点</button>
+            <button class="btn btn-primary btn-mini btn-add-treechild">新增</button>
+            <button class="btn btn-primary btn-mini btn-edit-treenode">编辑</button>
+            <button class="btn btn-primary btn-mini btn-del-treenode">删除</button>
+        </div>
+        <div id="@tree.id"></div>
+		</div>
+	}
+	<div class="span@(12-3*Model.trees.Count)">
+	@foreach(var table in Model.tables)
+	{
+	<div class="row-fluid">
+		<div class="row-fluid header blue btn-header">
+			<button class="btn btn-primary btn-mini btn-table-add">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
+			<button class="btn btn-primary btn-mini btn-more-move">批量转移</button>
+		</div>
+		<div class="table-container">
+		<table id="@table.id" class=" table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
                 @foreach(var h in table.data.headers)
                 {
                     if(h.type=="1")
@@ -41,9 +58,64 @@
                     <th data-option="{checkbox:true}" class="th-ckbox">@h.header</th>
                     }
                 }
-            </tr>
-        </thead>
-    </table>
+				</tr>
+			</thead>
+		</table>
+		</div>
 	</div>
-</div>
+	}	
+	</div>
+	</div>
+}
+else
+{
+	@foreach(var table in Model.tables)
+	{
+	<div class="row-fluid">
+		<div class="row-fluid header blue btn-header">
+			<button class="btn btn-primary btn-mini btn-table-add">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
+		</div>
+		<div class="table-container">
+		<table id="@table.id" class=" table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+                @foreach(var h in table.data.headers)
+                {
+                    if(h.type=="1")
+                    {
+                    <th data-option="{sequence:true}">@h.header</th>
+                    }
+                    else if(h.type=="0")
+                    {
+                    <th data-option="{bind:'@h.bindproperty'}">@h.header</th>
+                    }
+                    else if(h.type=="2")
+                    {
+                        if(h.actionbtns.Count==2)
+                        {
+                        <th data-option="{edit:true,del:true}">@h.header</th>
+                        }
+                        else if(h.actionbtns.Count==1)
+                        {
+                            if(h.actionbtns[0].type=="edit")
+                            {
+                            <th data-option="{edit:true,del:false}">@h.header</th>
+                            }
+                            else
+                            {
+                            <th data-option="{edit:false,del:true}">@h.header</th>
+                            }
+                        }
+                    }
+                    else if(h.type=="3")
+                    {
+                    <th data-option="{checkbox:true}" class="th-ckbox">@h.header</th>
+                    }
+                }
+				</tr>
+			</thead>
+		</table>
+		</div>
+	</div>
+	}
 }

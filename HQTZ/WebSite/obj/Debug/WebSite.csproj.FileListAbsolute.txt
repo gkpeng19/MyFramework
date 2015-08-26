@@ -123,3 +123,11 @@ D:\Work\MyFramework\HQTZ\WebSite\bin\Images\right_hand.png
 D:\Work\MyFramework\HQTZ\WebSite\bin\Images\right_handing.png
 D:\Work\MyFramework\HQTZ\WebSite\bin\Images\tou.png
 D:\Work\MyFramework\HQTZ\WebSite\bin\Images\username.png
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\hand.png
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\left-handing.png
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\left_hand.png
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\password.png
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\right_hand.png
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\right_handing.png
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\tou.png
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\username.png

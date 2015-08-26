@@ -20,9 +20,6 @@
 
         fieldset {
             padding: 5px;
-        }
-
-        fieldset {
             margin-top: 15px;
         }
 
@@ -73,7 +70,7 @@
             margin-left: 5px;
         }
 
-            #div_forTable table th:last-child {
+            #div_forTable table th.tablebtn {
                 width: 60px;
             }
 
@@ -82,6 +79,10 @@
 
             #div_forTable table.select {
                 border: solid 2px #e3ca4b;
+            }
+
+            #div_forTable table.tree {
+                width: 24%;
             }
     </style>
 </head>
@@ -175,11 +176,24 @@
                 <td><input type="number" id="txt_validateRegString" /> </td>
             </tr>
         </table>
+
+        <!--用于新增Tree控件-->
+        <table id="tree_addTree" class="temp simple_layer">
+            <tr>
+                <td class="td-title">加载Url：</td>
+                <td><input type="text" id="tree_loadUrl" /></td>
+                <td class="td-title">保存Url：</td>
+                <td><input type="text" id="tree_saveUrl" /></td>
+                <td class="td-title">删除Url：</td>
+                <td><input type="text" id="tree_delUrl" /></td>
+            </tr>
+        </table>
     </div>
     <div>
         <table width="100%">
             <tr>
                 <td>
+                    <input type="button" value="添加树" onclick="AddTree()" />
                     <input type="button" value="添加表格" onclick="AddTable()" />
                     <input type="button" value="添加全局数据" onclick="AddJsonData()" />
                     <input type="button" value="添加Form" onclick="AddFormData()" />
@@ -188,11 +202,10 @@
                 <td align="right"></td>
             </tr>
         </table>
-
     </div>
 
     <fieldset>
-        <legend>表格</legend>
+        <legend>数据展示</legend>
         <div id="div_forTable"></div>
         <div style="clear:both;"></div>
     </fieldset>
@@ -210,6 +223,60 @@
     </fieldset>
 
     <script type="text/javascript">
+        var temptrees = {};
+        function AddTree() {
+            $("#tree_addTree").open("添加树", function () {
+                var loadUrl = $.trim($("#tree_loadUrl").val());
+                var saveUrl = $.trim($("#tree_saveUrl").val());
+                var delUrl = $.trim($("#tree_delUrl").val());
+                if (loadUrl.length == 0 || saveUrl.length == 0 || delUrl.length == 0) {
+                    alert("请维护全部Url！");
+                    return false;
+                }
+                var tid = Math.random().toString().split('.')[1];
+
+                AddTreeSubmit(tid, loadUrl, saveUrl, delUrl);
+            });
+        }
+
+        function AddTreeSubmit(tid, loadUrl, saveUrl, delUrl, reftableid) {
+            /*添加树配置到界面---Start------*/
+            var table = $('<table class="tree" id="tree_' + tid + '" cellpadding="0" cellspacing="0"><thead><tr><th>树控件</td></tr></thead></table>');
+            var refBtn = $("<input type='button' value='关联到表格' />");
+            refBtn.bind("click", function () {
+                var stable = $("#div_forTable table.select");
+                if (stable.length == 0) {
+                    alert("请选中要关联到的表格！");
+                    return;
+                }
+
+                var id = stable[0].id.split('_')[1];
+                temptrees[tid]["reftableid"] = id;
+                alert("关联成功。");
+            });
+            var removeBtn = $("<input type='button' value='移除树' />");
+            $(removeBtn).bind("click", function () {
+                if (confirm("确定要移除该树控件吗？")) {
+                    for (var i in temptrees) {
+                        if (i == tid) {
+                            temptrees[i] = undefined;
+                            $("#tree_" + tid).remove();
+                            return;
+                        }
+                    }
+                }
+            });
+            table.find("tr").append($("<th class='tablebtn'></th>").append(refBtn));
+            table.find("tr").append($("<th class='tablebtn'></th>").append(removeBtn));
+            $("#div_forTable").append(table);
+            /*添加树配置到界面---End------*/
+
+            temptrees[tid] = { id: tid, loadurl: loadUrl, saveurl: saveUrl, delurl: delUrl };
+            if (reftableid) {
+                temptrees[tid]["reftableid"] = reftableid;
+            }
+        }
+
         var layerTable = null;
         function AddTable() {
             layerTable = layer.open({
@@ -225,7 +292,7 @@
         var temptables = [];
         function AddTableSubmit(tablejson) {
             var tid = Math.random().toString().split('.')[1];
-            var table = $('<table id="tbl_' + tid + '" cellpadding="0" cellspacing="0"><thead><tr></tr></thead></table>');
+            var table = $('<table class="table" id="tbl_' + tid + '" cellpadding="0" cellspacing="0"><thead><tr></tr></thead></table>');
             for (var i in tablejson.headers) {
                 table.find("tr").append("<th>" + tablejson.headers[i].header + "</th>");
             }
@@ -234,17 +301,18 @@
             $(removeBtn).bind("click", function () {
                 RemoveTable(tid);
             });
-            table.find("tr").append($("<th></th>").append(removeBtn));
+            table.find("tr").append($("<th class='tablebtn'></th>").append(removeBtn));
 
             $("#div_forTable").append(table);
 
             temptables.push({ id: tid, data: tablejson });
 
-            $("#div_forTable table").each(function () {
-                if (!this.onclick) {
+            $("#div_forTable .table").each(function () {
+                if (!$(this).attr("data-event")) {
+                    $(this).attr("data-event", 1);
                     $(this).bind("click", function () {
                         var target = this;
-                        $("#div_forTable table").each(function () {
+                        $("#div_forTable .table").each(function () {
                             if (target != this) {
                                 $(this).removeClass("select");
                             }
@@ -464,7 +532,14 @@
 
         function Save() {
             //构造页面数据
-            var content = { tables: [], jsons: [], forms: [], binds: [] };
+            var content = { trees: [], tables: [], jsons: [], forms: [], binds: [] };
+
+            for (var i in temptrees) {
+                if (temptrees[i]) {
+                    content.trees.push(temptrees[i]);
+                }
+            }
+
             for (var i in temptables) {
                 if (temptables[i].data) {
                     content.tables.push(temptables[i]);
@@ -497,6 +572,11 @@
 
         function InitUI(jsonstr) {
             var json = JSON.parse(jsonstr);
+
+            $(json.trees).each(function () {
+                AddTreeSubmit(this.id, this.loadurl, this.saveurl, this.delurl, this.reftableid);
+            });
+
             $(json.tables).each(function () {
                 AddTableSubmit(this.data);
             });
@@ -585,11 +665,6 @@
                 }
             });
         });
-
-        //var chars = '{"tables":[{"id":"21843774763972168","data":{"url":"/Home/LoadIndex","pkey":"ID","pagesize":10,"headers":[{"type":"1","header":"序号"},{"type":"0","header":"编号","bindproperty":"Code"},{"type":"2","header":"操作","actionbtns":[{"type":"edit","formdataid":"8105569424959262","action":"/HOme/Edit"},{"type":"delete","formdataid":-1,"action":"/Home/Delete"}]}]}}],"jsons":[{"id":"47546895565913505","url":"/Home/LoadData","data":[{"c":[{"v":"47546895565913505","f":"CData {}"},{"v":"","f":null},{"v":"0_47546895565913505_-1","f":null}]},{"c":[{"v":"9474408892971668","f":"Genders []"},{"v":"47546895565913505","f":null},{"v":"1_9474408892971668_2","f":null}]}]}],"forms":[{"id":"8105569424959262","isshow":0,"size":6,"data":[{"c":[{"v":"8105569424959262","f":"{}"},{"v":"","f":null},{"v":"0_8105569424959262_-1","f":null}]},{"c":[{"v":"7847530640099583","f":"ID {PK}"},{"v":"8105569424959262","f":null},{"v":"1_7847530640099583_9","f":null}]},{"c":[{"v":"1552949559935609","f":"Code {I}"},{"v":"8105569424959262","f":null},{"v":"1_1552949559935609_0","f":null}]},{"c":[{"v":"26384656061167205","f":"Gender {S}"},{"v":"8105569424959262","f":null},{"v":"1_26384656061167205_1","f":null}]}],"extdata":{"layer":2,"extdatas":[{"dataid":"1552949559935609","showname":"编号","size":6,"validates":[{"type":"required"}]},{"dataid":"26384656061167205","showname":"性别","size":6,"validates":[{"type":"required"}]}]}}],"binds":[{"id":"4382461471670757","data":[{"c":[{"v":"9474408892971668","f":"Genders []"},{"v":"","f":null},{"v":"2","f":null}]},{"c":[{"v":"26384656061167205","f":"Gender {S}"},{"v":"9474408892971668","f":null},{"v":"1","f":null}]}],"type":2}]}';
-        //InitUI(chars);
-
-        //Save();
     </script>
 </body>
 </html>
