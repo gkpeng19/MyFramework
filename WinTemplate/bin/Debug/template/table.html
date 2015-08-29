@@ -18,11 +18,41 @@
 	{
 	<div class="row-fluid">
 		<div class="row-fluid header blue btn-header">
-			<button class="btn btn-primary btn-mini btn-table-add">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
-			<button class="btn btn-primary btn-mini btn-more-move">批量转移</button>
+			<div class="span3">
+				<button class="btn btn-primary btn-mini btn-table-add">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
+				<button class="btn btn-primary btn-mini btn-more-move">批量转移</button>
+			</div>
+			<div class="span9">
+			@if(table.searchid!="0")
+			{
+				<div class="dataTables_wrapper" id="@table.searchid" style="text-align:right;">
+				@foreach(var sitem in table.searchitems)
+				{
+					<label>@(sitem.title):
+					@if(sitem.type=="1")
+					{
+					<text><input name="@sitem.property" class="input-medium" type="text"></text>
+					}
+					else if(sitem.type=="2")
+					{
+					<text><select id="@sitem.id" name="@sitem.property" class="input-medium">
+						<option value="-1">--请选择--</option>
+					</select></text>
+					}
+					else if(sitem.type=="3")
+					{
+					<text><div class="inline laydate-icon input-medium" onclick="initLaydate(this)" style="text-align:left;">&nbsp;</div>
+					<input type="hidden" name="@sitem.property" /></text>
+					}
+					</label>
+				}
+					<label><input type="button" class="btn btn-primary btn-mini" value="查询" onclick="$('#@table.id').datagrid('refresh')" /></label>
+				</div>
+			}
+			</div>
 		</div>
 		<div class="table-container">
-		<table id="@table.id" class=" table table-striped table-bordered table-hover">
+		<table id="@table.id" class="table table-striped table-bordered table-hover">
 			<thead>
 				<tr>
                 @foreach(var h in table.data.headers)
@@ -73,7 +103,37 @@ else
 	{
 	<div class="row-fluid">
 		<div class="row-fluid header blue btn-header">
-			<button class="btn btn-primary btn-mini btn-table-add">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
+			<div class="span2">
+				<button class="btn btn-primary btn-mini btn-table-add">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
+			</div>
+			<div class="span10">
+				@if(table.searchid!="0")
+				{
+				<div class="dataTables_wrapper" id="@table.searchid" style="text-align:right;">
+				@foreach(var sitem in table.searchitems)
+				{
+					<label>@(sitem.title): 
+					@if(sitem.type=="1")
+					{
+					<text><input name="@sitem.property" class="input-medium" type="text"></text>
+					}
+					else if(sitem.type=="2")
+					{
+					<text><select id="@sitem.id" name="@sitem.property" class="input-medium">
+						<option value="-1">--请选择--</option>
+					</select></text>
+					}
+					else if(sitem.type=="3")
+					{
+					<text><div class="inline laydate-icon input-medium" onclick="initLaydate(this)" style="text-align:left;">&nbsp;</div>
+					<input type="hidden" name="@sitem.property" /></text>
+					}
+					</label>
+				}
+				<label><input type="button" class="btn btn-primary btn-mini" value="查询" onclick="$('#@table.id').datagrid('refresh')" /></label>
+				</div>
+				}
+			</div>
 		</div>
 		<div class="table-container">
 		<table id="@table.id" class=" table table-striped table-bordered table-hover">

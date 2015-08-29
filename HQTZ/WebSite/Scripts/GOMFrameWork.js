@@ -1,4 +1,8 @@
-﻿var gExtends = { datagrid: {}, gtree: {} };
+﻿function initLaydate(src) {
+    laydate({ choose: function (date) { $(src).next().val(date); } });
+};
+/*-----------------------------------------------------------*/
+var gExtends = { datagrid: {}, gtree: {} };
 
 $.fn.extend({
     /*----DataGrid---------------------------*/
@@ -265,6 +269,7 @@ datatable.prototype.initByUrl = function (url, search, page) {
     page = page ? page : 1;
     search.page_g = page;
     search.psize_g = this.psize;
+
     var dg = this;
     $.post(url, search, function (r) {
         dg.initByData($.toJsResult(r.Data), page, r.PageCount);
@@ -555,7 +560,7 @@ datatable.prototype.getSelected = function () {
 };
 
 datatable.prototype.refresh = function () {
-    this.initByUrl(this.url, this.search, this.search.page);
+    this.initByUrl(this.url, this.search, 1);
 };
 
 datatable.prototype.hasChildren = function () {
@@ -1263,5 +1268,24 @@ $.fn.extend({
             container = this;
         }
         container.find(".loading").remove();
+    }
+});
+
+/*------在指定元素上创建遮罩---------------------------------------------*/
+$.fn.extend({
+    shade: function () {
+        var sdiv = $("<div></div>");
+        sdiv.css({
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            backgroundColor: "#808080",
+            opacity: 0,
+            zIndex: 300
+        }).height(this.height()).width(this.width()).show().appendTo("body");
+        var top = this.offset().top;
+        var left = this.offset().left;
+        sdiv[0].style.left = left + "px";
+        sdiv[0].style.top = top + "px";
     }
 });

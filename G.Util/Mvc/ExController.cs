@@ -9,6 +9,11 @@ namespace G.Util.Mvc
 {
     public static class ExController
     {
+        public static JsonNetResult JsonNet(object data)
+        {
+            return JsonNet(null, data);
+        }
+
         public static JsonNetResult JsonNet(this Controller controller, object data)
         {
             return JsonNet(data, null, null, JsonRequestBehavior.DenyGet);

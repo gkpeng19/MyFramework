@@ -1,9 +1,24 @@
-﻿@{var varstarchar="@{";}
-@varstarchar
-    ViewBag.Title = "Title";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+﻿<!DOCTYPE html>
 
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+	<link href="/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/Scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="/Scripts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/Scripts/validate/css/validate.css" rel="stylesheet" />
+    <link href="/Scripts/umeditor/themes/default/css/umeditor.min.css" rel="stylesheet" />
+    <link href="/Scripts/ace/css/ace.min.css" rel="stylesheet" />
+    <link href="/Scripts/ace/css/ace-responsive.min.css" rel="stylesheet" />
+    <link href="/Styles/GOMFrameWork.css" rel="stylesheet" />
+	@if(Model.trees.Count>0){
+	<text>
+	<link href="/Styles/gtree/themes/default/style.min.css" rel="stylesheet" />
+	</text>
+	}
+	</head>
+<body>
 @Include("tables",Model)
 
 @foreach(var fm in Model.forms)
@@ -98,19 +113,17 @@
 	</div>
 }
 
-@{var stylechar="@section styles{";}
-@if(Model.trees.Count>0)
-{
-<text>
-@stylechar
-	<link href="~/Styles/gtree/themes/default/style.min.css" rel="stylesheet" />
-}
-</text>
-}
-
-@{var varchar="@section scripts{";}
-@varchar
-<script type="text/javascript">
+	<script src="/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/Scripts/laydate/laydate.js"></script>
+    <script src="/Scripts/layer/layer.js"></script>
+    <script src="/Scripts/umeditor/umeditor.config.js"></script>
+    <script src="/Scripts/umeditor/umeditor.min.js"></script>
+    <script src="/Scripts/umeditor/lang/zh-cn/zh-cn.js"></script>
+    <script src="/Scripts/validate/talent-validate-all-init.js"></script>
+    <script src="/Scripts/ace/ace.min.js"></script>
+    <script src="/Scripts/GOMFrameWork.js"></script>
+	<script type="text/javascript">
 	@foreach(var json in Model.jsons)
 	{
 		<text>
@@ -564,30 +577,28 @@
 			tt.vf.req.add(vf_treenodeedit);
 			</text>
 		}
-        /*增加验证信息----------End*/
+        /*增加验证信息----------End*/	
 		
 		@foreach(var fm in Model.forms)
 		{
 			foreach(var btn in fm.btns)
 			{
 			<text>
-			$("#@btn.id").bind('click',function()
+			if(!tt.validateForm("@fm.id"))
+            {
+                return false;
+            }
+            var update=$("#@fm.id").getContext();
+			update.ran_g=Math.random();
+			$.post("@btn.action",update,function(r)
 			{
-				if(!tt.validateForm("@fm.id"))
-				{
-					return false;
-				}
-				var update=$("#@fm.id").getContext();
-				update.ran_g=Math.random();
-				$.post("@btn.action",update,function(r)
-				{
-					r=$.toJsResult(r);
-					//提交之后的操作
-					//...
-				});
+				r=$.toJsResult(r);
+				//提交之后的操作
+				//...
 			});
 			</text>
 			}
 		}
-</script>
-}
+	</script>
+</body>
+</html>

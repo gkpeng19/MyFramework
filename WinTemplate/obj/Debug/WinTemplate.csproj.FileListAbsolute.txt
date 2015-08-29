@@ -59,3 +59,5 @@ D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.Properties.Resources.res
 D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.UControl.LayerWindow.resources
 D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.csproj.GenerateResource.Cache
 D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.NewSluWin.resources
+D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\template\cs.html
+D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\template\html.html

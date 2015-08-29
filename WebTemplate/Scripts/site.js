@@ -89,7 +89,7 @@ var jsonconfig = function (selector, id, root) {
     return this;
 };
 
-jsonconfig.prototype.selectNode = null;
+jsonconfig.prototype.selectNode = null;//id,level,type,text
 jsonconfig.prototype.bindNodeSelectEvent = function () {
     var target = this;
     this.chartCon.find(".google-visualization-orgchart-node").bind("click", function () {
@@ -147,10 +147,12 @@ $.fn.extend({
         return fConfig["#" + this[0].id];
     }
 });
-var formconfig = function (selector, id, pkey, isshow, size) {
+var formconfig = function (selector, id, pkey, isshow, size, btns) {
     this.id = id;
     this.isshow = isshow;
     this.size = size;
+    this.btns = btns;
+    this.disabledurl = "";
 
     fConfig[selector] = this;
 
@@ -164,11 +166,18 @@ var formconfig = function (selector, id, pkey, isshow, size) {
     this.btn_textarea = $('<input type="button" value="添加 TextArea" data-type="3" />');
     this.btn_cbx = $('<input type="button" value="添加 CheckBox" data-type="4" />');
     this.btn_editor = $('<input type="button" value="添加 HtmlEditor" data-type="5" />');
+    this.btn_btns = $('<input type="button" value="编辑提交按钮"/>');
+    this.btn_fmdisable = $('<input type="button" value="只读开关"/>');
     this.btn_removeNode = $("<input type='button' value='移除' style='display:none;' />");
     this.btn_removeCon = $("<input type='button' value='移除该对象' />");
     this.chartCon.append(this.btn_input).append(this.btn_select).append(this.btn_datetime).append(this.btn_textarea)
-        .append(this.btn_cbx).append(this.btn_editor)
-        .append(this.btn_removeNode).append(this.btn_removeCon);
+        .append(this.btn_cbx).append(this.btn_editor);
+
+    if (this.isshow == 1) {
+        this.chartCon.append(this.btn_btns).append(this.btn_fmdisable);
+    }
+
+    this.chartCon.append(this.btn_removeNode).append(this.btn_removeCon);
 
     var target = this;
     var click_func = function (type) {
@@ -227,7 +236,6 @@ var formconfig = function (selector, id, pkey, isshow, size) {
             target.AddNode(type, name, extData);
         });
     };
-
     this.ctrTypes = ['I', 'S', 'DT', 'TA', 'CB', 'HE', '', '', '', 'PK'];
 
     this.btn_input.bind('click', function () { click_func(0); });
@@ -236,6 +244,42 @@ var formconfig = function (selector, id, pkey, isshow, size) {
     this.btn_textarea.bind('click', function () { click_func(3); });
     this.btn_cbx.bind('click', function () { click_func(4); });
     this.btn_editor.bind('click', function () { click_func(5); });
+
+    if (this.isshow == 1) {
+        this.btn_btns.bind("click", function () {
+            $("#form_editbtns td .tdcontainer").remove();
+            $("#form_editbtns td").append("<div class='tdcontainer'></div>");
+            $("#form_editbtns .tdcontainer").append('<input type="button" value="添加" onclick="AddFormButtons(\'#form_editbtns .tdcontainer\')" />');
+
+            $(target.btns).each(function () {
+                var id = Math.random().toString().split('.')[1];
+                $("#form_editbtns .tdcontainer").append('<input type="checkbox" id="' + id + '" checked="checked" data-txt="' + this.txt + '" data-action="' + this.action + '" /> <label for="' + id + '">' + this.txt + '</label>');
+            });
+
+            $("#form_editbtns").open("编辑表单提交按钮", function () {
+                var btns = [];
+                $("#form_editbtns .tdcontainer").find("input[type=checkbox]").each(function () {
+                    if (this.checked) {
+                        btns.push({ id: this.id, txt: $(this).attr("data-txt"), action: $(this).attr("data-action") });
+                    }
+                });
+
+                target.btns = btns;
+            });
+        });
+
+        this.btn_fmdisable.bind("click", function () {
+            $("#form_disabled").open("设置只读", function () {
+                var url = $.trim($("#fm_disabled_url").val());
+                if (url.length == 0) {
+                    alert("请输入只读Url！");
+                    return false;
+                }
+                $("#fm_disabled_url").val("");
+                target.disabledurl = url;
+            });
+        });
+    }
 
     this.btn_removeNode.bind('click', function () {
         if (!target.selectNode) {
@@ -283,7 +327,7 @@ var formconfig = function (selector, id, pkey, isshow, size) {
     return this;
 };
 
-formconfig.prototype.selectNode = null;
+formconfig.prototype.selectNode = null;//id,level,type,text
 formconfig.prototype.bindNodeSelectEvent = function () {
     var target = this;
     this.chartCon.find(".google-visualization-orgchart-node").bind("click", function () {

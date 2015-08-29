@@ -64,7 +64,7 @@
             border: solid 2px #b5d9ea;
             cursor: pointer;
             padding: 5px;
-            width: 49%;
+            width: 74%;
             margin: 5px 5px 0px 0px;
             float: left;
             margin-left: 5px;
@@ -84,6 +84,13 @@
             #div_forTable table.tree {
                 width: 24%;
             }
+
+        .chart_div {
+            margin: 5px 0px;
+            border: solid 2px #b5d9ea;
+            padding: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -150,12 +157,30 @@
             </tr>
             <tr>
                 <td class="td-title">隐藏表单：</td>
-                <td><input type="checkbox" id="cbx_hiddenForm" /> 是否隐藏</td>
+                <td><input type="checkbox" id="cbx_hiddenForm" /> <label for="cbx_hiddenForm">是否隐藏</label></td>
             </tr>
             <tr>
                 <td class="td-title">尺  寸：</td>
                 <td><input type="number" id="txt_formSize" value="6" /></td>
             </tr>
+            <tr id="form_tr_btns">
+                <td class="td-title">提交按钮：</td>
+                <td><span id="form_btns"></span><input type="button" value="添加" onclick="AddFormButtons()" /></td>
+            </tr>
+        </table>
+        <!--用于新增Form提交按钮-->
+        <table id="form_addbtns" class="temp simple_layer">
+            <tr><td class="td-title">按钮文本：</td><td><input type="text" id="form_addbtntext" /></td></tr>
+            <tr><td class="td-title">提交Url：</td><td><input type="text" id="form_addbtnaction" /></td></tr>
+        </table>
+        <!--用于编辑Form提交按钮-->
+        <table id="form_editbtns" class="temp simple_layer" style="width:300px;min-height:100px;">
+            <tr><td></td></tr>
+        </table>
+        <!--用于设置Form只读开关-->
+        <table id="form_disabled" class="temp simple_layer">
+            <tr><td class="td-title">只读Url：</td><td><input type="text" id="fm_disabled_url" /></td></tr>
+            <tr><td class="td-title">描述：</td><td style="color:blue;font-size:12px;">*返回0|1，1:只读*</td></tr>
         </table>
 
         <!--用于维护长度验证的长度-->
@@ -188,15 +213,50 @@
                 <td><input type="text" id="tree_delUrl" /></td>
             </tr>
         </table>
+
+        <!--设置表格查询-->
+        <table id="table_search" class="temp simple_layer">
+            <tr>
+                <td><input type="button" value="新增" onclick="TableAddSearch()" /></td>
+            </tr>
+            <tr>
+                <td style="width:300px;min-height:100px;" id="table_searchitemtd"></td>
+            </tr>
+        </table>
+        <!--新增表格查询项-->
+        <table id="table_searchitem" class="temp simple_layer" style="min-height:200px;">
+            <tr><td class="td-title">标题：</td><td><input type="text" id="table_sitemtitle" /></td></tr>
+            <tr><td class="td-title">查询属性：</td><td><input type="text" id="table_sitemproperty" /></td></tr>
+            <tr>
+                <td class="td-title">类型：</td>
+                <td>
+                    <select id="table_sitemtype" onchange="table_sitemtypechanged(this)">
+                        <option value="1">文本</option>
+                        <option value="2">下拉</option>
+                        <option value="3">日期</option>
+                    </select>
+                </td>
+            </tr>
+            <tr style="display:none;">
+                <td class="td-title">数据源：</td>
+                <td>
+                    <input type="text" readonly="readonly" id="table_sitembindjsonid" />
+                    <br /><input type="button" value="绑定数据源" onclick="table_sitembindjson()" />
+                </td>
+            </tr>
+        </table>
+
+        <div style="padding:20px;width:500px;height:250px;overflow-y:auto" id="div_bindform" class="temp">
+        </div>
     </div>
     <div>
         <table width="100%">
             <tr>
                 <td>
+                    <input type="button" value="添加Form" onclick="AddFormData()" />
+                    <input type="button" value="添加全局数据" onclick="AddJsonData()" />
                     <input type="button" value="添加树" onclick="AddTree()" />
                     <input type="button" value="添加表格" onclick="AddTable()" />
-                    <input type="button" value="添加全局数据" onclick="AddJsonData()" />
-                    <input type="button" value="添加Form" onclick="AddFormData()" />
                     <input type="button" value="添加绑定" onclick="AddDataBind()" />
                 </td>
                 <td align="right"></td>
@@ -223,9 +283,21 @@
     </fieldset>
 
     <script type="text/javascript">
+        $("#cbx_hiddenForm").bind('click', function () {
+            if (this.checked) {
+                $("#form_tr_btns").hide();
+                $("#form_btns input").remove();
+                $("#form_btns label").remove();
+            }
+            else {
+                $("#form_tr_btns").show();
+            }
+        });
+
+
         var temptrees = {};
         function AddTree() {
-            $("#tree_addTree").open("添加树", function () {
+            $("#tree_addTree").open("添加树配置", function () {
                 var loadUrl = $.trim($("#tree_loadUrl").val());
                 var saveUrl = $.trim($("#tree_saveUrl").val());
                 var delUrl = $.trim($("#tree_delUrl").val());
@@ -250,9 +322,11 @@
                     return;
                 }
 
-                var id = stable[0].id.split('_')[1];
-                temptrees[tid]["reftableid"] = id;
-                alert("关联成功。");
+                if (confirm("确定要关联Tree到选中的Table吗？")) {
+                    var id = stable[0].id.split('_')[1];
+                    temptrees[tid]["reftableid"] = id;
+                    alert("关联成功。");
+                }
             });
             var removeBtn = $("<input type='button' value='移除树' />");
             $(removeBtn).bind("click", function () {
@@ -289,7 +363,7 @@
             });
         }
 
-        var temptables = [];
+        var temptables = {};
         function AddTableSubmit(tablejson) {
             var tid = Math.random().toString().split('.')[1];
             var table = $('<table class="table" id="tbl_' + tid + '" cellpadding="0" cellspacing="0"><thead><tr></tr></thead></table>');
@@ -297,15 +371,47 @@
                 table.find("tr").append("<th>" + tablejson.headers[i].header + "</th>");
             }
 
+            var searchBtn = $("<input type='button' value='设置查询' />");
+            searchBtn.bind("click", function () {
+                var sitems = temptables[tid].searchitems;
+                if (sitems.length > 0) {
+                    for (var i = 0; i < sitems.length; ++i) {
+                        $("#table_searchitemtd").append('<input type="checkbox" id="sitem' + i + '" checked="checked" data-title="' + sitems[i].title + '" data-property="' + sitems[i].property + '" data-type="' + sitems[i].type + '" data-bindid="' + sitems[i].bindjsonid + '" /> <label for="sitem' + i + '">' + sitems[i].title + '</label>');
+                    }
+                }
+
+                $("#table_search").open("设置表格查询", function () {
+                    temptables[tid].searchitems = [];
+
+                    $("#table_searchitemtd input[type=checkbox]").each(function () {
+                        if (this.checked) {
+                            temptables[tid].searchitems.push({ id: Math.random().toString().split('.')[1], title: $(this).attr("data-title"), property: $(this).attr("data-property"), type: $(this).attr("data-type"), bindjsonid: $(this).attr("data-bindid") });
+                        }
+                        $(this).next().remove();
+                        $(this).remove();
+                    });
+                    if (temptables[tid].searchitems.length > 0) {
+                        temptables[tid].searchid = Math.random().toString().split('.')[1];
+                    }
+                    else {
+                        temptables[tid].searchid = "0";
+                    }
+                });
+            });
+            table.find("tr").append($("<th class='tablebtn'></th>").append(searchBtn));
+
             var removeBtn = $("<input type='button' value='移除表格' />");
             $(removeBtn).bind("click", function () {
-                RemoveTable(tid);
+                if (confirm("确定要移除该表格吗？")) {
+                    temptables[tid] = undefined;
+                }
             });
             table.find("tr").append($("<th class='tablebtn'></th>").append(removeBtn));
 
             $("#div_forTable").append(table);
 
-            temptables.push({ id: tid, data: tablejson });
+            var tablejson = { id: tid, data: tablejson, searchid: "0", searchitems: [] };
+            temptables[tid] = tablejson;
 
             $("#div_forTable .table").each(function () {
                 if (!$(this).attr("data-event")) {
@@ -327,18 +433,81 @@
             });
 
             layer.close(layerTable);
+
+            return tablejson;
         }
 
-        function RemoveTable(tid) {
-            if (confirm("确定要移除该表格吗？")) {
-                for (var i in temptables) {
-                    if (temptables[i].id == tid) {
-                        temptables[i].data = undefined;
-                        $("#tbl_" + tid).remove();
-                        return;
-                    }
+        function TableAddSearch() {
+            $("#table_searchitem").open("新增查询项", function () {
+                var title = $.trim($("#table_sitemtitle").val());
+                var property = $.trim($("#table_sitemproperty").val());
+                var type = $("#table_sitemtype").val();
+                var bindjsonid = $("#table_sitembindjsonid").val();
+                if (title == 0 || property.length == 0 || (type == 2 && bindjsonid.length == 0)) {
+                    alert("请维护所有项！");
+                    return false;
                 }
+
+                $("#table_sitemtitle").val("");
+                $("#table_sitemproperty").val("");
+                $("#table_sitemtype").val(1);
+                $("#table_sitembindjsonid").val("");
+                $("#table_sitembindjsonid").parent().parent().hide();
+
+                var id = Math.random().toString().split('.')[1];
+                $("#table_searchitemtd").append('<input type="checkbox" id="' + id + '" checked="checked" data-title="' + title + '" data-property="' + property + '" data-type="' + type + '" data-bindid="' + bindjsonid + '" /> <label for="' + id + '">' + title + '</label>');
+            });
+        }
+
+        function table_sitemtypechanged(src) {
+            if ($(src).val() == 2) {
+                $("#table_sitembindjsonid").val("");
+                $(src).parent().parent().next().show();
             }
+            else {
+                $(src).parent().parent().next().hide();
+            }
+        }
+
+        function table_sitembindjson() {
+            $("#div_bindform .chart_div").remove();
+
+            $("#div_forJson .chart").each(function () {
+                var chart = jConfigs["#" + $(this)[0].id];
+                var rows = eval('(' + chart.data.toJSON() + ')').rows;
+                $("#div_bindform").drawChart(rows);
+
+                $("#div_bindform .chart_div").each(function () {
+                    var target = this;
+                    $(this).bind('click', function () {
+                        $("#div_bindform .chart_div").each(function () {
+                            if (target == this) {
+                                $(this).addClass("selectchart");
+                            }
+                            else {
+                                $(this).removeClass("selectchart");
+                            }
+                        });
+                    });
+                });
+            });
+
+            $("#div_bindform").open("绑定数据源配置", function () {
+                if ($("#div_bindform .selectchart").length == 0 || $("#div_bindform .selectchart .google-visualization-orgchart-nodesel").length == 0) {
+                    $.alert("请选中数据源节点！");
+                    return false;
+                }
+                else {
+                    var title = $("#div_bindform .selectchart .google-visualization-orgchart-nodesel").attr("title");
+                    var strs = title.split('_');
+                    var type = strs[2];
+                    if (type != 2) {
+                        $.alert("请选中数组类型节点！");
+                        return false;
+                    }
+                    $("#table_sitembindjsonid").val(strs[1]);
+                }
+            });
         }
 
         function AddJsonData() {
@@ -375,13 +544,12 @@
         }
 
         function AddFormData() {
-            $("#form_primaryKey").open("设置主键名称", function () {
+            $("#form_primaryKey").open("添加表单配置", function () {
                 var name = $.trim($("#txt_formPrimaryKey").val());
                 if (name.length == 0) {
                     alert("请输入主键名称！");
                     return false;
                 }
-
 
                 var size = 0;
                 try {
@@ -392,19 +560,27 @@
                     return false;
                 }
 
-
                 $("#txt_formPrimaryKey").val("");
+                $("#txt_formSize").val(6);
+
                 var id = Math.random().toString().split('.')[1];
                 var isshow = $("#cbx_hiddenForm")[0].checked ? 0 : 1;
 
-                AddFormDataSubmit(id, isshow, name, size);
+                var btns = [];
+                $("#form_btns input[type=checkbox]").each(function () {
+                    if (this.checked) {
+                        btns.push({ id: this.id, txt: $(this).attr("data-txt"), action: $(this).attr("data-action") });
+                    }
+                });
+                AddFormDataSubmit(id, isshow, name, size, btns);
             });
         }
 
-        function AddFormDataSubmit(id, isshow, name, size) {
+        function AddFormDataSubmit(id, isshow, name, size, btns) {
             var selector = "chart_" + id;
             $("#div_forForm").append($("<div id='" + selector + "' class='chart'></div>"));
-            var form = new formconfig('#' + selector, id, name, isshow, size);
+
+            var form = new formconfig('#' + selector, id, name, isshow, size, btns);
             form.beforeRemoveForm = function (fid) {
                 var existstable = false;
                 //检查是否存在表格绑定到该Form
@@ -442,6 +618,30 @@
             BindChartContentEvent();
 
             return form;
+        }
+
+        function AddFormButtons(btncontainerselector) {
+            var btncontainer = null;
+            if (!btncontainerselector) {
+                btncontainer = $("#form_btns");
+            }
+            else {
+                btncontainer = $(btncontainerselector);
+            }
+
+            $("#form_addbtns").open("添加按钮", function () {
+                var txt = $.trim($("#form_addbtntext").val());
+                var action = $.trim($("#form_addbtnaction").val());
+                if (txt.length == 0 || action.length == 0) {
+                    alert("请维护所有内容！");
+                    return false;
+                }
+
+                $("#form_addbtntext").val("");
+                $("#form_addbtnaction").val("");
+                var id = Math.random().toString().split('.')[1];
+                btncontainer.append('<input type="checkbox" id="' + id + '" checked="checked" data-txt="' + txt + '" data-action="' + action + '" /> <label for="' + id + '">' + txt + '</label>');
+            });
         }
 
         function AddDataBind() {
@@ -541,7 +741,7 @@
             }
 
             for (var i in temptables) {
-                if (temptables[i].data) {
+                if (temptables[i]) {
                     content.tables.push(temptables[i]);
                 }
             }
@@ -557,7 +757,7 @@
                 var id = this.id.split('_')[1];
                 var chart = $(this).fconfig();
                 var data = JSON.parse(chart.data.toJSON()).rows;
-                content.forms.push({ id: id, isshow: chart.isshow, size: chart.size, data: data, extdata: chart.extData });
+                content.forms.push({ id: id, isshow: chart.isshow, disabledurl: chart.disabledurl, size: chart.size, data: data, extdata: chart.extData, btns: chart.btns });
             });
 
             $("#div_forBind .bindchart").each(function () {
@@ -578,7 +778,9 @@
             });
 
             $(json.tables).each(function () {
-                AddTableSubmit(this.data);
+                var json = AddTableSubmit(this.data);
+                json.searchid = this.searchid;
+                json.searchitems = this.searchitems;
             });
 
             $(json.jsons).each(function () {
@@ -590,7 +792,8 @@
             });
 
             $(json.forms).each(function () {
-                var chart = AddFormDataSubmit(this.id, this.isshow, '', this.size);
+                var chart = AddFormDataSubmit(this.id, this.isshow, '', this.size, this.btns);
+                chart.disabledurl = this.disabledurl;
                 chart.extData = this.extdata;
                 var data = InitChartData(this.data);
                 chart.data = data;

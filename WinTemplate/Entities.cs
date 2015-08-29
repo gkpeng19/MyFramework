@@ -47,9 +47,29 @@ namespace WinTemplate
         public GTable()
         {
             data = new GTableData();
+            searchitems = new List<GTableSearchItem>();
         }
         public string id { get; set; }
+        public string searchid { get; set; }
+        public List<GTableSearchItem> searchitems { get; set; }
         public GTableData data { get; set; }
+    }
+
+    public class GTableSearchItem
+    {
+        public string id { get; set; }
+        public string title { get; set; }
+        public string property { get; set; }
+
+        /// <summary>
+        /// 1：文本，2：下拉，3：日期
+        /// </summary>
+        public string type { get; set; }
+
+        /// <summary>
+        /// 下拉框绑定的数据源ID,在全局对象中
+        /// </summary>
+        public string bindjsonid { get; set; }
     }
 
     public class GTableData
@@ -121,16 +141,28 @@ namespace WinTemplate
         public GForm()
         {
             data = new List<GFormC>();
+            btns = new List<GFormBtn>();
         }
         public string id { get; set; }
 
         public string isshow { get; set; }
+
+        public string disabledurl { get; set; }
 
         public int size { get; set; }
 
         public List<GFormC> data { get; set; }
 
         public GFormExData extdata { get; set; }
+
+        public List<GFormBtn> btns { get; set; }
+    }
+
+    public class GFormBtn
+    {
+        public string id { get; set; }
+        public string txt { get; set; }
+        public string action { get; set; }
     }
 
     public class GFormC
@@ -248,6 +280,180 @@ namespace WinTemplate
 
     #endregion
 
+    #region 生成cs文件实体
+
+    public class GCsModel
+    {
+        public GCsModel()
+        {
+            Controllers = new Dictionary<string, GCsControllerModel>(StringComparer.CurrentCultureIgnoreCase) { };
+            AreaControllers = new Dictionary<string, Dictionary<string, GCsControllerModel>>(StringComparer.CurrentCultureIgnoreCase);
+        }
+
+        public Dictionary<string, GCsControllerModel> Controllers { get; set; }
+        public Dictionary<string, Dictionary<string, GCsControllerModel>> AreaControllers { get; set; }
+
+        private static void GetACAByUrl(string url, out string area, out string controller, out string action)
+        {
+            string[] strs = url.Split('/');
+            if (strs.Length == 4)
+            {
+                area = strs[1];
+            }
+            else
+            {
+                area = string.Empty;
+            }
+            action = strs[strs.Length - 1];
+            controller = strs[strs.Length - 2];
+        }
+
+        private static GCsControllerModel GetControllerByACA(GCsModel model, string projectName, string url, out string action)
+        {
+            string area, controller;
+            GetACAByUrl(url, out area, out controller, out action);
+
+            GCsControllerModel ctr = null;
+            if (area.Length == 0)
+            {
+                if (model.Controllers.ContainsKey(controller))
+                {
+                    ctr = model.Controllers[controller];
+                }
+                else
+                {
+                    ctr = new GCsControllerModel() { ProjectName = projectName, Name = controller };
+                    model.Controllers.Add(controller, ctr);
+                }
+            }
+            else
+            {
+                Dictionary<string, GCsControllerModel> ctrs = null;
+                if (model.AreaControllers.ContainsKey(area))
+                {
+                    ctrs = model.AreaControllers[area];
+                }
+                else
+                {
+                    ctrs = new Dictionary<string, GCsControllerModel>(StringComparer.CurrentCultureIgnoreCase);
+                    model.AreaControllers.Add(area, ctrs);
+                }
+
+                if (ctrs.ContainsKey(controller))
+                {
+                    ctr = ctrs[controller];
+                }
+                else
+                {
+                    ctr = new GCsControllerModel() { ProjectName = projectName, Name = controller };
+                    ctrs.Add(controller, ctr);
+                }
+            }
+            return ctr;
+        }
+
+        public static GCsModel GetModelFromContent(string projectName, GContent con)
+        {
+            GCsModel model = new GCsModel();
+
+            string action = string.Empty;
+            GCsControllerModel ctr = null;
+
+            foreach (var tree in con.trees)
+            {
+                ctr = GetControllerByACA(model, projectName, tree.loadurl, out action);
+                ctr.LoadTreeActions.Add(action);
+
+                ctr = GetControllerByACA(model, projectName, tree.saveurl, out action);
+                ctr.SaveActions.Add(action);
+
+                ctr = GetControllerByACA(model, projectName, tree.delurl, out action);
+                ctr.DeleteActions.Add(action);
+            }
+
+            foreach (var table in con.tables)
+            {
+                ctr = GetControllerByACA(model, projectName, table.data.url, out action);
+                ctr.LoadTableActions.Add(action);
+
+                foreach (var header in table.data.headers)
+                {
+                    if (header.actionbtns.Count > 0)
+                    {
+                        foreach (var btn in header.actionbtns)
+                        {
+                            if (btn.type.Equals("edit"))
+                            {
+                                ctr = GetControllerByACA(model, projectName, btn.action, out action);
+                                ctr.SaveActions.Add(action);
+                            }
+                            else if (btn.type.Equals("delete"))
+                            {
+                                ctr = GetControllerByACA(model, projectName, btn.action, out action);
+                                ctr.DeleteActions.Add(action);
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (var json in con.jsons)
+            {
+                List<string> jFields = new List<string>();
+                foreach (var d in json.data)
+                {
+                    if (d.c[0].fld.Length > 0)
+                    {
+                        jFields.Add(d.c[0].fld);
+                    }
+                }
+                ctr = GetControllerByACA(model, projectName, json.url, out action);
+                ctr.LoadJsonActions.Add(action, jFields);
+            }
+
+            foreach (var fm in con.forms)
+            {
+                if (fm.disabledurl.Length > 0)
+                {
+                    ctr = GetControllerByACA(model, projectName, fm.disabledurl, out action);
+                    ctr.LoadIntAction.Add(action);
+                }
+                foreach (var btn in fm.btns)
+                {
+                    ctr = GetControllerByACA(model, projectName, btn.action, out action);
+                    ctr.SaveActions.Add(action);
+                }
+            }
+
+            return model;
+        }
+    }
+
+    public class GCsControllerModel
+    {
+        public GCsControllerModel()
+        {
+            LoadIntAction = new List<string>();
+            LoadTreeActions = new List<string>();
+            LoadTableActions = new List<string>();
+            LoadJsonActions = new Dictionary<string, List<string>>();
+
+            SaveActions = new List<string>();
+            DeleteActions = new List<string>();
+        }
+
+        public string ProjectName { get; set; }
+        public string Name { get; set; }
+
+        public List<string> LoadIntAction { get; set; }
+        public List<string> LoadTreeActions { get; set; }
+        public List<string> LoadTableActions { get; set; }
+        public Dictionary<string, List<string>> LoadJsonActions { get; set; }
+        public List<string> SaveActions { get; set; }
+        public List<string> DeleteActions { get; set; }
+    }
+
+    #endregion
 
     public class GNode
     {

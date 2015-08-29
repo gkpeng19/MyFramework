@@ -22,6 +22,7 @@ namespace WinTemplate
     {
         string _temhtml = string.Empty;
         string _temtable = string.Empty;
+        string _temcs = string.Empty;
 
         public Main()
         {
@@ -31,10 +32,12 @@ namespace WinTemplate
 
             #region 初始化模版资源
 
-            string temhtmlpath = System.Environment.CurrentDirectory + @"\template\content.html";
+            string temhtmlpath = System.Environment.CurrentDirectory + @"\template\html.html";
             string temtablepath = System.Environment.CurrentDirectory + @"\template\table.html";
+            string temcspath = System.Environment.CurrentDirectory + @"\template\cs.html";
             _temhtml = System.IO.File.ReadAllText(temhtmlpath, Encoding.GetEncoding("GBK"));
             _temtable = System.IO.File.ReadAllText(temtablepath, Encoding.GetEncoding("GBK"));
+            _temcs = System.IO.File.ReadAllText(temcspath, Encoding.GetEncoding("GBK"));
 
             #endregion
         }
@@ -302,38 +305,83 @@ namespace WinTemplate
 
         void GenerateHtml(string filePath)
         {
+            string projectName = null;
+
             Razor.Compile(_temtable, "tables");
 
             var data = JSON.JsonBack<GContent>(File.ReadAllText(filePath + ".json"));
+
+            #region 生成Html文件并保存
+
             var html_result = Razor.Parse(_temhtml, data);
 
-            #region 写入生成的Html
-
             var findex = filePath.LastIndexOf('\\');
-            var html_path = filePath.Substring(0, findex);
+            var html_folder = filePath.Substring(0, findex);
             var filename = filePath.Substring(findex + 1);
-            html_path = html_path.Substring(_solution.SPath.Length + 1);
-            findex = html_path.IndexOf('\\');
+            var projectAndFolder = html_folder.Substring(_solution.SPath.Length + 1);
+            var csProjectAndFolder = projectAndFolder;
+            findex = projectAndFolder.IndexOf('\\');
             if (findex < 0)
             {
-                html_path += "\\_source";
+                projectName = projectAndFolder;
+                projectAndFolder += "\\_source";
+                csProjectAndFolder += "\\_source\\api";
             }
             else
             {
-                html_path = html_path.Insert(findex + 1, "_source\\");
+                projectName = projectAndFolder.Substring(0, findex);
+                projectAndFolder = projectAndFolder.Insert(findex + 1, "_source\\");
+                csProjectAndFolder = projectName + "\\_source\\api";
             }
 
-            html_path = _solution.SPath + "\\" + html_path;
+            html_folder = _solution.SPath + "\\" + projectAndFolder;
 
-
-            if (!Directory.Exists(html_path))
+            if (!Directory.Exists(html_folder))
             {
-                Directory.CreateDirectory(html_path);
+                Directory.CreateDirectory(html_folder);
             }
 
-            using (var sw = File.CreateText(html_path + "\\" + filename + ".cshtml"))
+            using (var sw = File.CreateText(html_folder + "\\" + filename + ".html"))
             {
                 sw.Write(html_result);
+            }
+
+            #endregion
+
+            #region 生成api文件并保存
+
+            var cs_folder = _solution.SPath + "\\" + csProjectAndFolder;
+            if (!Directory.Exists(cs_folder + "\\Controllers"))
+            {
+                Directory.CreateDirectory(cs_folder + "\\Controllers");
+            }
+
+            var csdata = GCsModel.GetModelFromContent(projectName, data);
+            foreach (var ctr in csdata.Controllers)
+            {
+                var cs_result = Razor.Parse(_temcs, ctr.Value);
+                using (var sw = File.CreateText(cs_folder + "\\Controllers\\" + filename + "Controller.cs"))
+                {
+                    sw.Write(cs_result);
+                }
+            }
+
+            foreach (var area in csdata.AreaControllers)
+            {
+                if (!Directory.Exists(cs_folder + "\\Areas\\" + area.Key + "\\Controllers"))
+                {
+                    Directory.CreateDirectory(cs_folder + "\\Areas\\" + area.Key + "\\Controllers");
+                }
+
+                foreach (var ctr in area.Value)
+                {
+                    var cs_result = Razor.Parse(_temcs, ctr.Value);
+
+                    using (var sw = File.CreateText(cs_folder + "\\Areas\\" + area.Key + "\\Controllers\\" + filename + "Controller.cs"))
+                    {
+                        sw.Write(cs_result);
+                    }
+                }
             }
 
             #endregion

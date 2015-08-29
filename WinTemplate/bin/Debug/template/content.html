@@ -36,7 +36,8 @@
 									}
 									else if(t=="2")
 									{
-									<input type="text" name="@d.c[0].fld" id="@d.c[0].v" class="span11" />
+									<div class="laydate-icon"  class="span11" onclick="initLaydate(this)"></div>
+									<input type="hidden" name="@d.c[0].fld" id="@d.c[0].v" />
 									}
 									else if(t=="3")
 									{
@@ -56,6 +57,15 @@
                             }
                         }
                     </div>
+					@if(fm.btns.Count>0)
+					{
+						<div>
+						@foreach(var btn in fm.btns)
+						{
+						<button id="@btn.id" class="btn btn-primary btn-mini">@btn.txt</button>
+						}
+						</div>
+					}
                 </div>
             </form>
 		</div>
@@ -115,6 +125,20 @@
 		</text>
 	}
 	
+	@foreach(var fm in Model.forms)
+	{
+		if(fm.disabledurl.Length>0)
+		{
+		<text>
+		$.post("@fm.disabledurl",{ran:Math.random()},function(r){
+			if(r==1){
+				$("#@fm.id").shade();
+			}
+		});
+		</text>
+		}
+	}
+	
 	@* 优先初始化select控件的option *@
 		function BindToSelect(data)
 		{
@@ -140,6 +164,36 @@
 		            }
 		        }
 		    }
+			
+			@foreach(var table in Model.tables)
+			{
+				foreach(var sitem in table.searchitems)
+				{
+					var exists=0;
+					foreach(var json in Model.jsons)
+		            {
+		                foreach(var d in json.data)
+		                {
+		                    if(d.c[0].v==sitem.bindjsonid)
+		                    {
+								exists=1;
+		                        <text>
+								var sel=$("#@sitem.id");
+		                        var items=data.@d.c[0].fld;
+								$(items).each(function () {
+									sel.append("<option value='"+this.v+"'>"+this.k+"</option>");
+								});
+		                        </text>
+								break;
+		                    }
+		                }
+						if(exists==1)
+						{
+							break;
+						}
+		            }
+				}
+			}
 		}
 
         function BindToDiv(data)
@@ -198,7 +252,36 @@
 					$(json.children_d).each(function () {
 						nids += (',' + this);
 					});
-					$("#@tree.reftableid").datagrid({ url: "/Biz/Context/LoadInfo", search: { nodeids: nids } });
+					@foreach(var tbl in Model.tables)
+					{
+						if(tbl.id==tree.reftableid)
+						{
+							if(tbl.searchid=="0")
+							{
+							<text>
+							$("#@tree.reftableid").datagrid({ url: "/Biz/Context/LoadInfo", search: { nodeids: nids } });
+							</text>
+							}
+							else
+							{
+							<text>
+							var hidNodeIdsInput=null;
+							if($("#@tbl.searchid .nodeids").length==0)
+							{
+								hidNodeIdsInput=$("<input type='hidden' name='nodeids' class='nodeids' />");
+								$("#@tbl.searchid").append(hidNodeIdsInput);
+							}
+							else
+							{
+								hidNodeIdsInput=$("#@tbl.searchid .nodeids");
+							}
+							hidNodeIdsInput.val(nids);
+							$("#@tree.reftableid").datagrid({ url: "/Biz/Context/LoadInfo", search:"#@tbl.searchid" });
+							</text>
+							}
+							break;
+						}
+					}
 				});
 				
 				$("#@tree.id").prev().find(".btn-add-treeroot").bind("click", function () {
@@ -267,6 +350,7 @@
 			
             @foreach(var table in Model.tables)
             {
+				var searchstr=table.searchid=="0"?"":(",search:'#"+table.searchid+"'");
 				var reftree="0";
 				foreach(var tree in Model.trees)
 				{
@@ -280,7 +364,7 @@
 				if(reftree=="0")
 				{
 				<text>
-				$("#@table.id").datagrid({ url: "@table.data.url",psize:@table.data.pagesize });
+				$("#@table.id").datagrid({ url: "@table.data.url" @searchstr,psize:@table.data.pagesize });
 				</text>
 				}
 				else
@@ -480,6 +564,30 @@
 			tt.vf.req.add(vf_treenodeedit);
 			</text>
 		}
-        /*增加验证信息----------End*/	
+        /*增加验证信息----------End*/
+		
+		@foreach(var fm in Model.forms)
+		{
+			foreach(var btn in fm.btns)
+			{
+			<text>
+			$("#@btn.id").bind('click',function()
+			{
+				if(!tt.validateForm("@fm.id"))
+				{
+					return false;
+				}
+				var update=$("#@fm.id").getContext();
+				update.ran_g=Math.random();
+				$.post("@btn.action",update,function(r)
+				{
+					r=$.toJsResult(r);
+					//提交之后的操作
+					//...
+				});
+			});
+			</text>
+			}
+		}
 </script>
 }
