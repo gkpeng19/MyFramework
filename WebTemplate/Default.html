@@ -64,7 +64,7 @@
             border: solid 2px #b5d9ea;
             cursor: pointer;
             padding: 5px;
-            width: 74%;
+            width: 99%;
             margin: 5px 5px 0px 0px;
             float: left;
             margin-left: 5px;
@@ -82,12 +82,11 @@
             }
 
             #div_forTable table.tree {
-                width: 24%;
+                width: 32%;
             }
 
-        .chart_div {
+        #div_bindform .chart_div {
             margin: 5px 0px;
-            border: solid 2px #b5d9ea;
             padding: 5px;
             cursor: pointer;
         }
@@ -103,6 +102,10 @@
             <tr>
                 <td class="td-title">Url：</td>
                 <td><input type="text" id="txt_jsonUrl" /> </td>
+            </tr>
+            <tr>
+                <td class="td-title">参数名：</td>
+                <td><input type="text" id="txt_jsonParams" /> </td>
             </tr>
         </table>
 
@@ -205,14 +208,31 @@
         <!--用于新增Tree控件-->
         <table id="tree_addTree" class="temp simple_layer">
             <tr>
+                <td class="td-title">节点名称-Field：</td>
+                <td><input type="text" id="tree_nodeField" /></td>
+                <td class="td-title">ParentID-Field：</td>
+                <td><input type="text" id="tree_parentIdField" /></td>
+            </tr>
+            <tr>
                 <td class="td-title">加载Url：</td>
                 <td><input type="text" id="tree_loadUrl" /></td>
                 <td class="td-title">保存Url：</td>
                 <td><input type="text" id="tree_saveUrl" /></td>
+            </tr>
+            <tr>
                 <td class="td-title">删除Url：</td>
                 <td><input type="text" id="tree_delUrl" /></td>
+                <td class="td-title"></td>
+                <td></td>
             </tr>
         </table>
+        <!--用于修改Tree的默认按钮-->
+        <div id="tree_editdefaultbtns" class='temp simple_layer' style='width:300px;height:150px;padding:20px;'>
+            <input type="checkbox" id="tree_dbtn1" data-role="addroot" /><label for="tree_dbtn1">新增根节点</label>
+            <input type="checkbox" id="tree_dbtn2" data-role="add" /><label for="tree_dbtn2">新增</label>
+            <input type="checkbox" id="tree_dbtn3" data-role="edit" /><label for="tree_dbtn3">编辑</label>
+            <input type="checkbox" id="tree_dbtn4" data-role="delete" /><label for="tree_dbtn4">删除</label>
+        </div>
 
         <!--设置表格查询-->
         <table id="table_search" class="temp simple_layer">
@@ -220,11 +240,11 @@
                 <td><input type="button" value="新增" onclick="TableAddSearch()" /></td>
             </tr>
             <tr>
-                <td style="width:300px;min-height:100px;" id="table_searchitemtd"></td>
+                <td style="width:300px;height:100px;" id="table_searchitemtd"></td>
             </tr>
         </table>
         <!--新增表格查询项-->
-        <table id="table_searchitem" class="temp simple_layer" style="min-height:200px;">
+        <table id="table_searchitem" class="temp simple_layer" style="height:200px;">
             <tr><td class="td-title">标题：</td><td><input type="text" id="table_sitemtitle" /></td></tr>
             <tr><td class="td-title">查询属性：</td><td><input type="text" id="table_sitemproperty" /></td></tr>
             <tr>
@@ -246,41 +266,75 @@
             </tr>
         </table>
 
+        <!--用于修改表格的默认按钮-->
+        <div id="table_editdefaultbtns" class='temp simple_layer' style='width:300px;height:150px;padding:20px;'>
+            <input type="checkbox" id="table_dbtn2" data-role="add" /><label for="table_dbtn2">新增</label>
+            <span id="table_movemorespan">
+                <input type="checkbox" id="table_dbtn3" data-role="movemore" onchange="table_setMoveMoreInfo(this)" /><label for="table_dbtn3">批量转移</label>
+            </span>
+        </div>
+
+        <!--用于表格查询项Select绑定全局数据-->
         <div style="padding:20px;width:500px;height:250px;overflow-y:auto" id="div_bindform" class="temp">
         </div>
-    </div>
-    <div>
-        <table width="100%">
+
+        <!--设置自定义按钮-->
+        <table id="tt_custombtn" class="temp simple_layer">
             <tr>
-                <td>
-                    <input type="button" value="添加Form" onclick="AddFormData()" />
-                    <input type="button" value="添加全局数据" onclick="AddJsonData()" />
-                    <input type="button" value="添加树" onclick="AddTree()" />
-                    <input type="button" value="添加表格" onclick="AddTable()" />
-                    <input type="button" value="添加绑定" onclick="AddDataBind()" />
-                </td>
-                <td align="right"></td>
+                <td><input type="button" value="新增" onclick="ttAddCustomBtn()" /></td>
             </tr>
+            <tr>
+                <td style="width:300px;height:100px;" id="tt_custombtntd"></td>
+            </tr>
+        </table>
+        <!--新增自定义按钮-->
+        <table id="table_addcustombtn" class="temp simple_layer">
+            <tr><td class="td-title">文本：</td><td><input type="text" id="table_cbtntext" /></td></tr>
+            <tr><td class="td-title">提交Url：</td><td><input type="text" id="table_cbtnaction" /></td></tr>
+        </table>
+
+        <table id="tree_settablefk" class="temp simple_layer">
+            <tr><td class="td-title">外键名称：</td><td><input type="text" id="table_fkname" /></td></tr>
+        </table>
+
+        <table id="table_settransferurl" class="temp simple_layer">
+            <tr><td class="td-title">提交Url：</td><td><input type="text" id="table_transferurl" /></td></tr>
         </table>
     </div>
 
-    <fieldset>
-        <legend>数据展示</legend>
-        <div id="div_forTable"></div>
-        <div style="clear:both;"></div>
-    </fieldset>
-    <fieldset>
-        <legend>全局数据</legend>
-        <div id="div_forJson"></div>
-    </fieldset>
-    <fieldset>
-        <legend>表单</legend>
-        <div id="div_forForm"></div>
-    </fieldset>
-    <fieldset>
-        <legend>数据绑定</legend>
-        <div id="div_forBind"></div>
-    </fieldset>
+    <div>
+        <div>
+            <table width="100%">
+                <tr>
+                    <td>
+                        <input type="button" value="添加Form" onclick="AddFormData()" />
+                        <input type="button" value="添加全局数据" onclick="AddJsonData()" />
+                        <input type="button" value="添加树" onclick="AddTree()" />
+                        <input type="button" value="添加表格" onclick="AddTable()" />
+                        <input type="button" value="添加绑定" onclick="AddDataBind()" />
+                    </td>
+                    <td align="right"></td>
+                </tr>
+            </table>
+        </div>
+        <fieldset>
+            <legend>数据展示</legend>
+            <div id="div_forTable"></div>
+            <div style="clear:both;"></div>
+        </fieldset>
+        <fieldset>
+            <legend>全局数据</legend>
+            <div id="div_forJson"></div>
+        </fieldset>
+        <fieldset>
+            <legend>表单</legend>
+            <div id="div_forForm"></div>
+        </fieldset>
+        <fieldset>
+            <legend>数据绑定</legend>
+            <div id="div_forBind"></div>
+        </fieldset>
+    </div>
 
     <script type="text/javascript">
         $("#cbx_hiddenForm").bind('click', function () {
@@ -294,24 +348,59 @@
             }
         });
 
+        function ttAddCustomBtn() {
+            $("#table_addcustombtn").open("新增自定义按钮", function () {
+                var text = $.trim($("#table_cbtntext").val());
+                var action = $.trim($("#table_cbtnaction").val());
+                if (text.length == 0 || action.length == 0) {
+                    alert("请维护所有项！");
+                    return false;
+                }
+
+                $("#table_cbtntext").val("");
+                $("#table_cbtnaction").val("");
+                var bid = Math.random().toString().split('.')[1];
+                $("#tt_custombtntd").append('<input type="checkbox" id="' + bid + '" checked="checked" data-text="' + text + '" data-action="' + action + '" /> <label for="' + bid + '">' + text + '</label>');
+            });
+        }
 
         var temptrees = {};
         function AddTree() {
             $("#tree_addTree").open("添加树配置", function () {
+                var nodeField = $.trim($("#tree_nodeField").val());
+                var parentIdField = $.trim($("#tree_parentIdField").val());
+                if (nodeField.length == 0) {
+                    alert("请维护节点名称对应字段！");
+                    return false;
+                }
+
+                if (parentIdField.length == 0) {
+                    alert("请维护上级节点ID对应字段！");
+                    return false;
+                }
+
                 var loadUrl = $.trim($("#tree_loadUrl").val());
                 var saveUrl = $.trim($("#tree_saveUrl").val());
                 var delUrl = $.trim($("#tree_delUrl").val());
-                if (loadUrl.length == 0 || saveUrl.length == 0 || delUrl.length == 0) {
-                    alert("请维护全部Url！");
+                if (loadUrl.length == 0) {
+                    alert("请维护加载Url！");
                     return false;
                 }
                 var tid = Math.random().toString().split('.')[1];
 
-                AddTreeSubmit(tid, loadUrl, saveUrl, delUrl);
+                AddTreeSubmit(tid, nodeField, parentIdField, loadUrl, saveUrl, delUrl, null);
+
+                $("#tree_loadUrl").val("");
+                $("#tree_saveUrl").val("");
+                $("#tree_delUrl").val("");
             });
         }
 
-        function AddTreeSubmit(tid, loadUrl, saveUrl, delUrl, reftableid) {
+        function AddTreeSubmit(tid, nodeField, parentIdField, loadUrl, saveUrl, delUrl, reftableid, defaultbtns) {
+            if (!defaultbtns) {
+                defaultbtns = ['addroot', 'add', 'edit', 'delete'];
+            }
+
             /*添加树配置到界面---Start------*/
             var table = $('<table class="tree" id="tree_' + tid + '" cellpadding="0" cellspacing="0"><thead><tr><th>树控件</td></tr></thead></table>');
             var refBtn = $("<input type='button' value='关联到表格' />");
@@ -322,12 +411,74 @@
                     return;
                 }
 
-                if (confirm("确定要关联Tree到选中的Table吗？")) {
+                $("#tree_settablefk").open("对应到Table中的外键名称", function () {
+                    var fkname = $.trim($("#table_fkname").val());
+                    if (fkname.length == 0) {
+                        alert("请设置外键名称！");
+                        return false;
+                    }
+
                     var id = stable[0].id.split('_')[1];
                     temptrees[tid]["reftableid"] = id;
+                    temptrees[tid]["reftablefk"] = fkname;
                     alert("关联成功。");
-                }
+                });
             });
+            table.find("tr").append($("<th class='tablebtn'></th>").append(refBtn));
+
+            var changeBtn = $("<input type='button' value='修改默认按钮' />");
+            changeBtn.bind('click', function () {
+                var dbtns = temptrees[tid].defaultbtns;
+                $("#tree_editdefaultbtns input[type=checkbox]").each(function () {
+                    for (var i = 0; i < dbtns.length; ++i) {
+                        if (dbtns[i] == $(this).attr("data-role")) {
+                            this.checked = true;
+                            return;
+                        }
+                        else {
+                            if (this.checked) {
+                                this.checked = false;
+                            }
+                        }
+                    }
+                });
+                $("#tree_editdefaultbtns").open("编辑树默认按钮", function () {
+                    temptrees[tid].defaultbtns = [];
+                    $("#tree_editdefaultbtns input[type=checkbox]").each(function () {
+                        if (this.checked) {
+                            temptrees[tid].defaultbtns.push($(this).attr("data-role"));
+                        }
+                    });
+                });
+            });
+            table.find("tr").append($("<th class='tablebtn'></th>").append(changeBtn));
+
+            var customBtn = $("<input type='button' value='自定义按钮' />");
+            customBtn.bind('click', function () {
+                $("#tt_custombtntd input[type=checkbox]").each(function () {
+                    $(this).next().remove();
+                    $(this).remove();
+                });
+
+                var btns = temptrees[tid].custombtns;
+                if (btns && btns.length > 0) {
+                    for (var i = 0; i < btns.length; ++i) {
+                        $("#tt_custombtntd").append('<input type="checkbox" id="tbtn' + i + '" checked="checked" data-text="' + btns[i].text + '" data-action="' + btns[i].action + '" /> <label for="tbtn' + i + '">' + btns[i].text + '</label>');
+                    }
+                }
+
+                $("#tt_custombtn").open("自定义树操作按钮", function () {
+                    temptrees[tid].custombtns = [];
+
+                    $("#tt_custombtntd input[type=checkbox]").each(function () {
+                        if (this.checked) {
+                            temptrees[tid].custombtns.push({ id: Math.random().toString().split('.')[1], text: $(this).attr("data-text"), action: $(this).attr("data-action") });
+                        }
+                    });
+                });
+            });
+            table.find("tr").append($("<th class='tablebtn'></th>").append(customBtn));
+
             var removeBtn = $("<input type='button' value='移除树' />");
             $(removeBtn).bind("click", function () {
                 if (confirm("确定要移除该树控件吗？")) {
@@ -340,12 +491,12 @@
                     }
                 }
             });
-            table.find("tr").append($("<th class='tablebtn'></th>").append(refBtn));
             table.find("tr").append($("<th class='tablebtn'></th>").append(removeBtn));
+
             $("#div_forTable").append(table);
             /*添加树配置到界面---End------*/
 
-            temptrees[tid] = { id: tid, loadurl: loadUrl, saveurl: saveUrl, delurl: delUrl };
+            temptrees[tid] = { id: tid, nodeField: nodeField, parentIdField: parentIdField, loadurl: loadUrl, saveurl: saveUrl, delurl: delUrl, defaultbtns: defaultbtns };
             if (reftableid) {
                 temptrees[tid]["reftableid"] = reftableid;
             }
@@ -364,7 +515,11 @@
         }
 
         var temptables = {};
-        function AddTableSubmit(tablejson) {
+        function AddTableSubmit(tablejson, defaultbtns) {
+            if (!defaultbtns) {
+                defaultbtns = ['add'];
+            }
+
             var tid = Math.random().toString().split('.')[1];
             var table = $('<table class="table" id="tbl_' + tid + '" cellpadding="0" cellspacing="0"><thead><tr></tr></thead></table>');
             for (var i in tablejson.headers) {
@@ -373,8 +528,13 @@
 
             var searchBtn = $("<input type='button' value='设置查询' />");
             searchBtn.bind("click", function () {
+                $("#table_searchitemtd input[type=checkbox]").each(function () {
+                    $(this).next().remove();
+                    $(this).remove();
+                });
+
                 var sitems = temptables[tid].searchitems;
-                if (sitems.length > 0) {
+                if (sitems && sitems.length > 0) {
                     for (var i = 0; i < sitems.length; ++i) {
                         $("#table_searchitemtd").append('<input type="checkbox" id="sitem' + i + '" checked="checked" data-title="' + sitems[i].title + '" data-property="' + sitems[i].property + '" data-type="' + sitems[i].type + '" data-bindid="' + sitems[i].bindjsonid + '" /> <label for="sitem' + i + '">' + sitems[i].title + '</label>');
                     }
@@ -387,8 +547,6 @@
                         if (this.checked) {
                             temptables[tid].searchitems.push({ id: Math.random().toString().split('.')[1], title: $(this).attr("data-title"), property: $(this).attr("data-property"), type: $(this).attr("data-type"), bindjsonid: $(this).attr("data-bindid") });
                         }
-                        $(this).next().remove();
-                        $(this).remove();
                     });
                     if (temptables[tid].searchitems.length > 0) {
                         temptables[tid].searchid = Math.random().toString().split('.')[1];
@@ -400,6 +558,69 @@
             });
             table.find("tr").append($("<th class='tablebtn'></th>").append(searchBtn));
 
+            var changeBtn = $("<input type='button' value='修改默认按钮' />");
+            changeBtn.bind('click', function () {
+                if ($(".tree").length == 0) {
+                    $("#table_movemorespan").hide();
+                }
+                else {
+                    $("#table_movemorespan").show();
+                }
+                var dbtns = temptables[tid].defaultbtns;
+                $("#table_editdefaultbtns input[type=checkbox]").each(function () {
+                    for (var i = 0; i < dbtns.length; ++i) {
+                        if (dbtns[i] == $(this).attr("data-role")) {
+                            this.checked = true;
+                            return;
+                        }
+                        else {
+                            if (this.checked) {
+                                this.checked = false;
+                            }
+                        }
+                    }
+                });
+                $("#table_editdefaultbtns").open("编辑表格默认按钮", function () {
+                    temptables[tid].defaultbtns = [];
+                    $("#table_editdefaultbtns input[type=checkbox]").each(function () {
+                        if (this.checked) {
+                            var role = $(this).attr("data-role");
+                            if (role == "movemore") {
+                                temptables[tid].transferurl = $(this).attr("data-turl");
+                            }
+                            temptables[tid].defaultbtns.push($(this).attr("data-role"));
+                        }
+                    });
+                });
+            });
+            table.find("tr").append($("<th class='tablebtn'></th>").append(changeBtn));
+
+            var customBtn = $("<input type='button' value='自定义按钮' />");
+            customBtn.bind('click', function () {
+                $("#tt_custombtntd input[type=checkbox]").each(function () {
+                    $(this).next().remove();
+                    $(this).remove();
+                });
+
+                var btns = temptables[tid].custombtns;
+                if (btns && btns.length > 0) {
+                    for (var i = 0; i < btns.length; ++i) {
+                        $("#tt_custombtntd").append('<input type="checkbox" id="tbtn' + i + '" checked="checked" data-text="' + btns[i].text + '" data-action="' + btns[i].action + '" /> <label for="tbtn' + i + '">' + btns[i].text + '</label>');
+                    }
+                }
+
+                $("#tt_custombtn").open("自定义表格操作按钮", function () {
+                    temptables[tid].custombtns = [];
+
+                    $("#tt_custombtntd input[type=checkbox]").each(function () {
+                        if (this.checked) {
+                            temptables[tid].custombtns.push({ id: Math.random().toString().split('.')[1], text: $(this).attr("data-text"), action: $(this).attr("data-action") });
+                        }
+                    });
+                });
+            });
+            table.find("tr").append($("<th class='tablebtn'></th>").append(customBtn));
+
             var removeBtn = $("<input type='button' value='移除表格' />");
             $(removeBtn).bind("click", function () {
                 if (confirm("确定要移除该表格吗？")) {
@@ -410,7 +631,7 @@
 
             $("#div_forTable").append(table);
 
-            var tablejson = { id: tid, data: tablejson, searchid: "0", searchitems: [] };
+            var tablejson = { id: tid, data: tablejson, searchid: "0", searchitems: [], defaultbtns: defaultbtns};
             temptables[tid] = tablejson;
 
             $("#div_forTable .table").each(function () {
@@ -435,6 +656,22 @@
             layer.close(layerTable);
 
             return tablejson;
+        }
+
+        function table_setMoveMoreInfo(src) {
+            if (src.checked) {
+                $("#table_settransferurl").open("设置批量转移提交Url", function () {
+                    var url = $.trim($("#table_transferurl").val());
+                    if (url.length == 0) {
+                        alert("请输入批量转移提交Url！");
+                        return false;
+                    }
+
+                    $("#table_transferurl").val("");
+
+                    $(src).attr("data-turl", url);
+                });
+            }
         }
 
         function TableAddSearch() {
@@ -527,16 +764,26 @@
                 $("#txt_jsonUrl").val("");
                 var id = Math.random().toString().split('.')[1];
 
-                AddJsonDataSubmit(id, url, name);
+                var params = [];
+                var paramstr = $("#txt_jsonParams").val();
+                if (paramstr.length > 0) {
+                    paramstr = paramstr.split(",");
+                    $(paramstr).each(function () {
+                        params.push($.trim(this));
+                    });
+                }
+
+                AddJsonDataSubmit(id, url, name, params);
             });
         }
 
-        function AddJsonDataSubmit(id, url, name) {
+        function AddJsonDataSubmit(id, url, name, params) {
             var selector = "chart_" + id;
             var chardiv = $("<div id='" + selector + "' class='chart'></div>");
             chardiv.attr("data-url", url);
             $("#div_forJson").append(chardiv);
             var chart = new jsonconfig('#' + selector, id, name + " {}");
+            chart.params = params;
 
             BindChartContentEvent();
 
@@ -749,8 +996,9 @@
             $("#div_forJson .chart").each(function () {
                 var id = this.id.split('_')[1];
                 var url = $(this).attr("data-url");
-                var data = JSON.parse($(this).jconfig().data.toJSON()).rows;
-                content.jsons.push({ id: id, url: url, data: data });
+                var chart = $(this).jconfig();
+                var data = JSON.parse(chart.data.toJSON()).rows;
+                content.jsons.push({ id: id, url: url, data: data, parameters: chart.params });
             });
 
             $("#div_forForm .chart").each(function () {
@@ -774,17 +1022,18 @@
             var json = JSON.parse(jsonstr);
 
             $(json.trees).each(function () {
-                AddTreeSubmit(this.id, this.loadurl, this.saveurl, this.delurl, this.reftableid);
+                AddTreeSubmit(this.id, this.nodeField, this.parentIdField, this.loadurl, this.saveurl, this.delurl, this.reftableid, this.defaultbtns);
             });
 
             $(json.tables).each(function () {
-                var json = AddTableSubmit(this.data);
+                var json = AddTableSubmit(this.data, this.defaultbtns);
                 json.searchid = this.searchid;
                 json.searchitems = this.searchitems;
+                json.transferurl = this.transferurl;
             });
 
             $(json.jsons).each(function () {
-                var chart = AddJsonDataSubmit(this.id, this.url, "");
+                var chart = AddJsonDataSubmit(this.id, this.url, "", this.parameters);
                 var data = InitChartData(this.data);
                 chart.data = data;
                 chart.chart.draw(data, { allowHtml: true, allowCollapse: true, size: "large" });

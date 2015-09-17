@@ -54,6 +54,7 @@ namespace EntityLibrary.Entities
             }
         }
         [JsonIgnore]
+        [UIValueZeroNotEqualNull]
         public Int32 IsTop
         {
             get

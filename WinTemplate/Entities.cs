@@ -31,11 +31,24 @@ namespace WinTemplate
 
     public class GTree
     {
+        public GTree()
+        {
+            defaultbtns = new List<string>();
+            custombtns = new List<GCustomBtn>();
+        }
+
         public string id { get; set; }
+        public string nodeField { get; set; }
+        public string parentIdField { get; set; }
         public string loadurl { get; set; }
         public string saveurl { get; set; }
         public string delurl { get; set; }
         public string reftableid { get; set; }
+        public string reftablefk { get; set; }
+
+        public List<string> defaultbtns { get; set; }
+
+        public List<GCustomBtn> custombtns { get; set; }
     }
 
     #endregion
@@ -47,12 +60,27 @@ namespace WinTemplate
         public GTable()
         {
             data = new GTableData();
+            defaultbtns = new List<string>();
             searchitems = new List<GTableSearchItem>();
+            custombtns = new List<GCustomBtn>();
         }
         public string id { get; set; }
         public string searchid { get; set; }
+
+        public List<string> defaultbtns { get; set; }
         public List<GTableSearchItem> searchitems { get; set; }
+
+        public string transferurl { get; set; }
+
+        public List<GCustomBtn> custombtns { get; set; }
         public GTableData data { get; set; }
+    }
+
+    public class GCustomBtn
+    {
+        public string id { get; set; }
+        public string text { get; set; }
+        public string action { get; set; }
     }
 
     public class GTableSearchItem
@@ -114,9 +142,25 @@ namespace WinTemplate
         public GJson()
         {
             data = new List<GJsonC>();
+            parameters = new List<string>();
         }
         public string id { get; set; }
         public string url { get; set; }
+
+        public List<string> parameters { get; set; }
+
+        public string paramsjson
+        {
+            get
+            {
+                string str = "ran:Math.random()";
+                foreach (var p in parameters)
+                {
+                    str += "," + p + ":$.getUrlParam('" + p + "')";
+                }
+                return str;
+            }
+        }
 
         public List<GJsonC> data { get; set; }
     }
@@ -209,7 +253,7 @@ namespace WinTemplate
             {
                 if (_minlen.Length == 0)
                 {
-                    _minlen = "--";
+                    _minlen = "'--'";
                 }
                 return _minlen;
             }
@@ -221,7 +265,7 @@ namespace WinTemplate
             {
                 if (_maxlen.Length == 0)
                 {
-                    _maxlen = "++";
+                    _maxlen = "'++'";
                 }
                 return _maxlen;
             }
@@ -361,20 +405,38 @@ namespace WinTemplate
 
             foreach (var tree in con.trees)
             {
-                ctr = GetControllerByACA(model, projectName, tree.loadurl, out action);
-                ctr.LoadTreeActions.Add(action);
+                if (tree.loadurl.Length > 0)
+                {
+                    ctr = GetControllerByACA(model, projectName, tree.loadurl, out action);
+                    ctr.LoadTreeActions.Add(action);
+                }
 
-                ctr = GetControllerByACA(model, projectName, tree.saveurl, out action);
-                ctr.SaveActions.Add(action);
+                if (tree.saveurl.Length > 0)
+                {
+                    ctr = GetControllerByACA(model, projectName, tree.saveurl, out action);
+                    ctr.SaveActions.Add(action);
+                }
 
-                ctr = GetControllerByACA(model, projectName, tree.delurl, out action);
-                ctr.DeleteActions.Add(action);
+                if (tree.delurl.Length > 0)
+                {
+                    ctr = GetControllerByACA(model, projectName, tree.delurl, out action);
+                    ctr.DeleteActions.Add(action);
+                }
             }
 
             foreach (var table in con.tables)
             {
-                ctr = GetControllerByACA(model, projectName, table.data.url, out action);
-                ctr.LoadTableActions.Add(action);
+                if (table.transferurl.Length > 0)
+                {
+                    ctr = GetControllerByACA(model, projectName, table.transferurl, out action);
+                    ctr.SaveActions.Add(action);
+                }
+
+                if (table.data.url.Length > 0)
+                {
+                    ctr = GetControllerByACA(model, projectName, table.data.url, out action);
+                    ctr.LoadTableActions.Add(action);
+                }
 
                 foreach (var header in table.data.headers)
                 {
@@ -384,13 +446,19 @@ namespace WinTemplate
                         {
                             if (btn.type.Equals("edit"))
                             {
-                                ctr = GetControllerByACA(model, projectName, btn.action, out action);
-                                ctr.SaveActions.Add(action);
+                                if (btn.action.Length > 0)
+                                {
+                                    ctr = GetControllerByACA(model, projectName, btn.action, out action);
+                                    ctr.SaveActions.Add(action);
+                                }
                             }
                             else if (btn.type.Equals("delete"))
                             {
-                                ctr = GetControllerByACA(model, projectName, btn.action, out action);
-                                ctr.DeleteActions.Add(action);
+                                if (btn.action.Length > 0)
+                                {
+                                    ctr = GetControllerByACA(model, projectName, btn.action, out action);
+                                    ctr.DeleteActions.Add(action);
+                                }
                             }
                         }
                     }
@@ -407,8 +475,11 @@ namespace WinTemplate
                         jFields.Add(d.c[0].fld);
                     }
                 }
-                ctr = GetControllerByACA(model, projectName, json.url, out action);
-                ctr.LoadJsonActions.Add(action, jFields);
+                if (json.url.Length > 0)
+                {
+                    ctr = GetControllerByACA(model, projectName, json.url, out action);
+                    ctr.LoadJsonActions.Add(action, jFields);
+                }
             }
 
             foreach (var fm in con.forms)
@@ -420,8 +491,11 @@ namespace WinTemplate
                 }
                 foreach (var btn in fm.btns)
                 {
-                    ctr = GetControllerByACA(model, projectName, btn.action, out action);
-                    ctr.SaveActions.Add(action);
+                    if (btn.action.Length > 0)
+                    {
+                        ctr = GetControllerByACA(model, projectName, btn.action, out action);
+                        ctr.SaveActions.Add(action);
+                    }
                 }
             }
 

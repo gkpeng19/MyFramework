@@ -4,3 +4,10 @@ D:\Work\MyFrameWork\GOMFrameWork\bin\Release\GOMFrameWork.pdb
 D:\Work\MyFrameWork\GOMFrameWork\obj\Release\GOMFrameWork.csprojResolveAssemblyReference.cache
 D:\Work\MyFrameWork\GOMFrameWork\obj\Release\GOMFrameWork.dll
 D:\Work\MyFrameWork\GOMFrameWork\obj\Release\GOMFrameWork.pdb
+D:\Gkpeng\MyFramework\GOMFrameWork\bin\Release\GOMFrameWork.dll
+D:\Gkpeng\MyFramework\GOMFrameWork\bin\Release\GOMFrameWork.pdb
+D:\Gkpeng\MyFramework\GOMFrameWork\bin\Release\Newtonsoft.Json.dll
+D:\Gkpeng\MyFramework\GOMFrameWork\bin\Release\Newtonsoft.Json.xml
+D:\Gkpeng\MyFramework\GOMFrameWork\obj\Release\GOMFrameWork.csprojResolveAssemblyReference.cache
+D:\Gkpeng\MyFramework\GOMFrameWork\obj\Release\GOMFrameWork.dll
+D:\Gkpeng\MyFramework\GOMFrameWork\obj\Release\GOMFrameWork.pdb

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+	<link href="/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/Scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="/Scripts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/Scripts/validate/css/validate.css" rel="stylesheet" />
+    <link href="/Scripts/umeditor/themes/default/css/umeditor.min.css" rel="stylesheet" />
+    <link href="/Scripts/ace/css/ace.min.css" rel="stylesheet" />
+    <link href="/Scripts/ace/css/ace-responsive.min.css" rel="stylesheet" />
+    <link href="/Styles/GOMFrameWork.css" rel="stylesheet" />
+	
+	<link href="/Styles/gtree/themes/default/style.min.css" rel="stylesheet" />
+	
+	</head>
+<body>
+	<div class="row-fluid">
+		<div class="span3">
+        <div class="row-fluid header blue btn-header">
+			<button class="btn btn-primary btn-mini btn-add-treeroot">新增根节点</button>
+			<button class="btn btn-primary btn-mini btn-add-treechild">新增</button>
+			<button class="btn btn-primary btn-mini btn-edit-treenode">编辑</button>
+			<button class="btn btn-primary btn-mini btn-del-treenode">删除</button>
+        </div>
+        <div id="6213339580403721"></div>
+		</div>
+	<div class="span9">
+	<div class="row-fluid">
+		<div class="row-fluid header blue btn-header">
+			<div class="span3">
+				<button class="btn btn-primary btn-mini btn-table-add">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
+				<button class="btn btn-primary btn-mini btn-more-move">批量转移</button>
+				<button id="7313186719258766" class="btn btn-primary btn-mini">表格自定义按钮</button>
+			</div>
+			<div class="span9">
+				<div class="dataTables_wrapper" id="3136924175678948" style="text-align:right;">
+					<label>标题:
+					<input name="Title" class="input-medium" type="text">
+					</label>
+					<label><input type="button" class="btn btn-primary btn-mini" value="查询" onclick="$('#9770240893034999').datagrid('refresh')" /></label>
+				</div>
+			</div>
+		</div>
+		<div class="table-container">
+		<table id="9770240893034999" class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+                    <th data-option="{sequence:true}">序号</th>
+                    <th data-option="{bind:'Title'}">标题</th>
+                    <th data-option="{bind:'IsTop'}">是否置顶</th>
+                    <th data-option="{bind:'CategoryName_G'}">分类</th>
+                    <th data-option="{bind:'CreateBy'}">创建人</th>
+                    <th data-option="{bind:'CreateOn_G'}">创建时间</th>
+                        <th data-option="{edit:true,del:true}">操作</th>
+				</tr>
+			</thead>
+		</table>
+		</div>
+	</div>
+	</div>
+	</div>
+
+
+	<div class="row-fluid">
+		<div class="span8">
+            <form name="7595760062945356" id="7595760062945356" class="layerout form-layer" style="display:none;">
+                <div>
+                    <input type="hidden" name="ID" />
+                    <div class="row-fluid">
+									<div class="span8">
+									<label>标题</label>
+									<input type="text" name="Title" id="6532266501954125" class="span11" />
+									</div>
+									<div class="span4">
+									<label>是否置顶</label>
+									<input type="checkbox" name="IsTop" id="09642352362945289" /><span class="lbl"></span>
+									</div>
+									<div class="span12">
+									<label>内容</label>
+									<textarea name="HtmlContext" id="42134244064880233" class="span12 text_editor_hide"></textarea>
+									</div>
+                    </div>
+                </div>
+            </form>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+    <div class="span3">
+        <form name="fm_treeedit" id="fm_treeedit" class="layerout form-layer">
+            <div>
+                <input type="hidden" name="ID" />
+                <div class="row-fluid">
+                    <div class="span12">
+                        <label>节点名称</label>
+                        <input type="text" name="Name" id="txt_treeNodeName" class="span11" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+	</div>
+	<div class="row-fluid">
+    <div class="span3">
+        <div id="targetTree" class="layerout" style="min-height:200px;"></div>
+    </div>
+	</div>
+
+	<script src="/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/Scripts/laydate/laydate.js"></script>
+    <script src="/Scripts/layer/layer.js"></script>
+    <script src="/Scripts/umeditor/umeditor.config.js"></script>
+    <script src="/Scripts/umeditor/umeditor.min.js"></script>
+    <script src="/Scripts/umeditor/lang/zh-cn/zh-cn.js"></script>
+    <script src="/Scripts/validate/talent-validate-all-init.js"></script>
+    <script src="/Scripts/ace/ace.min.js"></script>
+    <script src="/Scripts/GOMFrameWork.js"></script>
+	<script type="text/javascript">
+	
+	
+		
+		$("#7313186719258766").bind("click",function(win){
+			var sels = $("#9770240893034999").datagrid("getSelected");
+			if(sels.length==0)
+			{
+				$.error("请选择一条数据！");
+				return;
+			}
+			if(sels.length>1)
+			{
+				$.error("只能选择一条数据！");
+				return;
+			}
+			
+			$.post("/Info/TableCustomMethod",{id:sels[0].id,ran_g:Math.random()},function(r){
+				r=$.toJsResult(r);
+				if(r.ID>0){
+					//操作成功后的处理
+					//...
+					
+					layer.close(win);
+				}
+				else{
+					$.error("操作失败，请重试！");
+				}
+			});
+			
+			return false;
+		});
+		
+	
+	
+		function BindToSelect(data)
+		{
+			
+		}
+
+        function BindToDiv(data)
+        {
+        }
+
+        $(function()
+        {
+				
+				$("#6213339580403721").gtree({ url: "/Info/LoadInfoCategory" });
+				
+					
+					$("#6213339580403721").gtree("beforeDeleteNode", function () {
+						if ($("#9770240893034999").datagrid("hasChildren")) {
+							$.error("请先删除该节点下的内容！");
+							return false;
+						}
+						$("#9770240893034999").datagrid("refresh");
+						if ($("#9770240893034999").datagrid("hasChildren")) {
+							$.error("请先删除该节点下的内容！");
+							return false;
+						}
+						return true;
+					});
+					
+				
+				$("#6213339580403721").gtree("selectChanged", function (json) {
+					//刷新右边表格
+					var nids = '-1';
+					$(json.children_d).each(function () {
+						nids += (',' + this);
+					});
+							
+							var hidNodeIdsInput=null;
+							if($("#3136924175678948 .nodeids").length==0)
+							{
+								hidNodeIdsInput=$("<input type='hidden' name='nodeids' class='nodeids' />");
+								$("#3136924175678948").append(hidNodeIdsInput);
+							}
+							else
+							{
+								hidNodeIdsInput=$("#3136924175678948 .nodeids");
+							}
+							hidNodeIdsInput.val(nids);
+							$("#9770240893034999").datagrid({ url: "/Info/LoadInfo", search:"#3136924175678948" });
+							
+				});
+				
+					
+					$("#6213339580403721").prev().find(".btn-add-treeroot").bind("click", function () {
+						$("#fm_treeedit").bindEntity({});
+						EditTree6213339580403721(true, true);
+					});
+					
+					
+					$("#6213339580403721").prev().find(".btn-add-treechild").bind("click", function () {
+						var snode = $("#6213339580403721").gtree("getSelected");
+						if (snode) {
+							$("#fm_treeedit").bindEntity({});
+							EditTree6213339580403721(true, false);
+						}
+					});
+					
+					
+					$("#6213339580403721").prev().find(".btn-edit-treenode").bind('click', function () {
+						var snode = $("#6213339580403721").gtree("getSelected");
+						if (snode) {
+							$("#fm_treeedit").bindEntity({ ID: snode.id, Name: snode.text });
+							EditTree6213339580403721(false, false);
+						}
+					});
+					
+					
+					$("#6213339580403721").prev().find(".btn-del-treenode").bind('click', function () {
+						var snode = $("#6213339580403721").gtree("getSelected");
+						if (snode) {
+							$.confirm("确定要删除该节点吗？", function () {
+								if ($("#6213339580403721").gtree("removeSelectNode")) {
+									$.post("/Info/DeleteCategory", { ID: snode.id }, function (r) { });
+								}
+							});
+						}
+					});
+					
+					
+					function EditTree6213339580403721(isAdd, isRoot) {
+						$("#fm_treeedit").open("新增节点", function (win) {
+							if (!tt.validateForm("fm_treeedit")) {
+								return false;
+							}
+							var update = $("#fm_treeedit").getContext();
+							var snode = $("#6213339580403721").gtree("getSelected");
+							update.Name=null;
+							if(!isRoot&&isAdd)
+							{
+								update.ParentID=snode.id;
+							}
+							update.CategoryName=$.trim($("#txt_treeNodeName").val());						
+							
+							$.post("/Info/SaveCategory", update, function (r) {
+								r = $.toJsResult(r);
+								var node = { id: r.ID, parentid: r.ParentID, text: r.CategoryName };
+								if (r.ID > 0) {
+									//更新树
+									if (isAdd) {
+										if (isRoot) {
+											$("#6213339580403721").gtree("addRootNode", node);
+										}
+										else {
+											$("#6213339580403721").gtree("addChildNode", node);
+										}
+									}
+									else {
+										$("#6213339580403721").gtree("updateSelectNode", node);
+									}
+									layer.close(win);
+								}
+								else {
+									$.error("保存失败，请重试！");
+								}
+							});
+
+							return false;
+						});
+					}
+					
+			
+				
+				$("#9770240893034999").datagrid({ psize:10 });
+				
+						
+						$("#9770240893034999").parent().prev().find(".btn-more-move").bind('click', function () {
+							var sels = $("#9770240893034999").datagrid("getSelected");
+							if (sels.length == 0) {
+								$.error("请勾选数据！");
+								return;
+							}
+
+							$("#targetTree").gtree({ url: '/Info/LoadInfoCategory' });
+							$("#targetTree").open("选择节点", function (win) {
+								var snode = $("#targetTree").gtree("getSelected");
+								var json = [];
+								$(sels).each(function () {
+									json.push({ ID: this.ID, CategoryID: snode.id });
+								});
+								$.post("/Info/TransferInfo", { Contexts: json }, function (r) {
+									if (r > 0) {
+										layer.close(win);
+										$("#9770240893034999").datagrid("refresh");
+									}
+									else {
+										$.error("批量转移失败，请重试！");
+									}
+								});
+								return false;
+							});
+						});
+						
+									
+									$("#9770240893034999").parent().prev().find(".btn-table-add").bind('click',function()
+									{
+										$("#7595760062945356").bindEntity({});
+										$("#7595760062945356").open("新增",function(win)
+										{
+											if(!tt.validateForm("7595760062945356"))
+											{
+												return false;
+											}
+											var update=$("#7595760062945356").getContext();
+											var selNode=$("#6213339580403721").gtree("getSelected");
+											update["CategoryID"]=selNode.id;
+											$.post("/Info/SaveInfo",update,function(r)
+											{
+												r = $.toJsResult(r);
+												r["CategoryID_G"]=selNode.text;
+												if(r.ID>0)
+												{
+													$("#9770240893034999").datagrid("addRow",r);
+													layer.close(win);
+												}
+												else
+												{
+													$.error("保存失败，请重试！");
+												}
+											});
+
+											return false;
+										});
+									});
+									
+                                
+                                $("#9770240893034999").datagrid("onEdit", function () {
+                                    var json = $("#9770240893034999").datagrid("getCurrData");
+                                    $("#7595760062945356").bindEntity(json);
+                                    $("#7595760062945356").open("编辑",function(win)
+                                    {
+                                        if(!tt.validateForm("7595760062945356"))
+                                        {
+                                            return false;
+                                        }
+                                        var update=$("#7595760062945356").getContext();
+                                        $.post("/Info/SaveInfo",update,function(r)
+                                        {
+											var newjson = $.updateJson(json, $.toJsResult(r));
+                                            if(r.ID>0)
+                                            {
+                                                $("#9770240893034999").datagrid("updateRow",json,newjson);
+                                                layer.close(win);
+                                            }
+                                            else
+                                            {
+                                                $.error("保存失败，请重试！");
+                                            }
+                                        });
+
+                                        return false;
+                                    });
+                                });
+                                
+                                
+                                $("#9770240893034999").datagrid("onDelete", function () {
+									$.confirm("确定要删除吗？",function()
+									{
+										var json = $("#9770240893034999").datagrid("getCurrData");
+                                        $.post("/Info/DeleteEntity",{ID:json["ID"]},function(r)
+                                        {
+                                            if(r>0)
+                                            {
+                                                $("#9770240893034999").datagrid("removeCurrRow");
+                                            }
+                                            else{
+                                                $.error("删除失败，请重试！");
+                                            }
+                                        });
+									});
+                                });
+								
+        });
+
+        /*增加验证信息----------Start*/
+					
+					var f6532266501954125=new tt.Field("标题","","6532266501954125").setMsgId("layer-error-msg");
+					
+                            
+							tt.vf.req.add(f6532266501954125);
+							
+					
+					var f09642352362945289=new tt.Field("是否置顶","","09642352362945289").setMsgId("layer-error-msg");
+					
+					
+					var f42134244064880233=new tt.Field("内容","","42134244064880233").setMsgId("layer-error-msg");
+					
+                            
+							tt.vf.req.add(f42134244064880233);
+							
+		
+			
+			var vf_treenodeedit = new tt.Field("节点名称", "", "txt_treeNodeName").setMsgId("layer-error-msg");
+			tt.vf.req.add(vf_treenodeedit);
+			
+        /*增加验证信息----------End*/
+		
+	</script>
+</body>
+</html>

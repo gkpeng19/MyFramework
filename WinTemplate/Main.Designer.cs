@@ -34,6 +34,7 @@ namespace WinTemplate
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.kryptonSplitContainer1 = new ComponentFactory.Krypton.Toolkit.KryptonSplitContainer();
             this.kryptonPanel1 = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
+            this.tabControl = new WinTemplate.UControl.KryptonTabControl();
             this.kryptonHeaderGroup1 = new ComponentFactory.Krypton.Toolkit.KryptonHeaderGroup();
             this.fileTree = new ComponentFactory.Krypton.Toolkit.KryptonTreeView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -57,7 +58,7 @@ namespace WinTemplate
             this.kryptonContextMenuItems4 = new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItems();
             this.cMItemGenerateHtml = new ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem();
             this.sluFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.tabControl = new WinTemplate.UControl.KryptonTabControl();
+            this.sbtnGenerateHtml = new System.Windows.Forms.ToolStripButton();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -123,6 +124,14 @@ namespace WinTemplate
             this.kryptonPanel1.Size = new System.Drawing.Size(600, 431);
             this.kryptonPanel1.TabIndex = 1;
             // 
+            // tabControl
+            // 
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.Size = new System.Drawing.Size(600, 431);
+            this.tabControl.TabIndex = 0;
+            // 
             // kryptonHeaderGroup1
             // 
             this.kryptonHeaderGroup1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -159,10 +168,11 @@ namespace WinTemplate
             this.sbtnAddSulution,
             this.sbtnOpen,
             this.sbtnSave,
-            this.sbtnSaveAll});
+            this.sbtnSaveAll,
+            this.sbtnGenerateHtml});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(135, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(158, 25);
             this.toolStrip1.TabIndex = 1;
             // 
             // sbtnAddSulution
@@ -279,13 +289,15 @@ namespace WinTemplate
             // 
             this.cMItemGenerateHtml.Text = "生成Html";
             // 
-            // tabControl
+            // sbtnGenerateHtml
             // 
-            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 0);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.Size = new System.Drawing.Size(600, 431);
-            this.tabControl.TabIndex = 0;
+            this.sbtnGenerateHtml.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.sbtnGenerateHtml.Image = ((System.Drawing.Image)(resources.GetObject("sbtnGenerateHtml.Image")));
+            this.sbtnGenerateHtml.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.sbtnGenerateHtml.Name = "sbtnGenerateHtml";
+            this.sbtnGenerateHtml.Size = new System.Drawing.Size(23, 22);
+            this.sbtnGenerateHtml.Text = "生成文件";
+            this.sbtnGenerateHtml.Click += new System.EventHandler(this.sbtnGenerateHtml_Click);
             // 
             // Main
             // 
@@ -348,6 +360,7 @@ namespace WinTemplate
         private System.Windows.Forms.ToolStripButton sbtnOpen;
         private System.Windows.Forms.ToolStripButton sbtnSave;
         private System.Windows.Forms.ToolStripButton sbtnSaveAll;
+        private System.Windows.Forms.ToolStripButton sbtnGenerateHtml;
 
 
 

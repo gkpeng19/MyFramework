@@ -46,3 +46,4 @@ D:\Gkpeng\MyFramework\G.Util\bin\Debug\System.Web.Mvc.xml
 D:\Gkpeng\MyFramework\G.Util\obj\Debug\G.Util.csprojResolveAssemblyReference.cache
 D:\Gkpeng\MyFramework\G.Util\obj\Debug\G.Util.dll
 D:\Gkpeng\MyFramework\G.Util\obj\Debug\G.Util.pdb
+D:\Gkpeng\MyFramework\G.Util\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll

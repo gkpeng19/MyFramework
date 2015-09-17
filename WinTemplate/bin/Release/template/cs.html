@@ -1,0 +1,125 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using G.Util.Mvc;
+using System.Web.Mvc;
+using GOMFrameWork.DataEntity;
+using G.Util.Html;
+
+namespace @(Model.ProjectName).Controllers
+{
+    public class @(Model.Name)Controller : ApiController
+    {
+		@foreach(var action in Model.LoadJsonActions)
+		{
+		var fields=action.Value[0]+"=\"xxx\"";
+		for(var i=1;i<action.Value.Count;++i)
+		{
+			fields+=(", "+action.Value[i]+"=\"xxx\"");
+		}
+		<text>
+			public JsonResult @(action.Key)()
+			{
+				return ExController.JsonNet(new { @fields });
+			}
+			</text>
+		}
+		
+		@foreach(var action in Model.LoadIntAction)
+		{
+		<text>
+		public int @(action)()
+		{
+			//判断表单是否只读
+			//...
+			
+			return 1;
+		}
+		</text>
+		}
+		
+		@foreach(var action in Model.LoadTreeActions)
+		{
+		<text>
+		public JsonResult @(action)()
+        {
+            *SearchEntityType* se = null;
+
+            se.OrderBy("parentid", EnumOrderBy.Asc);
+            se.OrderBy("id");
+
+            var r = se.Load<*EntityType*>();
+            List<HtmlTreeNode> treeNodes = new List<HtmlTreeNode>();
+            foreach (var d in r.Data)
+            {
+                treeNodes.Add(new HtmlTreeNode() { id = (int)d.ID, text = d.Name, parentid = d.ParentID });
+            }
+
+            return ExController.JsonNet(HtmlTree.InitTree(treeNodes));
+        }
+		</text>
+		}
+		
+		@foreach(var action in Model.LoadTableActions)
+		{
+		<text>
+		public JsonResult @(action)(*SearchEntityType* se, int page_g, int psize_g)
+        {
+            #region 查询条件初始化 Example：se["Field"] = "value";
+
+            //.........................
+            se.OrderBy("id", EnumOrderBy.Desc);
+
+            #endregion
+
+            se.PageIndex = page_g;
+            se.PageSize = psize_g;
+
+            var result = se.Load<*EntityType*>();
+            return ExController.JsonNet(result);
+        }
+		</text>
+		}
+		
+		@foreach(var action in Model.SaveActions)
+		{
+		<text>
+		public JsonResult @(action)(*EntityType* entity)
+        {
+            if (entity.ID == 0)
+            {
+                #region 维护新增数据
+		        
+	            #endregion
+            }
+            else
+            {
+                #region 维护修改数据
+		        
+	            #endregion
+            }
+
+            var r = entity.Save();
+            if (r > 0)
+            {
+                return ExController.JsonNet(entity);
+            }
+            return ExController.JsonNet(new { ID = 0 });
+        }
+		</text>
+		}
+		
+		@foreach(var action in Model.DeleteActions)
+		{
+		<text>
+		public long @(action)(*EntityType* entity)
+        {
+            return entity.Delete();
+        }
+		</text>
+		}
+    }
+}

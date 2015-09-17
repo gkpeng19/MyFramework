@@ -105,7 +105,7 @@ namespace WinTemplate
 
                             var gFile = currNode.Tag as GFile;
                             var tab = gFile.Tab;
-                            if (tab != null)
+                            if (tab != null && tabControl.HasTab(tab))
                             {
                                 tabControl.SelectTab(tab);
                             }
@@ -233,6 +233,23 @@ namespace WinTemplate
 
         void AddFolder(TreeNode snode, string name)
         {
+            #region 检查文件夹名称是否已存在
+
+            foreach (TreeNode nd in snode.Nodes)
+            {
+                if (nd.Tag is GFolder)
+                {
+                    var fld = nd.Tag as GFolder;
+                    if (fld.Text.Equals(name, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        KryptonMessageBox.Show("文件夹名称已存在！");
+                        return;
+                    }
+                }
+            }
+
+            #endregion
+
             var path = (snode.Tag as GProject).SPath + "\\" + name;
             if (!Directory.Exists(path))
             {
@@ -252,6 +269,23 @@ namespace WinTemplate
 
         void AddFile(TreeNode snode, string name)
         {
+            #region 检查文件名是否已存在
+
+            foreach (TreeNode nd in snode.Nodes)
+            {
+                if (nd.Tag is GFile)
+                {
+                    var fle = nd.Tag as GFile;
+                    if (fle.Text.Equals(name, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        KryptonMessageBox.Show("文件名已存在！");
+                        return;
+                    }
+                }
+            }
+
+            #endregion
+
             var path = string.Empty;
             if (snode.Tag is GProject)
             {
@@ -307,7 +341,7 @@ namespace WinTemplate
         {
             string projectName = null;
 
-            Razor.Compile(_temtable, "tables");
+            Razor.Compile(_temtable, typeof(GContent), "tables");
 
             var data = JSON.JsonBack<GContent>(File.ReadAllText(filePath + ".json"));
 
@@ -496,6 +530,13 @@ namespace WinTemplate
             timer.Start();
         }
 
+        private void sbtnGenerateHtml_Click(object sender, EventArgs e)
+        {
+            GenerateHtml((fileTree.SelectedNode.Tag as GFile).SPath);
+        }
+
         #endregion
+
+
     }
 }

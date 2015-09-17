@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+	<link href="/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/Scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="/Scripts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/Scripts/validate/css/validate.css" rel="stylesheet" />
+    <link href="/Scripts/umeditor/themes/default/css/umeditor.min.css" rel="stylesheet" />
+    <link href="/Scripts/ace/css/ace.min.css" rel="stylesheet" />
+    <link href="/Scripts/ace/css/ace-responsive.min.css" rel="stylesheet" />
+    <link href="/Styles/GOMFrameWork.css" rel="stylesheet" />
+	
+	<link href="/Styles/gtree/themes/default/style.min.css" rel="stylesheet" />
+	
+	</head>
+<body>
+	<div class="row-fluid">
+		<div class="span3">
+        <div class="row-fluid header blue btn-header">
+			<button class="btn btn-primary btn-mini btn-add-treeroot">新增根节点</button>
+			<button class="btn btn-primary btn-mini btn-add-treechild">新增</button>
+			<button class="btn btn-primary btn-mini btn-edit-treenode">编辑</button>
+			<button class="btn btn-primary btn-mini btn-del-treenode">删除</button>
+        </div>
+        <div id="7401648004793817"></div>
+		</div>
+	<div class="span9">
+	</div>
+	</div>
+
+
+
+	<div class="row-fluid">
+    <div class="span3">
+        <form name="fm_treeedit" id="fm_treeedit" class="layerout form-layer">
+            <div>
+                <input type="hidden" name="ID" />
+                <input type="hidden" name="ParentID" value="0" />
+                <div class="row-fluid">
+                    <div class="span12">
+                        <label>节点名称</label>
+                        <input type="text" name="Name" id="txt_treeNodeName" class="span11" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+	</div>
+	<div class="row-fluid">
+    <div class="span3">
+        <div id="targetTree" class="layerout" style="min-height:200px;"></div>
+    </div>
+	</div>
+
+	<script src="/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/Scripts/laydate/laydate.js"></script>
+    <script src="/Scripts/layer/layer.js"></script>
+    <script src="/Scripts/umeditor/umeditor.config.js"></script>
+    <script src="/Scripts/umeditor/umeditor.min.js"></script>
+    <script src="/Scripts/umeditor/lang/zh-cn/zh-cn.js"></script>
+    <script src="/Scripts/validate/talent-validate-all-init.js"></script>
+    <script src="/Scripts/ace/ace.min.js"></script>
+    <script src="/Scripts/GOMFrameWork.js"></script>
+	<script type="text/javascript">
+	
+	
+	
+	
+		function BindToSelect(data)
+		{
+			
+		}
+
+        function BindToDiv(data)
+        {
+        }
+
+        $(function()
+        {
+				
+				$("#7401648004793817").gtree({ url: "/Menu/LoadMenus" });
+				$("#7401648004793817").gtree("beforeDeleteNode", function () {
+					if ($("#").datagrid("hasChildren")) {
+						$.error("请先删除该节点下的内容！");
+						return false;
+					}
+					$("#").datagrid("refresh");
+					if ($("#").datagrid("hasChildren")) {
+						$.error("请先删除该节点下的内容！");
+						return false;
+					}
+					return true;
+				});
+				$("#7401648004793817").gtree("selectChanged", function (json) {
+					//刷新右边表格
+					var nids = '-1';
+					$(json.children_d).each(function () {
+						nids += (',' + this);
+					});
+				});
+				
+					
+					$("#7401648004793817").prev().find(".btn-add-treeroot").bind("click", function () {
+						$("#fm_treeedit").bindEntity({});
+						EditTree7401648004793817(true, true);
+					});
+					
+					
+					$("#7401648004793817").prev().find(".btn-add-treechild").bind("click", function () {
+						var snode = $("#7401648004793817").gtree("getSelected");
+						if (snode) {
+							$("#fm_treeedit").bindEntity({ ParentID: snode.id });
+							EditTree7401648004793817(true, false);
+						}
+					});
+					
+					
+					$("#7401648004793817").prev().find(".btn-edit-treenode").bind('click', function () {
+						var snode = $("#7401648004793817").gtree("getSelected");
+						if (snode) {
+							$("#fm_treeedit").bindEntity({ ID: snode.id, ParentID: snode.parentid, Name: snode.text });
+							EditTree7401648004793817(false, false);
+						}
+					});
+					
+					
+					$("#7401648004793817").prev().find(".btn-del-treenode").bind('click', function () {
+						var snode = $("#7401648004793817").gtree("getSelected");
+						if (snode) {
+							$.confirm("确定要删除该节点吗？", function () {
+								if ($("#7401648004793817").gtree("removeSelectNode")) {
+									$.post("/Menu/DeleteMenu", { ID: snode.id }, function (r) { });
+								}
+							});
+						}
+					});
+					
+					
+					function EditTree7401648004793817(isAdd, isRoot) {
+						$("#fm_treeedit").open("新增节点", function (win) {
+							if (!tt.validateForm("fm_treeedit")) {
+								return false;
+							}
+							var update = $("#fm_treeedit").getContext();
+							$.post("/Menu/SaveMenu", update, function (r) {
+								r = $.toJsResult(r);
+								var node = { id: r.ID, parentid: r.ParentID, text: r.Name };
+								if (r.ID > 0) {
+									//更新树
+									if (isAdd) {
+										if (isRoot) {
+											$("#7401648004793817").gtree("addRootNode", node);
+										}
+										else {
+											$("#7401648004793817").gtree("addChildNode", node);
+										}
+									}
+									else {
+										$("#7401648004793817").gtree("updateSelectNode", node);
+									}
+									layer.close(win);
+								}
+								else {
+									$.error("保存失败，请重试！");
+								}
+							});
+
+							return false;
+						});
+					}
+					
+			
+        });
+
+        /*增加验证信息----------Start*/
+		
+			
+			var vf_treenodeedit = new tt.Field("节点名称", "", "txt_treeNodeName").setMsgId("layer-error-msg");
+			tt.vf.req.add(vf_treenodeedit);
+			
+        /*增加验证信息----------End*/
+		
+	</script>
+</body>
+</html>

@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.kryptonPanel1 = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
+            this.tabBody = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
             this.tabHeader = new ComponentFactory.Krypton.Toolkit.KryptonHeader();
             this.btnClose = new ComponentFactory.Krypton.Toolkit.ButtonSpecAny();
             this.btnTabs = new ComponentFactory.Krypton.Toolkit.ButtonSpecAny();
-            this.tabBody = new ComponentFactory.Krypton.Toolkit.KryptonPanel();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPanel1)).BeginInit();
             this.kryptonPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tabBody)).BeginInit();
@@ -47,6 +47,14 @@
             this.kryptonPanel1.Name = "kryptonPanel1";
             this.kryptonPanel1.Size = new System.Drawing.Size(346, 150);
             this.kryptonPanel1.TabIndex = 0;
+            // 
+            // tabBody
+            // 
+            this.tabBody.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabBody.Location = new System.Drawing.Point(0, 21);
+            this.tabBody.Name = "tabBody";
+            this.tabBody.Size = new System.Drawing.Size(346, 129);
+            this.tabBody.TabIndex = 2;
             // 
             // tabHeader
             // 
@@ -72,14 +80,6 @@
             this.btnTabs.Type = ComponentFactory.Krypton.Toolkit.PaletteButtonSpecStyle.DropDown;
             this.btnTabs.UniqueName = "0E9D19015D7F44A1D2BA571CD307D0DC";
             this.btnTabs.Visible = false;
-            // 
-            // tabBody
-            // 
-            this.tabBody.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabBody.Location = new System.Drawing.Point(0, 21);
-            this.tabBody.Name = "tabBody";
-            this.tabBody.Size = new System.Drawing.Size(346, 129);
-            this.tabBody.TabIndex = 2;
             // 
             // KryptonTabControl
             // 

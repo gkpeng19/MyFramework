@@ -94,7 +94,6 @@
         <form name="fm_treeedit" id="fm_treeedit" class="layerout form-layer">
             <div>
                 <input type="hidden" name="ID" />
-                <input type="hidden" name="ParentID" value="0" />
                 <div class="row-fluid">
                     <div class="span12">
                         <label>节点名称</label>
@@ -127,7 +126,7 @@
 	@foreach(var json in Model.jsons)
 	{
 		<text>
-		$.post("@json.url",{ran:Math.random()},function(r)
+		$.post("@json.url",{@json.paramsjson},function(r)
 		{
 			$(function()
 			{
@@ -147,6 +146,69 @@
 			if(r==1){
 				$("#@fm.id").shade();
 			}
+		});
+		</text>
+		}
+	}
+	
+	@foreach(var table in Model.tables)
+	{
+		foreach(var btn in table.custombtns)
+		{
+		<text>
+		$("#@btn.id").bind("click",function(win){
+			var sels = $("#@table.id").datagrid("getSelected");
+			if(sels.length==0)
+			{
+				$.error("请选择一条数据！");
+				return;
+			}
+			if(sels.length>1)
+			{
+				$.error("只能选择一条数据！");
+				return;
+			}
+			
+			$.post("@btn.action",{id:sels[0].id,ran_g:Math.random()},function(r){
+				r=$.toJsResult(r);
+				if(r.ID>0){
+					//操作成功后的处理
+					//...
+					
+					layer.close(win);
+				}
+				else{
+					$.error("操作失败，请重试！");
+				}
+			});
+			
+			return false;
+		});
+		</text>
+		}
+	}
+	@foreach(var tree in Model.trees)
+	{
+		foreach(var btn in tree.custombtns)
+		{
+		<text>
+		$("#@btn.id").bind("click",function(win){
+			//var select=$("#@tree.id").gtree("getSelected");
+			//var selects=$("#@tree.id").gtree("getSelecteds");
+			$.post("@btn.action",{ran_g:Math.random()},function(r){
+				r=$.toJsResult(r);
+				if(r.ID>0){
+					//操作成功后的处理
+					//...
+					
+					layer.close(win);
+				}
+				else{
+					$.error("操作失败，请重试！");
+				}
+			});
+			
+			return false;
 		});
 		</text>
 		}
@@ -247,18 +309,29 @@
 			{
 				<text>
 				$("#@tree.id").gtree({ url: "@tree.loadurl" });
-				$("#@tree.id").gtree("beforeDeleteNode", function () {
-					if ($("#@tree.reftableid").datagrid("hasChildren")) {
-						$.error("请先删除该节点下的内容！");
-						return false;
+				</text>
+				@foreach(var btnstr in tree.defaultbtns)
+				{
+					if(btnstr=="delete")
+					{
+					<text>
+					$("#@tree.id").gtree("beforeDeleteNode", function () {
+						if ($("#@tree.reftableid").datagrid("hasChildren")) {
+							$.error("请先删除该节点下的内容！");
+							return false;
+						}
+						$("#@tree.reftableid").datagrid("refresh");
+						if ($("#@tree.reftableid").datagrid("hasChildren")) {
+							$.error("请先删除该节点下的内容！");
+							return false;
+						}
+						return true;
+					});
+					</text>
+						break;
 					}
-					$("#@tree.reftableid").datagrid("refresh");
-					if ($("#@tree.reftableid").datagrid("hasChildren")) {
-						$.error("请先删除该节点下的内容！");
-						return false;
-					}
-					return true;
-				});
+				}
+				<text>
 				$("#@tree.id").gtree("selectChanged", function (json) {
 					//刷新右边表格
 					var nids = '-1';
@@ -272,7 +345,7 @@
 							if(tbl.searchid=="0")
 							{
 							<text>
-							$("#@tree.reftableid").datagrid({ url: "/Biz/Context/LoadInfo", search: { nodeids: nids } });
+							$("#@tree.reftableid").datagrid({ url: "@tbl.data.url", search: { nodeids: nids } });
 							</text>
 							}
 							else
@@ -289,92 +362,136 @@
 								hidNodeIdsInput=$("#@tbl.searchid .nodeids");
 							}
 							hidNodeIdsInput.val(nids);
-							$("#@tree.reftableid").datagrid({ url: "/Biz/Context/LoadInfo", search:"#@tbl.searchid" });
+							$("#@tree.reftableid").datagrid({ url: "@tbl.data.url", search:"#@tbl.searchid" });
 							</text>
 							}
 							break;
 						}
 					}
 				});
+				</text>
 				
-				$("#@tree.id").prev().find(".btn-add-treeroot").bind("click", function () {
-					$("#fm_treeedit").bindEntity({});
-					EditTree@(tree.id)(true, true);
-				});
-				$("#@tree.id").prev().find(".btn-add-treechild").bind("click", function () {
-					var snode = $("#@tree.id").gtree("getSelected");
-					if (snode) {
-						$("#fm_treeedit").bindEntity({ ParentID: snode.id });
-						EditTree@(tree.id)(true, false);
+				@foreach(var btnstr in tree.defaultbtns)
+				{
+					if(btnstr=="addroot")
+					{
+					<text>
+					$("#@tree.id").prev().find(".btn-add-treeroot").bind("click", function () {
+						$("#fm_treeedit").bindEntity({});
+						EditTree@(tree.id)(true, true);
+					});
+					</text>
 					}
-				});
-				$("#@tree.id").prev().find(".btn-edit-treenode").bind('click', function () {
-					var snode = $("#@tree.id").gtree("getSelected");
-					if (snode) {
-						$("#fm_treeedit").bindEntity({ ID: snode.id, ParentID: snode.parentid, Name: snode.text });
-						EditTree@(tree.id)(false, false);
-					}
-				});
-				$("#@tree.id").prev().find(".btn-del-treenode").bind('click', function () {
-					var snode = $("#@tree.id").gtree("getSelected");
-					if (snode) {
-						$.confirm("确定要删除该分类吗？", function () {
-							if ($("#@tree.id").gtree("removeSelectNode")) {
-								$.post("@tree.delurl", { ID: snode.id }, function (r) { });
-							}
-						});
-					}
-				});
-				
-				function EditTree@(tree.id)(isAdd, isRoot) {
-					$("#fm_treeedit").open("新增节点", function (win) {
-						if (!tt.validateForm("fm_treeedit")) {
-							return false;
+					else if(btnstr=="add")
+					{
+					<text>
+					$("#@tree.id").prev().find(".btn-add-treechild").bind("click", function () {
+						var snode = $("#@tree.id").gtree("getSelected");
+						if (snode) {
+							$("#fm_treeedit").bindEntity({});
+							EditTree@(tree.id)(true, false);
 						}
-						var update = $("#fm_treeedit").getContext();
-						$.post("@tree.saveurl", update, function (r) {
-							r = $.toJsResult(r);
-							var node = { id: r.ID, parentid: r.ParentID, text: r.Name };
-							if (r.ID > 0) {
-								//更新树
-								if (isAdd) {
-									if (isRoot) {
-										$("#@tree.id").gtree("addRootNode", node);
+					});
+					</text>
+					}
+					else if(btnstr=="edit")
+					{
+					<text>
+					$("#@tree.id").prev().find(".btn-edit-treenode").bind('click', function () {
+						var snode = $("#@tree.id").gtree("getSelected");
+						if (snode) {
+							$("#fm_treeedit").bindEntity({ ID: snode.id, Name: snode.text });
+							EditTree@(tree.id)(false, false);
+						}
+					});
+					</text>
+					}
+					else if(btnstr=="delete")
+					{
+					<text>
+					$("#@tree.id").prev().find(".btn-del-treenode").bind('click', function () {
+						var snode = $("#@tree.id").gtree("getSelected");
+						if (snode) {
+							$.confirm("确定要删除该节点吗？", function () {
+								if ($("#@tree.id").gtree("removeSelectNode")) {
+									$.post("@tree.delurl", { ID: snode.id }, function (r) { });
+								}
+							});
+						}
+					});
+					</text>
+					}
+				}
+				
+				@foreach(var btnstr in tree.defaultbtns)
+				{
+					if(btnstr!="delete")
+					{
+					<text>
+					function EditTree@(tree.id)(isAdd, isRoot) {
+						$("#fm_treeedit").open("新增节点", function (win) {
+							if (!tt.validateForm("fm_treeedit")) {
+								return false;
+							}
+							var update = $("#fm_treeedit").getContext();
+							var snode = $("#@tree.id").gtree("getSelected");
+							update.Name=null;
+							if(!isRoot&&isAdd)
+							{
+								update.@(tree.parentIdField)=snode.id;
+							}
+							update.@(tree.nodeField)=$.trim($("#txt_treeNodeName").val());						
+							
+							$.post("@tree.saveurl", update, function (r) {
+								r = $.toJsResult(r);
+								var node = { id: r.ID, parentid: r.@tree.parentIdField, text: r.@tree.nodeField };
+								if (r.ID > 0) {
+									//更新树
+									if (isAdd) {
+										if (isRoot) {
+											$("#@tree.id").gtree("addRootNode", node);
+										}
+										else {
+											$("#@tree.id").gtree("addChildNode", node);
+										}
 									}
 									else {
-										$("#@tree.id").gtree("addChildNode", node);
+										$("#@tree.id").gtree("updateSelectNode", node);
 									}
+									layer.close(win);
 								}
 								else {
-									$("#@tree.id").gtree("updateSelectNode", node);
+									$.error("保存失败，请重试！");
 								}
-								layer.close(win);
-							}
-							else {
-								$.error("保存失败，请重试！");
-							}
-						});
+							});
 
-						return false;
-					});
+							return false;
+						});
+					}
+					</text>
+					break;
+					}
 				}
-				</text>
 			}
 			
             @foreach(var table in Model.tables)
             {
 				var searchstr=table.searchid=="0"?"":(",search:'#"+table.searchid+"'");
-				var reftree="0";
+				var reftreeloadurl="0";
+				var reftablefk="0";
+				var reftreeid="0";
 				foreach(var tree in Model.trees)
 				{
 					if(tree.reftableid==table.id)
 					{
-						reftree=tree.loadurl;
+						reftreeloadurl=tree.loadurl;
+						reftablefk=tree.reftablefk;
+						reftreeid=tree.id;
 						break;
 					}
 				}
 				
-				if(reftree=="0")
+				if(reftreeloadurl=="0")
 				{
 				<text>
 				$("#@table.id").datagrid({ url: "@table.data.url" @searchstr,psize:@table.data.pagesize });
@@ -387,36 +504,43 @@
 				</text>
 				}
 				
-				if(reftree!="0")
+				if(reftreeloadurl!="0")
 				{
-				<text>
-				$("#@table.id").parent().prev().find(".btn-more-move").bind('click', function () {
-					var sels = $("#@table.id").datagrid("getSelected");
-					if (sels.length == 0) {
-						$.error("请勾选资讯！");
-						return;
-					}
+					foreach(var btnstr in table.defaultbtns)
+					{
+						if(btnstr=="movemore")
+						{
+						<text>
+						$("#@table.id").parent().prev().find(".btn-more-move").bind('click', function () {
+							var sels = $("#@table.id").datagrid("getSelected");
+							if (sels.length == 0) {
+								$.error("请勾选数据！");
+								return;
+							}
 
-					$("#targetTree").gtree({ url: '@reftree' });
-					$("#targetTree").open("选择节点", function (win) {
-						var snode = $("#targetTree").gtree("getSelected");
-						var json = [];
-						$(sels).each(function () {
-							json.push({ ID: this.ID, CategoryID: snode.id });
+							$("#targetTree").gtree({ url: '@reftreeloadurl' });
+							$("#targetTree").open("选择节点", function (win) {
+								var snode = $("#targetTree").gtree("getSelected");
+								var json = [];
+								$(sels).each(function () {
+									json.push({ ID: this.ID, @reftablefk: snode.id });
+								});
+								$.post("@table.transferurl", { Contexts: json }, function (r) {
+									if (r > 0) {
+										layer.close(win);
+										$("#@table.id").datagrid("refresh");
+									}
+									else {
+										$.error("批量转移失败，请重试！");
+									}
+								});
+								return false;
+							});
 						});
-						$.post("/Biz/Context/TransferContext", { Contexts: json }, function (r) {
-							if (r > 0) {
-								layer.close(win);
-								$("#@table.id").datagrid("refresh");
-							}
-							else {
-								$.error("批量转移失败，请重试！");
-							}
-						});
-						return false;
-					});
-				});
-				</text>
+						</text>
+						break;
+						}
+					}
 				}
                 
                 @foreach(var h in table.data.headers)
@@ -427,34 +551,46 @@
                         {
                             if(btn.type=="edit")
                             {
-                                <text>
-								$("#@table.id").parent().prev().find(".btn-table-add").bind('click',function()
+								@foreach(var btnstr in table.defaultbtns)
 								{
-									$("#@btn.formdataid").bindEntity({});
-									$("#@btn.formdataid").open("新增",function(win)
-                                    {
-                                        if(!tt.validateForm("@btn.formdataid"))
-                                        {
-                                            return false;
-                                        }
-                                        var update=$("#@btn.formdataid").getContext();
-                                        $.post("@btn.action",update,function(r)
-                                        {
-                                            r = $.toJsResult(r);
-                                            if(r.ID>0)
-                                            {
-                                                $("#@table.id").datagrid("addRow",r);
-                                                layer.close(win);
-                                            }
-                                            else
-                                            {
-                                                $.error("保存失败，请重试！");
-                                            }
-                                        });
+									if(btnstr=="add")
+									{
+									<text>
+									$("#@table.id").parent().prev().find(".btn-table-add").bind('click',function()
+									{
+										$("#@btn.formdataid").bindEntity({});
+										$("#@btn.formdataid").open("新增",function(win)
+										{
+											if(!tt.validateForm("@btn.formdataid"))
+											{
+												return false;
+											}
+											var update=$("#@btn.formdataid").getContext();
+											var selNode=$("#@reftreeid").gtree("getSelected");
+											update["@reftablefk"]=selNode.id;
+											$.post("@btn.action",update,function(r)
+											{
+												r = $.toJsResult(r);
+												r["@(reftablefk)_G"]=selNode.text;
+												if(r.ID>0)
+												{
+													$("#@table.id").datagrid("addRow",r);
+													layer.close(win);
+												}
+												else
+												{
+													$.error("保存失败，请重试！");
+												}
+											});
 
-                                        return false;
-                                    });
-								});
+											return false;
+										});
+									});
+									</text>
+									break;
+									}
+								}
+                                <text>
                                 $("#@table.id").datagrid("onEdit", function () {
                                     var json = $("#@table.id").datagrid("getCurrData");
                                     $("#@btn.formdataid").bindEntity(json);
@@ -577,24 +713,27 @@
 			tt.vf.req.add(vf_treenodeedit);
 			</text>
 		}
-        /*增加验证信息----------End*/	
+        /*增加验证信息----------End*/
 		
 		@foreach(var fm in Model.forms)
 		{
 			foreach(var btn in fm.btns)
 			{
 			<text>
-			if(!tt.validateForm("@fm.id"))
-            {
-                return false;
-            }
-            var update=$("#@fm.id").getContext();
-			update.ran_g=Math.random();
-			$.post("@btn.action",update,function(r)
+			$("#@btn.id").bind('click',function()
 			{
-				r=$.toJsResult(r);
-				//提交之后的操作
-				//...
+				if(!tt.validateForm("@fm.id"))
+				{
+					return false;
+				}
+				var update=$("#@fm.id").getContext();
+				update.ran_g=Math.random();
+				$.post("@btn.action",update,function(r)
+				{
+					r=$.toJsResult(r);
+					//提交之后的操作
+					//...
+				});
 			});
 			</text>
 			}

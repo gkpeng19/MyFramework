@@ -5,10 +5,29 @@
 	{
 		<div class="span3">
         <div class="row-fluid header blue btn-header">
-            <button class="btn btn-primary btn-mini btn-add-treeroot">新增根节点</button>
-            <button class="btn btn-primary btn-mini btn-add-treechild">新增</button>
-            <button class="btn btn-primary btn-mini btn-edit-treenode">编辑</button>
-            <button class="btn btn-primary btn-mini btn-del-treenode">删除</button>
+			@foreach(var btnstr in tree.defaultbtns)
+			{
+				if(btnstr=="addroot")
+				{
+			<button class="btn btn-primary btn-mini btn-add-treeroot">新增根节点</button>
+				}
+				else if(btnstr=="add")
+				{
+			<button class="btn btn-primary btn-mini btn-add-treechild">新增</button>
+				}
+				else if(btnstr=="edit")
+				{
+			<button class="btn btn-primary btn-mini btn-edit-treenode">编辑</button>
+				}
+				else if(btnstr=="delete")
+				{
+			<button class="btn btn-primary btn-mini btn-del-treenode">删除</button>
+				}
+			}
+			@foreach(var btn in tree.custombtns)
+			{
+			<button id="@btn.id" class="btn btn-primary btn-mini">@btn.text</button>
+			}
         </div>
         <div id="@tree.id"></div>
 		</div>
@@ -19,8 +38,21 @@
 	<div class="row-fluid">
 		<div class="row-fluid header blue btn-header">
 			<div class="span3">
+				@foreach(var btnstr in table.defaultbtns)
+				{
+					if(btnstr=="add")
+					{
 				<button class="btn btn-primary btn-mini btn-table-add">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
+					}
+					else if(btnstr=="movemore")
+					{
 				<button class="btn btn-primary btn-mini btn-more-move">批量转移</button>
+					}
+				}
+				@foreach(var btn in table.custombtns)
+				{
+				<button id="@btn.id" class="btn btn-primary btn-mini">@btn.text</button>
+				}
 			</div>
 			<div class="span9">
 			@if(table.searchid!="0")
@@ -104,7 +136,18 @@ else
 	<div class="row-fluid">
 		<div class="row-fluid header blue btn-header">
 			<div class="span2">
+				@foreach(var btnstr in table.defaultbtns)
+				{
+					if(btnstr=="add")
+					{
 				<button class="btn btn-primary btn-mini btn-table-add">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
+					}
+				}
+				
+				@foreach(var btn in table.custombtns)
+				{
+				<button id="@btn.id" class="btn btn-primary btn-mini">@btn.text</button>
+				}
 			</div>
 			<div class="span10">
 				@if(table.searchid!="0")

@@ -61,3 +61,4 @@ D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.csproj.GenerateResource.
 D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.NewSluWin.resources
 D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\template\cs.html
 D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\template\html.html
+D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll

@@ -24,6 +24,27 @@ namespace WinTemplate.UControl
         {
             InitializeComponent();
             _allTabs = new List<KryptonTab>();
+            this.Load += KryptonTabControl_Load;
+        }
+
+        void KryptonTabControl_Load(object sender, EventArgs e)
+        {
+            btnClose.Click += (ss, ee) =>
+                {
+                    if (SelectedTab != null)
+                    {
+                        tabHeader.ButtonSpecs.Remove(SelectedTab.TabTag);
+                        tabBody.Controls.Remove(SelectedTab.Container);
+
+                        _allTabs.Remove(SelectedTab);
+
+                        if (_allTabs.Count > 0)
+                        {
+                            SelectedTab = _allTabs[0];
+                            SelectedTab.Show();
+                        }
+                    }
+                };
         }
 
         public KryptonTab AddNewTab(string name, string fpath)
@@ -64,20 +85,13 @@ namespace WinTemplate.UControl
             }
         }
 
-        public void CloseSelectedTab()
+        public bool HasTab(KryptonTab tab)
         {
-            if (SelectedTab != null)
+            if (tabHeader.ButtonSpecs.Contains(tab.TabTag))
             {
-                _allTabs.Remove(SelectedTab);
-                tabHeader.ButtonSpecs.Remove(SelectedTab.TabTag);
-                tabBody.Controls.Remove(SelectedTab.Container);
+                return true;
             }
-
-            if (_allTabs.Count > 0)
-            {
-                SelectedTab = _allTabs[0];
-            }
-            SelectedTab.Show();
+            return false;
         }
     }
 

@@ -20,13 +20,22 @@ namespace G.Util.Html
                 var node = orderNodes[i];
                 if (node.parentid == 0)
                 {
-                    break;
+                    if(node.children.Count>0)
+                    {
+                        node.children.Reverse();
+                    }
+                    continue;
                 }
                 for (var j = i - 1; j >= 0; --j)
                 {
                     if (node.parentid == orderNodes[j].id)
                     {
                         orderNodes[j].children.Add(node);
+
+                        if(orderNodes[i].children.Count>0)
+                        {
+                            orderNodes[i].children.Reverse();
+                        }
                         orderNodes.RemoveAt(i);
                         break;
                     }

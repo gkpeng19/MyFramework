@@ -2,31 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Web.Http;
 using G.Util.Mvc;
-using System.Web.Mvc;
 using GOMFrameWork.DataEntity;
 using G.Util.Html;
+using System.Web.Mvc;
 
 namespace @(Model.ProjectName).Controllers
 {
-    public class @(Model.Name)Controller : ApiController
-    {
-		@foreach(var action in Model.LoadJsonActions)
+    public class @(Model.Name)Controller : Controller
+    {@foreach(var action in Model.LoadJsonActions){ var fields=action.Value[0]+"=\"xxx\"";for(var i=1;i<action.Value.Count;++i){fields+=(", "+action.Value[i]+"=\"xxx\"");}<text>
+		public JsonResult @(action.Key)()
 		{
-		var fields=action.Value[0]+"=\"xxx\"";
-		for(var i=1;i<action.Value.Count;++i)
-		{
-			fields+=(", "+action.Value[i]+"=\"xxx\"");
+			return ExController.JsonNet(new { @fields });
 		}
-		<text>
-			public JsonResult @(action.Key)()
-			{
-				return ExController.JsonNet(new { @fields });
-			}
-			</text>
-		}
+		</text>
+	}
 		
 		@foreach(var action in Model.LoadIntAction)
 		{
@@ -70,6 +60,7 @@ namespace @(Model.ProjectName).Controllers
         {
             #region 查询条件初始化 Example：se["Field"] = "value";
 
+			se.SearchID="xxxx";
             //.........................
             se.OrderBy("id", EnumOrderBy.Desc);
 

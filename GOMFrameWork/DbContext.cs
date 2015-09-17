@@ -29,7 +29,7 @@ namespace GOMFrameWork
             }
         }
 
-        public static void InitContext<T>(string key) where T : EntityBase
+        public static void InitContext<T>(string key) where T : DataBase
         {
             var typeName = typeof(T).FullName;
             if (!source.ContainsKey(typeName))
