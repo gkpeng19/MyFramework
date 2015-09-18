@@ -66,6 +66,43 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Designer\AddDataConfig.html" />
+    <Content Include="Designer\AddFormConfig.html" />
+    <Content Include="Designer\AddTableConfig.html" />
+    <Content Include="Designer\Default.html" />
+    <Content Include="Designer\GoogleChart\css\orgchart.css" />
+    <Content Include="Designer\GoogleChart\css\ui+zh_CN.css" />
+    <Content Include="Designer\GoogleChart\css\ui_zh_cn.css" />
+    <Content Include="Designer\GoogleChart\js\format+zh_CN,default+zh_CN,ui+zh_CN,orgchart+zh_CN.I.js" />
+    <Content Include="Designer\GoogleChart\js\format_zh_cn.js" />
+    <Content Include="Designer\GoogleChart\js\jsapi.js" />
+    <Content Include="Designer\GoogleChart\js\test.js" />
+    <Content Include="Designer\Scripts\GExtension.js" />
+    <Content Include="Designer\Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Designer\Scripts\json2.js" />
+    <Content Include="Designer\Scripts\layer\extend\layer.ext.js" />
+    <Content Include="Designer\Scripts\layer\layer.js" />
+    <Content Include="Designer\Scripts\layer\skins\default\default\icon-ext.png" />
+    <Content Include="Designer\Scripts\layer\skins\default\default\icon.png" />
+    <Content Include="Designer\Scripts\layer\skins\default\default\icon_ext.png" />
+    <Content Include="Designer\Scripts\layer\skins\default\default\loading-0.gif" />
+    <Content Include="Designer\Scripts\layer\skins\default\default\loading-1.gif" />
+    <Content Include="Designer\Scripts\layer\skins\default\default\loading-2.gif" />
+    <Content Include="Designer\Scripts\layer\skins\default\default\textbg.png" />
+    <Content Include="Designer\Scripts\layer\skins\default\default\xubox_ico0.png" />
+    <Content Include="Designer\Scripts\layer\skins\default\default\xubox_loading0.gif" />
+    <Content Include="Designer\Scripts\layer\skins\default\default\xubox_loading1.gif" />
+    <Content Include="Designer\Scripts\layer\skins\default\default\xubox_loading2.gif" />
+    <Content Include="Designer\Scripts\layer\skins\default\default\xubox_loading3.gif" />
+    <Content Include="Designer\Scripts\layer\skins\default\default\xubox_title0.png" />
+    <Content Include="Designer\Scripts\layer\skins\default\layer.css" />
+    <Content Include="Designer\Scripts\layer\skins\default\layer.ext.css" />
+    <Content Include="Designer\Scripts\layer\skins\moon\default.png" />
+    <Content Include="Designer\Scripts\layer\skins\moon\style.css" />
+    <Content Include="Designer\Scripts\laytpl.js" />
+    <Content Include="Designer\Scripts\page.js" />
+    <Content Include="Designer\Scripts\site.js" />
+    <Content Include="Designer\Styles\GExtension.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\ace\ace-elements.min.js" />
     <Content Include="Scripts\ace\ace.min.js" />
@@ -77,6 +114,7 @@
     <Content Include="Scripts\bootstrap\js\bootstrap.js" />
     <Content Include="Scripts\bootstrap\js\bootstrap.min.js" />
     <Content Include="Scripts\bootstrap\js\npm.js" />
+    <Content Include="Scripts\common.js" />
     <Content Include="Scripts\font-awesome\css\font-awesome.css" />
     <Content Include="Scripts\font-awesome\css\font-awesome.min.css" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -256,6 +294,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\MenuController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -277,6 +316,7 @@
     <Compile Include="Models\BW_RoleMenu.cs" />
     <Compile Include="Models\BW_User.cs" />
     <Compile Include="Models\ExtensionModel.cs" />
+    <Compile Include="Models\SysEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\umeditor\net\UMeditorUploader.cs" />
   </ItemGroup>

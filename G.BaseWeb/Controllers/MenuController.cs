@@ -38,6 +38,7 @@ namespace G.BaseWeb.Controllers
             {
                 #region 维护新增数据
 
+                entity.MenuType = (int)MenuTypeEnum.Menu;
                 entity.CreateOn = DateTime.Now;
                 entity.CreateBy = "";
 
@@ -61,7 +62,19 @@ namespace G.BaseWeb.Controllers
             return ExController.JsonNet(new { ID = 0 });
         }
 
+        public JsonResult SaveAuthorityBtn(BW_Menu entity)
+        {
+            entity.MenuType = (int)MenuTypeEnum.AuthorityBtn;
+            entity.CreateOn = DateTime.Now;
+            entity.CreateBy = "";
 
+            var r = entity.Save();
+            if (r > 0)
+            {
+                return ExController.JsonNet(entity);
+            }
+            return ExController.JsonNet(new { ID = 0 });
+        }
 
         public long DeleteMenu(BW_Menu entity)
         {

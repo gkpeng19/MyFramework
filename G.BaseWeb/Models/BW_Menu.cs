@@ -34,5 +34,12 @@ namespace G.BaseWeb.Models
             get { return GetInt32("ParentID"); }
             set { SetValue("ParentID", value); }
         }
+
+        [JsonIgnore]
+        public int MenuType
+        {
+            get { return GetInt32("MenuType"); }
+            set { SetValue("MenuType", value); }
+        }
     }
 }

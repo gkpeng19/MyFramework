@@ -789,7 +789,7 @@ var gtree = function (target) {
             html += '<a class="jstree-anchor jstree-clicked" href="javascript:void(0)"><i class="jstree-icon jstree-themeicon"></i><span>' + node.text + '</span></a>';
         }
         else {
-            html += '<a class="jstree-anchor" href="javascript:void(0)"><i class="jstree-icon jstree-themeicon"></i></span>' + node.text + '</span></a>';
+            html += '<a class="jstree-anchor" href="javascript:void(0)"><i class="jstree-icon jstree-themeicon"></i><span>' + node.text + '</span></a>';
         }
 
         if (node.children.length > 0 && isopen) {
@@ -1019,17 +1019,38 @@ gtree.prototype.removeSelectNode = function () {
     var nextid = 0;
     if (pid > 0) {
         var pnode = this.tool.getNode(pid);
-        this.tool.initTreeNodeChildren_D(pnode);
         nextid = pnode.id;
+
+        //从数据源中移除
+        var targetChildren = [];
+        $(pnode.children).each(function () {
+            if (this != node) {
+                targetChildren.push(this);
+            }
+        });
+        pnode.children = targetChildren;
+        this.tool.initTreeNodeChildren_D(pnode);
     }
-    else if (this.nodes[0] == node) {
-        if (this.nodes[1]) {
-            nextid = this.nodes[1].id;
+    else {//根节点
+        if (this.nodes[0] == node) {
+            if (this.nodes[1]) {
+                nextid = this.nodes[1].id;
+            }
         }
+        else {
+            nextid = this.nodes[0].id;
+        }
+
+        //从数据源移除根节点
+        var targetNodes = [];
+        $(this.nodes).each(function () {
+            if (this != node) {
+                targetNodes.push(this);
+            }
+        });
+        this.nodes = targetNodes;
     }
-    else {
-        nextid = this.nodes[0].id;
-    }
+
 
     var li = this.container.find(".jstree-clicked").parent();
     if (li.hasClass("jstree-last")) {
@@ -1051,15 +1072,27 @@ gtree.prototype.updateSelectNode = function (node) {
 
 gtree.prototype.select = function (nodeid) {
     var boxs = $("#" + nodeid + " .tree_ckbox");
-    if (boxs.length > 0 && !boxs[0].checked) {
-        boxs[0].click();
+    if (boxs.length > 0) {
+        if (!boxs[0].checked) {
+            boxs[0].click();
+        }
+    }
+    else {
+        var node = this.tool.getNode(nodeid);
+        node.checked_g = true;
     }
 };
 
 gtree.prototype.unSelect = function (nodeid) {
     var boxs = $("#" + nodeid + " .tree_ckbox");
-    if (boxs.length > 0 && boxs[0].checked) {
-        boxs[0].click();
+    if (boxs.length > 0) {
+        if (boxs[0].checked) {
+            boxs[0].click();
+        }
+    }
+    else {
+        var node = this.tool.getNode(nodeid);
+        node.checked_g = false;
     }
 };
 

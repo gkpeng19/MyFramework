@@ -4,6 +4,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{
+	var menuids="";
+	foreach(var menu in Model.authorities.btns)
+	{
+		if(menuids.Length==0)
+		{
+			menuids+=menu.menuid;
+		}
+		else
+		{
+			menuids+=(","+menu.menuid);
+		}
+	}
+}
+	
+<script type="text/javascript">
+	applyAuthority("@menuids");
+</script>
+
 @Include("tables",Model)
 
 @foreach(var fm in Model.forms)
@@ -78,12 +97,10 @@
     <div class="span3">
         <form name="fm_treeedit" id="fm_treeedit" class="layerout form-layer">
             <div>
-                <input type="hidden" name="ID" />
-                <input type="hidden" name="ParentID" value="0" />
                 <div class="row-fluid">
                     <div class="span12">
                         <label>节点名称</label>
-                        <input type="text" name="Name" id="txt_treeNodeName" class="span11" />
+                        <input type="text" id="txt_treeNodeName" class="span11" />
                     </div>
                 </div>
             </div>
@@ -306,7 +323,7 @@
 				</text>
 				@foreach(var btnstr in tree.defaultbtns)
 				{
-					if(btnstr=="delete")
+					if(btnstr=="delete"&&tree.reftableid!=null&&tree.reftableid.Length>0)
 					{
 					<text>
 					$("#@tree.id").gtree("beforeDeleteNode", function () {
@@ -325,45 +342,48 @@
 						break;
 					}
 				}
-				<text>
-				$("#@tree.id").gtree("selectChanged", function (json) {
-					//刷新右边表格
-					var nids = '-1';
-					$(json.children_d).each(function () {
-						nids += (',' + this);
-					});
-					@foreach(var tbl in Model.tables)
-					{
-						if(tbl.id==tree.reftableid)
+				if(tree.reftableid!=null&&tree.reftableid.Length>0)
+				{
+					<text>
+					$("#@tree.id").gtree("selectChanged", function (json) {
+						//刷新右边表格
+						var nids = '-1';
+						$(json.children_d).each(function () {
+							nids += (',' + this);
+						});
+						@foreach(var tbl in Model.tables)
 						{
-							if(tbl.searchid=="0")
+							if(tbl.id==tree.reftableid)
 							{
-							<text>
-							$("#@tree.reftableid").datagrid({ url: "@tbl.data.url", search: { nodeids: nids } });
-							</text>
+								if(tbl.searchid=="0")
+								{
+								<text>
+								$("#@tree.reftableid").datagrid({ url: "@tbl.data.url", search: { nodeids: nids } });
+								</text>
+								}
+								else
+								{
+								<text>
+								var hidNodeIdsInput=null;
+								if($("#@tbl.searchid .nodeids").length==0)
+								{
+									hidNodeIdsInput=$("<input type='hidden' name='nodeids' class='nodeids' />");
+									$("#@tbl.searchid").append(hidNodeIdsInput);
+								}
+								else
+								{
+									hidNodeIdsInput=$("#@tbl.searchid .nodeids");
+								}
+								hidNodeIdsInput.val(nids);
+								$("#@tree.reftableid").datagrid({ url: "@tbl.data.url", search:"#@tbl.searchid" });
+								</text>
+								}
+								break;
 							}
-							else
-							{
-							<text>
-							var hidNodeIdsInput=null;
-							if($("#@tbl.searchid .nodeids").length==0)
-							{
-								hidNodeIdsInput=$("<input type='hidden' name='nodeids' class='nodeids' />");
-								$("#@tbl.searchid").append(hidNodeIdsInput);
-							}
-							else
-							{
-								hidNodeIdsInput=$("#@tbl.searchid .nodeids");
-							}
-							hidNodeIdsInput.val(nids);
-							$("#@tree.reftableid").datagrid({ url: "@tbl.data.url", search:"#@tbl.searchid" });
-							</text>
-							}
-							break;
 						}
-					}
-				});
-				</text>
+					});
+					</text>
+				}
 				
 				@foreach(var btnstr in tree.defaultbtns)
 				{
@@ -423,18 +443,24 @@
 					{
 					<text>
 					function EditTree@(tree.id)(isAdd, isRoot) {
-						$("#fm_treeedit").open("新增节点", function (win) {
+						var winTitle=isAdd?"新增节点":"编辑节点";
+						$("#fm_treeedit").open(winTitle, function (win) {
 							if (!tt.validateForm("fm_treeedit")) {
 								return false;
 							}
-							var update = $("#fm_treeedit").getContext();
 							var snode = $("#@tree.id").gtree("getSelected");
-							update.Name=null;
-							if(!isRoot&&isAdd)
-							{
-								update.@(tree.parentIdField)=snode.id;
+							
+							var update = {};
+							if(isAdd){
+								if(!isAddRoot){
+									update.@(tree.parentIdField)=snode.id;
+								}
 							}
-							update.@(tree.nodeField)=$.trim($("#txt_treeNodeName").val());						
+							else{
+								update.ID = snode.id;
+							    update.@(tree.parentIdField)=snode.parentid;
+							}
+							update.Name=$.trim($("#txt_treeNodeName").val());				
 							
 							$.post("@tree.saveurl", update, function (r) {
 								r = $.toJsResult(r);
@@ -442,7 +468,7 @@
 								if (r.ID > 0) {
 									//更新树
 									if (isAdd) {
-										if (isRoot) {
+										if (isAddRoot) {
 											$("#@tree.id").gtree("addRootNode", node);
 										}
 										else {

@@ -115,7 +115,7 @@ namespace WinTemplate
                                 gFile.Tab = tab;
 
                                 WebBrowser browser = new WebBrowser();
-                                browser.Url = new Uri("http://localhost/Default.html");
+                                browser.Url = new Uri("http://localhost/Designer/Default.html");
                                 browser.ObjectForScripting = this;
                                 browser.Dock = DockStyle.Fill;
                                 tab.Container.Controls.Add(browser);
@@ -125,7 +125,10 @@ namespace WinTemplate
                                 timer.Tick += (sss, eee) =>
                                     {
                                         timer.Stop();
-                                        browser.Document.InvokeScript("InitUI", new string[] { File.ReadAllText(gFile.SPath + ".json") });
+                                        if (File.Exists(gFile.SPath + ".json"))
+                                        {
+                                            browser.Document.InvokeScript("InitUI", new string[] { File.ReadAllText(gFile.SPath + ".json") });
+                                        }
                                     };
                                 timer.Start();
                             }
@@ -298,7 +301,7 @@ namespace WinTemplate
 
             var tab = tabControl.AddNewTab(name, path);
             WebBrowser browser = new WebBrowser();
-            browser.Url = new Uri("http://localhost/Default.html");
+            browser.Url = new Uri("http://localhost/Designer/Default.html");
             browser.ObjectForScripting = this;
             browser.Dock = DockStyle.Fill;
             tab.Container.Controls.Add(browser);

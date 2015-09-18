@@ -1,0 +1,701 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <script src="GoogleChart/js/jsapi.js"></script>
+    <script src="Scripts/json2.js"></script>
+    <script src="Scripts/layer/layer.js"></script>
+    <script src="Scripts/GExtension.js"></script>
+    <script src="Scripts/site.js"></script>
+    <script src="Scripts/page.js"></script>
+    <script src="../Scripts/GOMFrameWork.js"></script>
+    <link href="GoogleChart/css/orgchart.css" rel="stylesheet" />
+    <link href="../Styles/gtree/themes/default/style.min.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            font-family: 'Microsoft YaHei UI';
+            font-size: 14px;
+            margin: 0px;
+            padding: 5px;
+        }
+
+        fieldset {
+            padding: 5px;
+            margin-top: 15px;
+        }
+
+        .temp {
+            display: none;
+        }
+
+        .simple_layer {
+            padding: 20px 20px 0px;
+        }
+
+        table .td-title {
+            width: 5em;
+            text-align: right;
+        }
+
+        .chart {
+            margin: 5px 0px;
+            border: solid 2px #b5d9ea;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .selectchart {
+            border: solid 2px #e3ca4b;
+        }
+
+        .bindchart {
+            margin: 5px 0px;
+            border: solid 2px #b5d9ea;
+            padding: 5px;
+            cursor: pointer;
+            width: 20%;
+            float: left;
+        }
+
+            .bindchart:nth-of-type(2n+2) {
+                margin: 5px;
+            }
+
+        #div_forTable table {
+            border: solid 2px #b5d9ea;
+            cursor: pointer;
+            padding: 5px;
+            width: 99%;
+            margin: 5px 5px 0px 0px;
+            float: left;
+            margin-left: 5px;
+        }
+
+            #div_forTable table th.tablebtn {
+                width: 60px;
+            }
+
+            #div_forTable table:nth-of-type(2n) {
+            }
+
+            #div_forTable table.select {
+                border: solid 2px #e3ca4b;
+            }
+
+            #div_forTable table.tree {
+                width: 32%;
+            }
+
+        #div_bindform .chart_div {
+            margin: 5px 0px;
+            padding: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="template">
+        <table id="json_objectName" class="temp simple_layer">
+            <tr>
+                <td class="td-title">对象名称：</td>
+                <td><input type="text" id="txt_jsonObjectName" /> </td>
+            </tr>
+            <tr>
+                <td class="td-title">Url：</td>
+                <td><input type="text" id="txt_jsonUrl" /> </td>
+            </tr>
+            <tr>
+                <td class="td-title">参数名：</td>
+                <td><input type="text" id="txt_jsonParams" /> </td>
+            </tr>
+        </table>
+
+        <!--用于新增Json-->
+        <table id="json_propertyName" class="temp simple_layer">
+            <tr>
+                <td class="td-title">属性名称：</td>
+                <td><input type="text" id="txt_jsonPropertyName" /> </td>
+            </tr>
+        </table>
+        <!--用于新增Form控件节点-->
+        <table id="form_propertyName" class="temp simple_layer">
+            <tr>
+                <td class="td-title">属性名称：</td>
+                <td><input type="text" id="txt_formPropertyName" /> </td>
+            </tr>
+            <tr>
+                <td class="td-title">显示名称：</td>
+                <td><input type="text" id="txt_formShowName" /> </td>
+            </tr>
+            <tr>
+                <td class="td-title">验证信息：</td>
+                <td>
+                    <table id="form_tab_validate">
+                        <tr>
+                            <td><input type="checkbox" name="required" id="validate_1" /> <label for="validate_1">非空</label></td>
+                            <td><input type="checkbox" name="number" id="validate_2" /> <label for="validate_2">数字</label></td>
+                            <td><input type="checkbox" name="numint" id="validate_3" /> <label for="validate_3">整数</label></td>
+                            <td><input type="checkbox" name="email" id="validate_4" /> <label for="validate_4">Email邮箱</label></td>
+                            <td><input type="checkbox" name="ipaddress" id="validate_5" /> <label for="validate_5">IP地址</label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="postcode" id="validate_6" /> <label for="validate_6">邮政编码</label></td>
+                            <td><input type="checkbox" name="telnum" id="validate_7" /> <label for="validate_7">电话号码</label></td>
+                            <td><input type="checkbox" name="idcard" id="validate_8" /> <label for="validate_8">身份证</label></td>
+                            <td><input type="checkbox" name="lenvalidate" id="validate_9" /> <label for="validate_9">长度限制</label></td>
+                            <td><input type="checkbox" name="regvalidate" id="validate_10" /> <label for="validate_10">正则</label></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-title">尺  寸：</td>
+                <td><input type="number" id="txt_formCtrSize" value="6" /> </td>
+            </tr>
+        </table>
+        <!--用于新增Form Root节点-->
+        <table id="form_primaryKey" class="temp simple_layer">
+            <tr>
+                <td class="td-title">主键名称：</td>
+                <td><input type="text" id="txt_formPrimaryKey" /> </td>
+            </tr>
+            <tr>
+                <td class="td-title">隐藏表单：</td>
+                <td><input type="checkbox" id="cbx_hiddenForm" /> <label for="cbx_hiddenForm">是否隐藏</label></td>
+            </tr>
+            <tr>
+                <td class="td-title">尺  寸：</td>
+                <td><input type="number" id="txt_formSize" value="6" /></td>
+            </tr>
+            <tr id="form_tr_btns">
+                <td class="td-title">提交按钮：</td>
+                <td><span id="form_btns"></span><input type="button" value="添加" onclick="AddFormButtons()" /></td>
+            </tr>
+        </table>
+        <!--用于新增Form提交按钮-->
+        <table id="form_addbtns" class="temp simple_layer">
+            <tr><td class="td-title">按钮文本：</td><td><input type="text" id="form_addbtntext" /></td></tr>
+            <tr><td class="td-title">提交Url：</td><td><input type="text" id="form_addbtnaction" /></td></tr>
+        </table>
+        <!--用于编辑Form提交按钮-->
+        <table id="form_editbtns" class="temp simple_layer" style="width:300px;min-height:100px;">
+            <tr><td></td></tr>
+        </table>
+        <!--用于设置Form只读开关-->
+        <table id="form_disabled" class="temp simple_layer">
+            <tr><td class="td-title">只读Url：</td><td><input type="text" id="fm_disabled_url" /></td></tr>
+            <tr><td class="td-title">描述：</td><td style="color:blue;font-size:12px;">*返回0|1，1:只读*</td></tr>
+        </table>
+
+        <!--用于维护长度验证的长度-->
+        <table id="form_validateLength" class="temp simple_layer">
+            <tr>
+                <td class="td-title">最小长度：</td>
+                <td><input type="number" id="txt_validateMinLength" /> </td>
+            </tr>
+            <tr>
+                <td class="td-title">最大长度：</td>
+                <td><input type="number" id="txt_validateMaxLength" /></td>
+            </tr>
+        </table>
+        <!--用于维护长度验证的正则表达式-->
+        <table id="form_validateReg" class="temp simple_layer">
+            <tr>
+                <td class="td-title">正则表达式：</td>
+                <td><input type="number" id="txt_validateRegString" /> </td>
+            </tr>
+        </table>
+
+        <!--用于新增Tree控件-->
+        <table id="tree_addTree" class="temp simple_layer">
+            <tr>
+                <td class="td-title">节点名称-Field：</td>
+                <td><input type="text" id="tree_nodeField" /></td>
+                <td class="td-title">ParentID-Field：</td>
+                <td><input type="text" id="tree_parentIdField" /></td>
+            </tr>
+            <tr>
+                <td class="td-title">加载Url：</td>
+                <td><input type="text" id="tree_loadUrl" /></td>
+                <td class="td-title">保存Url：</td>
+                <td><input type="text" id="tree_saveUrl" /></td>
+            </tr>
+            <tr>
+                <td class="td-title">删除Url：</td>
+                <td><input type="text" id="tree_delUrl" /></td>
+                <td class="td-title"></td>
+                <td></td>
+            </tr>
+        </table>
+        <!--用于修改Tree的默认按钮-->
+        <div id="tree_editdefaultbtns" class='temp simple_layer' style='width:300px;height:150px;padding:20px;'>
+            <input type="checkbox" id="tree_dbtn1" data-role="addroot" /><label for="tree_dbtn1">新增根节点</label>
+            <input type="checkbox" id="tree_dbtn2" data-role="add" /><label for="tree_dbtn2">新增</label>
+            <input type="checkbox" id="tree_dbtn3" data-role="edit" /><label for="tree_dbtn3">编辑</label>
+            <input type="checkbox" id="tree_dbtn4" data-role="delete" /><label for="tree_dbtn4">删除</label>
+        </div>
+
+        <!--设置表格查询-->
+        <table id="table_search" class="temp simple_layer">
+            <tr>
+                <td><input type="button" value="新增" onclick="TableAddSearch()" /></td>
+            </tr>
+            <tr>
+                <td style="width:300px;height:100px;" id="table_searchitemtd"></td>
+            </tr>
+        </table>
+        <!--新增表格查询项-->
+        <table id="table_searchitem" class="temp simple_layer" style="height:200px;">
+            <tr><td class="td-title">标题：</td><td><input type="text" id="table_sitemtitle" /></td></tr>
+            <tr><td class="td-title">查询属性：</td><td><input type="text" id="table_sitemproperty" /></td></tr>
+            <tr>
+                <td class="td-title">类型：</td>
+                <td>
+                    <select id="table_sitemtype" onchange="table_sitemtypechanged(this)">
+                        <option value="1">文本</option>
+                        <option value="2">下拉</option>
+                        <option value="3">日期</option>
+                    </select>
+                </td>
+            </tr>
+            <tr style="display:none;">
+                <td class="td-title">数据源：</td>
+                <td>
+                    <input type="text" readonly="readonly" id="table_sitembindjsonid" />
+                    <br /><input type="button" value="绑定数据源" onclick="table_sitembindjson()" />
+                </td>
+            </tr>
+        </table>
+
+        <!--用于修改表格的默认按钮-->
+        <div id="table_editdefaultbtns" class='temp simple_layer' style='width:300px;height:150px;padding:20px;'>
+            <input type="checkbox" id="table_dbtn2" data-role="add" /><label for="table_dbtn2">新增</label>
+            <span id="table_movemorespan">
+                <input type="checkbox" id="table_dbtn3" data-role="movemore" onchange="table_setMoveMoreInfo(this)" /><label for="table_dbtn3">批量转移</label>
+            </span>
+        </div>
+
+        <!--用于表格查询项Select绑定全局数据-->
+        <div style="padding:20px;width:500px;height:250px;overflow-y:auto" id="div_bindform" class="temp">
+        </div>
+
+        <!--设置自定义按钮-->
+        <table id="tt_custombtn" class="temp simple_layer">
+            <tr>
+                <td><input type="button" value="新增" onclick="ttAddCustomBtn()" /></td>
+            </tr>
+            <tr>
+                <td style="width:300px;height:100px;" id="tt_custombtntd"></td>
+            </tr>
+        </table>
+        <!--新增自定义按钮-->
+        <table id="table_addcustombtn" class="temp simple_layer">
+            <tr><td class="td-title">文本：</td><td><input type="text" id="table_cbtntext" /></td></tr>
+            <tr><td class="td-title">提交Url：</td><td><input type="text" id="table_cbtnaction" /></td></tr>
+        </table>
+
+        <table id="tree_settablefk" class="temp simple_layer">
+            <tr><td class="td-title">外键名称：</td><td><input type="text" id="table_fkname" /></td></tr>
+        </table>
+
+        <table id="table_settransferurl" class="temp simple_layer">
+            <tr><td class="td-title">提交Url：</td><td><input type="text" id="table_transferurl" /></td></tr>
+        </table>
+    </div>
+
+    <div>
+        <div>
+            <table width="100%">
+                <tr>
+                    <td>
+                        <input type="button" value="添加Form" onclick="AddFormData()" />
+                        <input type="button" value="添加全局数据" onclick="AddJsonData()" />
+                        <input type="button" value="添加树" onclick="AddTree()" />
+                        <input type="button" value="添加表格" onclick="AddTable()" />
+                        <input type="button" value="添加绑定" onclick="AddDataBind()" />
+                        <input type="button" value="权限设置" id="btnSetAuthority" />
+                    </td>
+                    <td align="right"></td>
+                </tr>
+            </table>
+        </div>
+        <fieldset>
+            <legend>数据展示</legend>
+            <div id="div_forTable"></div>
+            <div style="clear:both;"></div>
+        </fieldset>
+        <fieldset>
+            <legend>全局数据</legend>
+            <div id="div_forJson"></div>
+        </fieldset>
+        <fieldset>
+            <legend>表单</legend>
+            <div id="div_forForm"></div>
+        </fieldset>
+        <fieldset>
+            <legend>数据绑定</legend>
+            <div id="div_forBind"></div>
+        </fieldset>
+    </div>
+
+    <style type="text/css">
+        .authorityBtn {
+            padding: 3px 6px;
+            border: solid 2px #d5d5d5;
+            cursor: pointer;
+            border-collapse: separate;
+        }
+
+            .authorityBtn:nth-child(n+1) {
+                margin-left: 10px;
+            }
+
+        .authorityBtnChecked {
+            border: double 2px gray;
+            color: white;
+            /*-webkit-transition: border linear .2s,-webkit-box-shadow linear .2s;*/
+        }
+    </style>
+    <div id="for_Authority" class="temp simple_layer" style="width:750px;">
+        <input type="button" value="获取权限按钮" id="btnGetAuthorityBtns" />
+        <input type="button" value="绑定权限" onclick="bindMenuAuthority()" />
+        <input type="button" value="解除绑定" onclick="disBindMenuAuthority()" />
+        <fieldset>
+            <legend>菜单权限按钮</legend>
+            <div id="for_MenuAuthorityBtns" data-tag="menu" style="padding:10px;" class="container"></div>
+        </fieldset>
+        <fieldset>
+            <legend>本页所有按钮</legend>
+            <div id="for_ThisPageBtns" data-tag="page" style="padding:5px;" class="container">
+                <fieldset style="margin-top:0px;">
+                    <legend>表单提交按钮</legend>
+                    <div id="for_ThisPageFormBtns" style="padding:5px;"></div>
+                </fieldset>
+                <fieldset>
+                    <legend>树操作按钮</legend>
+                    <div id="for_ThisPageTreeBtns" style="padding:5px;"></div>
+                </fieldset>
+                <fieldset>
+                    <legend>表格操作按钮</legend>
+                    <div id="for_ThisPageTableBtns" style="padding:5px;"></div>
+                </fieldset>
+            </div>
+        </fieldset>
+        <!--<fieldset>
+            <legend>目标区域</legend>
+            <div id="for_AuthorityBtns" style="padding:15px 5px;" class="container">
+                <span style="line-height:40px;">&nbsp;</span>
+            </div>
+        </fieldset>-->
+    </div>
+
+    <div class="temp simple_layer" id="for_AuthorityTree" style="width:300px;">
+        <div class="targetTree" style="min-height:300px;"></div>
+    </div>
+
+
+    <script type="text/javascript">
+
+        var _authorities = { menushtml: "", btns: [] };
+
+        forInitAuthority();
+
+        var isFirstLoad = true;
+        function forInitAuthority() {
+            $("#for_AuthorityTree .targetTree").gtree({ url: "/Menu/LoadMenus" });
+
+            $("#btnSetAuthority").bind("click", function () {
+                if (isFirstLoad) {
+                    if (_authorities.menushtml.length > 0) {
+                        $("#for_MenuAuthorityBtns").html(_authorities.menushtml);
+                        var spans = $("#for_MenuAuthorityBtns span");
+                        spans.removeAttr("data-click");
+                        spans.removeClass("authorityBtnChecked");
+                        spans.css("background-color", "white");
+                        initBtnClickEvent();
+                    }
+                }
+
+                forInitPageBtns();
+
+                if (isFirstLoad && _authorities.btns.length > 0) {
+                    $(_authorities.btns).each(function () {
+                        var menuid = this.menuid;
+                        var btnid = this.btnid;
+                        var btnrole = this.btnrole;
+
+                        var menu = null;
+                        var btn = null;
+                        $("#for_MenuAuthorityBtns span").each(function () {
+                            if (menuid == $(this).attr("data-id")) {
+                                menu = $(this);
+                                return;
+                            }
+                        });
+
+                        $("#for_ThisPageBtns span").each(function () {
+                            if (btnid) {
+                                if (btnid == $(this).attr("data-id")) {
+                                    btn = $(this);
+                                    return;
+                                }
+                            }
+                            else {
+                                if (btnrole == $(this).attr("data-role")) {
+                                    btn = $(this);
+                                    return;
+                                }
+                            }
+                        });
+
+                        if (menu && btn) {
+                            bindMenuToBtn(menu, btn, true);
+                        }
+                    });
+                }
+
+                isFirstLoad = false;
+
+                $("#for_Authority").open("设置权限", function () {
+                    _authorities.btns = [];
+
+                    $("#for_MenuAuthorityBtns span").each(function () {
+                        var menu = $(this);
+                        var bind = $(this).attr("data-bind");
+                        if (bind) {
+                            $("#for_ThisPageBtns span").each(function () {
+                                var tbind = $(this).attr("data-bind");
+                                if (bind == tbind) {
+                                    _authorities.btns.push({ menuid: menu.attr("data-id"), btnid: $(this).attr("data-id"), btnrole: $(this).attr("data-role") });
+                                    return;
+                                }
+                            });
+                        }
+                    });
+
+                    _authorities.menushtml = $("#for_MenuAuthorityBtns").html();
+                });
+            });
+
+            $("#btnGetAuthorityBtns").bind("click", function () {
+                $("#for_AuthorityTree").open("选择权限按钮", function () {
+                    $("#for_MenuAuthorityBtns span").remove();
+
+                    var snode = $("#for_AuthorityTree .targetTree").gtree("getSelected");
+                    if (snode) {
+                        if (snode.children.length == 0) {
+                            alert("请选择末级\"菜单\"节点！");
+                            return false;
+                        }
+
+                        var error = false;
+                        $(snode.children).each(function () {
+                            if (this.children.length > 0) {
+                                error = true;
+                                return;
+                            }
+                        });
+
+                        if (error) {
+                            alert("请选择末级\"菜单\"节点！");
+                            return false;
+                        }
+
+                        $(snode.children).each(function () {
+                            if (this.text != "浏览") {
+                                $("#for_MenuAuthorityBtns").append("<span class='authorityBtn' data-id='" + this.id + "'>" + this.text + "</span>");
+                            }
+                        });
+
+                        initBtnClickEvent();
+                    }
+                });
+            });
+        }
+
+        function initBtnClickEvent() {
+            $(".authorityBtn").each(function () {
+                if (!$(this).attr("data-click")) {
+                    $(this).attr("data-click", 1);
+
+                    $(this).bind("click", function () {
+                        if ($(this).hasClass("authorityBtnChecked")) {
+                            $(this).removeClass("authorityBtnChecked");
+                            //$(this).css("-webkit-box-shadow", "");
+                            $(this).css("background-color", "");
+                        }
+                        else {
+                            $(this).parents(".container").find(".authorityBtnChecked").each(function () {
+                                $(this).removeClass("authorityBtnChecked");
+                                //$(this).css("-webkit-box-shadow", "");
+                                $(this).css("background-color", "");
+                            });
+                            $(this).addClass("authorityBtnChecked");
+                            var color = $(this).attr("data-color");
+                            if (!color) {
+                                color = "gray";
+                            }
+                            //$(this).css("-webkit-box-shadow", " 0 0 18px " + color);
+                            $(this).css("background-color", color);
+                        }
+                    });
+                }
+            });
+        }
+
+        function forInitPageBtns() {
+            $("#for_ThisPageFormBtns span").remove();
+            $("#for_ThisPageTreeBtns span").remove();
+            $("#for_ThisPageTableBtns span").remove();
+
+            $("#div_forForm .chart").each(function () {
+                var id = this.id.split('_')[1];
+                var chart = $(this).fconfig();
+                if (chart.isshow && chart.disabledurl.length == 0) {
+                    $(chart.btns).each(function () {
+                        $("#for_ThisPageFormBtns").append("<span class='authorityBtn' data-id='" + this.id + "'>" + this.txt + "</span>");
+                    });
+                }
+            });
+
+            for (var i in temptrees) {
+                var tree = temptrees[i];
+                if (tree) {
+                    $(tree.defaultbtns).each(function () {
+                        var txt = "";
+                        if (this == "addroot") {
+                            txt = "新增根节点";
+                        }
+                        else if (this == "add") {
+                            txt = "新增";
+                        }
+                        else if (this == "edit") {
+                            txt = "编辑";
+                        }
+                        else if (this == "delete") {
+                            txt = "删除";
+                        }
+                        $("#for_ThisPageTreeBtns").append("<span class='authorityBtn' data-role='tree" + this + "'>" + txt + "</span>");
+                    });
+
+                    $(tree.custombtns).each(function () {
+                        $("#for_ThisPageTreeBtns").append("<span class='authorityBtn' data-id='" + this.id + "'>" + this.text + "</span>");
+                    });
+                }
+            }
+
+            for (var i in temptables) {
+                var table = temptables[i];
+                if (table) {
+                    $(table.defaultbtns).each(function () {
+                        var txt = "";
+                        if (this == "add") {
+                            txt = "新增";
+                        }
+                        else if (this == "movemore") {
+                            txt = "批量转移";
+                        }
+                        $("#for_ThisPageTableBtns").append("<span class='authorityBtn' data-role='table" + this + "'>" + txt + "</span>");
+                    });
+
+                    $("#for_ThisPageTableBtns").append("<span class='authorityBtn' data-role='edit'>编辑</span>");
+                    $("#for_ThisPageTableBtns").append("<span class='authorityBtn' data-role='delete'>删除</span>");
+
+                    $(table.custombtns).each(function () {
+                        $("#for_ThisPageTableBtns").append("<span class='authorityBtn' data-id='" + this.id + "'>" + this.text + "</span>");
+                    });
+                }
+            }
+
+            initBtnClickEvent();
+        }
+
+
+        function bindMenuAuthority() {
+            var menu = $("#for_MenuAuthorityBtns .authorityBtnChecked");
+            if (menu.length == 0) {
+                alert("请选择权限菜单按钮！");
+                return;
+            }
+            var btn = $("#for_ThisPageBtns .authorityBtnChecked");
+            if (btn.length == 0) {
+                alert("请选择本页面按钮！");
+                return;
+            }
+
+            if (menu.attr("data-bind") || btn.attr("data-bind")) {
+                alert("存在按钮已被绑定！");
+                return;
+            }
+            bindMenuToBtn(menu, btn);
+            alert("绑定成功。");
+        }
+
+        var colors = ['#b5d9ea', '#e3ca4b', 'blue', '#00ffff', '#ff0000', '#ff6a00', '#b6ff00', '#4cff00', '#0094ff', '#ff00dc', '#ff006e', '#b200ff'];
+        var ranIndex = 1;
+        function bindMenuToBtn(menu, btn, isInitBind) {
+            menu.attr("data-bind", ranIndex);
+            btn.attr("data-bind", ranIndex);
+            menu.attr("data-color", colors[ranIndex]);
+            btn.attr("data-color", colors[ranIndex]);
+
+            menu.css("border-color", colors[ranIndex]);
+            btn.css("border-color", colors[ranIndex]);
+
+            if (!isInitBind) {//修改时根据已有权限初始化：true
+                //menu.css("-webkit-box-shadow", " 0 0 18px " + colors[ranIndex]);
+                //btn.css("-webkit-box-shadow", " 0 0 18px " + colors[ranIndex]);
+                menu.css("background-color", colors[ranIndex]);
+                btn.css("background-color", colors[ranIndex]);
+            }
+
+            ++ranIndex;
+        }
+
+        function disBindMenuAuthority() {
+            var menu = $("#for_MenuAuthorityBtns .authorityBtnChecked");
+            if (menu.length == 0) {
+                alert("请选择权限菜单按钮！");
+                return;
+            }
+            var btn = $("#for_ThisPageBtns .authorityBtnChecked");
+            if (btn.length == 0) {
+                alert("请选择本页面按钮！");
+                return;
+            }
+
+            var mbind = menu.attr("data-bind");
+            var bbind = btn.attr("data-bind");
+            if (mbind && bbind) {
+                if (mbind == bbind) {
+                    menu.removeAttr("data-bind");
+                    menu.removeAttr("data-color");
+                    menu.css("border-color", "");
+                    //menu.css("-webkit-box-shadow", "0 0 18px gray");
+                    menu.css("background-color", "#d5d5d5");
+
+                    btn.removeAttr("data-bind");
+                    btn.removeAttr("data-color");
+                    btn.css("border-color", "");
+                    //btn.css("-webkit-box-shadow", "0 0 18px gray");
+                    btn.css("background-color", "#d5d5d5");
+
+                    colors.push(colors[mbind]);
+
+                    alert("解除绑定成功。");
+                }
+                else {
+                    alert("请选择颜色相同的按钮！");
+                    return;
+                }
+            }
+            else {
+                alert("存在按钮未被绑定！");
+                return;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -9,24 +9,24 @@
 			{
 				if(btnstr=="addroot")
 				{
-			<button class="btn btn-primary btn-mini btn-add-treeroot">新增根节点</button>
+			<button class="btn btn-primary btn-mini btn-add-treeroot btn-authority">新增根节点</button>
 				}
 				else if(btnstr=="add")
 				{
-			<button class="btn btn-primary btn-mini btn-add-treechild">新增</button>
+			<button class="btn btn-primary btn-mini btn-add-treechild btn-authority">新增</button>
 				}
 				else if(btnstr=="edit")
 				{
-			<button class="btn btn-primary btn-mini btn-edit-treenode">编辑</button>
+			<button class="btn btn-primary btn-mini btn-edit-treenode btn-authority">编辑</button>
 				}
 				else if(btnstr=="delete")
 				{
-			<button class="btn btn-primary btn-mini btn-del-treenode">删除</button>
+			<button class="btn btn-primary btn-mini btn-del-treenode btn-authority">删除</button>
 				}
 			}
 			@foreach(var btn in tree.custombtns)
 			{
-			<button id="@btn.id" class="btn btn-primary btn-mini">@btn.text</button>
+			<button id="@btn.id" class="btn btn-primary btn-mini btn-authority">@btn.text</button>
 			}
         </div>
         <div id="@tree.id"></div>
@@ -42,16 +42,16 @@
 				{
 					if(btnstr=="add")
 					{
-				<button class="btn btn-primary btn-mini btn-table-add">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
+				<button class="btn btn-primary btn-mini btn-table-add btn-authority">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
 					}
 					else if(btnstr=="movemore")
 					{
-				<button class="btn btn-primary btn-mini btn-more-move">批量转移</button>
+				<button class="btn btn-primary btn-mini btn-more-move btn-authority">批量转移</button>
 					}
 				}
 				@foreach(var btn in table.custombtns)
 				{
-				<button id="@btn.id" class="btn btn-primary btn-mini">@btn.text</button>
+				<button id="@btn.id" class="btn btn-primary btn-mini btn-authority">@btn.text</button>
 				}
 			</div>
 			<div class="span9">
@@ -101,17 +101,17 @@
                     {
                         if(h.actionbtns.Count==2)
                         {
-                        <th data-option="{edit:true,del:true}">@h.header</th>
+                        <th data-option="{edit:true,del:true}" class="th-operate">@h.header</th>
                         }
                         else if(h.actionbtns.Count==1)
                         {
                             if(h.actionbtns[0].type=="edit")
                             {
-                            <th data-option="{edit:true,del:false}">@h.header</th>
+                            <th data-option="{edit:true,del:false}" class="th-operate">@h.header</th>
                             }
                             else
                             {
-                            <th data-option="{edit:false,del:true}">@h.header</th>
+                            <th data-option="{edit:false,del:true}" class="th-operate">@h.header</th>
                             }
                         }
                     }
@@ -140,13 +140,13 @@ else
 				{
 					if(btnstr=="add")
 					{
-				<button class="btn btn-primary btn-mini btn-table-add">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
+				<button class="btn btn-primary btn-mini btn-table-add btn-authority">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
 					}
 				}
 				
 				@foreach(var btn in table.custombtns)
 				{
-				<button id="@btn.id" class="btn btn-primary btn-mini">@btn.text</button>
+				<button id="@btn.id" class="btn btn-primary btn-mini btn-authority">@btn.text</button>
 				}
 			</div>
 			<div class="span10">
@@ -196,17 +196,17 @@ else
                     {
                         if(h.actionbtns.Count==2)
                         {
-                        <th data-option="{edit:true,del:true}">@h.header</th>
+                        <th data-option="{edit:true,del:true}" class="th-operate">@h.header</th>
                         }
                         else if(h.actionbtns.Count==1)
                         {
                             if(h.actionbtns[0].type=="edit")
                             {
-                            <th data-option="{edit:true,del:false}">@h.header</th>
+                            <th data-option="{edit:true,del:false}" class="th-operate">@h.header</th>
                             }
                             else
                             {
-                            <th data-option="{edit:false,del:true}">@h.header</th>
+                            <th data-option="{edit:false,del:true}" class="th-operate">@h.header</th>
                             }
                         }
                     }

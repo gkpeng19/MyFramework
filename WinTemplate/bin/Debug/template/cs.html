@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace @(Model.ProjectName).Controllers
 {
-    public class @(Model.Name)Controller : ApiController
+    public class @(Model.Name)Controller : Controller
     {@foreach(var action in Model.LoadJsonActions){ var fields=action.Value[0]+"=\"xxx\"";for(var i=1;i<action.Value.Count;++i){fields+=(", "+action.Value[i]+"=\"xxx\"");}<text>
 		public JsonResult @(action.Key)()
 		{

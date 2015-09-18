@@ -24,8 +24,9 @@
 			<button class="btn btn-primary btn-mini btn-add-treechild">新增</button>
 			<button class="btn btn-primary btn-mini btn-edit-treenode">编辑</button>
 			<button class="btn btn-primary btn-mini btn-del-treenode">删除</button>
+			<button id="7702891745440163" class="btn btn-primary btn-mini">新增权限按钮</button>
         </div>
-        <div id="7401648004793817"></div>
+        <div id="8771187609143494"></div>
 		</div>
 	<div class="span9">
 	</div>
@@ -37,12 +38,10 @@
     <div class="span3">
         <form name="fm_treeedit" id="fm_treeedit" class="layerout form-layer">
             <div>
-                <input type="hidden" name="ID" />
-                <input type="hidden" name="ParentID" value="0" />
                 <div class="row-fluid">
                     <div class="span12">
                         <label>节点名称</label>
-                        <input type="text" name="Name" id="txt_treeNodeName" class="span11" />
+                        <input type="text" id="txt_treeNodeName" class="span11" />
                     </div>
                 </div>
             </div>
@@ -68,6 +67,35 @@
 	<script type="text/javascript">
 	
 	
+		
+		$("#7702891745440163").bind("click",function(win){
+		    var snode = $("#8771187609143494").gtree("getSelected");
+		    if (snode) {
+		        $("#txt_treeNodeName").val("");
+		        $("#fm_treeedit").open("新增权限按钮", function (win) {
+		            if (!tt.validateForm("fm_treeedit")) {
+		                return false;
+		            }
+
+		            var update = {ParentID:snode.id,Name:$.trim($("#txt_treeNodeName").val())};
+		            $.post("/Menu/SaveAuthorityBtn", update, function (r) {
+		                r = $.toJsResult(r);
+		                var node = { id: r.ID, parentid: r.ParentID, text: r.Name };
+		                if (r.ID > 0) {
+		                    //更新树
+		                    $("#8771187609143494").gtree("addChildNode", node);
+		                    layer.close(win);
+		                }
+		                else {
+		                    $.error("保存失败，请重试！");
+		                }
+		            });
+
+		            return false;
+		        });
+		    }
+		});
+		
 	
 	
 		function BindToSelect(data)
@@ -82,57 +110,38 @@
         $(function()
         {
 				
-				$("#7401648004793817").gtree({ url: "/Menu/LoadMenus" });
-				$("#7401648004793817").gtree("beforeDeleteNode", function () {
-					if ($("#").datagrid("hasChildren")) {
-						$.error("请先删除该节点下的内容！");
-						return false;
-					}
-					$("#").datagrid("refresh");
-					if ($("#").datagrid("hasChildren")) {
-						$.error("请先删除该节点下的内容！");
-						return false;
-					}
-					return true;
-				});
-				$("#7401648004793817").gtree("selectChanged", function (json) {
-					//刷新右边表格
-					var nids = '-1';
-					$(json.children_d).each(function () {
-						nids += (',' + this);
-					});
-				});
+				$("#8771187609143494").gtree({ url: "/Menu/LoadMenus" });
 				
 					
-					$("#7401648004793817").prev().find(".btn-add-treeroot").bind("click", function () {
-						$("#fm_treeedit").bindEntity({});
-						EditTree7401648004793817(true, true);
+					$("#8771187609143494").prev().find(".btn-add-treeroot").bind("click", function () {
+						$("#txt_treeNodeName").val("");
+						EditTree8771187609143494(true, true);
 					});
 					
 					
-					$("#7401648004793817").prev().find(".btn-add-treechild").bind("click", function () {
-						var snode = $("#7401648004793817").gtree("getSelected");
+					$("#8771187609143494").prev().find(".btn-add-treechild").bind("click", function () {
+						var snode = $("#8771187609143494").gtree("getSelected");
 						if (snode) {
-							$("#fm_treeedit").bindEntity({ ParentID: snode.id });
-							EditTree7401648004793817(true, false);
+							$("#txt_treeNodeName").val("");
+							EditTree8771187609143494(true, false);
 						}
 					});
 					
 					
-					$("#7401648004793817").prev().find(".btn-edit-treenode").bind('click', function () {
-						var snode = $("#7401648004793817").gtree("getSelected");
+					$("#8771187609143494").prev().find(".btn-edit-treenode").bind('click', function () {
+						var snode = $("#8771187609143494").gtree("getSelected");
 						if (snode) {
-							$("#fm_treeedit").bindEntity({ ID: snode.id, ParentID: snode.parentid, Name: snode.text });
-							EditTree7401648004793817(false, false);
+							$("#txt_treeNodeName").val(snode.text);
+							EditTree8771187609143494(false, false);
 						}
 					});
 					
 					
-					$("#7401648004793817").prev().find(".btn-del-treenode").bind('click', function () {
-						var snode = $("#7401648004793817").gtree("getSelected");
+					$("#8771187609143494").prev().find(".btn-del-treenode").bind('click', function () {
+						var snode = $("#8771187609143494").gtree("getSelected");
 						if (snode) {
 							$.confirm("确定要删除该节点吗？", function () {
-								if ($("#7401648004793817").gtree("removeSelectNode")) {
+								if ($("#8771187609143494").gtree("removeSelectNode")) {
 									$.post("/Menu/DeleteMenu", { ID: snode.id }, function (r) { });
 								}
 							});
@@ -140,27 +149,41 @@
 					});
 					
 					
-					function EditTree7401648004793817(isAdd, isRoot) {
-						$("#fm_treeedit").open("新增节点", function (win) {
+					function EditTree8771187609143494(isAdd, isAddRoot) {
+						var winTitle=isAdd?"新增节点":"编辑节点";
+						$("#fm_treeedit").open(winTitle, function (win) {
 							if (!tt.validateForm("fm_treeedit")) {
 								return false;
 							}
-							var update = $("#fm_treeedit").getContext();
+							var snode = $("#8771187609143494").gtree("getSelected");
+							
+							var update = {};
+							if(isAdd){
+								if(!isAddRoot){
+									update.ParentID=snode.id;
+								}
+							}
+							else{
+								update.ID = snode.id;
+							    update.ParentID=snode.parentid;
+							}
+							update.Name=$.trim($("#txt_treeNodeName").val());
+
 							$.post("/Menu/SaveMenu", update, function (r) {
 								r = $.toJsResult(r);
 								var node = { id: r.ID, parentid: r.ParentID, text: r.Name };
 								if (r.ID > 0) {
 									//更新树
 									if (isAdd) {
-										if (isRoot) {
-											$("#7401648004793817").gtree("addRootNode", node);
+										if (isAddRoot) {
+											$("#8771187609143494").gtree("addRootNode", node);
 										}
 										else {
-											$("#7401648004793817").gtree("addChildNode", node);
+											$("#8771187609143494").gtree("addChildNode", node);
 										}
 									}
 									else {
-										$("#7401648004793817").gtree("updateSelectNode", node);
+										$("#8771187609143494").gtree("updateSelectNode", node);
 									}
 									layer.close(win);
 								}
