@@ -683,7 +683,6 @@ $.fn.extend({
     }
 });
 
-
 var gtree = function (target) {
     this.nodes = null;
 

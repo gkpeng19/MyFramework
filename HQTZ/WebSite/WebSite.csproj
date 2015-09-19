@@ -97,7 +97,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="HtmlPage1.html" />
     <Content Include="Images\Flag.png" />
     <Content Include="Images\hand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
