@@ -55,6 +55,30 @@
     <script src="Scripts/jquery-1.10.2.min.js"></script>
     <script src="Scripts/slider/js/slider.js"></script>
     <script type="text/javascript">
+        var defaultMenu = $(".menu-curr");
+        $("#menu div").bind("mouseover", function () {
+            if (!$(this).hasClass("menu-curr")) {
+                var currMenu = $(".menu-curr");
+                currMenu.removeClass("menu-curr");
+                if (!currMenu.hasClass("menu-normal")) {
+                    currMenu.addClass("menu-normal");
+                }
+                $(this).addClass("menu-curr");
+            }
+        });
+
+        $("#menu").bind("mouseout", function () {
+            if (defaultMenu.length > 0) {
+                if (!defaultMenu.hasClass("menu-curr")) {
+                    $(".menu-curr").removeClass("menu-curr");
+                    defaultMenu.addClass("menu-curr");
+                }
+            }
+            else {
+                $(".menu-curr").removeClass("menu-curr");
+            }
+        });
+
         var bannerSlider = new Slider($('#banner_tabs'), {
             time: 5000,
             delay: 400,
@@ -73,4 +97,3 @@
     </script>
 </body>
 </html>
-

@@ -14,12 +14,48 @@ public class imageUp : IHttpHandler
     {
         context.Response.ContentEncoding = System.Text.Encoding.UTF8;
         //上传配置
-        string pathbase = "upload/";                                                          //保存路径
-        int size = 10;                     //文件大小限制,单位mb                                                                                   //文件大小限制，单位KB
-        string[] filetype = { ".gif", ".png", ".jpg", ".jpeg", ".bmp" };                    //文件允许格式
+        string pathbase = "../../../upload/"; //保存路径
 
-        string callback = context.Request["callback"];
         string editorId = context.Request["editorid"];
+
+        //文件允许格式
+        string[] filetype = null; 
+        if(editorId!=null&&editorId.Length>0)
+        {
+            filetype = new string[] { ".gif", ".png", ".jpg", ".jpeg", ".bmp" };            
+        }
+        else
+        {
+            string filter = context.Request["filter"];
+            if(filter!=null&&filter.Length>0)
+            {
+                if(filter.Equals("image"))
+                {
+                    filetype = new string[] { ".gif", ".png", ".jpg", ".jpeg", ".bmp" }; 
+                }
+                else if(filter.Equals("video"))
+                {
+                    filetype = new string[] { ".mp4", ".flv" }; 
+                }
+                else if (filter.Equals("application"))
+                {
+                    filetype = new string[] { ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx" };
+                }
+            }
+        }
+        
+
+        int size = 0;                     //文件大小限制,单位mb
+        string maxSize = context.Request["maxSize"];
+        if (maxSize != null && maxSize.Length > 0)
+        {
+            int.TryParse(maxSize, out size);
+        }
+        if (size == 0)
+        {
+            size = 10;
+        }
+        string callback = context.Request["callback"];
 
         //上传图片
         Hashtable info;

@@ -23,10 +23,8 @@ D:\Work\MyFrameWork\WinTemplate\bin\Debug\ExcelLibrary.pdb
 D:\Work\MyFrameWork\WinTemplate\bin\Debug\RazorEngine.dll
 D:\Work\MyFrameWork\WinTemplate\bin\Debug\template\content.html
 D:\Work\MyFrameWork\WinTemplate\bin\Debug\template\table.html
-D:\Work\MyFrameWork\WinTemplate\obj\Debug\WinTemplate.Form1.resources
 D:\Work\MyFrameWork\WinTemplate\obj\Debug\WinTemplate.UControl.KryptonTabControl.resources
 D:\Work\MyFrameWork\WinTemplate\obj\Debug\WinTemplate.UControl.LayerWindow.resources
-D:\Work\MyFrameWork\WinTemplate\obj\Debug\WinTemplate.NewItemWin.resources
 D:\Work\MyFrameWork\WinTemplate\obj\Debug\WinTemplate.NewFileWin.resources
 D:\Work\MyFramework\WinTemplate\bin\Debug\ComponentFactory.Krypton.Toolkit.dll
 D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\WinTemplate.exe.config
@@ -62,3 +60,7 @@ D:\Gkpeng\MyFramework\WinTemplate\obj\Debug\WinTemplate.NewSluWin.resources
 D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\template\cs.html
 D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\template\html.html
 D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll
+D:\Work\MyFramework\WinTemplate\bin\Debug\template\cs.html
+D:\Work\MyFramework\WinTemplate\bin\Debug\template\html.html
+D:\Work\MyFramework\WinTemplate\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll
+D:\Work\MyFramework\WinTemplate\obj\Debug\WinTemplate.NewSluWin.resources

@@ -153,6 +153,10 @@ public class UMeditorUploader
      */
     private bool checkType(string[] filetype)
     {
+        if (filetype==null||filetype.Length==0)
+        {
+            return false;
+        }
         currentType = getFileExt();
         return Array.IndexOf(filetype, currentType) == -1;
     }

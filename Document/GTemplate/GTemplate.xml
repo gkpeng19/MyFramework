@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GSolution>
+  <Projects>
+    <GProject>
+      <Files>
+        <GFile>
+          <Text>Destination</Text>
+          <SPath>D:\Work\MyFramework\Document\GTemplate\HQWZ\Destination</SPath>
+        </GFile>
+      </Files>
+      <Folders />
+      <Text>HQWZ</Text>
+      <SPath>D:\Work\MyFramework\Document\GTemplate\HQWZ</SPath>
+    </GProject>
+  </Projects>
+  <Text>GTemplate</Text>
+  <SPath>D:\Work\MyFramework\Document\GTemplate</SPath>
+</GSolution>

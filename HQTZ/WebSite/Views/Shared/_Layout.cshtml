@@ -350,10 +350,14 @@
                 <div class="page-header position-relative">
                     <h1>@ViewBag.Title</h1>
                 </div>
+                <div>
+                    <input type="file" id="file1" name="upfile" />
+                </div>
                 @RenderBody()
             </div>
         </div>
     </div>
+
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="~/Scripts/laydate/laydate.js"></script>
@@ -365,5 +369,17 @@
     <script src="~/Scripts/ace/ace.min.js"></script>
     <script src="~/Scripts/GOMFrameWork.js"></script>
     @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        $("#file1").upload({
+            filter: 'image',
+            maxSize:10,
+            callback: function (result) {
+                if (result.state == "SUCCESS") {
+                    alert(1);
+                }
+            }
+        });
+    </script>
 </body>
 </html>

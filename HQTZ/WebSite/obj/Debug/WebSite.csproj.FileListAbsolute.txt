@@ -114,7 +114,6 @@ D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Scripts\umeditor\net\getContent.ashx
 D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Scripts\umeditor\net\imageUp.ashx
 D:\Work\MyFramework\HQTZ\WebSite\bin\Scripts\umeditor\net\UMeditorUploader.cs
 D:\Work\MyFramework\HQTZ\WebSite\bin\Scripts\umeditor\net\getContent.ashx
-D:\Work\MyFramework\HQTZ\WebSite\bin\Scripts\umeditor\net\imageUp.ashx
 D:\Work\MyFramework\HQTZ\WebSite\bin\Images\hand.png
 D:\Work\MyFramework\HQTZ\WebSite\bin\Images\left-handing.png
 D:\Work\MyFramework\HQTZ\WebSite\bin\Images\left_hand.png
@@ -131,3 +130,4 @@ D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\right_hand.png
 D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\right_handing.png
 D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\tou.png
 D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\username.png
+D:\Work\MyFramework\HQTZ\WebSite\bin\Scripts\umeditor\net\fileUp.ashx

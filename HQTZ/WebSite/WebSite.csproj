@@ -339,6 +339,7 @@
     <Content Include="Scripts\validate\validator\SelectCountValidator.js" />
     <Content Include="Scripts\validate\validator\ValidatorFactory.js" />
     <Content Include="Styles\GOMFrameWork.css" />
+    <Content Include="Pages\Admin.html" />
     <Content Include="Web.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Login\Index.cshtml" />
@@ -374,7 +375,7 @@
     <None Include="Scripts\umeditor\net\getContent.ashx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Scripts\umeditor\net\imageUp.ashx">
+    <None Include="Scripts\umeditor\net\fileUp.ashx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Scripts\umeditor\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.eot" />

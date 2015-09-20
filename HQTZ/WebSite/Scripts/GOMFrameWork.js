@@ -1108,6 +1108,69 @@ gtree.prototype.beforeDeleteNode = function (event) {
     this._beforeDeleteNode = event;
 };
 
+/*-----文件上传----------------------------------------------------*/
+$.fn.extend({
+    upload: function (args) {/*filter:image,video,application;uploadUrl:文件接收url;maxSize:最大文件大小;callback:回调函数 */
+        if (!args || !args.callback) {
+            return;
+        }
+
+        var me = this;
+        if (me.attr("type") != "file") {
+            return;
+        }
+
+        me.attr("name", "upfile");
+
+        if (args.filter) {
+            me.attr("accept", args.filter + "/*");
+        }
+
+        if (!args.uploadUrl) {
+            args.uploadUrl = "/Scripts/umeditor/net/fileUp.ashx";
+        }
+        var form = $('<form target="up" method="post" action="' + args.uploadUrl + '" enctype="multipart/form-data"></form>');
+        form.insertBefore(me).append(me);
+
+        me.bind("change", function () {
+            if ($(this).val().length == 0) {
+                return;
+            }
+
+            $('<iframe name="up"  style="display:none;"></iframe>').insertBefore(form).on('load', function () {
+                var r = this.contentWindow.document.body.innerHTML;
+                if (r == '') return;
+                var result = eval('(' + r + ')');
+                args.callback(result);
+
+                $(this).unbind('load');
+                $(this).remove();
+            });
+
+            var input_maxsize = null;
+            if (args.maxSize) {
+                input_maxsize = $('<input type="hidden" name="maxSize" value="' + args.maxSize + '" />');
+                form.append(input_maxsize);
+            }
+            var input_filter = null;
+            if (args.filter) {
+                input_filter = $('<input type="hidden" name="filter" value="' + args.filter + '" />');
+                form.append(input_filter);
+            }
+
+            form[0].submit();
+
+            if (input_maxsize) {
+                input_maxsize.remove();
+            }
+            if (input_filter) {
+                input_filter.remove();
+            }
+        })
+    }
+});
+
+
 /*-----Json数组的二分查找------------------------------------------------------*/
 $.extend({
     binarySearch: function (array, key, keyv, start, end) {
