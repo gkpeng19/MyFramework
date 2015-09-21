@@ -25,6 +25,8 @@ namespace WinTemplate
         public List<GJson> jsons { get; set; }
         public List<GForm> forms { get; set; }
         public List<GBind> binds { get; set; }
+
+        public GAuthority authorities { get; set; }
     }
 
     #region ForTree
@@ -324,6 +326,27 @@ namespace WinTemplate
 
     #endregion
 
+    #region ForAuthority
+
+    public class GAuthority
+    {
+        public GAuthority()
+        {
+            btns = new List<GAuthorityBtn>();
+        }
+        public string menushtml { get; set; }
+        public List<GAuthorityBtn> btns { get; set; }
+    }
+
+    public class GAuthorityBtn
+    {
+        public string menuid { get; set; }
+        public string btnid { get; set; }
+        public string btnrole { get; set; }
+    }
+
+    #endregion
+
     #region 生成cs文件实体
 
     public class GCsModel
@@ -426,7 +449,7 @@ namespace WinTemplate
 
             foreach (var table in con.tables)
             {
-                if (table.transferurl.Length > 0)
+                if (table.transferurl != null && table.transferurl.Length > 0)
                 {
                     ctr = GetControllerByACA(model, projectName, table.transferurl, out action);
                     ctr.SaveActions.Add(action);

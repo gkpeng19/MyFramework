@@ -1,0 +1,62 @@
+<html>
+<head>
+    <title></title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <!--<link href="css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/font-awesome.min.css" />-->
+    <!--[if IE 7]>
+      <link rel="stylesheet" href="css/font-awesome-ie7.min.css" />
+    <![endif]-->
+    <!-- page specific plugin styles -->
+
+    <link rel="stylesheet" href="css/jquery-ui-1.10.2.custom.min.css" />
+    <link rel="stylesheet" href="css/chosen.css" />
+    <link rel="stylesheet" href="css/datepicker.css" />
+    <link rel="stylesheet" href="css/bootstrap-timepicker.css" />
+    <link rel="stylesheet" href="css/daterangepicker.css" />
+    <link rel="stylesheet" href="css/colorpicker.css" />
+    <!-- ace styles -->
+    <link rel="stylesheet" href="css/ace.min.css" />
+    <link rel="stylesheet" href="css/ace-responsive.min.css" />
+    <link rel="stylesheet" href="css/ace-skins.min.css" />
+    <!--[if lt IE 9]>
+      <link rel="stylesheet" href="css/ace-ie.min.css" />
+    <![endif]-->
+
+    <script src="http://localhost:55611/Scripts/jquery-1.10.2.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.10.2.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+    <script type="text/javascript" src="js/chosen.jquery.min.js"></script>
+    <script type="text/javascript" src="js/fuelux.spinner.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-timepicker.min.js"></script>
+    <script type="text/javascript" src="js/date.js"></script>
+    <script type="text/javascript" src="js/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-colorpicker.min.js"></script>
+    <script type="text/javascript" src="js/jquery.knob.min.js"></script>
+    <script type="text/javascript" src="js/jquery.autosize-min.js"></script>
+    <script type="text/javascript" src="js/jquery.inputlimiter.1.3.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.maskedinput.min.js"></script>
+
+    <script src="js/ace-elements.min.js"></script>
+    <script src="js/ace.min.js"></script>
+</head>
+<body>
+    <div class="span3"><input type="file" id="id-input-file-1" /></div>
+    <script type="text/javascript">
+        $('#id-input-file-1').ace_file_input({
+            no_file: 'No File ...',
+            btn_choose: 'Choose',
+            btn_change: 'Change',
+            droppable: false,
+            onchange: function () { alert(1); },
+            thumbnail: false //| true | large
+            //whitelist:'gif|png|jpg|jpeg'
+            //blacklist:'exe|php'
+            //onchange:''
+            //
+        }).on("change", function () { alert(1); });
+    </script>
+</body>
+</html>

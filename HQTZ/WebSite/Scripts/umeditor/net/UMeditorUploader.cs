@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Web;
 using System.IO;
@@ -13,6 +13,7 @@ public class UMeditorUploader
     string state = "SUCCESS";
 
     string URL = null;
+    string path = null;
     string currentType = null;
     string uploadpath = null;
     string filename = null;
@@ -29,7 +30,8 @@ public class UMeditorUploader
   */
     public Hashtable upFile(HttpContext cxt, string pathbase, string[] filetype, int size)
     {
-        pathbase = pathbase + DateTime.Now.ToString("yyyy-MM-dd") + "/";
+        var dateTimeStr = DateTime.Now.ToString("yyyy-MM-dd");
+        pathbase = pathbase + dateTimeStr + "/";
         uploadpath = cxt.Server.MapPath(pathbase);//获取文件上传路径
 
         try
@@ -56,6 +58,7 @@ public class UMeditorUploader
                 filename = reName();
                 uploadFile.SaveAs(uploadpath + filename);
                 URL = pathbase + filename;
+                path = dateTimeStr + "/" + filename;
             }
         }
         catch (Exception e)
@@ -130,6 +133,7 @@ public class UMeditorUploader
 
         infoList.Add("state", state);
         infoList.Add("url", URL);
+        infoList.Add("path", path);
         infoList.Add("originalName", originalName);
         infoList.Add("name", Path.GetFileName(URL));
         infoList.Add("size", uploadFile.ContentLength);
@@ -153,7 +157,7 @@ public class UMeditorUploader
      */
     private bool checkType(string[] filetype)
     {
-        if (filetype==null||filetype.Length==0)
+        if (filetype == null || filetype.Length == 0)
         {
             return false;
         }

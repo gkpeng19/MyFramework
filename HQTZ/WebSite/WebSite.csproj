@@ -41,6 +41,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="G.BaseWeb">
+      <HintPath>..\packages\GOMFrameWork\G.BaseWeb.dll</HintPath>
+    </Reference>
     <Reference Include="G.Util">
       <HintPath>..\packages\GOMFrameWork\G.Util.dll</HintPath>
     </Reference>
@@ -122,6 +125,7 @@
     <Content Include="Images\username.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Pages\Destination.html" />
     <Content Include="Scripts\ace\ace-elements.min.js" />
     <Content Include="Scripts\ace\ace.min.js" />
     <Content Include="Scripts\ace\css\ace-responsive.min.css" />
@@ -181,6 +185,7 @@
     <Content Include="Areas\Biz\Views\User\Index.cshtml" />
     <Content Include="Areas\Biz\Views\Context\AdvertIndex.cshtml" />
     <Content Include="Areas\Biz\Views\Product\Index.cshtml" />
+    <Content Include="App_Start\HtmlHandler.ashx" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -349,6 +354,9 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\HtmlHandler.ashx.cs">
+      <DependentUpon>HtmlHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Biz\BizAreaRegistration.cs" />
     <Compile Include="Areas\Biz\Controllers\AdminController.cs" />
@@ -356,26 +364,29 @@
     <Compile Include="Areas\Biz\Controllers\ProductController.cs" />
     <Compile Include="Areas\Biz\Controllers\UserController.cs" />
     <Compile Include="CommonUtil.cs" />
+    <Compile Include="Controllers\DPanelController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="BaseControl.cs" />
+    <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\HQ_DisplayPanel.cs" />
+    <Compile Include="Models\SysEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Scripts\umeditor\net\UMeditorUploader.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Compile Include="Scripts\umeditor\net\fileUp.ashx.cs">
+      <DependentUpon>fileUp.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Scripts\umeditor\net\UMeditorUploader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
     <Content Include="Scripts\validate\_cmd.bat" />
     <Content Include="Scripts\validate\_run.bat" />
+    <Content Include="Scripts\umeditor\net\fileUp.ashx" />
     <None Include="Scripts\umeditor\net\getContent.ashx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Scripts\umeditor\net\fileUp.ashx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Scripts\umeditor\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.eot" />
@@ -409,7 +420,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Biz\Models\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EntityLibrary\EntityLibrary.csproj">

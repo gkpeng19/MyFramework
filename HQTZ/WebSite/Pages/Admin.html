@@ -39,7 +39,7 @@
             </div>
             <ul class="nav nav-list">
                 <li>
-                    <a href="/Biz/Context/Index" target="page-content">
+                    <a href="Destination.html" target="page-content">
                         <i class="fa fa-dashboard"></i>
                         <span>目的地</span>
                     </a>
@@ -54,7 +54,7 @@
             <div id="sidebar-collapse"><i class="icon-double-angle-left"></i></div>
         </div>
         <div id="main-content" class="clearfix">
-            <iframe class="clearfix" id="page-content" name="page-content" scrolling="no" src="Index.aspx"
+            <iframe class="clearfix" id="page-content" name="page-content" scrolling="no" src="Destination.html"
                     frameborder="0" style="padding: 0px; width: 100%;"></iframe>
         </div>
     </div>
@@ -62,46 +62,33 @@
     <script src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/ace/ace.min.js"></script>
     <script type="text/javascript">
-        var browserVersion = window.navigator.userAgent.toUpperCase();
-        var isOpera = false;
-        var isFireFox = false;
-        var isChrome = false;
-        var isSafari = false;
-        var isIE = false;
-        var iframeTime;
-        function reinitIframe(iframeId, minHeight) {
-            try {
-                var iframe = document.getElementById(iframeId);
-                var bHeight = 0;
-                if (isChrome == false && isSafari == false)
-                    bHeight = iframe.contentWindow.document.body.scrollHeight;
+        var lastWidth = 0;
+        var lastHeight = 0;
+        function startInit(iframe, minWidth, minHeight) {
+            setInterval(function () {
+                try {
+                    var width = $(window).width() - iframe.offset().left;
+                    var height = $(window).height() - iframe.offset().top;
+                    if (width < minWidth) {
+                        width = minWidth;
+                    }
+                    if (height < minHeight) {
+                        height = minHeight;
+                    }
 
-                var dHeight = 0;
-                if (isFireFox == true)
-                    dHeight = iframe.contentWindow.document.documentElement.offsetHeight + 2;
-                else if (isIE == false && isOpera == false)
-                    dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
-                else
-                    bHeight += 3;
-                var height = Math.max(bHeight, dHeight);
-                if (height < minHeight) height = minHeight;
-                iframe.style.height = height + "px";
-            } catch (ex) { }
-        }
-        function startInit(iframeId, minHeight) {
-            isOpera = browserVersion.indexOf("OPERA") > -1 ? true : false;
-            isFireFox = browserVersion.indexOf("FIREFOX") > -1 ? true : false;
-            isChrome = browserVersion.indexOf("CHROME") > -1 ? true : false;
-            isSafari = browserVersion.indexOf("SAFARI") > -1 ? true : false;
-            if (!!window.ActiveXObject || "ActiveXObject" in window)
-                isIE = true;
-            reinitIframe(iframeId, minHeight);
-            if (iframeTime != null)
-                clearInterval(iframeTime)
-            iframeTime = window.setInterval("reinitIframe('" + iframeId + "'," + minHeight + ")", 100);
+                    if (width != lastWidth) {
+                        iframe.width(width);
+                        lastWidth = width;
+                    }
+                    if (height != lastHeight) {
+                        iframe.height(height);
+                        lastHeight = height;
+                    }
+                } catch (ex) { }
+            }, 100);
         }
 
-        startInit('page-content', 560);
+        startInit($('#page-content'), 800, 560);
     </script>
 </body>
 </html>

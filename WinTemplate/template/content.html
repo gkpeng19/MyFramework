@@ -586,8 +586,11 @@
 												return false;
 											}
 											var update=$("#@btn.formdataid").getContext();
+											@if(reftableid!="0")
+											{
 											var selNode=$("#@reftreeid").gtree("getSelected");
 											update["@reftablefk"]=selNode.id;
+											}
 											$.post("@btn.action",update,function(r)
 											{
 												r = $.toJsResult(r);

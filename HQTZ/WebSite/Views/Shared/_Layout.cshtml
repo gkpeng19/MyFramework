@@ -350,9 +350,6 @@
                 <div class="page-header position-relative">
                     <h1>@ViewBag.Title</h1>
                 </div>
-                <div>
-                    <input type="file" id="file1" name="upfile" />
-                </div>
                 @RenderBody()
             </div>
         </div>
@@ -366,20 +363,9 @@
     <script src="~/Scripts/umeditor/umeditor.min.js"></script>
     <script src="~/Scripts/umeditor/lang/zh-cn/zh-cn.js"></script>
     <script src="~/Scripts/validate/talent-validate-all-init.js"></script>
+    <script src="~/Scripts/ace/ace-elements.min.js"></script>
     <script src="~/Scripts/ace/ace.min.js"></script>
     <script src="~/Scripts/GOMFrameWork.js"></script>
     @RenderSection("scripts", required: false)
-
-    <script type="text/javascript">
-        $("#file1").upload({
-            filter: 'image',
-            maxSize:10,
-            callback: function (result) {
-                if (result.state == "SUCCESS") {
-                    alert(1);
-                }
-            }
-        });
-    </script>
 </body>
 </html>

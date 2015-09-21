@@ -1110,8 +1110,8 @@ gtree.prototype.beforeDeleteNode = function (event) {
 
 /*-----文件上传----------------------------------------------------*/
 $.fn.extend({
-    upload: function (args) {/*filter:image,video,application;uploadUrl:文件接收url;maxSize:最大文件大小;callback:回调函数 */
-        if (!args || !args.callback) {
+    upload: function (args) {/*filter:image,video,application;uploadUrl:文件接收url;maxSize:最大文件大小;success:回调函数 */
+        if (!args || !args.success) {
             return;
         }
 
@@ -1120,7 +1120,7 @@ $.fn.extend({
             return;
         }
 
-        me.attr("name", "upfile");
+        me.attr("name", "upfile_g");
 
         if (args.filter) {
             me.attr("accept", args.filter + "/*");
@@ -1129,23 +1129,35 @@ $.fn.extend({
         if (!args.uploadUrl) {
             args.uploadUrl = "/Scripts/umeditor/net/fileUp.ashx";
         }
-        var form = $('<form target="up" method="post" action="' + args.uploadUrl + '" enctype="multipart/form-data"></form>');
-        form.insertBefore(me).append(me);
 
-        me.bind("change", function () {
+        me.ace_file_input({
+            no_file: 'No File ...',
+            btn_choose: 'Choose',
+            btn_change: 'Change',
+            droppable: false,
+            thumbnail: true
+        }).on("change", function () {
             if ($(this).val().length == 0) {
                 return;
             }
 
-            $('<iframe name="up"  style="display:none;"></iframe>').insertBefore(form).on('load', function () {
+            $('<iframe name="up"  style="display:none;"></iframe>').insertBefore(me).on('load', function () {
                 var r = this.contentWindow.document.body.innerHTML;
+
                 if (r == '') return;
                 var result = eval('(' + r + ')');
-                args.callback(result);
+                if (result.state != "SUCCESS") {
+                    me.parent().find(".remove").click();
+                    $.alert(result.state);
+                    return;
+                }
+                args.success(result);
 
                 $(this).unbind('load');
                 $(this).remove();
             });
+
+            var form = $('<form target="up" method="post" action="' + args.uploadUrl + '" enctype="multipart/form-data"></form>');
 
             var input_maxsize = null;
             if (args.maxSize) {
@@ -1158,7 +1170,14 @@ $.fn.extend({
                 form.append(input_filter);
             }
 
+            var nextEle = me.next();
+
+            form.append(me);
             form[0].submit();
+
+            me.insertBefore(nextEle);
+
+            form.remove();
 
             if (input_maxsize) {
                 input_maxsize.remove();
@@ -1166,7 +1185,7 @@ $.fn.extend({
             if (input_filter) {
                 input_filter.remove();
             }
-        })
+        });
     }
 });
 
