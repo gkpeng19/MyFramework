@@ -56,7 +56,7 @@ namespace G.Util.Mvc
 
             foreach (string key in ValueCollection.Keys)
             {
-                if (key.Length == 0 || key.EndsWith("_g", StringComparison.OrdinalIgnoreCase))
+                if (key.EndsWith("_g", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }

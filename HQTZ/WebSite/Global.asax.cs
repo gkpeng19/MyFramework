@@ -1,4 +1,6 @@
-﻿using G.Util.Account;
+﻿using G.BaseWeb.Models;
+using G.Util.Account;
+using GOMFrameWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,19 +18,23 @@ namespace WebSite
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            DbContext.InitContext<BaseModel>("BaseWeb");
+            DbContext.InitContext<BaseSearchModel>("BaseWeb");
+            DbContext.InitContext<BaseProcModel>("BaseWeb");
         }
 
-        //void Application_OnPostAuthenticateRequest(object sender, EventArgs e)
-        //{
-        //    IPrincipal user = HttpContext.Current.User;
-        //    if (user.Identity.IsAuthenticated
-        //        && user.Identity.AuthenticationType == "Forms")
-        //    {
-        //        LoginInfo identity = new LoginInfo();
-        //        CustomPrincipal principal = new CustomPrincipal(identity);
-        //        HttpContext.Current.User = principal;
-        //        Thread.CurrentPrincipal = principal;
-        //    }
-        //}
+        void Application_OnPostAuthenticateRequest(object sender, EventArgs e)
+        {
+            IPrincipal user = HttpContext.Current.User;
+            if (user.Identity.IsAuthenticated
+                && user.Identity.AuthenticationType == "Forms")
+            {
+                LoginInfo identity = new LoginInfo();
+                CustomPrincipal principal = new CustomPrincipal(identity);
+                HttpContext.Current.User = principal;
+                Thread.CurrentPrincipal = principal;
+            }
+        }
     }
 }

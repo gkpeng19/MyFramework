@@ -26,6 +26,16 @@ namespace G.BaseWeb.Models
             IsDelete = 0;
         }
 
+        #region 用户登录
+
+        [Search(Field = "UserName")]
+        public string LoginUserName
+        {
+            set { SetValue("LoginUserName", value); }
+        }
+
+        #endregion
+
         #region 角色查询
 
         [Search(Operator = SearchOperator.Like)]
@@ -47,7 +57,7 @@ namespace G.BaseWeb.Models
             set { SetValue("nodeids", value); }
         }
 
-        [Search(Operator=SearchOperator.Like)]
+        [Search(Operator = SearchOperator.Like)]
         public string UserName
         {
             set { SetValue("UserName", value); }

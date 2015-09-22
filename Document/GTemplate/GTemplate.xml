@@ -7,6 +7,10 @@
           <Text>Destination</Text>
           <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\Destination</SPath>
         </GFile>
+        <GFile>
+          <Text>DestinationDetails</Text>
+          <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\DestinationDetails</SPath>
+        </GFile>
       </Files>
       <Folders />
       <Text>HQWZ</Text>

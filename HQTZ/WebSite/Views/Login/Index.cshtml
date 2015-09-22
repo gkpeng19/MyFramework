@@ -211,9 +211,9 @@
                 return;
             }
             var isRemember = $("#remember")[0].checked ? 1 : 0;
-            $.post("/Login/LoginIn", { uname: name, psw: psw, remember: isRemember, ran: Math.random() }, function (r) {
+            $.post("/Base/LoginIn", { uname: name, psw: psw, remember: isRemember, ran: Math.random() }, function (r) {
                 if (r.result == 1) {
-                    location.href = "/Biz/Context/Index";
+                    location.href = "/Pages/Admin.html";
                 }
                 else {
                     layer.msg("用户名或密码错误!", { icon: 2, offset: 0, shift: 6 });

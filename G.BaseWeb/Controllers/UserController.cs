@@ -7,6 +7,7 @@ using GOMFrameWork.DataEntity;
 using G.Util.Html;
 using G.BaseWeb.Models;
 using System.Web.Mvc;
+using G.Util.Tool;
 
 namespace G.BaseWeb.Controllers
 {
@@ -89,6 +90,7 @@ namespace G.BaseWeb.Controllers
 
                 entity.CreateBy = "";
                 entity.CreateOn = DateTime.Now;
+                entity.UserPsw = Encryption.GetMD5("123456");
 
                 #endregion
             }

@@ -139,6 +139,7 @@
     <script src="/Scripts/umeditor/umeditor.min.js"></script>
     <script src="/Scripts/umeditor/lang/zh-cn/zh-cn.js"></script>
     <script src="/Scripts/validate/talent-validate-all-init.js"></script>
+	<script src="../Scripts/ace/ace-elements.min.js"></script>
     <script src="/Scripts/ace/ace.min.js"></script>
     <script src="/Scripts/GOMFrameWork.js"></script>
 	<script type="text/javascript">
@@ -594,12 +595,22 @@
 												return false;
 											}
 											var update=$("#@btn.formdataid").getContext();
+											@if(reftreeloadurl!="0")
+											{
+											<text>
 											var selNode=$("#@reftreeid").gtree("getSelected");
 											update["@reftablefk"]=selNode.id;
+											</text>
+											}
 											$.post("@btn.action",update,function(r)
 											{
 												r = $.toJsResult(r);
+												@if(reftreeloadurl!="0")
+												{
+												<text>
 												r["@(reftablefk)_G"]=selNode.text;
+												</text>
+												}
 												if(r.ID>0)
 												{
 													$("#@table.id").datagrid("addRow",r);

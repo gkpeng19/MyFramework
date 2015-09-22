@@ -71,7 +71,7 @@
                     }
                     var update = $("#23083348615572768").getContext();
                     $.post("/Biz/Context/SaveContext", update, function (r) {
-                        var newjson = $.updateJson(json, $.toJsResult(r));
+                        var newjson = $.combineJson(json, $.toJsResult(r));
                         if (r.ID > 0) {
                             $("#5308584827791714").datagrid("updateRow", json, newjson);
                             layer.close(win);

@@ -9,10 +9,12 @@ using G.Util.Mvc;
 using GOMFrameWork;
 using EntityLibrary.SearchEntities;
 using EntityLibrary;
+using G.BaseWeb;
+using G.Util.Html;
 
 namespace WebSite.Areas.Biz.Controllers
 {
-    public class ContextController : BaseController
+    public class ContextController : Controller
     {
         public ActionResult Index()
         {
@@ -49,12 +51,12 @@ namespace WebSite.Areas.Biz.Controllers
             if (entity.ID == 0)
             {
                 entity.CType = (int)ContextTypeEnum.Context;
-                entity.CreateBy = base.LoginUser.Name;
+                entity.CreateBy = AppEnvironment.LoginUser.Name;
                 entity.CreateOn = DateTime.Now;
             }
             else
             {
-                entity.EditBy = base.LoginUser.Name;
+                entity.EditBy = AppEnvironment.LoginUser.Name;
                 entity.EditOn = DateTime.Now;
             }
 
@@ -86,7 +88,7 @@ namespace WebSite.Areas.Biz.Controllers
                 treeNodes.Add(new HtmlTreeNode() { id = (int)c.ID, text = c.Name, parentid = c.ParentID });
             }
 
-            return this.JsonNet(CommonUtil.InitTree(treeNodes));
+            return this.JsonNet(HtmlTree.InitTree(treeNodes));
         }
 
         public JsonResult SaveCategory(HZ_Catagory entity)
@@ -94,12 +96,12 @@ namespace WebSite.Areas.Biz.Controllers
             if (entity.ID == 0)
             {
                 entity.CType = (int)CategoryTypeEnum.Info;
-                entity.CreateBy = base.LoginUser.Name;
+                entity.CreateBy = AppEnvironment.LoginUser.Name;
                 entity.CreateOn = DateTime.Now;
             }
             else
             {
-                entity.EditBy = base.LoginUser.Name;
+                entity.EditBy = AppEnvironment.LoginUser.Name;
                 entity.EditOn = DateTime.Now;
             }
 
@@ -144,12 +146,12 @@ namespace WebSite.Areas.Biz.Controllers
             if (entity.ID == 0)
             {
                 entity.CType = (int)ContextTypeEnum.Info;
-                entity.CreateBy = base.LoginUser.Name;
+                entity.CreateBy = AppEnvironment.LoginUser.Name;
                 entity.CreateOn = DateTime.Now;
             }
             else
             {
-                entity.EditBy = base.LoginUser.Name;
+                entity.EditBy = AppEnvironment.LoginUser.Name;
                 entity.EditOn = DateTime.Now;
             }
 
@@ -182,12 +184,12 @@ namespace WebSite.Areas.Biz.Controllers
             if (entity.ID == 0)
             {
                 entity.CType = (int)ContextTypeEnum.Advert;
-                entity.CreateBy = base.LoginUser.Name;
+                entity.CreateBy = AppEnvironment.LoginUser.Name;
                 entity.CreateOn = DateTime.Now;
             }
             else
             {
-                entity.EditBy = base.LoginUser.Name;
+                entity.EditBy = AppEnvironment.LoginUser.Name;
                 entity.EditOn = DateTime.Now;
             }
 
@@ -203,12 +205,12 @@ namespace WebSite.Areas.Biz.Controllers
 
         public long DeleteContext(HZ_Context entity)
         {
-            return base.DeleteEntity(entity);
+            return entity.Delete();
         }
 
         public long DeleteCategory(HZ_Catagory entity)
         {
-            return base.DeleteEntity(entity);
+            return entity.Delete();
         }
     }
 }

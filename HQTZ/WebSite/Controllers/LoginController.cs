@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using G.Util.Mvc;
 using EntityLibrary.SearchEntities;
 using EntityLibrary.Entities;
+using WebSite.Models;
+using G.BaseWeb.Controllers;
 
 namespace WebSite.Controllers
 {
@@ -19,22 +21,8 @@ namespace WebSite.Controllers
 
         public JsonResult LoginIn(string uname, string psw, int remember)
         {
-            Sh_HZ_Admin sh = new Sh_HZ_Admin();
-            sh["UserName"] = uname;
-            var user = sh.LoadEntity<HZ_Admin>();
-            if (user != null)
-            {
-                if (user.UPassword.Equals(CommonUtil.GetMD5(psw)))
-                {
-                    LoginInfo loginInfo = new LoginInfo(uname);
-                    loginInfo.UserID = user.ID;
-                    loginInfo.UserRole = user.UserRole;
-                    LoginInfo.SetLoginToken(loginInfo, remember == 1 ? true : false);
-                    return this.JsonNet(new { result = 1, url = "" });
-                }
-            }
-
-            return this.JsonNet(new { result = 0 });
+            BaseController bctr = new BaseController();
+            return bctr.LoginIn(uname, psw, remember);
         }
 
         public void LoginOut()

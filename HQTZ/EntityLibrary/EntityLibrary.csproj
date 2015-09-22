@@ -54,7 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssistEntity.cs" />
-    <Compile Include="Entities\HZ_Admin.cs" />
     <Compile Include="Entities\HZ_Catagory.cs" />
     <Compile Include="Entities\HZ_Context.cs" />
     <Compile Include="Entities\HZ_ImageBook.cs" />
@@ -63,9 +62,7 @@
     <Compile Include="Entities\HZ_Product.cs" />
     <Compile Include="Entities\HZ_ProductComment.cs" />
     <Compile Include="Entities\HZ_User.cs" />
-    <Compile Include="Extension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchEntities\HZ_Admin.cs" />
     <Compile Include="SearchEntities\HZ_Catagory.cs" />
     <Compile Include="SearchEntities\HZ_Context.cs" />
     <Compile Include="SearchEntities\HZ_ImageBook.cs" />

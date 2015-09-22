@@ -8,10 +8,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using G.Util.Mvc;
+using G.Util.Html;
+using G.BaseWeb;
 
 namespace WebSite.Areas.Biz.Controllers
 {
-    public class ProductController : BaseController
+    public class ProductController : Controller
     {
         public ActionResult Index()
         {
@@ -34,7 +36,7 @@ namespace WebSite.Areas.Biz.Controllers
                 treeNodes.Add(new HtmlTreeNode() { id = (int)c.ID, text = c.Name, parentid = c.ParentID });
             }
 
-            return this.JsonNet(CommonUtil.InitTree(treeNodes));
+            return this.JsonNet(HtmlTree.InitTree(treeNodes));
         }
 
         public JsonResult SaveCategory(HZ_Catagory entity)
@@ -42,12 +44,12 @@ namespace WebSite.Areas.Biz.Controllers
             if (entity.ID == 0)
             {
                 entity.CType = (int)CategoryTypeEnum.Product;
-                entity.CreateBy = base.LoginUser.Name;
+                entity.CreateBy = AppEnvironment.LoginUser.Name;
                 entity.CreateOn = DateTime.Now;
             }
             else
             {
-                entity.EditBy = base.LoginUser.Name;
+                entity.EditBy = AppEnvironment.LoginUser.Name;
                 entity.EditOn = DateTime.Now;
             }
 
@@ -61,7 +63,7 @@ namespace WebSite.Areas.Biz.Controllers
 
         public long DeleteCategory(HZ_Catagory entity)
         {
-            return base.DeleteEntity(entity);
+            return entity.Delete();
         }
 
         #endregion
@@ -82,12 +84,12 @@ namespace WebSite.Areas.Biz.Controllers
         {
             if (entity.ID == 0)
             {
-                entity.CreateBy = base.LoginUser.Name;
+                entity.CreateBy = AppEnvironment.LoginUser.Name;
                 entity.CreateOn = DateTime.Now;
             }
             else
             {
-                entity.EditBy = base.LoginUser.Name;
+                entity.EditBy = AppEnvironment.LoginUser.Name;
                 entity.EditOn = DateTime.Now;
             }
 
@@ -101,7 +103,7 @@ namespace WebSite.Areas.Biz.Controllers
 
         public long DeleteProduct(HZ_Product entity)
         {
-            return base.DeleteEntity(entity);
+            return entity.Delete();
         }
 
         public int TransferProducts(EntityProducts entity)

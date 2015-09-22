@@ -1120,8 +1120,6 @@ $.fn.extend({
             return;
         }
 
-        me.attr("name", "upfile_g");
-
         if (args.filter) {
             me.attr("accept", args.filter + "/*");
         }
@@ -1130,13 +1128,16 @@ $.fn.extend({
             args.uploadUrl = "/Scripts/umeditor/net/fileUp.ashx";
         }
 
-        me.ace_file_input({
-            no_file: 'No File ...',
-            btn_choose: 'Choose',
-            btn_change: 'Change',
-            droppable: false,
-            thumbnail: true
-        }).on("change", function () {
+        me.hide();
+        var id = me.attr("id");
+        var name = me.attr("name");
+        me.attr("id", "file_" + id);
+        me.attr("name", "upfile_g");
+        $('<input type="text" readonly="readonly" name="'
+            + name + '" id="' + id + '" class="span11" /><label for="file_'
+            + id + '" class="btn btn-primary btn-mini">&nbsp;上&nbsp;传&nbsp;</label>').insertAfter(me);
+
+        me.on("change", function () {
             if ($(this).val().length == 0) {
                 return;
             }
@@ -1362,28 +1363,27 @@ $.extend({
 
         return data;
     },
-    updateJson: function (oldjson, newjson) {
+    combineJson: function (oldjson, newjson, newjson2) {
         var json = {};
         for (var item in oldjson) {
-            if (typeof (oldjson[item]) != "object") {
+            if (oldjson[item] && typeof (oldjson[item]) != "object") {
                 json[item] = oldjson[item];
             }
         }
-
         for (var item in newjson) {
-            if (typeof (newjson[item]) != "object") {
-                var index = item.indexOf("_G");
-                if (index > 0) {
-                    var str = item.substring(0, index);
-                    if (newjson[str]) {
-                        json[item] = newjson[item];
-                    }
-                }
-                else {
-                    json[item] = newjson[item];
+            if (newjson[item] && typeof (newjson[item]) != "object") {
+                json[item] = newjson[item];
+            }
+        }
+
+        if (newjson2) {
+            for (var item in newjson2) {
+                if (newjson2[item] && typeof (newjson2[item]) != "object") {
+                    json[item] = newjson2[item];
                 }
             }
         }
+
         return json;
     }
 });

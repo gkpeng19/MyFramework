@@ -388,13 +388,14 @@ formconfig.prototype.RemoveSelectNode = function () {
             this.chart.draw(this.data, { allowHtml: true, allowCollapse: true, size: "large" });
             this.bindNodeSelectEvent();
 
+            var newExtDatas = [];
             for (var i = 0; i < this.extData.extdatas.length; ++i) {
                 var item = this.extData.extdatas[i];
-                if (item && item.dataid == v) {
-                    this.extData.extdatas[i] = null;
-                    break;
+                if (item && item.dataid != v) {
+                    newExtDatas.push(item);
                 }
             }
+            this.extData.extdatas = newExtDatas;
             return;
         }
     }

@@ -58,10 +58,9 @@
                             <label>名称</label>
                             <input type="text" name="Name" id="5053045133450633" class="span11" />
                         </div>
-                        <div class="span11">
+                        <div class="span12">
                             <label>上传图片</label>
-                            <input type="file" name="ImgName_g" id="6903831546189698" class="span9" />
-                            <input type="hidden" name="ImgName" id="txt_ImgName" />
+                            <input type="file" id="6903831546189698" name="ImgName" />
                         </div>
                     </div>
                 </div>
@@ -85,7 +84,7 @@
             filter: "image",
             success: function (result) {
                 if (result.state == "SUCCESS") {
-                    $("#txt_ImgName").val(result.path);
+                    $("#6903831546189698").val(result.path);
                 }
             }
         });
@@ -114,7 +113,6 @@
                     var update = $("#8972387375800068").getContext();
                     $.post("/DPanel/SaveDestination", update, function (r) {
                         r = $.toJsResult(r);
-                        r["0_G"] = selNode.text;
                         if (r.ID > 0) {
                             $("#08091819969919167").datagrid("addRow", r);
                             layer.close(win);
@@ -138,7 +136,7 @@
                     }
                     var update = $("#8972387375800068").getContext();
                     $.post("/DPanel/SaveDestination", update, function (r) {
-                        var newjson = $.updateJson(json, $.toJsResult(r));
+                        var newjson = $.combineJson(json, $.toJsResult(r));
                         if (r.ID > 0) {
                             $("#08091819969919167").datagrid("updateRow", json, newjson);
                             layer.close(win);

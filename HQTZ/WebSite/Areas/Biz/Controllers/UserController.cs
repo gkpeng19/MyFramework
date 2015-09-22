@@ -8,10 +8,12 @@ using System.Web.Mvc;
 using G.Util.Mvc;
 using EntityLibrary.SearchEntities;
 using EntityLibrary.Entities;
+using G.Util.Html;
+using G.Util.Tool;
 
 namespace WebSite.Areas.Biz.Controllers
 {
-    public class UserController : BaseController
+    public class UserController : Controller
     {
         //
         // GET: /Biz/User/
@@ -22,8 +24,8 @@ namespace WebSite.Areas.Biz.Controllers
 
         public JsonResult LoadCtnData()
         {
-            var userLevels = CommonUtil.GetHtmlSelectItems(typeof(UserLevelEnum));
-            var userTypes = CommonUtil.GetHtmlSelectItems(typeof(UserTypeEnum));
+            var userLevels = HtmlSelect.GetHtmlSelectByEnum(typeof(UserLevelEnum));
+            var userTypes = HtmlSelect.GetHtmlSelectByEnum(typeof(UserTypeEnum));
             return this.JsonNet(new { UserLevels = userLevels, UserTypes = userTypes });
         }
 
@@ -40,7 +42,7 @@ namespace WebSite.Areas.Biz.Controllers
         {
             if (entity.ID == 0)
             {
-                entity.UPassword = CommonUtil.GetMD5("123456");
+                entity.UPassword =Encryption.GetMD5("123456");
                 entity.CreateOn = DateTime.Now;
             }
 
@@ -57,7 +59,7 @@ namespace WebSite.Areas.Biz.Controllers
 
         public long DeleteUser(HZ_User entity)
         {
-            return base.DeleteEntity(entity);
+            return entity.Delete();
         }
     }
 }

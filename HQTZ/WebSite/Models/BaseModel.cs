@@ -1,13 +1,15 @@
-﻿using GOMFrameWork.DataEntity;
+﻿using G.Util.Mvc;
+using GOMFrameWork.DataEntity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace WebSite.Models
 {
-    public class CommonModel:EntityBase
+    public class CommonModel : EntityBase
     {
         [JsonIgnore]
         public DateTime CreateOn
@@ -64,17 +66,34 @@ namespace WebSite.Models
         }
     }
 
+    [ModelBinder(typeof(EntityModelBinder))]
     public class SearchModel : SearchEntity
     {
         public SearchModel()
         {
-            IsDelete = 1;
+            IsDelete = 0;
         }
 
-        [Search(Operator=SearchOperator.IsNullZeroEqual)]
+        public SearchModel(string searchId)
+            : this()
+        {
+            base.SearchID = searchId;
+        }
+
+        [Search(Operator = SearchOperator.IsNullZeroEqual)]
         public int IsDelete
         {
             set { SetValue("IsDelete", value); }
         }
+
+        #region 按展板名称查询展板明细
+
+        [Search(Field = "DPanel_G", Operator = SearchOperator.Like)]
+        public string DPanelName
+        {
+            set { SetValue("DPanelName", value); }
+        }
+
+        #endregion
     }
 }

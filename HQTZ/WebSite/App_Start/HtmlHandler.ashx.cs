@@ -13,14 +13,15 @@ namespace WebSite.App_Start
     {
         public void ProcessRequest(HttpContext context)
         {
-            context.Response.ContentType = "text/plain";
+            context.Response.ContentType = "text/html";
 
             if (AppEnvironment.LoginUser == null)
             {
                 context.Response.Redirect("~/Login/Index", false);
+                return;
             }
 
-            context.Response.Write("Hello");
+            context.Response.WriteFile(context.Server.MapPath(context.Request.RawUrl));
         }
 
         public bool IsReusable

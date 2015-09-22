@@ -586,15 +586,22 @@
 												return false;
 											}
 											var update=$("#@btn.formdataid").getContext();
-											@if(reftableid!="0")
+											@if(reftreeloadurl!="0")
 											{
+											<text>
 											var selNode=$("#@reftreeid").gtree("getSelected");
 											update["@reftablefk"]=selNode.id;
+											</text>
 											}
 											$.post("@btn.action",update,function(r)
 											{
-												r = $.toJsResult(r);
+												r = $.combineJson(update,$.toJsResult(r));
+												@if(reftreeloadurl!="0")
+												{
+												<text>
 												r["@(reftablefk)_G"]=selNode.text;
+												</text>
+												}
 												if(r.ID>0)
 												{
 													$("#@table.id").datagrid("addRow",r);
@@ -626,7 +633,7 @@
                                         var update=$("#@btn.formdataid").getContext();
                                         $.post("@btn.action",update,function(r)
                                         {
-											var newjson = $.updateJson(json, $.toJsResult(r));
+											var newjson = $.combineJson(json,update,$.toJsResult(r));
                                             if(r.ID>0)
                                             {
                                                 $("#@table.id").datagrid("updateRow",json,newjson);

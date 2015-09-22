@@ -35,7 +35,7 @@ namespace G.BaseWeb.Controllers
         public JsonResult LoginIn(string uname, string psw, int remember)
         {
             BaseSearchModel sm = new BaseSearchModel("bw_user");
-            sm["UserName"] = uname;
+            sm.LoginUserName = uname;
             var user = sm.LoadEntity<BW_User>();
             if (user != null)
             {
