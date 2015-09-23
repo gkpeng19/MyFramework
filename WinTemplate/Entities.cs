@@ -255,7 +255,7 @@ namespace WinTemplate
             {
                 if (_minlen.Length == 0)
                 {
-                    _minlen = "'--'";
+                    _minlen = "--";
                 }
                 return _minlen;
             }
@@ -267,7 +267,7 @@ namespace WinTemplate
             {
                 if (_maxlen.Length == 0)
                 {
-                    _maxlen = "'++'";
+                    _maxlen = "++";
                 }
                 return _maxlen;
             }

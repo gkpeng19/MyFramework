@@ -7,10 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSite", "WebSite\WebSite.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityLibrary", "EntityLibrary\EntityLibrary.csproj", "{B54A0E30-B6EB-437E-B55C-92A272B0D260}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{EA26DEC2-4F42-47D2-9C82-FF0D7863B85B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HQWZ", "HQWZ\HQWZ.csproj", "{C3DFEFED-3999-4027-BE24-A7EA858C7565}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,14 +21,6 @@ Global
 		{B54A0E30-B6EB-437E-B55C-92A272B0D260}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B54A0E30-B6EB-437E-B55C-92A272B0D260}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B54A0E30-B6EB-437E-B55C-92A272B0D260}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EA26DEC2-4F42-47D2-9C82-FF0D7863B85B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA26DEC2-4F42-47D2-9C82-FF0D7863B85B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA26DEC2-4F42-47D2-9C82-FF0D7863B85B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA26DEC2-4F42-47D2-9C82-FF0D7863B85B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C3DFEFED-3999-4027-BE24-A7EA858C7565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C3DFEFED-3999-4027-BE24-A7EA858C7565}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C3DFEFED-3999-4027-BE24-A7EA858C7565}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C3DFEFED-3999-4027-BE24-A7EA858C7565}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -10,7 +10,22 @@ using System.Web.Mvc;
 namespace @(Model.ProjectName).Controllers
 {
     public class @(Model.Name)Controller : Controller
-    {@foreach(var action in Model.LoadJsonActions){ var fields=action.Value[0]+"=\"xxx\"";for(var i=1;i<action.Value.Count;++i){fields+=(", "+action.Value[i]+"=\"xxx\"");}<text>
+    {
+	@foreach(var action in Model.LoadJsonActions)
+	{ 
+		var fields="";
+		for(var i=1;i<action.Value.Count;++i)
+		{	
+			if(i==1)
+			{
+				fields+=(action.Value[i]+"=\"xxx\"");
+			}
+			else
+			{
+				fields+=(", "+action.Value[i]+"=\"xxx\"");
+			}
+		}
+		<text>
 		public JsonResult @(action.Key)()
 		{
 			return ExController.JsonNet(new { @fields });

@@ -595,7 +595,7 @@
 											}
 											$.post("@btn.action",update,function(r)
 											{
-												r = $.toJsResult(r);
+												r = $.combineJson(update,$.toJsResult(r));
 												@if(reftreeloadurl!="0")
 												{
 												<text>
@@ -633,7 +633,7 @@
                                         var update=$("#@btn.formdataid").getContext();
                                         $.post("@btn.action",update,function(r)
                                         {
-											var newjson = $.updateJson(json, $.toJsResult(r));
+											var newjson = $.combineJson(json,update,$.toJsResult(r));
                                             if(r.ID>0)
                                             {
                                                 $("#@table.id").datagrid("updateRow",json,newjson);

@@ -17,7 +17,7 @@ namespace WebSite.App_Start
 
             if (AppEnvironment.LoginUser == null)
             {
-                context.Response.Redirect("~/Login/Index", false);
+                context.Response.WriteFile(context.Server.MapPath("~/AdminPages/Login.html"));
                 return;
             }
 

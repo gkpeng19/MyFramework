@@ -99,17 +99,30 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AdminPages\Login.html" />
+    <Content Include="AdminPages\VillageRoom.html" />
+    <Content Include="Default.html" />
     <Content Include="Global.asax" />
+    <Content Include="Images\banner1.jpg" />
+    <Content Include="Images\banner2.jpg" />
+    <Content Include="Images\contact.jpg" />
     <Content Include="Images\Flag.png" />
+    <Content Include="Images\green-menubg.jpg" />
     <Content Include="Images\hand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\img1.gif" />
+    <Content Include="Images\leader.gif" />
     <Content Include="Images\left-handing.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\left_hand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\logo.gif" />
+    <Content Include="Images\menubg.jpg" />
+    <Content Include="Images\menudbg.jpg" />
+    <Content Include="Images\more.jpg" />
     <Content Include="Images\password.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -119,16 +132,18 @@
     <Content Include="Images\right_handing.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\server-tel.gif" />
     <Content Include="Images\tou.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\trave.gif" />
     <Content Include="Images\username.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Pages\BenefitDetails.html" />
-    <Content Include="Pages\DestinationDetails.html" />
-    <Content Include="Pages\MemberBenefit.html" />
-    <Content Include="Pages\Destination.html" />
+    <Content Include="AdminPages\BenefitDetails.html" />
+    <Content Include="AdminPages\DestinationDetails.html" />
+    <Content Include="AdminPages\MemberBenefit.html" />
+    <Content Include="AdminPages\Destination.html" />
     <Content Include="Scripts\ace\ace-elements.min.js" />
     <Content Include="Scripts\ace\ace.min.js" />
     <Content Include="Scripts\ace\css\ace-responsive.min.css" />
@@ -179,18 +194,16 @@
     <Content Include="Scripts\font-awesome\scss\_rotated-flipped.scss" />
     <Content Include="Scripts\font-awesome\scss\_stacked.scss" />
     <Content Include="Scripts\font-awesome\scss\_variables.scss" />
-    <Content Include="Areas\Biz\Views\web.config" />
-    <Content Include="Areas\Biz\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Biz\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Biz\Views\Context\Index.cshtml" />
-    <Content Include="Areas\Biz\Views\Context\InfoIndex.cshtml" />
-    <Content Include="Areas\Biz\Views\User\Index.cshtml" />
-    <Content Include="Areas\Biz\Views\Context\AdvertIndex.cshtml" />
-    <Content Include="Areas\Biz\Views\Product\Index.cshtml" />
     <Content Include="App_Start\HtmlHandler.ashx" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\website\page.js" />
+    <Content Include="Scripts\website\slider\css\silder.css" />
+    <Content Include="Scripts\website\slider\images\ad_ctr.png" />
+    <Content Include="Scripts\website\slider\images\alpha.png" />
+    <Content Include="Scripts\website\slider\images\dot.png" />
+    <Content Include="Scripts\website\slider\js\slider.js" />
     <Content Include="Styles\gtree\themes\default-dark\32px.png" />
     <Content Include="Styles\gtree\themes\default-dark\40px.png" />
     <Content Include="Styles\gtree\themes\default-dark\style.css" />
@@ -346,37 +359,30 @@
     <Content Include="Scripts\validate\validator\SelectCountValidator.js" />
     <Content Include="Scripts\validate\validator\ValidatorFactory.js" />
     <Content Include="Styles\GOMFrameWork.css" />
-    <Content Include="Pages\Admin.html" />
+    <Content Include="AdminPages\Admin.html" />
+    <Content Include="Styles\website\page.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminControllers\VillageRoomController.cs" />
     <Compile Include="App_Start\HtmlHandler.ashx.cs">
       <DependentUpon>HtmlHandler.ashx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Areas\Biz\BizAreaRegistration.cs" />
-    <Compile Include="Areas\Biz\Controllers\ContextController.cs" />
-    <Compile Include="Areas\Biz\Controllers\ProductController.cs" />
-    <Compile Include="Areas\Biz\Controllers\UserController.cs" />
-    <Compile Include="Controllers\DPanelContentController.cs" />
-    <Compile Include="Controllers\DPanelController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="AdminControllers\DPanelContentController.cs" />
+    <Compile Include="AdminControllers\DPanelController.cs" />
+    <Compile Include="Controllers\DestinationController.cs" />
+    <Compile Include="Controllers\DetailController.cs" />
+    <Compile Include="Controllers\MemberBenefitController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\BaseModel.cs" />
-    <Compile Include="Models\HQ_Admin.cs" />
-    <Compile Include="Models\HQ_DisplayContent.cs" />
-    <Compile Include="Models\HQ_DisplayPanel.cs" />
-    <Compile Include="Models\SysEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\umeditor\net\fileUp.ashx.cs">
       <DependentUpon>fileUp.ashx</DependentUpon>
@@ -413,6 +419,9 @@
     <Content Include="Scripts\umeditor\third-party\mathquill\font\Symbola.svg" />
     <Content Include="Scripts\umeditor\third-party\mathquill\font\Symbola.ttf" />
     <Content Include="Scripts\umeditor\third-party\mathquill\font\Symbola.woff" />
+    <Content Include="Views\Destination\Index.cshtml" />
+    <Content Include="Views\MemberBenefit\Index.cshtml" />
+    <Content Include="Views\Detail\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -422,7 +431,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Biz\Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EntityLibrary\EntityLibrary.csproj">

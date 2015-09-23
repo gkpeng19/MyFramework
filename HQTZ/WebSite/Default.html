@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>旅居中国-首页</title>
+    <link href="Styles/website/page.css" rel="stylesheet" />
+    <link href="Scripts/website/slider/css/silder.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="page">
+        <div class="content">
+            <div id="top">
+                <img src="Images/logo.gif" style="margin-left:50px;" />
+                <img src="Images/server-tel.gif" style="margin-left:300px;" />
+            </div>
+            <div id="menu">
+                <a href="/Destination"><div class="menu-normal"><span>目的地</span></div></a>
+                <a href="/MemberBenefit">
+                    <div class="menu-normal"><span>得天独厚</span></div>
+                </a>
+                <div class="menu-normal"><span>会员中心</span></div>
+                <div class="menu-normal"><span>尊享服务</span></div>
+                <div class="menu-normal"><span>最新优惠</span></div>
+            </div>
+            <div class="clear"></div>
+            <div id="banner_tabs" class="flexslider" style="position:relative;top:-10px;">
+                <ul class="slides">
+                    <li>
+                        <a title="" target="_blank" href="#">
+                            <img width="980" height="488" alt="" style="background: url(Images/banner1.jpg) no-repeat center;" src="Scripts/website/slider/images/alpha.png">
+                        </a>
+                    </li>
+                    <li>
+                        <a title="" target="_blank" href="#">
+                            <img width="980" height="488" alt="" style="background: url(Images/banner2.jpg) no-repeat center;" src="Scripts/website/slider/images/alpha.png">
+                        </a>
+                    </li>
+                </ul>
+                <ul class="flex-direction-nav">
+                    <li><a class="flex-prev" href="javascript:;">Previous</a></li>
+                    <li><a class="flex-next" href="javascript:;">Next</a></li>
+                </ul>
+                <ol id="bannerCtrl" class="flex-control-nav flex-control-paging">
+                    <li><a>1</a></li>
+                    <li><a>2</a></li>
+                </ol>
+            </div>
+            <div id="trave">
+                <img src="Images/trave.gif" />
+            </div>
+            <div id="contact">
+                <img src="Images/contact.jpg" />
+            </div>
+        </div>
+        <div id="bottom"></div>
+    </div>
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <script src="Scripts/website/slider/js/slider.js"></script>
+    <script type="text/javascript">
+        var defaultMenu = $(".menu-curr");
+        $("#menu div").bind("mouseover", function () {
+            if (!$(this).hasClass("menu-curr")) {
+                var currMenu = $(".menu-curr");
+                currMenu.removeClass("menu-curr");
+                if (!currMenu.hasClass("menu-normal")) {
+                    currMenu.addClass("menu-normal");
+                }
+                $(this).addClass("menu-curr");
+            }
+        });
+
+        $("#menu").bind("mouseout", function () {
+            if (defaultMenu.length > 0) {
+                if (!defaultMenu.hasClass("menu-curr")) {
+                    $(".menu-curr").removeClass("menu-curr");
+                    defaultMenu.addClass("menu-curr");
+                }
+            }
+            else {
+                $(".menu-curr").removeClass("menu-curr");
+            }
+        });
+
+        var bannerSlider = new Slider($('#banner_tabs'), {
+            time: 5000,
+            delay: 400,
+            event: 'hover',
+            auto: true,
+            mode: 'fade',
+            controller: $('#bannerCtrl'),
+            activeControllerCls: 'active'
+        });
+        $('#banner_tabs .flex-prev').click(function () {
+            bannerSlider.prev()
+        });
+        $('#banner_tabs .flex-next').click(function () {
+            bannerSlider.next()
+        });
+    </script>
+</body>
+</html>

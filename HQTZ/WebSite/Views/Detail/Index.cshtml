@@ -1,0 +1,12 @@
+﻿@model EntityLibrary.Entities.HQ_DisplayContent
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="padding:0px 35px;">
+    <div style="margin-top:10px;">
+        @(new HtmlString(Model.DContent))
+    </div>
+</div>
+

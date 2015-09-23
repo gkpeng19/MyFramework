@@ -48,3 +48,13 @@ D:\Work\MyFramework\HQTZ\HQWZ\bin\zh-Hans\System.Web.WebPages.Razor.resources.dl
 D:\Work\MyFramework\HQTZ\HQWZ\obj\Debug\HQWZ.csprojResolveAssemblyReference.cache
 D:\Work\MyFramework\HQTZ\HQWZ\obj\Debug\HQWZ.dll
 D:\Work\MyFramework\HQTZ\HQWZ\obj\Debug\HQWZ.pdb
+D:\Gkpeng\MyFramework\HQTZ\HQWZ\bin\EntityLibrary.dll
+D:\Gkpeng\MyFramework\HQTZ\HQWZ\bin\G.Util.dll
+D:\Gkpeng\MyFramework\HQTZ\HQWZ\bin\GOMFrameWork.dll
+D:\Gkpeng\MyFramework\HQTZ\HQWZ\bin\Newtonsoft.Json.dll
+D:\Gkpeng\MyFramework\HQTZ\HQWZ\bin\ExcelLibrary.dll
+D:\Gkpeng\MyFramework\HQTZ\HQWZ\bin\EntityLibrary.pdb
+D:\Gkpeng\MyFramework\HQTZ\HQWZ\bin\G.Util.pdb
+D:\Gkpeng\MyFramework\HQTZ\HQWZ\bin\GOMFrameWork.pdb
+D:\Gkpeng\MyFramework\HQTZ\HQWZ\bin\Newtonsoft.Json.xml
+D:\Gkpeng\MyFramework\HQTZ\HQWZ\bin\ExcelLibrary.pdb
