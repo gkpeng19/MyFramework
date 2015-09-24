@@ -4,9 +4,72 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section styles{
+    <link href="~/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="~/Scripts/bootstrap/bootstrap-timepicker.css" rel="stylesheet" />
+    <link href="~/Scripts/bootstrap/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="~/Scripts/ace/css/ace.min.css" rel="stylesheet" />
+}
+
+@section scripts{
+<script src="~/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap/bootstrap-datepicker.min.js"></script>
+    <script src="~/Scripts/bootstrap/bootstrap-timepicker.min.js"></script>
+    <script type="text/javascript">
+
+        $("#startDate").datepicker({ startDate: new Date().toLocaleDateString() });
+        $("#startTime").timepicker({
+            minuteStep: 10,
+            showSeconds: false,
+            showMeridian: false
+        });
+    </script>
+}
+
+
 <div style="padding:0px 35px;">
     <div style="margin-top:10px;">
         @(new HtmlString(Model.DContent))
+    </div>
+</div>
+
+<div id="accordion2" class="accordion">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a href="#collapseOne" data-parent="#accordion2" data-toggle="collapse" class="accordion-toggle collapsed">
+                Collapsible Group Item #1
+            </a>
+        </div>
+        <div class="accordion-body collapse" id="collapseOne" style="height: 0px;">
+            <div class="accordion-inner">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label" for="startDate">起始时间：</label>
+            <div class="controls">
+                <input class="input-medium" id="startDate" type="text" data-date-format="yyyy-mm-dd">
+                <div class="input-append bootstrap-timepicker">
+                    <input id="startTime" type="text" class="input-mini" />
+                    <span class="add-on"><i class="fa fa-clock-o"></i></span>
+                </div>
+            </div>
+
+            <label class="control-label" for="startDate">结束时间：</label>
+            <div class="controls">
+                <input class="input-medium" id="endDate" type="text" data-date-format="yyyy-mm-dd">
+                <div class="input-append bootstrap-timepicker">
+                    <input id="endTime" type="text" class="input-mini" />
+                    <span class="add-on"><i class="fa fa-clock-o"></i></span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

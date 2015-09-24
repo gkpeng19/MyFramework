@@ -66,12 +66,6 @@ body .page {
     text-align: center;
 }
 
-#contact {
-    position: relative;
-    top: 4px;
-    cursor: pointer;
-}
-
 #bottom {
     background-color: #868c91;
     height: 10px;

@@ -11,6 +11,10 @@
           <Text>DestinationDetails</Text>
           <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\DestinationDetails</SPath>
         </GFile>
+        <GFile>
+          <Text>VillageRoom</Text>
+          <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\VillageRoom</SPath>
+        </GFile>
       </Files>
       <Folders />
       <Text>HQWZ</Text>

@@ -149,8 +149,12 @@
     <Content Include="Scripts\ace\css\ace-responsive.min.css" />
     <Content Include="Scripts\ace\css\ace-skins.min.css" />
     <Content Include="Scripts\ace\css\ace.min.css" />
+    <Content Include="Scripts\bootstrap\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap\bootstrap-timepicker.css" />
+    <Content Include="Scripts\bootstrap\bootstrap-timepicker.min.js" />
     <Content Include="Scripts\bootstrap\css\bootstrap-responsive.min.css" />
     <Content Include="Scripts\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Scripts\bootstrap\bootstrap-datepicker.css" />
     <Content Include="Scripts\bootstrap\js\bootstrap.js" />
     <Content Include="Scripts\bootstrap\js\bootstrap.min.js" />
     <Content Include="Scripts\bootstrap\js\npm.js" />
