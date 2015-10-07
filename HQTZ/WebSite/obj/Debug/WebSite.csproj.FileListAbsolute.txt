@@ -74,7 +74,6 @@ E:\Work\MyFramework\HQTZ\WebSite\obj\Debug\WebSite.csprojResolveAssemblyReferenc
 E:\Work\MyFramework\HQTZ\WebSite\obj\Debug\WebSite.dll
 E:\Work\MyFramework\HQTZ\WebSite\obj\Debug\WebSite.pdb
 D:\Work\MyFramework\HQTZ\WebSite\bin\WebSite.dll.config
-D:\Work\MyFramework\HQTZ\WebSite\bin\Scripts\umeditor\net\UMeditorUploader.cs
 D:\Work\MyFramework\HQTZ\WebSite\bin\Scripts\umeditor\net\getContent.ashx
 D:\Work\MyFramework\HQTZ\WebSite\bin\Images\hand.png
 D:\Work\MyFramework\HQTZ\WebSite\bin\Images\left-handing.png
@@ -84,7 +83,6 @@ D:\Work\MyFramework\HQTZ\WebSite\bin\Images\right_hand.png
 D:\Work\MyFramework\HQTZ\WebSite\bin\Images\right_handing.png
 D:\Work\MyFramework\HQTZ\WebSite\bin\Images\tou.png
 D:\Work\MyFramework\HQTZ\WebSite\bin\Images\username.png
-D:\Work\MyFramework\HQTZ\WebSite\bin\Scripts\umeditor\net\fileUp.ashx
 D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\hand.png
 D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\left-handing.png
 D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\Images\left_hand.png
@@ -131,3 +129,5 @@ D:\Gkpeng\MyFramework\HQTZ\WebSite\obj\Debug\WebSite.dll
 D:\Gkpeng\MyFramework\HQTZ\WebSite\obj\Debug\WebSite.pdb
 D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\G.BaseWeb.dll
 D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\G.BaseWeb.pdb
+D:\Work\MyFramework\HQTZ\WebSite\bin\G.BaseWeb.dll
+D:\Work\MyFramework\HQTZ\WebSite\bin\G.BaseWeb.pdb

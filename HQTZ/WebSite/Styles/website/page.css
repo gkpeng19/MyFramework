@@ -79,11 +79,19 @@ body .page {
     float: left;
 }
 
+    .panel img {
+        width: 215px;
+        height: 155px;
+    }
+
 #panel_more {
     text-align: right;
 }
+
 #panel-more img {
-    margin-top:140px;
+    width: 84px;
+    height: 22px;
+    margin-top: 140px;
 }
 
 .dc_content {

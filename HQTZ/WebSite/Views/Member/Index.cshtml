@@ -1,0 +1,263 @@
+﻿@{
+    ViewBag.Title = "会员中心";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="padding:0px 35px;">
+    <img src="~/Images/leader.gif" />
+    <div style="margin-top:10px;" id="panel_container">
+        <a href="#" onclick="LoginClick()">
+            <div class="panel">
+                <img src="~/Images/temp.jpg" />
+            </div>
+        </a>
+        <a href="#" onclick="RegClick()">
+            <div class="panel">
+                <img src="~/Images/temp.jpg" />
+            </div>
+        </a>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<table border="0" cellpadding="0" cellspacing="0" id="loginDiv">
+    <tr>
+        <td>
+            <label for="username">用户名：</label>
+        </td>
+        <td>
+            <input type="text" id="username" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label for="userpsw">密&nbsp;&nbsp;&nbsp;码：</label>
+        </td>
+        <td>
+            <input type="password" id="userpsw" maxlength="20" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label for="tpyzm">验证码：</label>
+        </td>
+        <td>
+            <input type="text" id="tpyzm" style="width:110px;position:relative;top:-6px;" />
+            <img id="yzm_img" height="25" src="../Ajax/ajax.ashx?action=GetImgYzm"
+                 alt="点击更换验证码" onclick="changeYzmImg()" />
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" align="center">
+            <input type="checkbox" checked="checked" id="keepactive" />  <label for="keepactive" style="position:relative;top:-3px;">记住我</label>
+            <a style="margin-left: 60px;" href="javascript://void(0)" onclick="reguser()">免费注册</a> | <a href="javascript://void(0)"
+                                                                                                        onclick="findpsw()">忘记密码</a>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" align="center">
+            <input type="button" value="登&nbsp;&nbsp;录" onclick="submitlogin()" />
+        </td>
+    </tr>
+</table>
+
+<table border="0" cellpadding="0" cellspacing="0" id="regDiv">
+    <tr>
+        <td style="width:6em;">
+            <label for="regusername">用 户 名：</label>
+        </td>
+        <td>
+            <input type="text" id="regusername" onblur="checkregUserName(this)" />
+        </td>
+    </tr>
+    <tr>
+        <td><label for="phone">手机号码：</label></td>
+        <td>
+            <input type="text" id="phone" value="" />
+        </td>
+    </tr>
+    <tr>
+        <td><label for="reguserpsw">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</label></td>
+        <td>
+            <input type="password" id="reguserpsw" maxlength="20" />
+        </td>
+    </tr>
+    <tr>
+        <td><label for="againuserpsw">重复密码：</label></td>
+        <td>
+            <input type="password" id="againuserpsw" maxlength="20" />
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" align="center" style="padding-top:30px;">
+            <input type="button" value="注&nbsp;&nbsp;册" onclick="submitreg()" />
+        </td>
+    </tr>
+</table>
+
+@section styles{
+    <style type="text/css">
+        /*用户登录↓*/
+        #loginDiv {
+            display: none;
+            font-size: 12px;
+            padding: 20px 50px;
+        }
+
+        #regDiv {
+            font-size: 12px;
+            display: none;
+            padding: 20px 55px;
+        }
+
+            #loginDiv tr td:first-child, #regDiv tr td:first-child {
+                width: 4em;
+            }
+
+            #loginDiv td, #regDiv td, #EditDiv td, #ReviseDiv td {
+                padding: 5px 0px;
+            }
+
+            #loginDiv input[type=text], #loginDiv input[type=password], #regDiv input[type=text], #regDiv input[type=password] {
+                padding: 5px;
+                width: 220px;
+                border: solid 1px #dddddd;
+                color: #666666;
+            }
+
+            #loginDiv input[type=button], #regDiv input[type=button] {
+                width: 230px;
+                padding: 5px;
+            }
+        /*用户登录↑*/
+    </style>
+}
+
+@section scripts{
+    <script src="~/Scripts/layer/layer.js"></script>
+    <script type="text/javascript">
+        setCurrMenu(2);
+
+        @if(ViewBag.IsLogin!=null)
+        {
+            <text>
+        removeUnLogin();
+        </text>
+        }
+
+        var layerLogin = null;
+        function LoginClick() {
+            layerLogin = $("#loginDiv").open("会员登录");
+        }
+
+        var layerReg = null;
+        function RegClick() {
+            layerReg = $("#regDiv").open("会员注册");
+        }
+
+        function reguser() {
+            layer.close(layerLogin);
+            RegClick();
+        }
+
+        function submitlogin() {
+            var username = $.trim($("#username").val());
+            var userpsw = $.trim($("#userpsw").val());
+            if (username.length == 0) {
+                $.error("用户名不能为空！");
+                return;
+            }
+
+            if (userpsw.length == 0) {
+                $.error("密码不能为空！");
+                return;
+            }
+
+            var isRem = $("#keepactive")[0].checked ? 1 : 0;
+            $.post("/Member/MemberLogin", { username: username, userpsw: userpsw, isrem: isRem, ran: Math.random() }, function (r) {
+                if (r == -1) {
+                    $.error("用户名不存在！");
+                }
+                else if (r == 0) {
+                    $.error("用户名或密码错误！");
+                }
+                else if (r == 1) {
+                    layer.close(layerLogin);
+                    removeUnLogin();
+                    @if(ViewBag.ReturnUrl !=null)
+                    {
+                        <text>
+                    location.href = "@ViewBag.ReturnUrl";
+                    </text>
+                    }
+                }
+            });
+        }
+
+        function submitreg() {
+            var username = $.trim($("#regusername").val());
+            var userpsw = $.trim($("#reguserpsw").val());
+            if (username.length == 0) {
+                $.error("用户名不能为空！");
+                return;
+            }
+            if (username.length < 6) {
+                $.error("用户名至少为6为字符！");
+                return;
+            }
+            if (userpsw.length == 0) {
+                $.error("密码不能为空！");
+                return;
+            }
+            if (userpsw != $.trim($("#againuserpsw").val())) {
+                $.error("两次密码不相同！");
+                return;
+            }
+
+            var phone = $.trim($("#phone").val());
+            if (phone.length == 0) {
+                $.error("手机号码不能为空！");
+                return;
+            }
+
+            $.post("/Member/MemberReg", { username: username, userpsw: userpsw, phone: phone, ran: Math.random() }, function (r) {
+                if (r == -1) {
+                    $.error("用户名已存在！");
+                }
+                else if (r > 0) {
+                    layer.close(layerReg);
+                    LoginClick();
+                }
+                else {
+                    $.error("注册失败，请重试！");
+                }
+            });
+        }
+
+        function checkregUserName(src) {
+            var username = $.trim($(src).val());
+            if (username.length == 0 || username.length < 6) {
+                return;
+            }
+
+            $.post("/Member/IsMemberExist", { username: username, ran: Math.random() }, function (r) {
+                if (r == 1) {
+                    $.error("用户名已存在！");
+                }
+            });
+        }
+
+        function removeUnLogin() {
+            var links = $("#panel_container a");
+            links.eq(0).remove();
+            links.eq(1).remove();
+        }
+
+        @if(ViewBag.Action!=null&&ViewBag.Action=="login")
+        {
+            <text>
+        LoginClick();
+        </text>
+        }
+    </script>
+}

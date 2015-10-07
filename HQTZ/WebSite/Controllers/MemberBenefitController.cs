@@ -23,7 +23,7 @@ namespace WebSite.Controllers
                 psize = psize + (page - 1) * 4;
             }
             SearchModel sm = new SearchModel("HQ_DisplayPanel");
-            sm["DPanelType"] = (int)DPanelTypeEnum.MemberBenefit;
+            sm["DPanelType"] = (int)EnumDPanelType.MemberBenefit;
             sm.OrderBy("id");
             sm.PageIndex = 1;
             sm.PageSize = psize;

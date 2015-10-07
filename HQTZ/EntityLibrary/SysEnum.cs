@@ -5,9 +5,16 @@ using System.Web;
 
 namespace EntityLibrary.Entities
 {
-    public enum DPanelTypeEnum
+    public enum EnumDPanelType
     {
         Distination = 1,
-        MemberBenefit = 2
+        MemberBenefit = 2,
+        MemberService = 3,
+        NewCheaper = 4
+    }
+
+    public enum EnumUserType
+    {
+        Normal = 1
     }
 }

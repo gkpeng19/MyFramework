@@ -46,5 +46,24 @@ namespace G.BaseWeb.Models
             get { return GetString("UserRole_G"); }
             set { SetValue("UserRole_G", value); }
         }
+
+        [JsonIgnore]
+        public string TrueName
+        {
+            get { return GetString("TrueName"); }
+            set { SetValue("TrueName", value); }
+        }
+        [JsonIgnore]
+        public string PhoneNum
+        {
+            get { return GetString("PhoneNum"); }
+            set { SetValue("PhoneNum", value); }
+        }
+        [JsonIgnore]
+        public string Email
+        {
+            get { return GetString("Email"); }
+            set { SetValue("Email", value); }
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace G.Util.Account
             UserName = userName;
         }
 
-        private string UserName
+        public string UserName
         {
             get
             {
@@ -27,7 +27,7 @@ namespace G.Util.Account
                 }
                 return string.Empty;
             }
-            set { this["username"] = value; }
+            private set { this["username"] = value; }
         }
 
         public long UserID
@@ -76,6 +76,20 @@ namespace G.Util.Account
             {
                 this["userrole"] = value;
             }
+        }
+
+        public string SystemID
+        {
+            get
+            {
+                HttpCookie cookie = HttpContext.Current.Request.Cookies["systemid"];
+                if (cookie != null)
+                {
+                    return cookie.Value;
+                }
+                return string.Empty;
+            }
+            set { this["systemid"] = value; }
         }
 
         public object this[string key]
@@ -150,6 +164,19 @@ namespace G.Util.Account
             HttpContext.Current.Response.Cookies.Clear();
             FormsAuthentication.SignOut();
             HttpContext.Current.Response.Redirect(FormsAuthentication.LoginUrl);
+        }
+
+        public static LoginInfo Current
+        {
+            get
+            {
+                var identity = HttpContext.Current.User.Identity;
+                if (identity != null)
+                {
+                    return identity as LoginInfo;
+                }
+                return null;
+            }
         }
     }
 

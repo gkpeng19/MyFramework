@@ -9,25 +9,6 @@ using System.Web.Mvc;
 using G.Util.Mvc;
 using GOMFrameWork.DataEntity;
 
-namespace G.BaseWeb
-{
-    public class AppEnvironment
-    {
-        public static LoginInfo LoginUser
-        {
-            get
-            {
-                var identity = HttpContext.Current.User.Identity;
-                if (identity != null)
-                {
-                    return identity as LoginInfo;
-                }
-                return null;
-            }
-        }
-    }
-}
-
 namespace G.BaseWeb.Controllers
 {
     public class BaseController : Controller
@@ -78,14 +59,14 @@ namespace G.BaseWeb.Controllers
 
         public JsonResult LoadAuthorities(string menuids)
         {
-            var user = AppEnvironment.LoginUser;
+            var user = LoginInfo.Current;
             if (user == null)
             {
                 return this.JsonNet(new { ID = 0 });
             }
             Search_MenuAuthority search = new Search_MenuAuthority();
             search.MenuIds = menuids;
-            search.RoleID = AppEnvironment.LoginUser.UserRole;
+            search.RoleID =user.UserRole;
             var menus = search.Load<BW_Menu>().Data;
 
             var canView = false;

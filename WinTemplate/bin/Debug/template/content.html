@@ -726,7 +726,7 @@
                             <text>tt.vf.idcard.add(f@(exd.dataid));</text>
                             break;
                         case "lenvalidate":
-                            <text>new tt.LV().set(@validate.minlen, @validate.maxlen).add(f@(exd.dataid));</text>
+                            <text>new tt.LV().set('@validate.minlen', '@validate.maxlen').add(f@(exd.dataid));</text>
                             break;
                         case "regvalidate":
                             <text>new tt.RV().set(new RegExp("@validate.regstr"),"输入数据格式错误" ).add(f@(exd.dataid));</text>

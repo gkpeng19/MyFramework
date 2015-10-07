@@ -10,11 +10,11 @@ using System.Web.Mvc;
 namespace EntityLibrary.Entities
 {
     [ModelBinder(typeof(EntityModelBinder))]
-    public class HQ_Admin:CommonModel
+    public class HQ_Member:CommonModel
     {
-        public HQ_Admin()
+        public HQ_Member()
         {
-            base.TableName = "HQ_Admin";
+            base.TableName = "HQ_Member";
         }
 
         [JsonIgnore]

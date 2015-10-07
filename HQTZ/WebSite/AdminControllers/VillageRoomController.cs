@@ -8,6 +8,7 @@ using G.Util.Html;
 using System.Web.Mvc;
 using EntityLibrary.Entities;
 using G.BaseWeb;
+using G.Util.Account;
 
 namespace HQWZ.Controllers
 {
@@ -18,7 +19,7 @@ namespace HQWZ.Controllers
 		{
             SearchModel sm=new SearchModel("uv_DisplayContent");
             sm.AddSearch("ID","Name");
-            sm["DPanelType"]=(int)DPanelTypeEnum.Distination;
+            sm["DPanelType"]=(int)EnumDPanelType.Distination;
             sm.OrderBy("DPanelID");
             var result= sm.Load<HQ_DisplayContent>();
             var items= HtmlSelect.GetHtmlSelectByCollection<HQ_DisplayContent>(result.Data,(e)=>
@@ -53,7 +54,7 @@ namespace HQWZ.Controllers
             {
                 #region 维护新增数据
 		        
-                entity.CreateBy=AppEnvironment.LoginUser.Name;
+                entity.CreateBy=LoginInfo.Current.Name;
                 entity.CreateOn=DateTime.Now;
 
 	            #endregion
@@ -62,7 +63,7 @@ namespace HQWZ.Controllers
             {
                 #region 维护修改数据
 		        
-                entity.EditBy=AppEnvironment.LoginUser.Name;
+                entity.EditBy=LoginInfo.Current.Name;
                 entity.EditOn=DateTime.Now;
 
 	            #endregion

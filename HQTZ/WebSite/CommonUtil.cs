@@ -2,6 +2,7 @@
 using G.Util.Extension;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
@@ -10,53 +11,17 @@ namespace WebSite
 {
     public static class CommonUtil
     {
-        public static string GetMD5(string myString)
+        public static string SystemID
         {
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] fromData = System.Text.Encoding.Unicode.GetBytes(myString);
-            byte[] targetData = md5.ComputeHash(fromData);
-            string byte2String = null; for (int i = 0; i < targetData.Length; i++)
+            get
             {
-                byte2String += targetData[i].ToString("x");
-            }
-            return byte2String;
-        }
-
-        /// <summary>
-        /// 根据树节点集合，初始化树
-        /// </summary>
-        /// <param name="orderNodes">有序树节点集合(按parentid正序)</param>
-        /// <returns></returns>
-        public static List<HtmlTreeNode> InitTree(List<HtmlTreeNode> orderNodes)
-        {
-            for (var i = orderNodes.Count - 1; i >= 0; --i)
-            {
-                var node = orderNodes[i];
-                if (node.parentid == 0)
+                var systemid = ConfigurationManager.AppSettings["SystemID"];
+                if (systemid == null)
                 {
-                    break;
+                    return string.Empty;
                 }
-                for (var j = i - 1; j >= 0; --j)
-                {
-                    if (node.parentid == orderNodes[j].id)
-                    {
-                        orderNodes[j].children.Add(node);
-                        orderNodes.RemoveAt(i);
-                        break;
-                    }
-                }
+                return systemid;
             }
-            return orderNodes;
-        }
-
-        public static List<HtmlSelectItem> GetHtmlSelectItems(Type enumType)
-        {
-            List<HtmlSelectItem> list = new List<HtmlSelectItem>();
-            foreach (var item in EnumExtension.GetEnumCollection(enumType))
-            {
-                list.Add(new HtmlSelectItem() { k = item.Description, v = item.Value });
-            }
-            return list;
         }
     }
 }

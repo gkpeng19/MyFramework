@@ -6,8 +6,8 @@ using G.Util.Mvc;
 using GOMFrameWork.DataEntity;
 using G.Util.Html;
 using System.Web.Mvc;
-using G.BaseWeb;
 using EntityLibrary.Entities;
+using G.Util.Account;
 
 namespace WebSite.AdminControllers
 {
@@ -49,7 +49,7 @@ namespace WebSite.AdminControllers
             {
                 #region 维护新增数据
 
-                entity.CreateBy = AppEnvironment.LoginUser.Name;
+                entity.CreateBy = LoginInfo.Current.Name;
                 entity.CreateOn = DateTime.Now;
 
                 #endregion
@@ -58,7 +58,7 @@ namespace WebSite.AdminControllers
             {
                 #region 维护修改数据
 
-                entity.EditBy = AppEnvironment.LoginUser.Name;
+                entity.EditBy = LoginInfo.Current.Name;
                 entity.EditOn = DateTime.Now;
 
                 #endregion

@@ -120,6 +120,14 @@ namespace EntityLibrary.Entities
 
         #endregion
 
+        #region 会员登录
         
+        [Search(Field="UserName",Operator=SearchOperator.Equal)]
+        public string MemberName
+        {
+            set { SetValue("MemberName", value); }
+        }
+
+        #endregion
     }
 }
