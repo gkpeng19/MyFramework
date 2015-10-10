@@ -15,6 +15,14 @@
           <Text>VillageRoom</Text>
           <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\VillageRoom</SPath>
         </GFile>
+        <GFile>
+          <Text>Agenter</Text>
+          <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\Agenter</SPath>
+        </GFile>
+        <GFile>
+          <Text>TravelGuide</Text>
+          <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\TravelGuide</SPath>
+        </GFile>
       </Files>
       <Folders />
       <Text>HQWZ</Text>

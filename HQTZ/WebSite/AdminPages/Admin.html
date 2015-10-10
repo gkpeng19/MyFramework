@@ -19,12 +19,12 @@
                     <li class="light-blue user-profile">
                         <a class="user-menu dropdown-toggle" href="#">
                             <span>
-                                <small>欢迎您,</small> 耿凯鹏
+                                <small>欢迎您,</small> <span id="username"></span>
                             </span>
                         </a>
                     </li>
                     <li class="purple">
-                        <a href="/Login/LoginOut"><i class="fa fa-sign-out"></i> 退 出</a>
+                        <a href="/ClientBase/LoginOut"><i class="fa fa-sign-out"></i> 退 出</a>
                     </li>
                 </ul>
             </div>
@@ -38,7 +38,7 @@
                 <span>菜单</span>
             </div>
             <ul class="nav nav-list">
-                <li>
+                <li class="active">
                     <a href="Destination.html" target="page-content">
                         <i class="fa fa-dashboard"></i>
                         <span>目的地</span>
@@ -66,6 +66,42 @@
                     <a href="BenefitDetails.html" target="page-content">
                         <i class="fa fa-dashboard"></i>
                         <span>得天独厚详细</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="MemberService.html" target="page-content">
+                        <i class="fa fa-dashboard"></i>
+                        <span>尊享服务</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="ServiceDetails.html" target="page-content">
+                        <i class="fa fa-dashboard"></i>
+                        <span>尊享服务详细</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="NewCheaper.html" target="page-content">
+                        <i class="fa fa-dashboard"></i>
+                        <span>最新优惠</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="CheaperDetails.html" target="page-content">
+                        <i class="fa fa-dashboard"></i>
+                        <span>最新优惠详细</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Agenter.html" target="page-content">
+                        <i class="fa fa-dashboard"></i>
+                        <span>代理人信息</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Article.html?atype=1" target="page-content">
+                        <i class="fa fa-dashboard"></i>
+                        <span>旅居指南</span>
                     </a>
                 </li>
             </ul>
@@ -107,6 +143,19 @@
         }
 
         startInit($('#page-content'), 800, 560);
+
+        $.post("/ClientBase/GetLoginUserName", {}, function (name) {
+            $("#username").text(name);
+        });
+
+        $(function () {
+            $(".nav-list li").bind('click', function () {
+                if (!$(this).hasClass("active")) {
+                    $(".nav-list .active").removeClass("active");
+                    $(this).addClass("active");
+                }
+            });
+        });
     </script>
 </body>
 </html>

@@ -30,7 +30,7 @@
     <script type="text/javascript">
         setCurrMenu(3);
 
-        var panelMore = $('<div class="panel" id="panel_more"><img src="/Images/more.jpg" style="cursor:pointer;" /></td>');
+        var panelMore = $('<div class="panel" id="panel_more"><img src="/Images/more.jpg" /></td>');
         var clickIndex = 1;
         panelMore.find("img").bind("click", function () {
             LoadDestinations(clickIndex + 1);
@@ -40,7 +40,7 @@
         function LoadDestinations(page) {
             $("#panel_more").remove();
 
-            $.post("/Destination/LoadDestinations", { page: page }, function (r) {
+            $.post("/MemberService/LoadServices", { page: page }, function (r) {
                 var list = $.toJsResult(r.Data);
                 $(list).each(function () {
                     $("#panel_container").append('<div class="panel"><img data-id="' + this.ID + '" data-name="' + this.Name + '" src="/' + this.ImgName + '" class="traveImg" /><div class="traveTitle"><i>' + this.Name + '</i></div></div>');
@@ -52,7 +52,7 @@
 
                 initTraveImgShade(".traveImg", "#E32c2d", function (target, container) {
                     var name = $(target).attr("data-name");
-                    $.post("/Destination/LoadDestinationDetails", { destinationId: $(target).attr("data-id") }, function (r) {
+                    $.post("/MemberService/LoadServiceDetails", { serviceid: $(target).attr("data-id") }, function (r) {
                         container.append("<div class='dc_title'>" + name + "</div>");
                         var dc_ctx = $("<div class='dc_ctx'></div>");
                         container.append(dc_ctx);

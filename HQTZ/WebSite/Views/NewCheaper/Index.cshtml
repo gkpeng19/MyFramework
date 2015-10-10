@@ -40,7 +40,7 @@
         function LoadDestinations(page) {
             $("#panel_more").remove();
 
-            $.post("/MemberBenefit/LoadBenefits", { page: page }, function (r) {
+            $.post("/NewCheaper/LoadCheapers", { page: page }, function (r) {
                 var list = $.toJsResult(r.Data);
                 $(list).each(function () {
                     $("#panel_container").append('<div class="panel"><img data-id="' + this.ID + '" data-name="' + this.Name + '" src="/' + this.ImgName + '" class="traveImg" /><div class="traveTitle"><i>' + this.Name + '</i></div></div>');
@@ -52,7 +52,7 @@
 
                 initTraveImgShade(".traveImg", "#00b1c2", function (target, container) {
                     var name = $(target).attr("data-name");
-                    $.post("/MemberBenefit/LoadBenefitDetails", { destinationId: $(target).attr("data-id") }, function (r) {
+                    $.post("/NewCheaper/LoadCheaperDetails", { cheaperid: $(target).attr("data-id") }, function (r) {
                         container.append("<div class='dc_title'>" + name + "</div>");
                         var dc_ctx = $("<div class='dc_ctx'></div>");
                         container.append(dc_ctx);

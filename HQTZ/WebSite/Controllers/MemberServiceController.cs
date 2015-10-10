@@ -15,7 +15,7 @@ namespace WebSite.Controllers
             return View();
         }
 
-        public JsonResult LoadDestinations(int page)
+        public JsonResult LoadServices(int page)
         {
             var psize = 7;
             if (page > 1)
@@ -46,10 +46,10 @@ namespace WebSite.Controllers
             return this.JsonNet(new { Data = list, PageCount = result.PageCount });
         }
 
-        public JsonResult LoadDestinationDetails(int destinationId)
+        public JsonResult LoadServiceDetails(int serviceid)
         {
             SearchModel sm = new SearchModel("HQ_DisplayContent");
-            sm["DPanelID"] = destinationId;
+            sm["DPanelID"] = serviceid;
             sm.AddSearch("ID", "Name");
             var result = sm.Load<HQ_DisplayContent>();
             return this.JsonNet(result.Data);

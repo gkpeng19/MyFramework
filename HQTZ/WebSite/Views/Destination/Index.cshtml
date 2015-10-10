@@ -30,7 +30,7 @@
     <script type="text/javascript">
         setCurrMenu(0);
 
-        var panelMore = $('<div class="panel" id="panel_more"><img src="/Images/more.jpg" style="cursor:pointer;" /></td>');
+        var panelMore = $('<div class="panel" id="panel_more"><img src="/Images/more.jpg" /></td>');
         var clickIndex = 1;
         panelMore.find("img").bind("click", function () {
             LoadDestinations(clickIndex + 1);
@@ -58,7 +58,7 @@
                         container.append(dc_ctx);
                         var list = $.toJsResult(r);
                         $(list).each(function () {
-                            dc_ctx.append("<div><a target='_blank' href='/Detail/Index/" + this.ID + "'><i class='fa fa-caret-right'></i>&nbsp; " + this.Name + "</a></div>");
+                            dc_ctx.append("<div><a target='_blank' href='/Detail/RoomIndex/" + this.ID + "'><i class='fa fa-caret-right'></i>&nbsp; " + this.Name + "</a></div>");
                         });
                     });
                 });

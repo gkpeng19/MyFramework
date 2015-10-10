@@ -1135,7 +1135,7 @@ $.fn.extend({
         me.attr("name", "upfile_g");
         $('<input type="text" readonly="readonly" name="'
             + name + '" id="' + id + '" class="span11" /><label for="file_'
-            + id + '" class="btn btn-primary btn-mini">&nbsp;上&nbsp;传&nbsp;</label>').insertAfter(me);
+            + id + '" class="btn btn-primary btn-mini" style="margin-top:-10px;margin-left:-56px;">&nbsp;上&nbsp;传&nbsp;</label>').insertAfter(me);
 
         me.on("change", function () {
             if ($(this).val().length == 0) {
@@ -1250,7 +1250,9 @@ $.fn.extend({
                         }
                     }
                     else {
-                        $(this).val(value);
+                        if ($(this).attr("type") != "file") {
+                            $(this).val(value);
+                        }
                     }
                 }
                 else {
@@ -1294,7 +1296,8 @@ $.fn.extend({
         this.find("input,textarea").each(function () {
             var name = $(this).attr("name");
             if (name != undefined) {
-                if ($(this).attr("type") == "checkbox") {
+                var tagType = $(this).attr("type");
+                if (tagType == "checkbox") {
                     if (this.checked) {
                         newjson[name] = 1;
                     }
@@ -1302,7 +1305,7 @@ $.fn.extend({
                         newjson[name] = 0;
                     }
                 }
-                else {
+                else if (tagType != "file") {
                     newjson[name] = $.trim($(this).val());
                 }
             }
@@ -1390,6 +1393,7 @@ $.extend({
 
 /*-------layer插件扩展-----------------------------------------------------------*/
 $.extend({
+    msg: function (msg) { layer.msg(msg, { icon: 0, time: 1000 }); },
     alert: function (msg) { layer.alert(msg, { icon: 0 }); },
     success: function (msg) { layer.alert(msg, { icon: 1 }); },
     error: function (msg) { layer.alert(msg, { icon: 2 }); },
@@ -1569,5 +1573,7 @@ $.extend({
         }
 
         _pageParameters.init = true;
+
+        return _pageParameters[pname];
     }
 });

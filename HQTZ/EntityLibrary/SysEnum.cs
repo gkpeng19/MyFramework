@@ -17,4 +17,9 @@ namespace EntityLibrary.Entities
     {
         Normal = 1
     }
+
+    public enum EnumArticleCategory
+    {
+        TravelGuide=1
+    }
 }

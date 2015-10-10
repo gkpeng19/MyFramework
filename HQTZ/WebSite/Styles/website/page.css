@@ -40,6 +40,7 @@ body .page {
 }
 
 #menu div span {
+    font-size:16px;
     position: relative;
     top: -5px;
     left: -5px;
@@ -88,10 +89,11 @@ body .page {
     text-align: right;
 }
 
-#panel-more img {
+#panel_more img {
     width: 84px;
     height: 22px;
     margin-top: 140px;
+    cursor:pointer;
 }
 
 .dc_content {

@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using G.Util.Mvc;
 using GOMFrameWork.DataEntity;
+using System.Web.Security;
 
 namespace G.BaseWeb.Controllers
 {
@@ -33,9 +34,10 @@ namespace G.BaseWeb.Controllers
             return this.JsonNet(new { result = 0 });
         }
 
-        public void LoginOut()
+        public virtual void LoginOut()
         {
             LoginInfo.LoginOut();
+            base.HttpContext.Response.Redirect(FormsAuthentication.LoginUrl);
         }
 
         class Search_MenuAuthority : BaseSearchModel
@@ -66,7 +68,7 @@ namespace G.BaseWeb.Controllers
             }
             Search_MenuAuthority search = new Search_MenuAuthority();
             search.MenuIds = menuids;
-            search.RoleID =user.UserRole;
+            search.RoleID = user.UserRole;
             var menus = search.Load<BW_Menu>().Data;
 
             var canView = false;
@@ -85,6 +87,14 @@ namespace G.BaseWeb.Controllers
                 return this.JsonNet(new { ID = 0 });
             }
             return this.JsonNet(new { ID = 1, Menus = menus });
+        }
+
+        public virtual ActionResult GetYzmImg()
+        {
+            string code = null;
+            var bytes = Yzm.CreateYZM(out code, 4);
+            base.Session["yzm"] = code;
+            return File(bytes, @"image/Jpeg");
         }
     }
 }

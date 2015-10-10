@@ -163,7 +163,6 @@ namespace G.Util.Account
         {
             HttpContext.Current.Response.Cookies.Clear();
             FormsAuthentication.SignOut();
-            HttpContext.Current.Response.Redirect(FormsAuthentication.LoginUrl);
         }
 
         public static LoginInfo Current

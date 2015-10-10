@@ -77,6 +77,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Extension\XmlExtension.cs" />
+    <Compile Include="Tool\Yzm.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GOMFrameWork\GOMFrameWork.csproj">

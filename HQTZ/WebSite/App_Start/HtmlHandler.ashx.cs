@@ -21,7 +21,13 @@ namespace WebSite.App_Start
                 return;
             }
 
-            context.Response.WriteFile(context.Server.MapPath(context.Request.RawUrl));
+            var filepath = context.Request.RawUrl;
+            var spIndex = filepath.IndexOf('?');
+            if (spIndex > 0)
+            {
+                filepath = filepath.Substring(0, spIndex);
+            }
+            context.Response.WriteFile(context.Server.MapPath(filepath));
         }
 
         public bool IsReusable

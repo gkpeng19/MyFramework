@@ -35,8 +35,13 @@ namespace WebSite.Controllers
             return View();
         }
 
-        public int MemberLogin(string username, string userpsw, int isrem)
+        public int MemberLogin(string username, string userpsw, string yzm, int isrem)
         {
+            var syzm = base.Session["yzm"];
+            if (syzm == null || !syzm.ToString().Equals(yzm, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return -2;
+            }
             SearchModel sm = new SearchModel("HQ_Member");
             sm.MemberName = username;
             var member = sm.LoadEntity<HQ_Member>();

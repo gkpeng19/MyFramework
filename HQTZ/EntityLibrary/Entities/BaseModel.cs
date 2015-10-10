@@ -100,7 +100,7 @@ namespace EntityLibrary.Entities
 
         #region 按房间名称查询度假村房间
 
-        [Search(Field="Name",Operator=SearchOperator.Like)]
+        [Search(Field = "Name", Operator = SearchOperator.Like)]
         public string RoomName
         {
             set { SetValue("RoomName", value); }
@@ -121,11 +121,21 @@ namespace EntityLibrary.Entities
         #endregion
 
         #region 会员登录
-        
-        [Search(Field="UserName",Operator=SearchOperator.Equal)]
+
+        [Search(Field = "UserName", Operator = SearchOperator.Equal)]
         public string MemberName
         {
             set { SetValue("MemberName", value); }
+        }
+
+        #endregion
+
+        #region 文章按标题查询
+
+        [Search(Field = "Title", Operator = SearchOperator.Like)]
+        public string ArticleName
+        {
+            set { SetValue("ArticleName", value); }
         }
 
         #endregion
