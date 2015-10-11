@@ -443,6 +443,8 @@
     <Content Include="Views\Member\OrderIndex.cshtml" />
     <Content Include="Views\NewCheaper\Index.cshtml" />
     <Content Include="Views\MemberService\Index.cshtml" />
+    <Content Include="Views\Member\TraveGuide.cshtml" />
+    <Content Include="Views\Member\ViewGuidInfo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

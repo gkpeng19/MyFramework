@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using G.Util.Mvc;
 
 namespace WebSite.Controllers
 {
@@ -103,6 +104,57 @@ namespace WebSite.Controllers
                 return 1;
             }
             return 0;
+        }
+
+        public string SearchAgenter(string name)
+        {
+            if (name == null || name.Length == 0)
+            {
+                return string.Empty;
+            }
+            SearchModel sm = new SearchModel("HQ_Agenter");
+            sm.AgenterName = name;
+            var agenter = sm.LoadEntity<HQ_Agenter>();
+            if (agenter != null)
+            {
+                return agenter.AContent;
+            }
+            return string.Empty;
+        }
+
+        public ActionResult TraveGuide()
+        {
+            return View();
+        }
+
+        public JsonResult LoadTraveGuides(SearchModel sm, int pindex_g, int psize_g = 8)
+        {
+            sm.SearchID = "HQ_Article";
+            sm["ACategory"] = (int)EnumArticleCategory.TravelGuide;
+            sm.PageIndex = pindex_g;
+            sm.PageSize = psize_g;
+            sm.OrderBy("id", GOMFrameWork.DataEntity.EnumOrderBy.Desc);
+            var result = sm.Load<HQ_Article>();
+            foreach (var d in result.Data)
+            {
+                var content = d.AContent.Substring(0, 500);
+                content = System.Text.RegularExpressions.Regex.Replace(content, "<[^>]*>", "");
+                if(content.Length>180)
+                {
+                    content = content.Substring(0, 180);
+                }
+                d.AContent = content;
+            }
+
+            return this.JsonNet(new { list = result.Data, pager = Pager.InitPager(pindex_g, result.PageCount, "loadTraveGuides") });
+        }
+
+        public ActionResult ViewGuidInfo(int id)
+        {
+            SearchModel sm=new SearchModel("HQ_Article");
+            sm["ID"]=id;
+            var article = sm.LoadEntity<HQ_Article>();
+            return View(article);
         }
 
         [LoginVerify("Client")]
