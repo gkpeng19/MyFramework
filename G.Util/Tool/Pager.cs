@@ -10,6 +10,11 @@ namespace G.Util.Tool
     {
         public static string InitPager(int pageindex, int pagecount, string function, int pagebutton = 15)
         {
+            if (pagecount <= 1)
+            {
+                return string.Empty;
+            }
+
             StringBuilder sb = new StringBuilder();
 
             if (pageindex > 1)

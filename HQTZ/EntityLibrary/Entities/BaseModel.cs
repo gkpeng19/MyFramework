@@ -139,5 +139,15 @@ namespace EntityLibrary.Entities
         }
 
         #endregion
+
+        #region 查询代理人
+
+        [Search(Field = "Name")]
+        public string AgenterName
+        {
+            set { SetValue("AgenterName", value); }
+        }
+
+        #endregion
     }
 }

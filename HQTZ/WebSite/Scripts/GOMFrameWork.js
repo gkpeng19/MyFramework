@@ -1135,7 +1135,7 @@ $.fn.extend({
         me.attr("name", "upfile_g");
         $('<input type="text" readonly="readonly" name="'
             + name + '" id="' + id + '" class="span11" /><label for="file_'
-            + id + '" class="btn btn-primary btn-mini" style="margin-top:-10px;margin-left:-56px;">&nbsp;上&nbsp;传&nbsp;</label>').insertAfter(me);
+            + id + '" class="btn btn-primary btn-mini" style="margin-top:-10px;margin-left:-57px;">&nbsp;上&nbsp;传&nbsp;</label>').insertAfter(me);
 
         me.on("change", function () {
             if ($(this).val().length == 0) {
@@ -1145,20 +1145,21 @@ $.fn.extend({
             $('<iframe name="up"  style="display:none;"></iframe>').insertBefore(me).on('load', function () {
                 var r = this.contentWindow.document.body.innerHTML;
 
-                if (r == '') return;
-                var result = eval('(' + r + ')');
-                if (result.state != "SUCCESS") {
-                    me.parent().find(".remove").click();
-                    $.alert(result.state);
-                    return;
+                if (r != "") {
+                    var result = eval('(' + r + ')');
+                    if (result.state != "SUCCESS") {
+                        me.parent().find(".remove").click();
+                        $.alert(result.state);
+                        return;
+                    }
+                    args.success(result);
                 }
-                args.success(result);
 
                 $(this).unbind('load');
                 $(this).remove();
             });
 
-            var form = $('<form target="up" method="post" action="' + args.uploadUrl + '" enctype="multipart/form-data"></form>');
+            var form = $('<form style="display:none;" target="up" method="post" action="' + args.uploadUrl + '" enctype="multipart/form-data"></form>');
 
             var input_maxsize = null;
             if (args.maxSize) {
@@ -1174,6 +1175,7 @@ $.fn.extend({
             var nextEle = me.next();
 
             form.append(me);
+            $("body").append(form);
             form[0].submit();
 
             me.insertBefore(nextEle);

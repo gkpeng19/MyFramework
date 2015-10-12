@@ -16,6 +16,16 @@
                 <img src="~/Images/temp.jpg" />
             </div>
         </a>
+        <a href="#" onclick="AgenterSearch()">
+            <div class="panel">
+                <img src="~/Images/temp.jpg" />
+            </div>
+        </a>
+        <a href="/Member/TraveGuide">
+            <div class="panel">
+                <img src="~/Images/temp.jpg" />
+            </div>
+        </a>
     </div>
     <div class="clear"></div>
 </div>
@@ -42,7 +52,7 @@
             <label for="tpyzm">验证码：</label>
         </td>
         <td>
-            <input type="text" id="tpyzm" style="width:140px;position:relative;top:-5px;" />
+            <input type="text" id="tpyzm" style="width:139px;position:relative;top:-5px;" />
             <img id="yzm_img" height="25" src="/Base/GetYzmImg" style="border:solid 1px #ddd;position:relative;top:3px;"
                  title="点击更换验证码" alt="验证码" onclick="changeYzmImg()" />
         </td>
@@ -95,6 +105,11 @@
     </tr>
 </table>
 
+<div style="width:800px;display:none;padding:0px 20px;" id="agenterDiv">
+    <p style="border-bottom:dashed 1px #ddd;padding-bottom:10px;"><label for="agenterName" style="font-size:14px;">代理人姓名：</label><input type="text" id="agenterName" /><input id="btnSearchAgenter" type="button" value="查询" style="width:60px;padding:3px;" /></p>
+    <div id="agenterInfo" style="height:400px;overflow-y:auto;"></div>
+</div>
+
 @section styles{
     <style type="text/css">
         /*用户登录↓*/
@@ -118,7 +133,7 @@
                 padding: 5px 0px;
             }
 
-            #loginDiv input[type=text], #loginDiv input[type=password], #regDiv input[type=text], #regDiv input[type=password] {
+            input[type=text], #loginDiv input[type=password], #regDiv input[type=text], #regDiv input[type=password] {
                 padding: 5px;
                 width: 220px;
                 border: solid 1px #dddddd;
@@ -266,6 +281,30 @@
             links.eq(0).remove();
             links.eq(1).remove();
         }
+
+        function AgenterSearch() {
+            $("#agenterDiv").open("代理人查询");
+        }
+
+        $(function () {
+            $("#btnSearchAgenter").bind("click", function () {
+                var name = $.trim($("#agenterName").val());
+                if (name.length == 0) {
+                    return;
+                }
+                
+                $.post("/Member/SearchAgenter", { name: name }, function (r) {
+                    $("#agenterInfo").loaded();
+
+                    if (r.length == 0) {
+                        $("#agenterInfo").html("<p style='line-height:300px;text-align:center;color:gray;'>查询不到代理人信息！</p>");
+                    }
+                    else {
+                        $("#agenterInfo").html(r);
+                    }
+                });
+            });
+        });
 
         @if(ViewBag.Action!=null&&ViewBag.Action=="login")
         {

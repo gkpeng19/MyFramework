@@ -1,14 +1,13 @@
 ﻿body {
-    font-family: Helvetica, Tahoma, Arial, STXihei, "华文细黑", "Microsoft YaHei", "微软雅黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
+    font-family: "Microsoft YaHei", "微软雅黑",Arial,Helvetica, Tahoma, STXihei, "华文细黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
 }
 
 .btn {
-    font-family: Helvetica, Tahoma, Arial, STXihei, "华文细黑", "Microsoft YaHei", "微软雅黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
+    font-family: "Microsoft YaHei", "微软雅黑",Arial,Helvetica, Tahoma, STXihei, "华文细黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
 }
 
 /*Pager*/
 .pager a {
-    font-family: 'Microsoft YaHei';
     padding: 6px 12px;
     border: 1px solid #ddd;
     background-color: white;
