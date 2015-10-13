@@ -48,3 +48,7 @@ D:\Gkpeng\MyFramework\G.Util\obj\Debug\G.Util.dll
 D:\Gkpeng\MyFramework\G.Util\obj\Debug\G.Util.pdb
 D:\Gkpeng\MyFramework\G.Util\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll
 D:\Work\MyFramework\G.Util\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll
+D:\Gkpeng\MyFramework\G.Util\bin\Debug\ServiceStack.Common.dll
+D:\Gkpeng\MyFramework\G.Util\bin\Debug\ServiceStack.Interfaces.dll
+D:\Gkpeng\MyFramework\G.Util\bin\Debug\ServiceStack.Redis.dll
+D:\Gkpeng\MyFramework\G.Util\bin\Debug\ServiceStack.Text.dll

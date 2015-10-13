@@ -64,3 +64,7 @@ D:\Work\MyFramework\WinTemplate\bin\Debug\template\cs.html
 D:\Work\MyFramework\WinTemplate\bin\Debug\template\html.html
 D:\Work\MyFramework\WinTemplate\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll
 D:\Work\MyFramework\WinTemplate\obj\Debug\WinTemplate.NewSluWin.resources
+D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\ServiceStack.Redis.dll
+D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\ServiceStack.Interfaces.dll
+D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\ServiceStack.Text.dll
+D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\ServiceStack.Common.dll

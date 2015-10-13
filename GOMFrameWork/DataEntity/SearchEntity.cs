@@ -16,18 +16,41 @@ namespace GOMFrameWork.DataEntity
 
         public string SearchID { get; set; }
 
-        public string ExtensionCondition { get; set; }
+        //public string ExtensionCondition { get; set; }
 
         public SearchEntity()
+            : this(false)
         {
-            Collection = new List<SearchItem>();
         }
 
         public SearchEntity(string searchID)
+            : this()
         {
             this.SearchID = searchID;
-            Collection = new List<SearchItem>();
         }
+
+        private SearchEntity(bool isFromSql)
+        {
+            this.IsFromSql = isFromSql;
+            if (!isFromSql)
+            {
+                Collection = new List<SearchItem>();
+            }
+        }
+
+        #region 用于执行sql语句
+
+        internal bool IsFromSql { get; private set; }
+        internal DbParameter[] SqlParameters { get; private set; }
+        public static SearchEntity FormSql(string sql, params DbParameter[] parameters)
+        {
+            SearchEntity se = new SearchEntity(true);
+            se.SearchID = sql;
+            se.SqlParameters = parameters;
+            return se;
+        }
+
+        #endregion
 
         public void AddSearch(params string[] value)
         {

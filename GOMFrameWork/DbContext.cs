@@ -73,11 +73,12 @@ namespace GOMFrameWork
             return EntityProviderFactory.GetProvider(source[entityType.FullName].ToString());
         }
 
-        internal static EntityProvider GetEntityProvider(EntityProvider provider, Type entityType, ref bool isNew)
+        internal static EntityProvider GetEntityProvider(EntityProvider provider, Type entityType, out bool isReuse)
         {
             //对于非Save方法，provider恒等于Null
             if (provider == null)
             {
+                isReuse = false;
                 return GetEntityProvider(entityType);
             }
 
@@ -101,10 +102,11 @@ namespace GOMFrameWork
 
             if (source[key].ToString().Equals(provider.ContextKey))
             {
-                isNew = false;
+                isReuse = true;
                 return provider;
             }
 
+            isReuse = false;
             return EntityProviderFactory.GetProvider(key);
         }
     }

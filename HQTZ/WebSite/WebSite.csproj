@@ -109,6 +109,7 @@
     <Content Include="AdminPages\VillageRoom.html" />
     <Content Include="Default.htm" />
     <Content Include="Global.asax" />
+    <Content Include="Images\agentersearch.jpg" />
     <Content Include="Images\banner1.jpg" />
     <Content Include="Images\banner2.jpg" />
     <Content Include="Images\contact.jpg" />
@@ -125,6 +126,7 @@
     <Content Include="Images\left_hand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\login.jpg" />
     <Content Include="Images\logo.gif" />
     <Content Include="Images\menubg.jpg" />
     <Content Include="Images\menudbg.jpg" />
@@ -132,6 +134,7 @@
     <Content Include="Images\password.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\register.jpg" />
     <Content Include="Images\right_hand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -139,11 +142,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\server-tel.gif" />
-    <Content Include="Images\temp.jpg" />
     <Content Include="Images\tou.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\trave.gif" />
+    <Content Include="Images\traveguid.jpg" />
     <Content Include="Images\username.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -206,6 +209,7 @@
     <Content Include="Scripts\font-awesome\scss\_stacked.scss" />
     <Content Include="Scripts\font-awesome\scss\_variables.scss" />
     <Content Include="App_Start\HtmlHandler.ashx" />
+    <None Include="Properties\PublishProfiles\HQTZ.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

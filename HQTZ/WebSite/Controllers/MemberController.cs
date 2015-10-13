@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using G.Util.Mvc;
+using System.Data.SqlClient;
 
 namespace WebSite.Controllers
 {
@@ -137,11 +138,21 @@ namespace WebSite.Controllers
             var result = sm.Load<HQ_Article>();
             foreach (var d in result.Data)
             {
-                var content = d.AContent.Substring(0, 500);
-                content = System.Text.RegularExpressions.Regex.Replace(content, "<[^>]*>", "");
+                var title = d.Title;
+                if (title.Length > 30)
+                {
+                    title = title.Substring(0, 30) + "...";
+                    d.Title = title;
+                }
+                var content = System.Text.RegularExpressions.Regex.Replace(d.AContent, "<[^>]*>", "");
                 if(content.Length>180)
                 {
                     content = content.Substring(0, 180);
+                }
+                var cindex=content.LastIndexOf('<');
+                if (cindex >= 0)
+                {
+                    content = content.Substring(0, cindex);
                 }
                 d.AContent = content;
             }

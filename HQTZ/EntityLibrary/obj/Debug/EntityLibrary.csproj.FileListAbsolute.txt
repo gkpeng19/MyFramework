@@ -41,4 +41,3 @@ D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\ExcelLibrary.pdb
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.pdb
-D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.csprojResolveAssemblyReference.cache

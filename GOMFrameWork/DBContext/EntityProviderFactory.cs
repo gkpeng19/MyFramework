@@ -39,6 +39,7 @@ namespace GOMFrameWork.DBContext
                     if (queue.Count > 0)
                     {
                         provider = queue.Dequeue();
+                        return provider;
                     }
                 }
             }

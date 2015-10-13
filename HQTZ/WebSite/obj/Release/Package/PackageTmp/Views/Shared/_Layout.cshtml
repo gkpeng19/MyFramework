@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>旅居中国-@ViewBag.Title</title>
+    <link href="~/Styles/website/page.css" rel="stylesheet" />
+    <link href="~/Scripts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <div class="page">
+        <div class="content">
+            <div id="top">
+                <img src="~/Images/logo.gif" style="margin-left:50px;" />
+                <img src="~/Images/server-tel.gif" style="margin-left:300px;" />
+            </div>
+            <div id="menu">
+                <a href="/Destination">
+                    <div class="menu-normal" data-class="menu-curr"><span>目的地</span></div>
+                </a>
+                <a href="/MemberBenefit">
+                    <div class="menu-normal" data-class="green-menu-curr"><span>得天独厚</span></div>
+                </a>
+                <a href="/Member">
+                    <div class="menu-normal" data-class="menu-curr"><span>会员中心</span></div>
+                </a>
+                <a href="/MemberService">
+                    <div class="menu-normal" data-class="menu-curr"><span>尊享服务</span></div>
+                </a>
+                <a href="/NewCheaper">
+                    <div class="menu-normal" data-class="green-menu-curr"><span>最新优惠</span></div>
+                </a>
+            </div>
+            <div class="clear"></div>
+            <div style="margin-top:10px;">
+                @RenderBody()
+            </div>
+            <div style="margin-top:30px;">
+                <img src="~/Images/img1.gif" />
+            </div>
+            <div id="trave">
+                <img src="~/Images/trave.gif" />
+            </div>
+            <div style="height:47px;">
+                <img src="~/Images/contact.jpg" />
+            </div>
+        </div>
+        <div id="bottom"></div>
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/GOMFrameWork.js"></script>
+    <script src="~/Scripts/website/page.js"></script>
+    <script type="text/javascript">
+        var defaultMenu = null;
+        var lastMenu = null;
+        $("#menu div").bind("mouseover", function () {
+            var toClass = $(this).attr("data-class");
+            if (!$(this).hasClass(toClass)) {
+                if (lastMenu) {
+                    lastMenu.removeClass(lastMenu.attr("data-class"));
+                }
+
+                $(this).addClass(toClass);
+                lastMenu = $(this);
+            }
+        });
+
+        $("#menu").bind("mouseout", function () {
+            lastMenu.removeClass(lastMenu.attr("data-class"));
+            lastMenu = null;
+            if (defaultMenu) {
+                var toClass = defaultMenu.attr("data-class");
+                if (!defaultMenu.hasClass(toClass)) {
+                    defaultMenu.addClass(toClass);
+                }
+                lastMenu = defaultMenu;
+            }
+        });
+
+        function setCurrMenu(idx) {
+            defaultMenu = $("#menu div").eq(idx);
+            defaultMenu.addClass(defaultMenu.attr("data-class"));
+            lastMenu = defaultMenu;
+        }
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

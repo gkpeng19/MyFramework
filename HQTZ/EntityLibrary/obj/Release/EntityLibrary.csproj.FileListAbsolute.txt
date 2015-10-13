@@ -1,0 +1,15 @@
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Release\EntityLibrary.dll
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Release\EntityLibrary.pdb
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Release\G.Util.dll
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Release\GOMFrameWork.dll
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Release\Newtonsoft.Json.dll
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Release\System.Web.Mvc.dll
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Release\ExcelLibrary.dll
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Release\G.Util.pdb
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Release\GOMFrameWork.pdb
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Release\Newtonsoft.Json.xml
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Release\System.Web.Mvc.xml
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Release\ExcelLibrary.pdb
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Release\zh-Hans\System.Web.Mvc.resources.dll
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Release\EntityLibrary.dll
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Release\EntityLibrary.pdb

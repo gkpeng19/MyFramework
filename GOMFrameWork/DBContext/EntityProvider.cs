@@ -36,9 +36,21 @@ namespace GOMFrameWork.DBContext
         {
             CommonResult<T> result = new CommonResult<T>();
 
-            DbParameter[] parameters = GetSearchParameters(entity);
+            string sql = null;
+            DbParameter[] parameters = null;
+            if (entity.IsFromSql)
+            {
+                sql = entity.SearchID;
+                parameters = entity.SqlParameters;
+            }
+            else
+            {
+                sql = GetSearchSql(entity);
+                parameters = GetSearchParameters(entity);
+            }
+
             List<T> data = null;
-            using (DbDataReader reader = _dbProvider.ExcuteReader(GetSearchSql(entity), parameters))
+            using (DbDataReader reader = _dbProvider.ExcuteReader(sql, parameters))
             {
                 data = reader.ConvertToList<T>();
             }
@@ -362,10 +374,10 @@ namespace GOMFrameWork.DBContext
                         sbwhere.Append(" and " + item.ToString("@"));
                     }
 
-                    if (entity.ExtensionCondition != null && entity.ExtensionCondition.Length > 0)
-                    {
-                        sbwhere.Append(" and " + entity.ExtensionCondition);
-                    }
+                    //if (entity.ExtensionCondition != null && entity.ExtensionCondition.Length > 0)
+                    //{
+                    //    sbwhere.Append(" and " + entity.ExtensionCondition);
+                    //}
 
                     where = sbwhere.ToString();
                 }
@@ -619,10 +631,10 @@ namespace GOMFrameWork.DBContext
                     sbwhere.Append(" and s." + item.ToString(":"));
                 }
 
-                if (entity.ExtensionCondition != null && entity.ExtensionCondition.Length > 0)
-                {
-                    sbwhere.Append(" and s." + entity.ExtensionCondition);
-                }
+                //if (entity.ExtensionCondition != null && entity.ExtensionCondition.Length > 0)
+                //{
+                //    sbwhere.Append(" and s." + entity.ExtensionCondition);
+                //}
 
                 string sql = string.Empty;
                 if (entity.PageIndex <= 0)

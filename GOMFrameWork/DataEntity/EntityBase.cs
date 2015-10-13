@@ -18,13 +18,13 @@ namespace GOMFrameWork.DataEntity
     {
         internal EntityProvider GetProvider()
         {
-            bool isNew = true;
-            return GetProvider(null, ref isNew);
+            bool isReuse = false;
+            return GetProvider(null, out isReuse);
         }
 
-        internal EntityProvider GetProvider(EntityProvider provider, ref bool isNew)
+        internal EntityProvider GetProvider(EntityProvider provider, out bool isReuse)
         {
-            return DbContext.GetEntityProvider(provider, this.GetType(), ref isNew);
+            return DbContext.GetEntityProvider(provider, this.GetType(), out isReuse);
         }
 
         protected abstract void SetValue(string key, object value);
@@ -410,17 +410,17 @@ namespace GOMFrameWork.DataEntity
 
         #region 数据库操作
 
-        public long Save()
+        public virtual long Save()
         {
             return Save(null);
         }
 
-        internal long Save(EntityProvider provider)
+        private long Save(EntityProvider provider)
         {
             this.Remove_G();
 
-            bool isNew = true;
-            var entityProvider = GetProvider(provider, ref isNew);
+            bool isReuse = false;
+            var entityProvider = GetProvider(provider, out isReuse);
 
             long id = 0;
             try
@@ -533,7 +533,7 @@ namespace GOMFrameWork.DataEntity
             }
             finally
             {
-                if (isNew)
+                if (!isReuse)
                 {
                     entityProvider.Close();
                 }
@@ -547,7 +547,7 @@ namespace GOMFrameWork.DataEntity
             return id;
         }
 
-        public long Delete()
+        public virtual long Delete()
         {
             this["IsDelete"] = 1;
             return this.Save();
