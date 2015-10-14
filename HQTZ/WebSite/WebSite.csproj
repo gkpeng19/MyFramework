@@ -134,6 +134,7 @@
     <Content Include="Images\password.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\phonecall.png" />
     <Content Include="Images\register.jpg" />
     <Content Include="Images\right_hand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -376,6 +377,7 @@
     <Content Include="Styles\GOMFrameWork.css" />
     <Content Include="AdminPages\Admin.html" />
     <Content Include="Styles\website\page.css" />
+    <Content Include="test.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

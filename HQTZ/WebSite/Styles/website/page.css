@@ -68,8 +68,10 @@ body .page {
 }
 
 #bottom {
-    background-color: #868c91;
-    height: 10px;
+    width:980px;
+    background-color: #444444;
+    height:200px;
+    padding:10px 100px 0px 100px;
 }
 
 
