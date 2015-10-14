@@ -223,10 +223,23 @@ namespace G.Util.Tool
             return JsonConvert.DeserializeObject<T>(jsonStr, jConverters);
         }
 
-        public static object GetPropertyValue(this string jsonStr, string PropertyName)
+        public static JObject GetJObject(params object[] content)
         {
-            JObject obj = JObject.Parse(jsonStr);
-            return obj[PropertyName];
+            if (content == null || content.Length == 0)
+            {
+                return new JObject();
+            }
+            return new JObject(content);
+        }
+
+        public static JObject GetJObject(string jsonStr)
+        {
+            return JObject.Parse(jsonStr);
+        }
+
+        public static JProperty GetJProperty(string key, object value)
+        {
+            return new JProperty(key, value);
         }
 
         /*JsonConvert.SerializeObject的内部实现
