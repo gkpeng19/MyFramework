@@ -9,22 +9,51 @@ namespace G.Util.Redis
 {
     public class RedisManager
     {
-        static object _object = new object();
-        static RedisClient _redis = null;
+        static object _serObject = new object();
+        static object _cliObject = new object();
 
-        public static RedisClient GetClient()
+        static RedisClient _masterRedis = null;
+
+        static Random _clientRedisRan = new Random();
+        static RedisClient[] _clientRedis = null;
+
+        static RedisManager()
         {
-            if (_redis == null)
+            var length = RedisSingleton.Current.RedisService.Selves.Count;
+            _clientRedis = new RedisClient[length];
+        }
+
+        public static RedisClient GetMaster()
+        {
+            if (_masterRedis == null)
             {
-                lock (_object)
+                lock (_serObject)
                 {
-                    if (_redis == null)
+                    if (_masterRedis == null)
                     {
-                        _redis = new RedisClient("127.0.0.1", 6379);
+                        var master = RedisSingleton.Current.RedisService.Master;
+                        _masterRedis = new RedisClient(master.Ip, master.Port);
                     }
                 }
             }
-            return _redis;
+            return _masterRedis;
+        }
+
+        public static RedisClient GetClient()
+        {
+            var ranInt = _clientRedisRan.Next(_clientRedis.Length);
+            if (_clientRedis[ranInt] == null)
+            {
+                lock (_cliObject)
+                {
+                    if (_clientRedis[ranInt] == null)
+                    {
+                        var selve = RedisSingleton.Current.RedisService.Selves[ranInt];
+                        _clientRedis[ranInt] = new RedisClient(selve.Ip, selve.Port);
+                    }
+                }
+            }
+            return _clientRedis[ranInt];
         }
     }
 }

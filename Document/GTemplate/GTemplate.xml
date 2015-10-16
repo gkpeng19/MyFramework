@@ -23,6 +23,10 @@
           <Text>TravelGuide</Text>
           <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\TravelGuide</SPath>
         </GFile>
+        <GFile>
+          <Text>ContactUs</Text>
+          <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\ContactUs</SPath>
+        </GFile>
       </Files>
       <Folders />
       <Text>HQWZ</Text>

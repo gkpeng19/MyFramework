@@ -37,6 +37,13 @@ namespace EntityLibrary.Entities
         }
 
         [JsonIgnore]
+        public string Description
+        {
+            get { return GetString("Description"); }
+            set { SetValue("Description", value); }
+        }
+
+        [JsonIgnore]
         public int VillageID
         {
             get { return GetInt32("VillageID"); }

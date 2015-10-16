@@ -57,9 +57,7 @@
 }
 
 .text_editor, .text_editor_hide {
-    max-height: 250px;
-    min-height: 250px;
-    height: 250px;
+    height: 230px;
 }
 
 

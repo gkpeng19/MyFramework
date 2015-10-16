@@ -1,5 +1,6 @@
 ﻿using G.Util.Redis;
 using Newtonsoft.Json;
+using ServiceStack.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,16 +29,27 @@ namespace G.Test
             //s.Name = "kiven";
             //s.Save();
 
-            RedisRepository res = new RedisRepository();
-            var list= res.GetAll<Student>();
+            //RedisClient master = RedisManager.GetMaster();
+            //RedisClient selve = RedisManager.GetClient();
 
-            var s1= new Student();
-            s1.SetUIValue("ID",1);
-            var target = res.Find<Student>(s1);
+            //master.Set<string>("test", "aa");
+            //var v = selve.Get<string>("test");
+            //System.Diagnostics.Debug.WriteLine(v);
+
+            //RedisRepository res = new RedisRepository();
+            //var v = res.Exist<Student>();
+            //Console.WriteLine(v);
+            //var list= res.GetAll<Student>();
+
+            //var s1= new Student();
+            //s1.SetUIValue("ID",1);
+            //var target = res.Find<Student>(s1);
+
+            //var list= RedisRepository.Default.GetAll<Student>();
         }
     }
 
-    public class Student : RedisEntity
+    public class Student : GOMFrameWork.DataEntity.EntityBase
     {
         public Student()
         {

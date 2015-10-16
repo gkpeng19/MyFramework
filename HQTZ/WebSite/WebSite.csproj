@@ -101,6 +101,7 @@
   <ItemGroup>
     <Content Include="AdminPages\Agenter.html" />
     <Content Include="AdminPages\CheaperDetails.html" />
+    <Content Include="AdminPages\ContactUs.html" />
     <Content Include="AdminPages\ServiceDetails.html" />
     <Content Include="AdminPages\Login.html" />
     <Content Include="AdminPages\NewCheaper.html" />
@@ -112,7 +113,11 @@
     <Content Include="Images\agentersearch.jpg" />
     <Content Include="Images\banner1.jpg" />
     <Content Include="Images\banner2.jpg" />
+    <Content Include="Images\book.jpg" />
+    <Content Include="Images\book-over.jpg" />
     <Content Include="Images\contact.jpg" />
+    <Content Include="Images\contactus.jpg" />
+    <Content Include="Images\contactus.png" />
     <Content Include="Images\Flag.png" />
     <Content Include="Images\green-menubg.jpg" />
     <Content Include="Images\hand.png">
@@ -214,6 +219,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.floatDiv.js" />
     <Content Include="Scripts\website\page.js" />
     <Content Include="Scripts\website\slider\css\silder.css" />
     <Content Include="Scripts\website\slider\images\ad_ctr.png" />
@@ -377,7 +383,6 @@
     <Content Include="Styles\GOMFrameWork.css" />
     <Content Include="AdminPages\Admin.html" />
     <Content Include="Styles\website\page.css" />
-    <Content Include="test.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -451,6 +456,7 @@
     <Content Include="Views\MemberService\Index.cshtml" />
     <Content Include="Views\Member\TraveGuide.cshtml" />
     <Content Include="Views\Member\ViewGuidInfo.cshtml" />
+    <Content Include="Views\ClientBase\ContactIndex.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

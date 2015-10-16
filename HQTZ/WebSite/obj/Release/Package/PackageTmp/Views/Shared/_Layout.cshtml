@@ -39,14 +39,43 @@
             <div style="margin-top:30px;">
                 <img src="~/Images/img1.gif" />
             </div>
-            <div id="trave">
+            <div id="trave" style="margin-top:20px;">
                 <img src="~/Images/trave.gif" />
             </div>
-            <div style="height:47px;">
-                <img src="~/Images/contact.jpg" />
+        </div>
+        <div id="bottom" class="bottomflow">
+            <div class="flow_tab">
+                <span>联络我们</span><i class="flow_tab_icon fa fa-angle-double-down" style="position:relative;left:8px;"></i>
+            </div>
+            <div class="flow_content">
+                <div class="flow_ctx">
+                    <table>
+                        <tr>
+                            <td>
+                                <img class="contact_ctx_icon" src="~/Images/phonecall.png" />
+                            </td>
+                            <td class="contact_ctx">
+                                <span>咨询您的假期顾问</span>
+                                <br />
+                                <span>400 0112 916</span>
+                            </td>
+                            <td class="contact_ctx">
+                                <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1002934864&site=qq&menu=yes">
+                                    <i class="contact_ctx_icon fa fa-qq" style="font-size:35px;"></i>
+                                    <span>&nbsp;QQ交谈</span>
+                                </a>
+                            </td>
+                            <td class="contact_ctx">
+                                <a href="/ClientBase/ContactIndex">
+                                    <img class="contact_ctx_icon" src="~/Images/contactus.jpg" />
+                                    <span>&nbsp;联系我们</span>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
-        <div id="bottom"></div>
     </div>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/GOMFrameWork.js"></script>
@@ -83,6 +112,8 @@
             defaultMenu.addClass(defaultMenu.attr("data-class"));
             lastMenu = defaultMenu;
         }
+
+        initBottomFlow();
     </script>
     @RenderSection("scripts", required: false)
 </body>

@@ -1414,7 +1414,7 @@ $.extend({
 });
 
 $.fn.extend({
-    open: function (title, yes, no, close, cancle) {
+    open: function (title, yes, no, close, cancle,exoptions) {
         if (!title || (title.length && title.length == 0)) {
             title = false;
         }
@@ -1444,7 +1444,7 @@ $.fn.extend({
                 }
             }
         };
-        if (close == false) {
+        if (close != undefined && close == false) {
             options.closeBtn = false;
         }
         var btns = [];
@@ -1483,11 +1483,11 @@ $.fn.extend({
         });
         /*设置弹出层中的Editor结束*/
 
-        var height = this[0].clientHeight + 46 + 20 + editorheight;
+        var height = this[0].clientHeight + (title == false ? 0 : 45) + 20 + editorheight;
 
         if (btns.length > 0) {
             options.btn = btns;
-            height += 70;
+            height += 55;
         }
 
         options.area = [];
@@ -1499,6 +1499,11 @@ $.fn.extend({
         }
         options.area[1] = height + "px";
 
+        if (options) {
+            for (var it in exoptions) {
+                options[it] = exoptions[it];
+            }
+        }
         var win = layer.open(options);
 
         this.parent().parent().find(".layui-layer-btn").append("<span id='layer-error-msg'></span>");

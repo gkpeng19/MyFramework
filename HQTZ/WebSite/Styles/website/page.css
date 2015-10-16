@@ -40,7 +40,7 @@ body .page {
 }
 
 #menu div span {
-    font-size:16px;
+    font-size: 16px;
     position: relative;
     top: -5px;
     left: -5px;
@@ -63,17 +63,55 @@ body .page {
 }
 
 #trave {
-    padding: 15px 0px 0px 0px;
     text-align: center;
+    height: 170px;
 }
 
-#bottom {
-    width:980px;
+.bottomflow {
+    position: fixed;
+}
+
+.flow_tab {
+    height: 28px;
+    width: 148px;
+    text-align: center;
+    background-image: url('/Images/contactus.png');
+    background-repeat: no-repeat;
+    color: white;
+    padding-top: 13px;
+    cursor: pointer;
+    margin-left: 100px;
+}
+
+.flow_content {
+    width: 980px;
     background-color: #444444;
-    height:200px;
-    padding:10px 100px 0px 100px;
+    padding: 3px 100px 0px 100px;
+    color: white;
+    font-size: 13px;
 }
 
+.flow_ctx {
+    display: none;
+    padding: 5px 0px 0px 0px;
+}
+
+    .flow_ctx .contact_ctx_icon {
+        vertical-align: middle;
+    }
+
+.contact_ctx {
+    padding-right: 15px;
+}
+
+    .contact_ctx a {
+        color: white;
+    }
+
+        .contact_ctx a:hover {
+            color: white;
+            text-decoration: none;
+        }
 
 /*---------页面--------------------------------------*/
 .panel {
@@ -91,12 +129,12 @@ body .page {
     text-align: right;
 }
 
-#panel_more img {
-    width: 84px;
-    height: 22px;
-    margin-top: 140px;
-    cursor:pointer;
-}
+    #panel_more img {
+        width: 84px;
+        height: 22px;
+        margin-top: 140px;
+        cursor: pointer;
+    }
 
 .dc_content {
     color: white;

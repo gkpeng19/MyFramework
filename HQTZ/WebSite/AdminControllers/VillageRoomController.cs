@@ -46,8 +46,7 @@ namespace HQWZ.Controllers
             return ExController.JsonNet(result);
         }
 		
-		
-		
+		[ValidateInput(false)]
 		public JsonResult SaveRoom(HQ_Room entity)
         {
             if (entity.ID == 0)

@@ -12,26 +12,53 @@ namespace G.Util.Redis
 {
     internal interface IRedisRepository
     {
-        List<TEntity> GetAll<TEntity>() where TEntity : RedisEntity, new();
-        TEntity Find<TEntity>(RedisEntity entity) where TEntity : RedisEntity, new();
-        void Save(RedisEntity entity);
-        void Delete(RedisEntity entity);
+        bool Exist<TEntity>() where TEntity : EntityBase;
+        List<TEntity> GetAll<TEntity>() where TEntity : EntityBase, new();
+        TEntity Find<TEntity>(EntityBase entity) where TEntity : EntityBase, new();
+        void Save(EntityBase entity);
+        void Delete(EntityBase entity);
     }
 
     public class RedisRepository : IRedisRepository
     {
-        private RedisClient _redis = null;
-        public RedisRepository()
+        static object _object = new object();
+        static RedisRepository _repository = null;
+
+        private RedisRepository() { }
+
+        public static RedisRepository Default
         {
-            _redis = RedisManager.GetClient();
+            get
+            {
+                if (_repository == null)
+                {
+                    lock (_object)
+                    {
+                        if (_repository == null)
+                        {
+                            _repository = new RedisRepository();
+                        }
+                    }
+                }
+                return _repository;
+            }
         }
 
-        protected internal virtual bool IsExist(RedisEntity entity)
+        private bool Exist(string typeName)
+        {
+            if (typeName != null && typeName.Length > 0)
+            {
+                return RedisManager.GetClient().Exists(typeName) == 0 ? false : true;
+            }
+            return false;
+        }
+
+        protected internal virtual bool Exist(EntityBase entity)
         {
             if (entity.ID > 0)
             {
-                var entityIds = _redis.GetAllItemsFromList(entity.GetType().Name);
-                if (entityIds.Contains(entity.ID.ToString()))
+                var entityIds = RedisManager.GetClient().GetAllItemsFromList(entity.GetType().Name);
+                if (entityIds != null && entityIds.Contains(entity.ID.ToString()))
                 {
                     return true;
                 }
@@ -39,13 +66,27 @@ namespace G.Util.Redis
             return false;
         }
 
-        public virtual List<TEntity> GetAll<TEntity>() where TEntity : RedisEntity, new()
+        public bool Exist<TEntity>() where TEntity : EntityBase
+        {
+            return Exist(typeof(TEntity).Name);
+        }
+
+        public virtual List<TEntity> GetAll<TEntity>() where TEntity : EntityBase, new()
         {
             List<TEntity> list = new List<TEntity>();
+
             var _listId = typeof(TEntity).Name;
-            foreach (var pid in _redis.GetAllItemsFromList(_listId))
+            var client = RedisManager.GetClient();
+
+            var entityIds = client.GetAllItemsFromList(_listId);
+            if (entityIds == null)
             {
-                byte[] bytes = _redis.Get(_listId + pid);
+                return list;
+            }
+
+            foreach (var pid in entityIds)
+            {
+                byte[] bytes = client.Get(_listId + pid);
                 if (bytes == null || bytes.Length == 0)
                 {
                     continue;
@@ -61,17 +102,18 @@ namespace G.Util.Redis
             return list;
         }
 
-        public virtual TEntity Find<TEntity>(RedisEntity entity) where TEntity : RedisEntity, new()
+        public virtual TEntity Find<TEntity>(EntityBase entity) where TEntity : EntityBase, new()
         {
             if (entity.ID > 0)
             {
                 var _listId = entity.GetType().Name;
                 var _id = entity.ID.ToString();
+                var client = RedisManager.GetClient();
 
-                var entityIds = _redis.GetAllItemsFromList(_listId);
-                if (entityIds.Contains(_id))
+                var entityIds = client.GetAllItemsFromList(_listId);
+                if (entityIds != null && entityIds.Contains(_id))
                 {
-                    var bytes = _redis.Get(_listId + _id);
+                    var bytes = client.Get(_listId + _id);
                     if (bytes == null || bytes.Length == 0)
                     {
                         return null;
@@ -90,17 +132,18 @@ namespace G.Util.Redis
             return null;
         }
 
-        public virtual void Save(RedisEntity entity)
+        public virtual void Save(EntityBase entity)
         {
             if (entity != null)
             {
                 string pid = entity.ID.ToString();
                 string _listId = entity.GetType().Name;
+                var master = RedisManager.GetMaster();
 
-                if (IsExist(entity))
+                if (Exist(entity))
                 {
                     var ek = _listId + pid;
-                    var bytes = _redis.Get(ek);
+                    var bytes = master.Get(ek);
                     if (bytes != null && bytes.Length > 0)
                     {
                         var jEntity = JSON.GetJObject(Encoding.UTF8.GetString(bytes));
@@ -110,8 +153,8 @@ namespace G.Util.Redis
                             jEntity.Add(JSON.GetJProperty(item.Key, item.Value));
                         }
 
-                        _redis.Remove(_listId + pid);
-                        _redis.Set(_listId + pid, Encoding.UTF8.GetBytes(jEntity.ToString()));
+                        master.Remove(_listId + pid);
+                        master.Set(_listId + pid, Encoding.UTF8.GetBytes(jEntity.ToString()));
                     }
                 }
                 else
@@ -121,52 +164,23 @@ namespace G.Util.Redis
                     {
                         jEntity.Add(JSON.GetJProperty(item.Key, item.Value));
                     }
-                    _redis.Set(_listId + pid, Encoding.UTF8.GetBytes(jEntity.ToString()));
-                    _redis.AddItemToList(_listId, pid);
+                    master.Set(_listId + pid, Encoding.UTF8.GetBytes(jEntity.ToString()));
+                    master.AddItemToList(_listId, pid);
                 }
-                _redis.BgSave();
+                master.BgSave();
             }
         }
 
-        public virtual void Delete(RedisEntity entity)
+        public virtual void Delete(EntityBase entity)
         {
             if (entity != null)
             {
+                var master = RedisManager.GetMaster();
                 var _listId = entity.GetType().Name;
-                _redis.Remove(_listId + entity.ID.ToString());
-                _redis.RemoveItemFromList(_listId, entity.ID.ToString());
-                _redis.BgSave();
+                master.Remove(_listId + entity.ID.ToString());
+                master.RemoveItemFromList(_listId, entity.ID.ToString());
+                master.BgSave();
             }
-        }
-    }
-
-    public class RedisEntity : EntityBase
-    {
-        public RedisEntity() : base() { }
-
-        public override long Save()
-        {
-            EntityBase e = this;
-            var id = base.Save();
-            if (id > 0)
-            {
-                //更新缓存
-                RedisRepository re = new RedisRepository();
-                re.Save(this);
-            }
-            return id;
-        }
-
-        public override long Delete()
-        {
-            var r = base.Delete();
-            if (r > 0)
-            {
-                //更新缓存
-                RedisRepository re = new RedisRepository();
-                re.Delete(this);
-            }
-            return r;
         }
     }
 }

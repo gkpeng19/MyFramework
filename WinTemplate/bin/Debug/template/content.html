@@ -27,11 +27,11 @@
 
 @foreach(var fm in Model.forms)
 {
-    var style=fm.isshow=="0"?"display:none;":"";
 	var hide=fm.isshow=="0"?"_hide":"";
+	var className=fm.isshow=="0"?"layerout form-layer":"";
 	<div class="row-fluid">
 		<div class="span@(fm.size)">
-            <form name="@fm.id" id="@fm.id" class="layerout form-layer" style="@style">
+            <form name="@fm.id" id="@fm.id" class="@className">
                 <div>
                     <input type="hidden" name="@fm.data[1].c[0].fld" />
                     <div class="row-fluid">
@@ -81,7 +81,7 @@
 						<div>
 						@foreach(var btn in fm.btns)
 						{
-						<button id="@btn.id" class="btn btn-primary btn-mini">@btn.txt</button>
+						<input type="button" id="@btn.id" class="btn btn-primary btn-mini btn-authority" value="@btn.txt" />
 						}
 						</div>
 					}
