@@ -56,6 +56,7 @@
     <Compile Include="Entities\BaseModel.cs" />
     <Compile Include="Entities\HQ_Agenter.cs" />
     <Compile Include="Entities\HQ_Article.cs" />
+    <Compile Include="Entities\HQ_BookRoom.cs" />
     <Compile Include="Entities\HQ_Member.cs" />
     <Compile Include="Entities\HQ_DisplayContent.cs" />
     <Compile Include="Entities\HQ_DisplayPanel.cs" />

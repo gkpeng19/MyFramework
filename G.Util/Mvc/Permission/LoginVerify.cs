@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -20,10 +21,30 @@ namespace G.Util.Mvc.Permission
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (!filterContext.HttpContext.User.Identity.IsAuthenticated || !LoginInfo.Current.SystemID.Equals(this._systemId, StringComparison.CurrentCultureIgnoreCase))
+            string loginUrl = string.Empty;
+            if (!LoginVerify.IsLogin(filterContext.HttpContext, ref loginUrl, this._systemId))
             {
-                string loginUrl = string.Empty;
-                string returnUrl = filterContext.HttpContext.Request.Url.AbsolutePath;
+                filterContext.HttpContext.Response.Redirect(loginUrl, true);
+            }
+        }
+    }
+
+    public static class LoginVerify
+    {
+        public static bool IsLogin(HttpContextBase context, string systemId = null)
+        {
+            if (!context.User.Identity.IsAuthenticated || !LoginInfo.Current.SystemID.Equals(systemId, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static bool IsLogin(HttpContextBase context, ref string loginUrl, string systemId = null)
+        {
+            if (!context.User.Identity.IsAuthenticated || !LoginInfo.Current.SystemID.Equals(systemId, StringComparison.CurrentCultureIgnoreCase))
+            {
+                string returnUrl = context.Request.Url.AbsolutePath;
                 if (FormsAuthentication.LoginUrl.IndexOf('?') > -1)
                 {
                     loginUrl = FormsAuthentication.LoginUrl + string.Format("&ReturnUrl={0}", returnUrl);
@@ -32,8 +53,9 @@ namespace G.Util.Mvc.Permission
                 {
                     loginUrl = FormsAuthentication.LoginUrl + string.Format("?ReturnUrl={0}", returnUrl);
                 }
-                filterContext.HttpContext.Response.Redirect(loginUrl, true);
+                return false;
             }
+            return true;
         }
     }
 }

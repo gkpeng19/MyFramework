@@ -230,6 +230,19 @@ namespace GOMFrameWork.DataEntity
             }
         }
 
+        public long LoadValue()
+        {
+            var eProvider = GetProvider();
+            try
+            {
+                return eProvider.ExcuteValue(this);
+            }
+            finally
+            {
+                eProvider.Close();
+            }
+        }
+
         #endregion
     }
 

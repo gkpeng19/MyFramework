@@ -71,14 +71,61 @@ namespace GOMFrameWork.DBContext
 
         internal virtual T ExcuteSearchEntity<T>(SearchEntity entity) where T : EntityBase, new()
         {
-            DbParameter[] parameters = GetSearchParameters(entity);
+            string sql = null;
+            DbParameter[] parameters = null;
+            if (entity.IsFromSql)
+            {
+                sql = entity.SearchID;
+                parameters = entity.SqlParameters;
+            }
+            else
+            {
+                sql = GetSearchSql(entity);
+                parameters = GetSearchParameters(entity);
+            }
+
             T data = null;
-            using (DbDataReader reader = _dbProvider.ExcuteReader(GetSearchSql(entity), parameters))
+            using (DbDataReader reader = _dbProvider.ExcuteReader(sql, parameters))
             {
                 data = reader.ConvertToEntity<T>();
             }
 
             return data;
+        }
+
+        internal virtual long ExcuteValue(SearchEntity entity)
+        {
+            string sql = null;
+            DbParameter[] parameters = null;
+            if (entity.IsFromSql)
+            {
+                sql = entity.SearchID;
+                parameters = entity.SqlParameters;
+            }
+            else
+            {
+                sql = GetSearchSql(entity);
+                parameters = GetSearchParameters(entity);
+            }
+
+            using (DbDataReader reader = _dbProvider.ExcuteReader(sql, parameters))
+            {
+                if (reader.Read())
+                {
+                    try
+                    {
+                        return Convert.ToInt64(reader[0]);
+                    }
+                    catch
+                    {
+                        throw new Exception("查询内容错误，请查询数值类型！");
+                    }
+                }
+                else
+                {
+                    throw new Exception("查询内容错误，请查询数值类型！");
+                }
+            }
         }
 
         internal virtual CommonResult ExcuteProcResult(ProcEntity entity)
@@ -101,6 +148,7 @@ namespace GOMFrameWork.DBContext
 
             return result;
         }
+
 
         internal virtual CommonResult<T> ExcuteProcResult<T>(ProcEntity entity) where T : EntityBase, new()
         {

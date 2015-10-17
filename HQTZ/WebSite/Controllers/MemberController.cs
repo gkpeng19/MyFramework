@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using G.Util.Mvc;
 using System.Data.SqlClient;
+using GOMFrameWork.DataEntity;
 
 namespace WebSite.Controllers
 {
@@ -145,11 +146,11 @@ namespace WebSite.Controllers
                     d.Title = title;
                 }
                 var content = System.Text.RegularExpressions.Regex.Replace(d.AContent, "<[^>]*>", "");
-                if(content.Length>180)
+                if (content.Length > 180)
                 {
                     content = content.Substring(0, 180);
                 }
-                var cindex=content.LastIndexOf('<');
+                var cindex = content.LastIndexOf('<');
                 if (cindex >= 0)
                 {
                     content = content.Substring(0, cindex);
@@ -162,8 +163,8 @@ namespace WebSite.Controllers
 
         public ActionResult ViewGuidInfo(int id)
         {
-            SearchModel sm=new SearchModel("HQ_Article");
-            sm["ID"]=id;
+            SearchModel sm = new SearchModel("HQ_Article");
+            sm["ID"] = id;
             var article = sm.LoadEntity<HQ_Article>();
             return View(article);
         }
@@ -172,6 +173,57 @@ namespace WebSite.Controllers
         public ActionResult OrderIndex()
         {
             return View();
+        }
+
+        public int IsRoomEnough(int roomid, DateTime sdate, DateTime edate)
+        {
+            if (sdate > edate)
+            {
+                return 0;
+            }
+            SearchModel smroom = new SearchModel("hq_room");
+            smroom["ID"] = roomid;
+            smroom.AddSearch("RCount");
+            var rcount = smroom.LoadEntity<HQ_Room>().RCount;
+
+            SearchEntity sm = SearchEntity.FormSql("select count(1) id from hq_bookroom where roomid=@roomid and isnull(isdelete,0)=0 and bookendtime>=@stime and bookstarttime<=@etime",
+            new SqlParameter("roomid", roomid), new SqlParameter("stime", sdate), new SqlParameter("etime", edate));
+
+            var bcount = sm.LoadValue();
+
+            if (bcount >= rcount)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        static object _object = new object();
+        public long BookRoom(int roomid, DateTime sdate, DateTime edate)
+        {
+            string loginUrl = string.Empty;
+            if (!LoginVerify.IsLogin(base.HttpContext, "Client"))
+            {
+                return -1;
+            }
+
+            lock (_object)
+            {
+                if (IsRoomEnough(roomid, sdate, edate) > 0)
+                {
+                    HQ_BookRoom entity = new HQ_BookRoom();
+                    entity.MemberID = (int)LoginInfo.Current.UserID;
+                    entity.RoomID = roomid;
+                    entity.BookStartTime = sdate;
+                    entity.BookEndTime = edate;
+                    entity.CreateOn = DateTime.Now;
+                    return entity.Save();
+                }
+                else
+                {
+                    return -2;
+                }
+            }
         }
     }
 }

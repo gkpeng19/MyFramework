@@ -52,3 +52,7 @@ D:\Gkpeng\MyFramework\G.Util\bin\Debug\ServiceStack.Common.dll
 D:\Gkpeng\MyFramework\G.Util\bin\Debug\ServiceStack.Interfaces.dll
 D:\Gkpeng\MyFramework\G.Util\bin\Debug\ServiceStack.Redis.dll
 D:\Gkpeng\MyFramework\G.Util\bin\Debug\ServiceStack.Text.dll
+D:\Work\MyFramework\G.Util\bin\Debug\ServiceStack.Common.dll
+D:\Work\MyFramework\G.Util\bin\Debug\ServiceStack.Interfaces.dll
+D:\Work\MyFramework\G.Util\bin\Debug\ServiceStack.Redis.dll
+D:\Work\MyFramework\G.Util\bin\Debug\ServiceStack.Text.dll

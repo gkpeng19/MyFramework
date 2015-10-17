@@ -4,6 +4,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="layerout" id="div_bookroom" style="width:350px;padding-top:30px;">
+    <table>
+        <tr>
+            <td style="padding-right:15px;padding-top:3px;" valign="top">起始时间：</td>
+            <td><input id="startDate" type="text" data-date-format="yyyy-mm-dd"></td>
+        </tr>
+        <tr>
+            <td valign="top" style="padding-top:3px;">结束时间：</td>
+            <td><input id="endDate" type="text" data-date-format="yyyy-mm-dd"></td>
+        </tr>
+    </table>
+</div>
+
 <div style="padding:0px 35px;">
     <div style="margin-top:10px;">
         <div id="div_desc">@(new HtmlString(Model.DContent))</div>
@@ -18,30 +31,6 @@
     <div id="tagBookRoom" class="header blue" style="margin-bottom:5px;font-size:18px;font-weight:bold;"><i class="fa fa-cart-plus"></i> 预定房间</div>
     <div id="roomlist" class="accordion">
     </div>
-
-    <div style="display:none;">
-        <div class="form-horizontal">
-            <div class="control-group">
-                <label class="control-label" for="startDate">起始时间：</label>
-                <div class="controls">
-                    <input class="input-medium" id="startDate" type="text" data-date-format="yyyy-mm-dd">
-                    <div class="input-append bootstrap-timepicker">
-                        <input id="startTime" type="text" class="input-mini" />
-                        <span class="add-on"><i class="fa fa-clock-o"></i></span>
-                    </div>
-                </div>
-
-                <label class="control-label" for="startDate">结束时间：</label>
-                <div class="controls">
-                    <input class="input-medium" id="endDate" type="text" data-date-format="yyyy-mm-dd">
-                    <div class="input-append bootstrap-timepicker">
-                        <input id="endTime" type="text" class="input-mini" />
-                        <span class="add-on"><i class="fa fa-clock-o"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 }
 
 
@@ -51,6 +40,7 @@
     <link href="~/Scripts/bootstrap/bootstrap-timepicker.css" rel="stylesheet" />
     <link href="~/Scripts/bootstrap/bootstrap-datepicker.css" rel="stylesheet" />
     <link href="~/Scripts/ace/css/ace.min.css" rel="stylesheet" />
+    <link href="~/Styles/GOMFrameWork.css" rel="stylesheet" />
     <style type="text/css">
         #a_book:hover {
             text-decoration: none;
@@ -95,12 +85,12 @@
         #book {
             width: 71px;
             height: 71px;
-            background-image: url('/Images/book.jpg');
+            background-image: url('/Images/book-over.jpg');
             background-repeat: no-repeat;
         }
 
             #book:hover {
-                background-image: url('/Images/book-over.jpg');
+                background-image: url('/Images/book.jpg');
             }
     </style>
 }
@@ -117,11 +107,12 @@
         {
             <text>
         $("#startDate").datepicker({ startDate: new Date().toLocaleDateString() });
-        $("#startTime").timepicker({
-            minuteStep: 10,
-            showSeconds: false,
-            showMeridian: false
-        });
+        $("#endDate").datepicker({ startDate: new Date().toLocaleDateString() });
+        //$("#startTime").timepicker({
+        //    minuteStep: 10,
+        //    showSeconds: false,
+        //    showMeridian: false
+        //});
 
         var villageId = @(ViewBag.VillageID == null ? "0" : ViewBag.VillageID);
 
@@ -150,6 +141,44 @@
                         $("#book")[0].click();
                     },200);
                 });
+
+                $(".rbook").bind("click",function()
+                {
+                    targetRoomId=$(this).attr("data-id");
+
+                    $("#startDate").val("");
+                    $("#endDate").val("");
+
+                    var _layer=null;
+                    _layer=$("#div_bookroom").open("预定房间",function()
+                    {
+                        var r=CheckBookRoom();
+                        if(r)
+                        {
+                            $.post("/Member/BookRoom",bArgs,function(r)
+                            {
+                                if(r==-2)
+                                {
+                                    ShowMsg("该时段的房间已全部被预定！");
+                                }
+                                else if(r==-1)
+                                {
+                                    layer.alert("未登录，请先登录系统！", { icon: 2 },function()
+                                    {
+                                        location.href="/Member/Index?op=login&ReturnUrl="+location.href;
+                                    });
+                                }
+                                else if(r>0)
+                                {
+                                    layer.close(_layer);
+                                    $.success("房间预订成功。");
+                                }
+                            });
+                        }
+
+                        return false;
+                    });
+                });
             });
 
             var right=(($(window).width()- $(".content").width())/2-71)/2;
@@ -159,6 +188,10 @@
             }
             $("#a_book").floatdiv({right:right,top:"200px"});
             $("#a_book").show();
+
+            $("#startDate,#endDate").bind("change",function(){
+                CheckBookRoom();
+            });
         });
 
         function GetRoomItem(id,name,price,count,desc,isopen)
@@ -167,9 +200,9 @@
             '<div class="accordion-heading">'+
                 '<div class="accordion-toggle">'+
                     '<span>'+name+'</span>'+
-                    '<span class="rprice label label-success">'+price+' / 天</span>'+
+                    '<span class="rprice label label-success">￥'+price+' / 天</span>'+
                     '<span class="rcount">'+
-                        '剩余 <span class="label label-warning arrowed-right">'+count+'</span> 间'+
+                        '共 <span class="label label-warning arrowed-right">'+count+'</span> 间'+
                     '</span>'+
                     '<span class="label label-info rbook" data-id="'+id+'">预定</span>'+
                     (isopen?('<a href="#collapse'+id+'" data-toggle="collapse" data-parent="#roomlist" class="rdesc">查看详情</a>'):('<a href="#collapse'+id+'" data-toggle="collapse" data-parent="#roomlist" class="collapsed rdesc">查看详情</a>'))+
@@ -181,6 +214,59 @@
                 '</div>'+
             '</div>'+
             '</div>'
+        }
+
+        function ShowMsg(msg)
+        {
+            if(msg.length==0)
+            {
+                $("#layer-error-msg").html("");
+            }
+            else
+            {
+                $("#layer-error-msg").html('<span class="alert alert-error" style="font-size: 11px; padding: 3px 15px 3px 5px;"><i class="fa fa-warning"></i> '+msg+'</span>');
+            }
+        }
+
+        var targetRoomId=0;
+        var bArgs=null;
+        function CheckBookRoom()
+        {
+            var sdate=$.trim($("#startDate").val());
+            if(sdate.length==0)
+            {
+                ShowMsg("请输入起始时间！");
+                return false;
+            }
+
+            var edate=$.trim($("#endDate").val());
+            if(edate.length==0)
+            {
+                ShowMsg("请输入结束时间！");
+                return false;
+            }
+
+            if(new Date(sdate.replace("-", "/").replace("-", "/"))>new Date(edate.replace("-", "/").replace("-", "/")))
+            {
+                ShowMsg("结束日期不能小于起始时间！");
+                return false;
+            }
+
+            ShowMsg("");
+
+            $.ajaxSetup({ async: false });
+            bArgs={roomid:targetRoomId,sdate:sdate,edate:edate,ran:Math.random()};
+            $.post("/Member/IsRoomEnough",bArgs,function(r){
+                if(r==0)
+                {
+                    $.ajaxSetup({ async: true });
+
+                    ShowMsg("该时段的房间已全部被预定！");
+                    return false;
+                }
+            });
+
+            return true;
         }
 
         </text>
