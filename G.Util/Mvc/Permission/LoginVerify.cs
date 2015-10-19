@@ -22,7 +22,7 @@ namespace G.Util.Mvc.Permission
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             string loginUrl = string.Empty;
-            if (!LoginVerify.IsLogin(filterContext.HttpContext, ref loginUrl, this._systemId))
+            if (!LoginVerify.IsLogin(ref loginUrl, this._systemId))
             {
                 filterContext.HttpContext.Response.Redirect(loginUrl, true);
             }
@@ -31,8 +31,13 @@ namespace G.Util.Mvc.Permission
 
     public static class LoginVerify
     {
-        public static bool IsLogin(HttpContextBase context, string systemId = null)
+        public static bool IsLogin(string systemId = null)
         {
+            if (systemId == null)
+            {
+                systemId = string.Empty;
+            }
+            var context = HttpContext.Current;
             if (!context.User.Identity.IsAuthenticated || !LoginInfo.Current.SystemID.Equals(systemId, StringComparison.CurrentCultureIgnoreCase))
             {
                 return false;
@@ -40,8 +45,13 @@ namespace G.Util.Mvc.Permission
             return true;
         }
 
-        public static bool IsLogin(HttpContextBase context, ref string loginUrl, string systemId = null)
+        public static bool IsLogin(ref string loginUrl, string systemId = null)
         {
+            if (systemId == null)
+            {
+                systemId = string.Empty;
+            }
+            var context = HttpContext.Current;
             if (!context.User.Identity.IsAuthenticated || !LoginInfo.Current.SystemID.Equals(systemId, StringComparison.CurrentCultureIgnoreCase))
             {
                 string returnUrl = context.Request.Url.AbsolutePath;

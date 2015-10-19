@@ -10,7 +10,7 @@ using System.Web.Mvc;
 namespace EntityLibrary.Entities
 {
     [ModelBinder(typeof(EntityModelBinder))]
-    public class HQ_Member:CommonModel
+    public class HQ_Member : CommonModel
     {
         public HQ_Member()
         {
@@ -60,6 +60,14 @@ namespace EntityLibrary.Entities
         {
             get { return GetString("Email"); }
             set { SetValue("Email", value); }
+        }
+
+        [JsonIgnore]
+        [UIValueZeroNotEqualNull]
+        public int IsDelete
+        {
+            get { return GetInt32("IsDelete"); }
+            set { SetValue("IsDelete", value); }
         }
     }
 }

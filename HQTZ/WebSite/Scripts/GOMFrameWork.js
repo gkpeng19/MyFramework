@@ -448,7 +448,7 @@ datatable.prototype.initLineHtml = function (json, identity) {
             }
 
             if (option.onload) {
-                vhtm = option.onload(vhtm);
+                vhtm = option.onload(json,vhtm);
             }
 
             html += "<td>" + vhtm + "</td>";

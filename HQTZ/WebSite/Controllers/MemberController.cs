@@ -189,7 +189,7 @@ namespace WebSite.Controllers
             SearchEntity sm = SearchEntity.FormSql("select count(1) id from hq_bookroom where roomid=@roomid and isnull(isdelete,0)=0 and bookendtime>=@stime and bookstarttime<=@etime",
             new SqlParameter("roomid", roomid), new SqlParameter("stime", sdate), new SqlParameter("etime", edate));
 
-            var bcount = sm.LoadValue();
+            var bcount = sm.LoadValue<Int32>();
 
             if (bcount >= rcount)
             {
@@ -202,7 +202,7 @@ namespace WebSite.Controllers
         public long BookRoom(int roomid, DateTime sdate, DateTime edate)
         {
             string loginUrl = string.Empty;
-            if (!LoginVerify.IsLogin(base.HttpContext, "Client"))
+            if (!LoginVerify.IsLogin("Client"))
             {
                 return -1;
             }

@@ -8,13 +8,12 @@ using G.Util.Html;
 using G.BaseWeb.Models;
 using System.Web.Mvc;
 using G.Util.Tool;
+using G.Util.Account;
 
 namespace G.BaseWeb.Controllers
 {
     public class UserController : Controller
     {
-
-
         public JsonNetResult LoadRoleTree()
         {
             BaseSearchModel se = new BaseSearchModel("bw_role");
@@ -58,7 +57,7 @@ namespace G.BaseWeb.Controllers
             {
                 #region 维护新增数据
 
-                entity.CreateBy = "";
+                entity.CreateBy = LoginInfo.Current.UserName;
                 entity.CreateOn = DateTime.Now;
 
                 #endregion
@@ -67,7 +66,7 @@ namespace G.BaseWeb.Controllers
             {
                 #region 维护修改数据
 
-                entity.EditBy = "";
+                entity.EditBy = LoginInfo.Current.UserName;
                 entity.EditOn = DateTime.Now;
 
                 #endregion
@@ -88,7 +87,7 @@ namespace G.BaseWeb.Controllers
             {
                 #region 维护新增数据
 
-                entity.CreateBy = "";
+                entity.CreateBy = LoginInfo.Current.UserName;
                 entity.CreateOn = DateTime.Now;
                 entity.UserPsw = Encryption.GetMD5("123456");
 
@@ -98,7 +97,7 @@ namespace G.BaseWeb.Controllers
             {
                 #region 维护修改数据
 
-                entity.EditBy = "";
+                entity.EditBy = LoginInfo.Current.UserName;
                 entity.EditOn = DateTime.Now;
 
                 #endregion

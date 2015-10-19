@@ -730,6 +730,9 @@
                         case "telnum":
                             <text>tt.vf.tel.add(f@(exd.dataid));</text>
                             break;
+						case "phone":
+							<text>new tt.RV().set(new RegExp("^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$"),"数据格式错误" ).add(f@(exd.dataid));</text>
+                            break;
                         case "idcard":
                             <text>tt.vf.idcard.add(f@(exd.dataid));</text>
                             break;

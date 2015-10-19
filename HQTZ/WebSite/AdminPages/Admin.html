@@ -11,7 +11,7 @@
     <link href="../Styles/GOMFrameWork.css" rel="stylesheet" />
     <style type="text/css">
         .nav-list > li > a > i {
-            line-height:36px;
+            line-height: 36px;
         }
     </style>
 </head>
@@ -43,7 +43,28 @@
                 <span>菜单</span>
             </div>
             <ul class="nav nav-list">
-                <li class="active">
+                <li class="active open">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="fa fa-user"></i>
+                        <span>管理员</span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <ul class="submenu">
+                        <li class="active"><a href="User.html" target="page-content">管理员列表</a></li>
+                        <li><a href="#" onclick="ChangePsw()">修改密码</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="fa fa-users"></i>
+                        <span>会员中心</span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="Member.html" target="page-content">会员信息</a></li>
+                    </ul>
+                </li>
+                <li>
                     <a href="Destination.html" target="page-content">
                         <i class="fa fa-dashboard"></i>
                         <span>目的地</span>
@@ -119,13 +140,24 @@
             <div id="sidebar-collapse"><i class="icon-"></i></div>
         </div>
         <div id="main-content" class="clearfix">
-            <iframe class="clearfix" id="page-content" name="page-content" scrolling="no" src="Destination.html"
+            <iframe class="clearfix" id="page-content" name="page-content" scrolling="no" src="User.html"
                     frameborder="0" style="padding: 0px; width: 100%;"></iframe>
         </div>
     </div>
+
+    <div class="layerout" id="div_ChangePsw" style="width:350px;">
+        <table>
+            <tr><td class="tdtitle">旧密码：</td><td><input type="password" id="u_oldpsw" /></td></tr>
+            <tr><td class="tdtitle">新密码：</td><td><input type="password" id="u_newpsw" /></td></tr>
+            <tr><td class="tdtitle">重复新密码：</td><td><input type="password" id="u_tnewpsw" /></td></tr>
+        </table>
+    </div>
+
     <script src="../Scripts/jquery-1.10.2.min.js"></script>
     <script src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="../Scripts/ace/ace.min.js"></script>
+    <script src="../Scripts/layer/layer.js"></script>
+    <script src="../Scripts/GOMFrameWork.js"></script>
     <script type="text/javascript">
         var lastWidth = 0;
         var lastHeight = 0;
@@ -160,13 +192,58 @@
         });
 
         $(function () {
-            $(".nav-list li").bind('click', function () {
+            $(".nav-list>li,.nav-list>li>ul.submenu>li").bind('click', function () {
                 if (!$(this).hasClass("active")) {
-                    $(".nav-list .active").removeClass("active");
+                    if ($(this).find("ul.submenu").length == 0) {
+                        $(".nav-list .active").removeClass("active");
+                    }
                     $(this).addClass("active");
                 }
             });
         });
+
+        function ChangePsw() {
+            $("#div_ChangePsw").open("修改密码", function (idx) {
+                var oldpsw = $.trim($("#u_oldpsw").val());
+                var newpsw = $.trim($("#u_newpsw").val());
+                var tnewpsw = $.trim($("#u_tnewpsw").val());
+                if (oldpsw.length == 0) {
+                    ShowMsg("旧密码不能为空！");
+                    return false;
+                }
+
+                if (newpsw.length == 0) {
+                    ShowMsg("新密码不能为空！");
+                    return false;
+                }
+
+                if (newpsw != tnewpsw) {
+                    ShowMsg("两次新密码不相同！");
+                    return false;
+                }
+
+                $.post("/Base/ChangeUserPsw", { oldPsw: oldpsw, newPsw: newpsw, ran: Math.random() }, function (r) {
+                    if (r == 0) {
+                        ShowMsg("旧密码错误！");
+                    }
+                    else {
+                        layer.close(idx);
+                        $.msg("密码修改成功。");
+                    }
+                });
+
+                return false;
+            });
+        }
+
+        function ShowMsg(msg) {
+            if (msg.length == 0) {
+                $("#layer-error-msg").html("");
+            }
+            else {
+                $("#layer-error-msg").html('<span class="alert alert-error" style="font-size: 11px; padding: 3px 15px 3px 5px;"><i class="fa fa-warning"></i> ' + msg + '</span>');
+            }
+        }
     </script>
 </body>
 </html>

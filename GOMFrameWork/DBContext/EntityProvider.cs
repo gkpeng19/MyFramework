@@ -93,7 +93,7 @@ namespace GOMFrameWork.DBContext
             return data;
         }
 
-        internal virtual long ExcuteValue(SearchEntity entity)
+        internal virtual T ExcuteValue<T>(SearchEntity entity)
         {
             string sql = null;
             DbParameter[] parameters = null;
@@ -114,7 +114,7 @@ namespace GOMFrameWork.DBContext
                 {
                     try
                     {
-                        return Convert.ToInt64(reader[0]);
+                        return (T)reader[0];
                     }
                     catch
                     {

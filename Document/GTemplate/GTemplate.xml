@@ -27,6 +27,14 @@
           <Text>ContactUs</Text>
           <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\ContactUs</SPath>
         </GFile>
+        <GFile>
+          <Text>Member</Text>
+          <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\Member</SPath>
+        </GFile>
+        <GFile>
+          <Text>Test</Text>
+          <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\Test</SPath>
+        </GFile>
       </Files>
       <Folders />
       <Text>HQWZ</Text>

@@ -71,12 +71,16 @@
     margin-bottom: 5px;
 }
 
-.table-container {
-}
-
 
 .loading {
     width: 32px;
     height: 32px;
     position: absolute;
+}
+
+/*表单表格*/
+.tdtitle {
+    width:6em;
+    padding:3px 0px;
+    text-align:right;
 }

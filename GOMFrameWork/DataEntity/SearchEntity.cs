@@ -230,12 +230,12 @@ namespace GOMFrameWork.DataEntity
             }
         }
 
-        public long LoadValue()
+        public T LoadValue<T>()
         {
             var eProvider = GetProvider();
             try
             {
-                return eProvider.ExcuteValue(this);
+                return eProvider.ExcuteValue<T>(this);
             }
             finally
             {

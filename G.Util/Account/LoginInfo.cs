@@ -14,6 +14,7 @@ namespace G.Util.Account
         {
             _userName = userName;
             UserName = userName;
+            SystemID = string.Empty;
         }
 
         public string UserName

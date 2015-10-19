@@ -19,9 +19,9 @@ D:\Gkpeng\MyFramework\G.Test\bin\Debug\System.Web.Mvc.xml
 D:\Gkpeng\MyFramework\G.Test\bin\Debug\Newtonsoft.Json.xml
 D:\Gkpeng\MyFramework\G.Test\bin\Debug\log4net.xml
 D:\Gkpeng\MyFramework\G.Test\bin\Debug\ExcelLibrary.pdb
-D:\Gkpeng\MyFramework\G.Test\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll
 D:\Gkpeng\MyFramework\G.Test\obj\Debug\G.Test.exe
 D:\Gkpeng\MyFramework\G.Test\obj\Debug\G.Test.pdb
 D:\Work\MyFramework\G.Test\bin\Debug\G.Test.exe.config
 D:\Work\MyFramework\G.Test\obj\Debug\G.Test.exe
 D:\Work\MyFramework\G.Test\obj\Debug\G.Test.pdb
+D:\Gkpeng\MyFramework\G.Test\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll

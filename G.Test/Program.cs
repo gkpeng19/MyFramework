@@ -1,4 +1,5 @@
 ﻿using G.Util.Redis;
+using GOMFrameWork.DataEntity;
 using Newtonsoft.Json;
 using ServiceStack.Redis;
 using System;
@@ -13,6 +14,8 @@ namespace G.Test
     {
         static void Main(string[] args)
         {
+            SearchEntity se = SearchEntity.FormSql("select cast(count(1) as bigint) from hq_room");
+            var v = se.LoadValue<Int64>();
             //Student s = new Student();
             //s.SetUIValue("ID", 1);
             //s.Name = "gkpeng";

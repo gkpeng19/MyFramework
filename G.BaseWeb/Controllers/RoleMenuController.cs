@@ -7,7 +7,6 @@ using GOMFrameWork.DataEntity;
 using G.Util.Html;
 using G.BaseWeb.Models;
 using System.Web.Mvc;
-using System.Transactions;
 
 namespace G.BaseWeb.Controllers
 {

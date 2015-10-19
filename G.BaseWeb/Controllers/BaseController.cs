@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using G.Util.Mvc;
 using GOMFrameWork.DataEntity;
 using System.Web.Security;
+using G.Util.Mvc.Permission;
 
 namespace G.BaseWeb.Controllers
 {
@@ -95,6 +96,22 @@ namespace G.BaseWeb.Controllers
             var bytes = Yzm.CreateYZM(out code, 4);
             base.Session["yzm"] = code;
             return File(bytes, @"image/Jpeg");
+        }
+
+        [LoginVerify]
+        public long ChangeUserPsw(string oldPsw, string newPsw)
+        {
+            BaseSearchModel se = new BaseSearchModel("bw_user");
+            se["ID"] = LoginInfo.Current.UserID;
+            var user = se.LoadEntity<BW_User>();
+            if (user.UserPsw.Equals(Encryption.GetMD5(oldPsw)))
+            {
+                user = new BW_User();
+                user["ID"] = LoginInfo.Current.UserID;
+                user.UserPsw = Encryption.GetMD5(newPsw);
+                return user.Save();
+            }
+            return 0;
         }
     }
 }

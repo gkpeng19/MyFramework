@@ -1,4 +1,5 @@
 ﻿using G.Util.Account;
+using G.Util.Mvc.Permission;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace WebSite.App_Start
         {
             context.Response.ContentType = "text/html";
 
-            if (LoginInfo.Current == null)
+            if (!LoginVerify.IsLogin())
             {
                 context.Response.WriteFile(context.Server.MapPath("~/AdminPages/Login.html"));
                 return;
