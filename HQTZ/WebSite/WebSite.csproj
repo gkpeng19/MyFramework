@@ -115,6 +115,8 @@
     <Content Include="Images\agentersearch.jpg" />
     <Content Include="Images\banner1.jpg" />
     <Content Include="Images\banner2.jpg" />
+    <Content Include="Images\bar.png" />
+    <Content Include="Images\bgnoise_lg.png" />
     <Content Include="Images\book.jpg" />
     <Content Include="Images\book-over.jpg" />
     <Content Include="Images\contact.jpg" />
@@ -385,6 +387,7 @@
     <Content Include="Styles\GOMFrameWork.css" />
     <Content Include="AdminPages\Admin.html" />
     <Content Include="Styles\website\page.css" />
+    <Content Include="Styles\website\orderstyles.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

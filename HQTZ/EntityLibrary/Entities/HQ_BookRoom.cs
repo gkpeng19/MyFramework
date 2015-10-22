@@ -48,5 +48,32 @@ namespace EntityLibrary.Entities
             get { return GetDateTime("CreateOn"); }
             set { SetValue("CreateOn", value); }
         }
+
+        public string BookStartTime_G
+        {
+            get { return BookStartTime.ToString("yyyy-MM-dd"); }
+        }
+
+        public string BookEndTime_G
+        {
+            get { return BookEndTime.ToString("yyyy-MM-dd"); }
+        }
+
+        public string CreateOn_G
+        {
+            get { return CreateOn.ToString("yyyy-MM-dd"); }
+        }
+
+        [JsonIgnore]
+        public string RoomName_G
+        {
+            get { return GetString("RoomName_G"); }
+            set { SetValue("RoomName_G", value); }
+        }
+        [JsonIgnore]
+        public int RoomPrice_G
+        {
+            get { return Convert.ToInt32(GetDecimal("RoomPrice_G")); }
+        }
     }
 }

@@ -1,6 +1,60 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "我的订单";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div style="padding:0px 35px;">
+    <img src="~/Images/leader.gif" />
+    <div style="margin-top:10px;" id="fdw-pricing-table">
+        @{
+            List<EntityLibrary.Entities.HQ_BookRoom> brooms= (List<EntityLibrary.Entities.HQ_BookRoom>)ViewBag.BRooms;
+        }
+        @for (int i = 0; i < brooms.Count;++i )
+        {
+            var broom=brooms[i];
+            <div class="plan plan@(i%4+1)">
+                <div class="header">Enterprise</div>
+                <div class="price">￥@broom.RoomPrice_G</div>
+                <ul>
+                    <li><b>10GB</b> Disk Space</li>
+                    <li><b>100GB</b> Monthly Bandwidth</li>
+                    <li><b>20</b> Email Accounts</li>
+                    <li><b>Unlimited</b> subdomains</li>
+                </ul>
+                <a class="signup" href="http://www.freshdesignweb.com">Sign up</a>
+            </div>
+        }
+        @*<table cellpadding="0" cellspacing="0" id="table-7" width="100%">
+                <thead>
+                    <tr><th>房间</th><th>单价</th><th>入住日期</th><th>离开日期</th><th>预定日期</th><th>操作</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (EntityLibrary.Entities.HQ_BookRoom bm in ViewBag.BRooms)
+                    {
+                        <tr>
+                            <td>@bm.RoomName_G</td>
+                            <td>@bm.RoomPrice_G</td>
+                            <td>@bm.BookStartTime_G</td>
+                            <td>@bm.BookEndTime_G</td>
+                            <td>@bm.CreateOn_G</td>
+                            <td></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>*@
+    </div>
+    <div class="clear"></div>
+</div>
+
+@section styles{
+<link href="~/Styles/website/orderstyles.css" rel="stylesheet" />
+    <style type="text/css">
+
+    </style>
+}
+
+@section scripts{
+    <script type="text/javascript">
+        setCurrMenu(2);
+    </script>
+}

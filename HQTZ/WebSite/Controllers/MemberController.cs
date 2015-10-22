@@ -172,6 +172,9 @@ namespace WebSite.Controllers
         [LoginVerify("Client")]
         public ActionResult OrderIndex()
         {
+            SearchModel sm = new SearchModel("uv_bookroom");
+            sm["MemberID"] = LoginInfo.Current.UserID;
+            ViewBag.BRooms = sm.Load<HQ_BookRoom>().Data;
             return View();
         }
 

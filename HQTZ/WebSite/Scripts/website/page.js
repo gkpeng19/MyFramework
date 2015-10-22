@@ -16,6 +16,8 @@ function initTraveImgShade(selector, color, func) {
                 if (idx) {
                     lastShade = _shades[idx];
                     lastShade.show();
+                    lastTarget = this;
+                    $(this).parent().find(".traveTitle").css("visibility", "hidden");
                 }
                 else {
                     var sdiv = $("<div class='dc_content'></div>");

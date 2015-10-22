@@ -223,13 +223,18 @@ namespace G.Util.Tool
             return JsonConvert.DeserializeObject<T>(jsonStr, jConverters);
         }
 
-        public static JObject GetJObject(params object[] content)
+        public static JObject GetJObject(params JProperty[] content)
         {
             if (content == null || content.Length == 0)
             {
                 return new JObject();
             }
             return new JObject(content);
+        }
+
+        public static JArray GetJArray(string jsonStr)
+        {
+            return JArray.Parse(jsonStr);
         }
 
         public static JObject GetJObject(string jsonStr)

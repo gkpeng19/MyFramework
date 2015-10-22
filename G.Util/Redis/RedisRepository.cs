@@ -1,5 +1,7 @@
 ﻿using G.Util.Tool;
 using GOMFrameWork.DataEntity;
+using GOMFrameWork.Utils;
+using Newtonsoft.Json.Linq;
 using ServiceStack.Redis;
 using ServiceStack.Redis.Generic;
 using System;
@@ -14,15 +16,16 @@ namespace G.Util.Redis
     {
         bool Exist<TEntity>() where TEntity : EntityBase;
         List<TEntity> GetAll<TEntity>() where TEntity : EntityBase, new();
-        TEntity Find<TEntity>(EntityBase entity) where TEntity : EntityBase, new();
+        TEntity Find<TEntity>(long entityId) where TEntity : EntityBase, new();
         void Save(EntityBase entity);
-        void Delete(EntityBase entity);
+        void Delete<TEntity>(EntityBase entity);
     }
 
-    public class RedisRepository : IRedisRepository
+    public class RedisRepository
     {
         static object _object = new object();
         static RedisRepository _repository = null;
+        static string hashname = "hashname";
 
         private RedisRepository() { }
 
@@ -44,143 +47,109 @@ namespace G.Util.Redis
             }
         }
 
-        private bool Exist(string typeName)
+        public void Set(string key, string value)
         {
-            if (typeName != null && typeName.Length > 0)
+            if (key == null || key.Length == 0 || value == null)
             {
-                return RedisManager.GetClient().Exists(typeName) == 0 ? false : true;
+                return;
             }
-            return false;
+            RedisManager.GetMaster().HSet(hashname, Encoding.UTF8.GetBytes(key), Encoding.UTF8.GetBytes(value));
         }
 
-        protected internal virtual bool Exist(EntityBase entity)
+        public void Set<T>(string key, T entity) where T : EntityBase
         {
-            if (entity.ID > 0)
+            if (key == null || key.Length == 0 || entity == null)
             {
-                var entityIds = RedisManager.GetClient().GetAllItemsFromList(entity.GetType().Name);
-                if (entityIds != null && entityIds.Contains(entity.ID.ToString()))
-                {
-                    return true;
-                }
+                return;
             }
-            return false;
+            var jEntity = JSON.GetJObject(JSON.GetJProperty(entity.PrimaryKey, entity.ID));
+            foreach (EntityItem item in entity.Collection.Values)
+            {
+                jEntity.Add(JSON.GetJProperty(item.Key, item.Value));
+            }
+            RedisManager.GetMaster().HSet(hashname, Encoding.UTF8.GetBytes(key), Encoding.UTF8.GetBytes(jEntity.ToString()));
         }
 
-        public bool Exist<TEntity>() where TEntity : EntityBase
+        public void SetList<T>(string key, List<T> list) where T : EntityBase
         {
-            return Exist(typeof(TEntity).Name);
-        }
-
-        public virtual List<TEntity> GetAll<TEntity>() where TEntity : EntityBase, new()
-        {
-            List<TEntity> list = new List<TEntity>();
-
-            var _listId = typeof(TEntity).Name;
-            var client = RedisManager.GetClient();
-
-            var entityIds = client.GetAllItemsFromList(_listId);
-            if (entityIds == null)
+            if (key == null || key.Length == 0 || list == null || list.Count == 0)
             {
-                return list;
+                return;
             }
 
-            foreach (var pid in entityIds)
-            {
-                byte[] bytes = client.Get(_listId + pid);
-                if (bytes == null || bytes.Length == 0)
+            JArray collection = new JArray();
+            list.ForEach(e =>
                 {
-                    continue;
-                }
-                var jEntity = JSON.GetJObject(Encoding.UTF8.GetString(bytes));
-                TEntity target = new TEntity();
-                foreach (Newtonsoft.Json.Linq.JProperty pi in jEntity.Properties())
-                {
-                    target.Collection[pi.Name] = new EntityItem() { Key = pi.Name, Value = pi.Value.ToString() };
-                }
-                list.Add(target);
-            }
-            return list;
-        }
-
-        public virtual TEntity Find<TEntity>(EntityBase entity) where TEntity : EntityBase, new()
-        {
-            if (entity.ID > 0)
-            {
-                var _listId = entity.GetType().Name;
-                var _id = entity.ID.ToString();
-                var client = RedisManager.GetClient();
-
-                var entityIds = client.GetAllItemsFromList(_listId);
-                if (entityIds != null && entityIds.Contains(_id))
-                {
-                    var bytes = client.Get(_listId + _id);
-                    if (bytes == null || bytes.Length == 0)
+                    var jEntity = JSON.GetJObject(JSON.GetJProperty(e.PrimaryKey, e.ID));
+                    foreach (EntityItem item in e.Collection.Values)
                     {
-                        return null;
+                        jEntity.Add(JSON.GetJProperty(item.Key, item.Value));
                     }
+                    collection.Add(jEntity);
+                });
+            RedisManager.GetMaster().HSet(hashname, Encoding.UTF8.GetBytes(key), Encoding.UTF8.GetBytes(collection.ToString()));
+        }
 
-                    var jEntity = JSON.GetJObject(Encoding.UTF8.GetString(bytes));
-                    TEntity target = new TEntity();
-                    foreach (Newtonsoft.Json.Linq.JProperty pi in jEntity.Properties())
-                    {
-                        target.Collection[pi.Name] = new EntityItem() { Key = pi.Name, Value = pi.Value.ToString() };
-                    }
+        public string Get(string key)
+        {
+            if (key == null || key.Length == 0)
+            {
+                return null;
+            }
 
-                    return target;
-                }
+            var bytes = RedisManager.GetClient().HGet(hashname, Encoding.UTF8.GetBytes(key));
+            if (bytes != null && bytes.Length > 0)
+            {
+                return Encoding.UTF8.GetString(bytes);
             }
             return null;
         }
 
-        public virtual void Save(EntityBase entity)
+        public T Get<T>(string key) where T : EntityBase, new()
         {
-            if (entity != null)
+            if (key == null || key.Length == 0)
             {
-                string pid = entity.ID.ToString();
-                string _listId = entity.GetType().Name;
-                var master = RedisManager.GetMaster();
-
-                if (Exist(entity))
-                {
-                    var ek = _listId + pid;
-                    var bytes = master.Get(ek);
-                    if (bytes != null && bytes.Length > 0)
-                    {
-                        var jEntity = JSON.GetJObject(Encoding.UTF8.GetString(bytes));
-                        foreach (EntityItem item in entity.Collection.Values)
-                        {
-                            jEntity.Remove(item.Key);
-                            jEntity.Add(JSON.GetJProperty(item.Key, item.Value));
-                        }
-
-                        master.Remove(_listId + pid);
-                        master.Set(_listId + pid, Encoding.UTF8.GetBytes(jEntity.ToString()));
-                    }
-                }
-                else
-                {
-                    var jEntity = JSON.GetJObject(JSON.GetJProperty(entity.PrimaryKey, entity.ID));
-                    foreach (EntityItem item in entity.Collection.Values)
-                    {
-                        jEntity.Add(JSON.GetJProperty(item.Key, item.Value));
-                    }
-                    master.Set(_listId + pid, Encoding.UTF8.GetBytes(jEntity.ToString()));
-                    master.AddItemToList(_listId, pid);
-                }
-                master.BgSave();
+                return null;
             }
+
+            var bytes = RedisManager.GetClient().HGet(hashname, Encoding.UTF8.GetBytes(key));
+            if (bytes != null && bytes.Length > 0)
+            {
+                T target = new T();
+                var jobject = JSON.GetJObject(Encoding.UTF8.GetString(bytes));
+                foreach (JProperty pi in jobject.Properties())
+                {
+                    target.Collection[pi.Name] = new EntityItem() { Key = pi.Name, Value = pi.Value.ToString() };
+                }
+                return target;
+            }
+            return null;
         }
 
-        public virtual void Delete(EntityBase entity)
+        public List<T> GetList<T>(string key) where T : EntityBase, new()
         {
-            if (entity != null)
+            List<T> list = new List<T>();
+
+            if (key == null || key.Length == 0)
             {
-                var master = RedisManager.GetMaster();
-                var _listId = entity.GetType().Name;
-                master.Remove(_listId + entity.ID.ToString());
-                master.RemoveItemFromList(_listId, entity.ID.ToString());
-                master.BgSave();
+                return list;
             }
+
+            var bytes = RedisManager.GetClient().HGet(hashname, Encoding.UTF8.GetBytes(key));
+            if (bytes != null && bytes.Length > 0)
+            {
+                var jarray = JSON.GetJArray(Encoding.UTF8.GetString(bytes));
+                foreach (JObject jobject in jarray)
+                {
+                    T target = new T();
+                    foreach (JProperty pi in jobject.Properties())
+                    {
+                        target.Collection[pi.Name] = new EntityItem() { Key = pi.Name, Value = pi.Value.ToString() };
+                    }
+                    list.Add(target);
+                }
+            }
+            return list;
         }
     }
 }
