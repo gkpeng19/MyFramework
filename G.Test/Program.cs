@@ -1,4 +1,6 @@
 ﻿using G.Util.Redis;
+using G.Util.Tool;
+using GOMFrameWork;
 using GOMFrameWork.DataEntity;
 using Newtonsoft.Json;
 using ServiceStack.Redis;
@@ -6,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace G.Test
@@ -14,10 +17,8 @@ namespace G.Test
     {
         static void Main(string[] args)
         {
-            SearchEntity se = SearchEntity.FormSql("select cast(count(1) as bigint) from hq_room");
-            var v = se.LoadValue<Int64>();
             //Student s = new Student();
-            //s.SetUIValue("ID", 1);
+            //s.SetUIValue("ID"/ 1);
             //s.Name = "gkpeng";
             //s.Age = 18;
             //s.Time = DateTime.Now;
@@ -35,7 +36,7 @@ namespace G.Test
             //RedisClient master = RedisManager.GetMaster();
             //RedisClient selve = RedisManager.GetClient();
 
-            //master.Set<string>("test", "aa");
+            //master.Set<string>("test"/ "aa");
             //var v = selve.Get<string>("test");
             //System.Diagnostics.Debug.WriteLine(v);
 
@@ -45,48 +46,107 @@ namespace G.Test
             //var list= res.GetAll<Student>();
 
             //var s1= new Student();
-            //s1.SetUIValue("ID",1);
+            //s1.SetUIValue("ID"/1);
             //var target = res.Find<Student>(s1);
 
             //var list= RedisRepository.Default.GetAll<Student>();
+
+            DbContext.InitContext<Park>("ParkConnection");
+
+            List<string> headers = new List<string>{
+                "ID","Name","COMPLETETIME",
+                "OPENDATE","PARKGRADE","HIGHQUALITYPARK","FREEPARK","PROPERTY","PEAKLOWSEASON","ONOFFTIMEPEAK","ONOFFLOW","OWEDDISTINCE","OWEDSTREET",
+                "DETAILADDRESS","ZIPCODE","TRAFFICWAY","INTRODUCT","FEATURESPOT","TOTALAREA","WATERAREA","LANDAREA","BUILDAREA","ANCIENTBUILDAREA",
+                "EXTEBUILDAREA","ADMINBUILDAREA","LANDSCAPEAREA","MANAGEBUILDAREA","GREENSPACEAREA","MATAREA","LENPAVEROAD","SQUAREPAVEAREA","GREENRATE","GREENCOVERAGE",
+                "RATEGREENCOVERAGE","TURFAREA","FLOWGRASSAREA","FLOWVAR","TREESNUM","RBORNUM","SHURBNUM","ANCIENTTREENUM","SIGNALBOARDNUM","MULSIGBOARD",
+                "CHAIRNUM","GARBAGENUM","LAMPNUM","FIRSTWCNUM","SECONDWCNUM","OTHERWCNUM","TOTALWCNUM","URINALNUM","MALEWCNUM","FEMALEWCNUM",
+                "PARK","INNERPARKNUM","BESIDEPARKNUM","BROADFAC","BIKEPARK","BIKEPARKNUM","BULLECTINBOARDNUM","BULLECTINSCREENNUM","BODYBUILDEQUNUM","ATHLETICGROUND",
+                "ATHLETICGROUNDNUM","BODYBUILDWALKLEN","SOLARLAMPNUM","VOLTAICPLANT","ANNALLPOWERPLANT","SOLARLAMPANNUSEPOWER","TOTALANNUALPOWER","COLLECTRAINWAY","COLLECTRAINAREA","ANNUALWATERSUM",
+                "RECLAIMEDWATER","RECLAIMEDWATERAPP","ANNUSECOUNTREWATER","REWATERHADLEFAC","REWATERHANDLEFACINTR","SPRINKAREA","DRIPAREA","GEOTHERMAL","GEOTHERMALUSEINTR","OTHERSAVEENERWAYINTR",
+                "SPECIALWICKETNUM","SPECIALPARKNUM","WHEELCHAIRNUM","RAMPNUM","RAMPLEN","LOWPOOLNUM","UNSEXWCNUM","ACCWCNUM","LOWTELNUM",
+                "OTHERACCFACINTR","INDEPTADMIOFFICE","ADMOFFICENAME","ADMAGENCYLEVEL","SUPERADMDEPT","ONSTAFFNUM","TECPERSONNUM","INDEPTLEGALENTITY","CHARGEPERSONNAME","CONTRACTPERSONNAME",
+                "FIXEDPHONE","MOBILETEL","CONSULTPHONE","FAX","Email","WEBSET","LANDBELOGN","ANNCONSINVE","RELCATIONCOST","COMULATIVEINVE",
+                "CONSINVESSOURCE","OVERALLPLAN","PLANAPPROVEDEPT","OPENTYPE","MONICAMERNUM","EMERSHELTER","EMERSHELTERCAPA","BUFFETNUM","BUFFETTOTALAREA","RESTAURANTNUMBER",
+                "RESTAURANTAREA","HOTELNUMBER","HOTELAREA","HOTELFLOORAREA","OLDBRAND","OLDBRANDINTRO","BOATNUM","ACTIVITYSPACENUM","CABLECAR","CABLEWAYLEN",
+                "SLIDEWAY","SLIDEWAYLEN","AMUSEFAC","AMUSEFACINTR","ICEACTIVITY","ENTRANCETICKETPRICE","OFFSEASONTICKETPRIC","PEAKSEASONTICKETPRICE","COUPONPRICE","MONTHTICKETPRICE",
+                "SEASONTICKETPRIC","ANNUALTICKETPRICE","SPEPERSONDISCOUNTINTR","GARDENNUM","GARDENNAME","GARDENTICKETPRICE","ENTRANCETICKETREVENUE","OFFSEASONTICKETREVENUE","PEAKSEASONTICKETREVENUE","COUPONREVENUE",
+                "MONTHTICKETREVENUE","SEASONTICKETREVENUE","ANNTICKETREVENUE","SPEPERSONDISCOUNTNUMINTRO","GARDENTICKETREVENUE","IMPORHOLIDAYTOURISTNUM","GARDENTOURISTNUM","BOATTYPE","BOATTICKETPRICE","HOLDICEACTIVITYANN",
+                "PROJECTNAME","PROJECTTYPE","PROJECTINVE"
+            };
+
+            StringBuilder sb = new StringBuilder();
+            for (var i = headers.Count - 1; i >= 0; --i)
+            {
+                var key = headers[i];
+                sb.Append(key);
+                headers.RemoveAt(i);
+                var index = headers.IndexOf(key, 0);
+                if (index >= 0)
+                {
+                    headers.RemoveAt(index);
+                }
+            }
+
+            var aaaa = sb.ToString();
+
+            //var path = @"D:\Gkpeng\MyFramework\G.Test\parks.xls";
+            //var parkList = ExcelHelper.Read<Park>(path, headers, 1);
+            //foreach (var park in parkList)
+            //{
+            //    park.Save();
+            //    Thread.Sleep(200);
+            //}
         }
     }
 
-    public class Student : GOMFrameWork.DataEntity.EntityBase
+    public class Park : GOMFrameWork.DataEntity.EntityBase
     {
-        public Student()
+        public Park()
         {
-            base.TableName = "Sutdent";
+            base.TableName = "tab_registerpark";
+            base.PrimaryKey = "iid";
         }
-        [JsonIgnore]
-        public string Name
+
+        protected override bool IsNullUIValue(string key, object value)
         {
-            get { return GetString("Name"); }
-            set { SetValue("Name", value); }
+            string v = value.ToString();
+            if (v.Length == 0)
+            {
+                return true;
+            }
+            return false;
         }
-        [JsonIgnore]
-        public int Age
+
+        public override void SetUIValue(string key, object value)
         {
-            get { return GetInt32("Age"); }
-            set { SetValue("Age", value); }
-        }
-        [JsonIgnore]
-        public DateTime Time
-        {
-            get { return GetDateTime("Time"); }
-            set { SetValue("Time", value); }
-        }
-        [JsonIgnore]
-        public decimal Price
-        {
-            get { return GetDecimal("Price"); }
-            set { SetValue("Price", value); }
-        }
-        [JsonIgnore]
-        public double PriceD
-        {
-            get { return GetDouble("PriceD"); }
-            set { SetValue("PriceD", value); }
+            var newvalue = value.ToString();
+            var item = Collection[key];
+            if (item == null)
+            {
+                if (!IsNullUIValue(key, newvalue))
+                {
+                    Collection[key] = new EntityItem() { Key = key, Value = newvalue };
+                }
+            }
+            else
+            {
+                if (IsNullUIValue(key, newvalue))
+                {
+                    if (ID > 0)
+                    {
+                        //清空数据库字段中的值
+                        (item as EntityItem).Value = DBNull.Value;
+                    }
+                    else
+                    {
+                        Collection.Remove(key);
+                    }
+                }
+                else
+                {
+                    (item as EntityItem).Value = newvalue;
+                }
+            }
         }
     }
 }

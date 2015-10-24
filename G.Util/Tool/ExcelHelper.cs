@@ -30,11 +30,15 @@ namespace G.Util.Tool
             Worksheet sheet = book.Worksheets[0];
 
             List<T> list = new List<T>();
-            for (int r = 0; r <= sheet.Cells.LastRowIndex; r++)
+            for (int r = offset; r <= sheet.Cells.LastRowIndex; r++)
             {
                 var obj = new T();
                 for (int i = 0; i <= sheet.Cells.LastColIndex; i++)
                 {
+                    if (hps[i].EndsWith("_G"))
+                    {
+                        continue;
+                    }
                     var v = sheet.Cells[r, i].Value;
                     if (v != null)
                     {

@@ -607,7 +607,7 @@ namespace GOMFrameWork.DBContext
             int index = 0;
             foreach (EntityItem item in entity.Collection.Values)
             {
-                parameters[index] = new OracleParameter(item.Key, item.Value);
+                parameters[index] = new OracleParameter(":" + item.Key, item.Value);
                 ++index;
             }
 

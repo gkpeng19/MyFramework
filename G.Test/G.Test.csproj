@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="parks.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\G.Util\G.Util.csproj">
@@ -76,6 +77,9 @@
       <Project>{88be7db6-73ac-45ba-beb0-01cdac27ff20}</Project>
       <Name>GOMFrameWork</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TextFile1.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

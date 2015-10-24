@@ -7,7 +7,7 @@ namespace GOMFrameWork.DataEntity
 {
     public class EntityItem
     {
-        internal EntityItem() { }
+        public EntityItem() { }
 
         public string Key { get; set; }
         public object Value { get; set; }
