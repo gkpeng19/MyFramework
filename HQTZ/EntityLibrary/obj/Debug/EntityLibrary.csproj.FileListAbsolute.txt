@@ -1,6 +1,5 @@
 D:\Work\MyFrameWork\HQTZ\EntityLibrary\bin\Debug\EntityLibrary.dll
 D:\Work\MyFrameWork\HQTZ\EntityLibrary\bin\Debug\EntityLibrary.pdb
-D:\Work\MyFrameWork\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.csprojResolveAssemblyReference.cache
 D:\Work\MyFrameWork\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.dll
 D:\Work\MyFrameWork\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.pdb
 E:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\EntityLibrary.dll
@@ -42,3 +41,4 @@ D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\zh-Hans\System.Web.Mvc.resour
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.pdb
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.csprojResolveAssemblyReference.cache
+D:\Work\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.csprojResolveAssemblyReference.cache

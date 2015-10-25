@@ -56,15 +56,20 @@ http://www.freshdesignweb.com/free-beautiful-css3-table-style.html
 		top: -20px;
 		padding: 40px 20px;   
 	}
+
+    #fdw-pricing-table .plan:nth-of-type(n+5)
+    {
+        margin-top:10px;
+    }
 	
 	/* --------------- */	
 
 	#fdw-pricing-table .header {
 		position: relative;
-		font-size: 20px;
+		font-size: 13px;
 		font-weight: normal;
 		text-transform: uppercase;
-		padding: 40px;
+		padding: 15px;
 		margin: -20px -20px 20px -20px;
 		border-bottom: 8px solid;
 		background-color: #eee;
@@ -81,7 +86,7 @@ http://www.freshdesignweb.com/free-beautiful-css3-table-style.html
 		bottom: -8px; left: 0;
 		height: 3px; width: 100%;
 		content: '';
-		background-image: url(images/bar.png);
+		background-image: url(/Images/bar.png);
 	}
 	
 	#fdw-pricing-table .popular-plan .header {
@@ -108,26 +113,24 @@ http://www.freshdesignweb.com/free-beautiful-css3-table-style.html
 	/* --------------- */
 
 	#fdw-pricing-table .price{
-		font-size: 45px;
+		font-size: 30px;
 	}
 
-	#fdw-pricing-table .monthly{
-		font-size: 13px;
-		margin-bottom: 20px;
-		text-transform: uppercase;
-		color: #999;
+    #fdw-pricing-table .price span{
+		font-size: 15px;
 	}
 
 	/* --------------- */
 
 	#fdw-pricing-table ul {
-		margin: 20px 0;
+		margin: 10px 0;
 		padding: 0;
 		list-style: none;
+        font-size:13px;
 	}
 
 	#fdw-pricing-table li {
-		padding: 10px 0;
+		padding: 5px 0;
 	}
 	
 	/* --------------- */

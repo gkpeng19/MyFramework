@@ -172,10 +172,25 @@ namespace WebSite.Controllers
         [LoginVerify("Client")]
         public ActionResult OrderIndex()
         {
-            SearchModel sm = new SearchModel("uv_bookroom");
-            sm["MemberID"] = LoginInfo.Current.UserID;
-            ViewBag.BRooms = sm.Load<HQ_BookRoom>().Data;
             return View();
+        }
+
+        [LoginVerify("Client")]
+        public JsonResult LoadOrders(SearchModel sm, int page_g, int psize_g = 8)
+        {
+            sm.SearchID = "uv_bookroom";
+            sm["MemberID"] = LoginInfo.Current.UserID;
+            sm.OrderBy("id", EnumOrderBy.Desc);
+            sm.PageIndex = page_g;
+            sm.PageSize = psize_g;
+            var result = sm.Load<HQ_BookRoom>();
+
+            return this.JsonNet(new { Data = result.Data, pager = Pager.InitPager(page_g, result.PageCount, "loadOrders") });
+        }
+
+        public long CancelBook(HQ_BookRoom broom)
+        {
+            return broom.Delete();
         }
 
         public int IsRoomEnough(int roomid, DateTime sdate, DateTime edate)
@@ -204,7 +219,6 @@ namespace WebSite.Controllers
         static object _object = new object();
         public long BookRoom(int roomid, DateTime sdate, DateTime edate)
         {
-            string loginUrl = string.Empty;
             if (!LoginVerify.IsLogin("Client"))
             {
                 return -1;

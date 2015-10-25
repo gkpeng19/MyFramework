@@ -149,5 +149,27 @@ namespace EntityLibrary.Entities
         }
 
         #endregion
+
+        #region 会员订单查询
+
+        [Search(Field = "MemberName_G", Operator = SearchOperator.Like)]
+        public string MOrder_MemberName
+        {
+            set { SetValue("MOrder_MemberName", value); }
+        }
+
+        [Search(Operator = SearchOperator.GreaterEqual)]
+        public DateTime BookStartTime
+        {
+            set { SetValue("BookStartTime", value); }
+        }
+
+        [Search(Operator = SearchOperator.LessEqual)]
+        public DateTime BookEndTime
+        {
+            set { SetValue("BookEndTime", value); }
+        }
+
+        #endregion
     }
 }

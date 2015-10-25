@@ -346,7 +346,8 @@ namespace WinTemplate
 
             Razor.Compile(_temtable, typeof(GContent), "tables");
 
-            var data = JSON.JsonBack<GContent>(File.ReadAllText(filePath + ".json"));
+            var jsonstr = File.ReadAllText(filePath + ".json");
+            var data = JSON.JsonBack<GContent>(jsonstr);
 
             #region 生成Html文件并保存
 

@@ -75,5 +75,54 @@ namespace EntityLibrary.Entities
         {
             get { return Convert.ToInt32(GetDecimal("RoomPrice_G")); }
         }
+
+        int _days = 0;
+        public int BookDays_G
+        {
+            get
+            {
+                if (_days == 0)
+                {
+                    _days = BookEndTime.Subtract(BookStartTime).Days + 1;
+                }
+                return _days;
+            }
+        }
+
+        public int AllPrice_G
+        {
+            get { return RoomPrice_G * BookDays_G; }
+        }
+
+        public int CanCancelBook_G
+        {
+            get
+            {
+                if (BookStartTime.AddDays(1) < DateTime.Now)
+                {
+                    return 0;
+                }
+                return 1;
+            }
+        }
+
+        [JsonIgnore]
+        public string MemberName_G
+        {
+            get { return GetString("MemberName_G"); }
+            set { SetValue("MemberName_G", value); }
+        }
+        [JsonIgnore]
+        public string VillageName_G
+        {
+            get { return GetString("VillageName_G"); }
+            set { SetValue("VillageName_G", value); }
+        }
+        [JsonIgnore]
+        public string DestinationName_G
+        {
+            get { return GetString("DestinationName_G"); }
+            set { SetValue("DestinationName_G", value); }
+        }
     }
 }

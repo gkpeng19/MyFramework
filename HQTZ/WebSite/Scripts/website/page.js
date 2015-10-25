@@ -1,8 +1,8 @@
 ﻿var _shades = [];
 var lastShade = null;
 var lastTarget = null;
+var targetImgIndex = 0;
 function initTraveImgShade(selector, color, func) {
-    var dindex = 0;
     $(selector).each(function () {
         if (!$(this).attr("data-event")) {
             $(this).attr("data-event", 1);
@@ -37,13 +37,13 @@ function initTraveImgShade(selector, color, func) {
                     var left = $(this).offset().left;
                     sdiv[0].style.left = left + "px";
                     sdiv[0].style.top = top + "px";
-                    $(this).attr("data-index", dindex);
+                    $(this).attr("data-index", targetImgIndex);
 
                     $(this).parent().find(".traveTitle").css("visibility", "hidden");
 
                     _shades.push(sdiv);
 
-                    ++dindex;
+                    ++targetImgIndex;
 
                     lastShade = sdiv;
                     lastTarget = this;
