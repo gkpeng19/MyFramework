@@ -12,13 +12,13 @@ namespace G.Util.Tool
     public class ImageUtil
     {
         /// <summary>    
-        /// Creating a Watermarked Photograph with GDI+ for .NET    
-        /// </summary>    
+        /// 图片添加水印 with GDI+ for .NET    
+        /// </summary>
         /// <param name="rSrcImgPath">原始图片的物理路径</param>    
         /// <param name="rMarkImgPath">水印图片的物理路径</param>    
         /// <param name="rMarkText">水印文字（不显示水印文字设为空串）</param>    
         /// <param name="rDstImgPath">输出合成后的图片的物理路径</param>    
-        public void BuildWatermark(string rSrcImgPath, string rMarkImgPath, string rMarkText, string rDstImgPath)
+        public void MakeWatermark(string rSrcImgPath, string rMarkImgPath, string rMarkText, string rDstImgPath)
         {
             //以下（代码）从一个指定文件创建了一个Image 对象，然后为它的 Width 和 Height定义变量。    
             //这些长度待会被用来建立一个以24 bits 每像素的格式作为颜色数据的Bitmap对象。    
@@ -157,5 +157,92 @@ namespace G.Util.Tool
             imgPhoto.Dispose();
             imgWatermark.Dispose();
         }
+
+        /// <summary>
+        /// 生成缩略图 
+        /// </summary>
+        /// <param name="originalImagePath">源图路径（物理路径）</param>
+        /// <param name="thumbnailPath">缩略图路径（物理路径）</param>
+        /// <param name="width">缩略图宽度</param>
+        /// <param name="height">缩略图高度</param>
+        public static void MakeThumbnail(string originalImagePath, string thumbnailPath, int width = 0, int height = 0)
+        {
+            if (width == height && height == 0)
+            {
+                return;
+            }
+
+            Image originalImage = Image.FromFile(originalImagePath);
+            int towidth = width;
+            int toheight = height;
+
+            int x = 0;
+            int y = 0;
+            int ow = originalImage.Width;
+            int oh = originalImage.Height;
+
+            if (width > 0 && height > 0)
+            {
+                if ((double)originalImage.Width / (double)originalImage.Height > (double)towidth / (double)toheight)
+                {
+                    oh = originalImage.Height;
+                    ow = originalImage.Height * towidth / toheight;
+                    y = 0;
+                    x = (originalImage.Width - ow) / 2;
+                }
+                else
+                {
+                    ow = originalImage.Width;
+                    oh = originalImage.Width * height / towidth;
+                    x = 0;
+                    y = (originalImage.Height - oh) / 2;
+                }
+            }
+            else if (width > 0 && height == 0)
+            {
+                toheight = originalImage.Height * width / originalImage.Width;
+            }
+            else if (height > 0 && width == 0)
+            {
+                towidth = originalImage.Width * height / originalImage.Height;
+            }
+
+            //新建一个bmp图片 
+            Image bitmap = new System.Drawing.Bitmap(towidth, toheight);
+
+            //新建一个画板 
+            Graphics g = System.Drawing.Graphics.FromImage(bitmap);
+
+            //设置高质量插值法 
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
+
+            //设置高质量,低速度呈现平滑程度 
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+            //清空画布并以透明背景色填充 
+            g.Clear(Color.Transparent);
+
+            //在指定位置并且按指定大小绘制原图片的指定部分 
+            g.DrawImage(originalImage, new Rectangle(0, 0, towidth, toheight),
+                new Rectangle(x, y, ow, oh),
+                GraphicsUnit.Pixel);
+
+            try
+            {
+                //以jpg格式保存缩略图 
+                bitmap.Save(thumbnailPath, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+            catch (System.Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                originalImage.Dispose();
+                bitmap.Dispose();
+                g.Dispose();
+            }
+        }
+
     }
 }

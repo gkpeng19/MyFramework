@@ -51,6 +51,10 @@ namespace G.Test
 
             //var list= RedisRepository.Default.GetAll<Student>();
 
+            string pagehtml = Pager.InitLinkPager(2, 15);
+
+            return;
+
             DbContext.InitContext<Park>("ParkConnection");
 
             List<string> headers = new List<string>{
@@ -74,28 +78,21 @@ namespace G.Test
                 "PROJECTNAME","PROJECTTYPE","PROJECTINVE"
             };
 
-            StringBuilder sb = new StringBuilder();
             for (var i = headers.Count - 1; i >= 0; --i)
             {
                 var key = headers[i];
-                sb.Append(key);
-                headers.RemoveAt(i);
-                var index = headers.IndexOf(key, 0);
-                if (index >= 0)
+                for (var j = i - 1; j >= 0; --j)
                 {
-                    headers.RemoveAt(index);
+                    if (headers[j] == key)
+                    {
+                        headers.RemoveAt(i);
+                        break;
+                    }
                 }
             }
 
-            var aaaa = sb.ToString();
-
-            //var path = @"D:\Gkpeng\MyFramework\G.Test\parks.xls";
-            //var parkList = ExcelHelper.Read<Park>(path, headers, 1);
-            //foreach (var park in parkList)
-            //{
-            //    park.Save();
-            //    Thread.Sleep(200);
-            //}
+            var path = @"C:\Users\gkpeng\Desktop\parks.xlsx";
+            var parkList = ExcelHelper.Read<Park>(path, headers.ToArray(), 1);
         }
     }
 
