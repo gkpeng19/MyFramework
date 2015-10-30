@@ -145,3 +145,10 @@ D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\log4net.xml
 D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\NPOI.xml
 D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\NPOI.OOXML.xml
 D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\NPOI.OpenXml4Net.xml
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\System.Net.Http.Formatting.dll
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\System.Web.Cors.dll
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\System.Web.Http.Cors.dll
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\System.Web.Http.dll
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\System.Net.Http.Formatting.xml
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\System.Web.Http.xml
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\System.Web.Http.Cors.xml

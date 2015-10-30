@@ -43,5 +43,11 @@ namespace EntityLibrary.Entities
             get { return GetString("DPanel_G"); }
             set { SetValue("DPanel_G", value); }
         }
+        [JsonIgnore]
+        public string ImgName_G
+        {
+            get { return GetString("ImgName_G"); }
+            set { SetValue("ImgName_G", value); }
+        }
     }
 }
