@@ -28,7 +28,7 @@ public class UMeditorUploader
   *@param int
   * @return Hashtable
   */
-    public Hashtable upFile(HttpContext cxt, string pathbase, string[] filetype, int size)
+    public Hashtable upFile(HttpContext cxt, string pathbase, string[] filetype, int size, string progresskey)
     {
         var dateTimeStr = DateTime.Now.ToString("yyyy-MM-dd");
         pathbase = pathbase + dateTimeStr + "/";
@@ -47,16 +47,34 @@ public class UMeditorUploader
             {
                 state = "不允许的文件类型";
             }
-            //大小验证
-            if (checkSize(size))
+            else if (checkSize(size))/*大小验证*/
             {
-                state = "文件大小超出网站限制";
+                state = "文件大小超出限制";
             }
+
             //保存图片
             if (state == "SUCCESS")
             {
                 filename = reName();
-                uploadFile.SaveAs(uploadpath + filename);
+                using (FileStream fs = new FileStream(uploadpath + filename, FileMode.Create))
+                {
+                    byte[] buffer = new byte[92160];
+                    int progress = 0;
+                    int contentLength = uploadFile.ContentLength;
+                    while (progress < contentLength)
+                    {
+                        int bytes = uploadFile.InputStream.Read(buffer, 0, buffer.Length);
+                        fs.Write(buffer, 0, bytes);
+                        progress += bytes;
+
+                        //记录上传进度
+                        if (progresskey != null && progresskey.Length > 0)
+                        {
+                            HttpContext.Current.Cache[progresskey] = (int)(((decimal)progress) / contentLength * 100);
+                        }
+                    }
+
+                }
                 URL = pathbase + filename;
                 path = dateTimeStr + "/" + filename;
             }

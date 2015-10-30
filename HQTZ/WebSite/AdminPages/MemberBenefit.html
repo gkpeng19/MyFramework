@@ -81,6 +81,7 @@
     <script type="text/javascript">
         $("#6903831546189698").upload({
             filter: "image",
+            maxSize: 500,
             success: function (result) {
                 if (result.state == "SUCCESS") {
                     $("#6903831546189698").val(result.path);

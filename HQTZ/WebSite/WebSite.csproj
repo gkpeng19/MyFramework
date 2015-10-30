@@ -431,6 +431,9 @@
     <Compile Include="Scripts\umeditor\net\fileUp.ashx.cs">
       <DependentUpon>fileUp.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Scripts\umeditor\net\fileUpProgress.ashx.cs">
+      <DependentUpon>fileUpProgress.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Scripts\umeditor\net\UMeditorUploader.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -439,6 +442,7 @@
     <Content Include="Scripts\validate\_cmd.bat" />
     <Content Include="Scripts\validate\_run.bat" />
     <Content Include="Scripts\umeditor\net\fileUp.ashx" />
+    <Content Include="Scripts\umeditor\net\fileUpProgress.ashx" />
     <None Include="Scripts\umeditor\net\getContent.ashx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

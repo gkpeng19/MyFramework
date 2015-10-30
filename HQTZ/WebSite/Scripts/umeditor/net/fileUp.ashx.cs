@@ -6,9 +6,6 @@ using System.Web;
 
 namespace WebSite.Scripts.umeditor.net
 {
-    /// <summary>
-    /// fileUp 的摘要说明
-    /// </summary>
     public class fileUp : IHttpHandler
     {
         public void ProcessRequest(HttpContext context)
@@ -16,9 +13,10 @@ namespace WebSite.Scripts.umeditor.net
             context.Response.ContentType = "text/plain";
             context.Response.ContentEncoding = System.Text.Encoding.UTF8;
 
+            string progresskey = context.Request["progresskey"];
+
             //上传配置
             string pathbase = "upload/"; //保存路径
-
             string editorId = context.Request["editorid"];
 
             //文件允许格式
@@ -67,7 +65,7 @@ namespace WebSite.Scripts.umeditor.net
             //上传图片
             Hashtable info;
             UMeditorUploader up = new UMeditorUploader();
-            info = up.upFile(context, "../../../" + pathbase, filetype, size); //获取上传状态
+            info = up.upFile(context, "../../../" + pathbase, filetype, size, progresskey); //获取上传状态
             info["path"] = pathbase + info["path"];
             string json = BuildJson(info);
 

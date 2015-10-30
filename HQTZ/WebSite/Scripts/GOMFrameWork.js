@@ -448,7 +448,7 @@ datatable.prototype.initLineHtml = function (json, identity) {
             }
 
             if (option.onload) {
-                vhtm = option.onload(json,vhtm);
+                vhtm = option.onload(json, vhtm);
             }
 
             html += "<td>" + vhtm + "</td>";
@@ -1110,7 +1110,8 @@ gtree.prototype.beforeDeleteNode = function (event) {
 
 /*-----文件上传----------------------------------------------------*/
 $.fn.extend({
-    upload: function (args) {/*filter:image,video,application;uploadUrl:文件接收url;maxSize:最大文件大小;success:回调函数 */
+    /*filter:image,video,application;uploadUrl:文件接收url;progressUrl:获取进度url;maxSize:最大文件大小;success:回调函数 */
+    upload: function (args) {
         if (!args || !args.success) {
             return;
         }
@@ -1120,12 +1121,15 @@ $.fn.extend({
             return;
         }
 
+        var progresskey = Math.random();
+
         if (args.filter) {
             me.attr("accept", args.filter + "/*");
         }
 
         if (!args.uploadUrl) {
             args.uploadUrl = "/Scripts/umeditor/net/fileUp.ashx";
+            args.progressUrl = "/Scripts/umeditor/net/fileUpProgress.ashx";
         }
 
         me.hide();
@@ -1133,9 +1137,9 @@ $.fn.extend({
         var name = me.attr("name");
         me.attr("id", "file_" + id);
         me.attr("name", "upfile_g");
-        $('<input type="text" readonly="readonly" name="'
-            + name + '" id="' + id + '" class="span11" /><label for="file_'
-            + id + '" class="btn btn-primary btn-mini" style="margin-top:-10px;margin-left:-57px;">&nbsp;上&nbsp;传&nbsp;</label>').insertAfter(me);
+        var fInput = $('<input type="text" readonly="readonly" name="' + name + '" id="' + id + '" class="span11" />');
+        var fSubmit = $('<label for="file_' + id + '" class="btn btn-primary btn-mini" style="margin-top:-10px;margin-left:-57px;">&nbsp;上&nbsp;传&nbsp;</label>');
+        $("<span></span>").append(fInput).append(fSubmit).insertAfter(me);
 
         me.on("change", function () {
             if ($(this).val().length == 0) {
@@ -1160,6 +1164,8 @@ $.fn.extend({
             });
 
             var form = $('<form style="display:none;" target="up" method="post" action="' + args.uploadUrl + '" enctype="multipart/form-data"></form>');
+            //唯一获取进度的key
+            form.append('<input type="hidden" name="progresskey" value="' + progresskey + '" />');
 
             var input_maxsize = null;
             if (args.maxSize) {
@@ -1178,10 +1184,41 @@ $.fn.extend({
             $("body").append(form);
             form[0].submit();
 
+            //初始化进度条
+            if (args.progressUrl) {
+                var pbar = $('<div class="progress progress-success progress-striped" style="height:4px;margin-bottom:0px;"><div class="bar" style=""></div></div>');
+                pbar.css({
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    zIndex: 20000000
+                }).width(fInput.width() + 13).show().appendTo("body");
+                var top = fInput.offset().top;
+                var left = fInput.offset().left;
+                pbar[0].style.left = left + "px";
+                pbar[0].style.top = (top + 30) + "px";
+                //更新进度条进度
+                var isComplate = false;
+                var pInterval = setInterval(function () {
+                    $.get(args.progressUrl, { progresskey: progresskey, ran: Math.random() }, function (r) {
+                        if (isComplate) {
+                            return;
+                        }
+                        pbar.find(".bar").css({ width: r + "%" });
+                        if (r == 100) {
+                            isComplate = true;
+                            clearInterval(pInterval);
+                            var pTimeout = setTimeout(function () {
+                                clearTimeout(pTimeout);
+                                pbar.remove();
+                            }, 1000);
+                        }
+                    });
+                }, 400);
+            }
+
             me.insertBefore(nextEle);
-
             form.remove();
-
             if (input_maxsize) {
                 input_maxsize.remove();
             }
@@ -1414,7 +1451,7 @@ $.extend({
 });
 
 $.fn.extend({
-    open: function (title, yes, no, close, cancle,exoptions) {
+    open: function (title, yes, no, close, cancle, exoptions) {
         if (!title || (title.length && title.length == 0)) {
             title = false;
         }
@@ -1539,12 +1576,8 @@ $.fn.extend({
             container = this;
         }
         container.find(".loading").remove();
-    }
-});
-
-/*------在指定元素上创建遮罩---------------------------------------------*/
-$.fn.extend({
-    shade: function () {
+    },
+    shade: function () {/*在指定元素上创建遮罩*/
         var sdiv = $("<div></div>");
         sdiv.css({
             position: 'absolute',
@@ -1552,7 +1585,7 @@ $.fn.extend({
             left: 0,
             backgroundColor: "#808080",
             opacity: 0,
-            zIndex: 300
+            zIndex: 20000000
         }).height(this.height()).width(this.width()).show().appendTo("body");
         var top = this.offset().top;
         var left = this.offset().left;
