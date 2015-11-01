@@ -1121,17 +1121,9 @@ $.fn.extend({
             return;
         }
 
-        var progresskey = Math.random();
-
         if (args.filter) {
             me.attr("accept", args.filter + "/*");
         }
-
-        if (!args.uploadUrl) {
-            args.uploadUrl = "/Scripts/umeditor/net/fileUp.ashx";
-            args.progressUrl = "/Scripts/umeditor/net/fileUpProgress.ashx";
-        }
-
         me.hide();
         var id = me.attr("id");
         var name = me.attr("name");
@@ -1139,7 +1131,21 @@ $.fn.extend({
         me.attr("name", "upfile_g");
         var fInput = $('<input type="text" readonly="readonly" name="' + name + '" id="' + id + '" class="span11" />');
         var fSubmit = $('<label for="file_' + id + '" class="btn btn-primary btn-mini" style="margin-top:-10px;margin-left:-57px;">&nbsp;上&nbsp;传&nbsp;</label>');
-        $("<span></span>").append(fInput).append(fSubmit).insertAfter(me);
+        var fContainer = $("<span></span>");
+        fContainer.append(fInput).append(fSubmit).insertAfter(me);
+
+        if (!args.uploadUrl) {
+            args.uploadUrl = "/Scripts/umeditor/net/fileUp.ashx?iseditor=0";
+            args.progressUrl = "/Scripts/umeditor/net/fileUpProgress.ashx";
+        }
+        var progresskey = Math.random();
+        args.uploadUrl = (args.uploadUrl + "&progresskey=" + progresskey);
+        if (args.maxSize) {
+            args.uploadUrl = args.uploadUrl + "&maxSize=" + args.maxSize;
+        }
+        if (args.filter) {
+            args.uploadUrl = args.uploadUrl + "&filter=" + args.filter;
+        }
 
         me.on("change", function () {
             if ($(this).val().length == 0) {
@@ -1151,7 +1157,8 @@ $.fn.extend({
 
                 if (r != "") {
                     var result = eval('(' + r + ')');
-                    if (result.state != "SUCCESS") {
+                    if (result.state != "1") {
+                        args.isError = true;
                         me.parent().find(".remove").click();
                         $.alert(result.state);
                         return;
@@ -1164,21 +1171,6 @@ $.fn.extend({
             });
 
             var form = $('<form style="display:none;" target="up" method="post" action="' + args.uploadUrl + '" enctype="multipart/form-data"></form>');
-            //唯一获取进度的key
-            form.append('<input type="hidden" name="progresskey" value="' + progresskey + '" />');
-
-            var input_maxsize = null;
-            if (args.maxSize) {
-                input_maxsize = $('<input type="hidden" name="maxSize" value="' + args.maxSize + '" />');
-                form.append(input_maxsize);
-            }
-            var input_filter = null;
-            if (args.filter) {
-                input_filter = $('<input type="hidden" name="filter" value="' + args.filter + '" />');
-                form.append(input_filter);
-            }
-
-            var nextEle = me.next();
 
             form.append(me);
             $("body").append(form);
@@ -1198,33 +1190,50 @@ $.fn.extend({
                 pbar[0].style.left = left + "px";
                 pbar[0].style.top = (top + 30) + "px";
                 //更新进度条进度
-                var isComplate = false;
-                var pInterval = setInterval(function () {
-                    $.get(args.progressUrl, { progresskey: progresskey, ran: Math.random() }, function (r) {
-                        if (isComplate) {
-                            return;
+                var progress = 1;
+                var increment = 1.00;
+                var tInterval = setInterval(function () {
+                    if (tInterval) {
+                        progress += increment;
+                        pbar.find(".bar").css({ width: progress + "%" });
+                        if (progress % 10 == 0) {
+                            increment = (100 - progress) / 100.00;
                         }
-                        pbar.find(".bar").css({ width: r + "%" });
-                        if (r == 100) {
-                            isComplate = true;
-                            clearInterval(pInterval);
-                            var pTimeout = setTimeout(function () {
-                                clearTimeout(pTimeout);
-                                pbar.remove();
-                            }, 1000);
+                    }
+                }, 1000);
+
+                var pInterval = setInterval(function () {
+                    if (args.isError) {
+                        clearInterval(pInterval);
+                        pbar.remove();
+                        return;
+                    }
+                    if (progress == 100) {
+                        clearInterval(pInterval);
+                        return;
+                    }
+                    $.get(args.progressUrl, { progresskey: progresskey, ran: Math.random() }, function (r) {
+                        if (r >= progress) {
+                            if (tInterval) {
+                                clearInterval(tInterval);
+                                tInterval = null;
+                            }
+
+                            if (r == 100) {
+                                progress = 100;
+                                var pTimeout = setTimeout(function () {
+                                    clearTimeout(pTimeout);
+                                    pbar.remove();
+                                }, 1000);
+                            }
+                            pbar.find(".bar").css({ width: r + "%" });
                         }
                     });
                 }, 400);
             }
 
-            me.insertBefore(nextEle);
+            me.insertBefore(fContainer);
             form.remove();
-            if (input_maxsize) {
-                input_maxsize.remove();
-            }
-            if (input_filter) {
-                input_filter.remove();
-            }
         });
     }
 });

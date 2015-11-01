@@ -114,9 +114,16 @@
     <div id="agenterInfo" style="height:400px;overflow-y:auto;"></div>
 </div>
 
+<div id="div_ChangePsw" style="width:350px;">
+    <table>
+        <tr><td>旧&nbsp;&nbsp; 密 &nbsp;&nbsp;码：</td><td><input type="password" id="u_oldpsw" /></td></tr>
+        <tr><td>新&nbsp;&nbsp; 密 &nbsp;&nbsp;码：</td><td><input type="password" id="u_newpsw" /></td></tr>
+        <tr><td>重复新密码：</td><td><input type="password" id="u_tnewpsw" /></td></tr>
+    </table>
+</div>
+
 @section styles{
     <style type="text/css">
-        /*用户登录↓*/
         #loginDiv {
             display: none;
             font-size: 12px;
@@ -128,27 +135,40 @@
             display: none;
             padding: 20px 55px;
         }
+        #div_ChangePsw {
+            display: none;
+            font-size: 12px;
+            padding: 20px 10px 0px 30px;
+        }
 
-            #loginDiv tr td:first-child, #regDiv tr td:first-child {
+         #loginDiv tr td:first-child, #regDiv tr td:first-child {
                 width: 4.5em;
             }
 
-            #loginDiv td, #regDiv td, #EditDiv td, #ReviseDiv td {
-                padding: 5px 0px;
-            }
+        #div_ChangePsw tr td:first-child {
+            width: 6.5em;
+        }
 
-            input[type=text], #loginDiv input[type=password], #regDiv input[type=text], #regDiv input[type=password] {
-                padding: 5px;
-                width: 220px;
-                border: solid 1px #dddddd;
-                color: #666666;
-            }
+        #loginDiv td, #regDiv td, #EditDiv td, #ReviseDiv td, #div_ChangePsw td {
+            padding: 5px 0px;
+        }
 
-            #loginDiv input[type=button], #regDiv input[type=button] {
-                width: 230px;
-                padding: 5px;
-            }
-        /*用户登录↑*/
+        input[type=text], #loginDiv input[type=password], #regDiv input[type=text], input[type=password] {
+            padding: 5px;
+            width: 220px;
+            border: solid 1px #dddddd;
+            color: #666666;
+        }
+
+        #loginDiv input[type=button], #regDiv input[type=button] {
+            width: 230px;
+            padding: 5px;
+        }
+
+        #layer-error-msg {
+            float: left;
+            padding-left: 10px;
+        }
 
         .traveTitle {
             width: 83px;
@@ -172,9 +192,10 @@
         @if(ViewBag.IsLogin!=null)
         {
             <text>
-        removeUnLogin();
+        changeUIWhenIsLogin();
         </text>
         }
+
 
         function changeYzmImg() {
             $("#yzm_img").attr("src", "/Base/GetYzmImg/" + Math.random().toString().split('.')[1]);
@@ -228,7 +249,7 @@
                 }
                 else if (r == 1) {
                     layer.close(layerLogin);
-                    removeUnLogin();
+                    changeUIWhenIsLogin();
                     @if(ViewBag.ReturnUrl !=null)
                     {
                         <text>
@@ -292,8 +313,10 @@
             });
         }
 
-        function removeUnLogin() {
+        function changeUIWhenIsLogin() {
             var links = $("#panel_container a");
+            $('<a href="#" onclick="ChangePsw()" id="panel_ChangePsw"><div class="panel"><img src="/Images/changePsw.jpg" class="traveImg" /><div class="traveTitle"><i>修改密码</i></div></div></a>').insertAfter(links.eq(0));
+
             links.eq(0).remove();
             links.eq(1).remove();
         }
@@ -308,7 +331,7 @@
                 if (name.length == 0) {
                     return;
                 }
-                
+
                 $.post("/Member/SearchAgenter", { name: name }, function (r) {
                     $("#agenterInfo").loaded();
 
@@ -321,6 +344,48 @@
                 });
             });
         });
+
+        function ChangePsw() {
+            $("#div_ChangePsw").open("修改密码", function (idx) {
+                var oldpsw = $.trim($("#u_oldpsw").val());
+                var newpsw = $.trim($("#u_newpsw").val());
+                var tnewpsw = $.trim($("#u_tnewpsw").val());
+                if (oldpsw.length == 0) {
+                    ShowMsg("旧密码不能为空！");
+                    return false;
+                }
+
+                if (newpsw.length == 0) {
+                    ShowMsg("新密码不能为空！");
+                    return false;
+                }
+
+                if (newpsw != tnewpsw) {
+                    ShowMsg("两次新密码不相同！");
+                    return false;
+                }
+
+                $.post("/Base/ChangeUserPsw", { oldPsw: oldpsw, newPsw: newpsw, ran: Math.random() }, function (r) {
+                    if (r == 0) {
+                        ShowMsg("旧密码错误！");
+                    }
+                    else {
+                        layer.close(idx);
+                        $.success("密码修改成功。");
+                    }
+                });
+
+                return false;
+            });
+        }
+        function ShowMsg(msg) {
+            if (msg.length == 0) {
+                $("#layer-error-msg").html("");
+            }
+            else {
+                $("#layer-error-msg").html('<span class="alert alert-error" style="font-size: 11px; padding: 3px 15px 3px 5px;color:#e32c2d;"><i class="fa fa-warning"></i> ' + msg + '</span>');
+            }
+        }
 
         @if(ViewBag.Action!=null&&ViewBag.Action=="login")
         {

@@ -10,7 +10,7 @@ using System.Collections;
 /// </summary>
 public class UMeditorUploader
 {
-    string state = "SUCCESS";
+    string state = "1";
 
     string URL = null;
     string path = null;
@@ -53,7 +53,7 @@ public class UMeditorUploader
             }
 
             //保存图片
-            if (state == "SUCCESS")
+            if (state.Equals("1"))
             {
                 filename = reName();
                 using (FileStream fs = new FileStream(uploadpath + filename, FileMode.Create))

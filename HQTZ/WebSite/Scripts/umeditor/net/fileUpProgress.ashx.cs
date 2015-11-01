@@ -12,10 +12,15 @@ namespace WebSite.Scripts.umeditor.net
             context.Response.ContentType = "text/plain";
             context.Response.ContentEncoding = System.Text.Encoding.UTF8;
 
-            var progress = HttpContext.Current.Cache[context.Request["progresskey"]];
+            var progresskey = context.Request["progresskey"];
+            var progress = HttpContext.Current.Cache[progresskey];
             if (progress == null)
             {
-                progress = 1;
+                progress = 0;
+            }
+            if (int.Parse(progress.ToString()) == 100)
+            {
+                HttpContext.Current.Cache.Remove(progresskey);
             }
             context.Response.Write(progress);
             context.Response.End();

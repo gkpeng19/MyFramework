@@ -98,7 +98,7 @@
         },
         callback: function (editor, $w, url, state) {
 
-            if (state == "SUCCESS") {
+            if (state == "1") {
                 //显示图片计数+1
                 Upload.showCount++;
                 var $img = $("<img src='" + editor.options.imagePath + url + "' class='edui-image-pic' />"),

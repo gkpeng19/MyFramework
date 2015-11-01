@@ -92,9 +92,7 @@
         $("#9795693998125579").upload({
             filter: "image",
             success: function (result) {
-                if (result.state == "SUCCESS") {
-                    $("#9795693998125579").val(result.path);
-                }
+                $("#9795693998125579").val(result.path);
             }
         });
 

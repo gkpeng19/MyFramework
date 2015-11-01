@@ -82,9 +82,7 @@
         $("#6903831546189698").upload({
             filter: "image",
             success: function (result) {
-                if (result.state == "SUCCESS") {
-                    $("#6903831546189698").val(result.path);
-                }
+                $("#6903831546189698").val(result.path);
             }
         });
 

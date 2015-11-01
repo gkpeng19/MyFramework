@@ -17,14 +17,17 @@ namespace WebSite.Scripts.umeditor.net
 
             //上传配置
             string pathbase = "upload/"; //保存路径
-            string editorId = context.Request["editorid"];
 
             //文件允许格式
-            string[] filetype = null;
-            if (editorId != null && editorId.Length > 0)
+            string[] filetypes = null;
+            string callback = null;
+            if (context.Request["iseditor"] == null)//从百度编辑器上传
             {
-                filetype = new string[] { ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
+                string editorId = context.Request["editorid"];
+                filetypes = new string[] { ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
                 pathbase = pathbase + "images/";
+
+                callback = context.Request["callback"];
             }
             else
             {
@@ -33,22 +36,21 @@ namespace WebSite.Scripts.umeditor.net
                 {
                     if (filter.Equals("image"))
                     {
-                        filetype = new string[] { ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
+                        filetypes = new string[] { ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
                         pathbase = pathbase + "images/";
                     }
                     else if (filter.Equals("video"))
                     {
-                        filetype = new string[] { ".mp4", ".flv" };
+                        filetypes = new string[] { ".mp4", ".flv" };
                         pathbase = pathbase + "videos/";
                     }
                     else if (filter.Equals("application"))
                     {
-                        filetype = new string[] { ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx" };
+                        filetypes = new string[] { ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx" };
                         pathbase = pathbase + "documents/";
                     }
                 }
             }
-
 
             int size = 0;                     //文件大小限制,单位mb
             string maxSize = context.Request["maxSize"];
@@ -60,12 +62,11 @@ namespace WebSite.Scripts.umeditor.net
             {
                 size = 10;
             }
-            string callback = context.Request["callback"];
 
             //上传图片
             Hashtable info;
             UMeditorUploader up = new UMeditorUploader();
-            info = up.upFile(context, "../../../" + pathbase, filetype, size, progresskey); //获取上传状态
+            info = up.upFile(context, "../../../" + pathbase, filetypes, size, progresskey); //获取上传状态
             info["path"] = pathbase + info["path"];
             string json = BuildJson(info);
 
