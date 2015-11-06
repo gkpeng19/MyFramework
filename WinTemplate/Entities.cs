@@ -241,6 +241,8 @@ namespace WinTemplate
         public string showname { get; set; }
         public string size { get; set; }
         public List<GFormValidate> validates { get; set; }
+
+        public GFormUploader uploader { get; set; }
     }
 
     public class GFormValidate
@@ -274,6 +276,12 @@ namespace WinTemplate
             set { _maxlen = value; }
         }
         public string regstr { get; set; }
+    }
+
+    public class GFormUploader
+    {
+        public string filter { get; set; }
+        public string maxSize { get; set; }
     }
 
     public enum GFormValidateEnum

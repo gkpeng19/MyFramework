@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.OracleClient;
 using System.Data.SqlClient;
 using System.Reflection;
 using System.Text;
@@ -10,6 +9,7 @@ using GOMFrameWork.Utils;
 using System.Transactions;
 using GOMFrameWork.DataEntity;
 using System.Collections;
+using Oracle.DataAccess.Client;
 
 namespace GOMFrameWork.DBContext
 {
@@ -419,7 +419,7 @@ namespace GOMFrameWork.DBContext
                 {
                     foreach (SearchItem item in entity.Collection)
                     {
-                        sbwhere.Append(" and " + item.ToString("@"));
+                        sbwhere.Append(" and " + item.ToSqlString("@"));
                     }
 
                     //if (entity.ExtensionCondition != null && entity.ExtensionCondition.Length > 0)
@@ -676,7 +676,7 @@ namespace GOMFrameWork.DBContext
             {
                 foreach (SearchItem item in entity.Collection)
                 {
-                    sbwhere.Append(" and s." + item.ToString(":"));
+                    sbwhere.Append(" and " + item.ToOracleString(":"));
                 }
 
                 //if (entity.ExtensionCondition != null && entity.ExtensionCondition.Length > 0)
@@ -737,7 +737,7 @@ namespace GOMFrameWork.DBContext
             {
                 foreach (string name in outPNames)
                 {
-                    parameters[index] = new OracleParameter(name, OracleType.Cursor) { Direction = ParameterDirection.Output };
+                    parameters[index] = new OracleParameter(name, OracleDbType.RefCursor) { Direction = ParameterDirection.Output };
                     ++index;
                 }
             }

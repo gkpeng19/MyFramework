@@ -22,6 +22,9 @@ namespace G.BaseWeb
             DbContext.InitContext<BaseModel>("BaseWeb");
             DbContext.InitContext<BaseSearchModel>("BaseWeb");
             DbContext.InitContext<BaseProcModel>("BaseWeb");
+
+            DbContext.InitContext<SimpleBase>("Simple");
+            DbContext.InitContext<SimpleSearchModel>("Simple");
         }
 
         void Application_OnPostAuthenticateRequest(object sender, EventArgs e)

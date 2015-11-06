@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+	<link href="/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/Scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="/Scripts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/Scripts/validate/css/validate.css" rel="stylesheet" />
+    <link href="/Scripts/umeditor/themes/default/css/umeditor.min.css" rel="stylesheet" />
+    <link href="/Scripts/ace/css/ace.min.css" rel="stylesheet" />
+    <link href="/Scripts/ace/css/ace-responsive.min.css" rel="stylesheet" />
+    <link href="/Styles/GOMFrameWork.css" rel="stylesheet" />
+	
+	<script src="/Scripts/jquery-1.10.2.min.js"></script>
+
+</head>
+<body>
+
+
+	<div class="row-fluid">
+		<div class="span12">
+            <form name="9446538638612913" id="9446538638612913" class="">
+                <div>
+                    <input type="hidden" name="ID" />
+                    <div class="row-fluid">
+									<div class="span12">
+									<label>申报号</label>
+									<input type="text" name="Code" id="36070379533192814" class="span11" />
+									</div>
+									<div class="span12">
+									<label>项目名称</label>
+									<input type="text" name="Name" id="47556345054230853" class="span11" />
+									</div>
+									<div class="span12">
+									<label>申报类型</label>
+									<select name="SType" id="7972532373909347" class="span11"></select>
+									</div>
+									<div class="span12">
+									<label>占地面积</label>
+									<input type="text" name="Area" id="06402659016996731" class="span11" />
+									</div>
+									<div class="span12">
+									<label>状态</label>
+									<select name="State" id="8545380899966937" class="span11"></select>
+									</div>
+									<div class="span12">
+									<label>项目封面</label>
+									<input type="file" id="33926479668517795" name="Image" />
+									</div>
+									<div class="span12">
+									<label>项目描述</label>
+									<textarea name="Description" id="3221054956560825" class="span12 text_editor"></textarea>
+									</div>
+                    </div>
+						<div>
+						<input type="button" id="7399924080715265" class="btn btn-primary btn-mini btn-authority" value="提交" />
+						</div>
+                </div>
+            </form>
+		</div>
+	</div>
+
+
+    <script src="/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/Scripts/layer/layer.js"></script>
+    <script src="/Scripts/umeditor/umeditor.config.js"></script>
+    <script src="/Scripts/umeditor/umeditor.min.js"></script>
+    <script src="/Scripts/umeditor/lang/zh-cn/zh-cn.js"></script>
+    <script src="/Scripts/validate/talent-validate-all-init.js"></script>
+    <script src="/Scripts/ace/ace.min.js"></script>
+    <script src="/Scripts/GOMFrameWork.js"></script>
+	<script type="text/javascript">
+			
+			$("#33926479668517795").upload({
+				filter: "image",
+				maxSize:10,
+				success: function (result) {
+					$("#33926479668517795").val(result.path);
+				}
+			});
+			
+	
+		
+		$.post("/Simple/LoadEditContent",{ran:Math.random(),pid:$.getUrlParam('pid')},function(r)
+		{
+			$(function()
+			{
+				BindToSelect(r);
+				BindToDiv(r);
+			});
+		});
+		
+	
+	
+	
+	
+		function BindToSelect(data)
+		{
+		                        
+								var sel=$("#7972532373909347");
+		                        var items=data.STypes;
+								$(items).each(function () {
+									sel.append("<option value='"+this.v+"'>"+this.k+"</option>");
+								});
+		                        
+		                        
+								var sel=$("#8545380899966937");
+		                        var items=data.PStates;
+								$(items).each(function () {
+									sel.append("<option value='"+this.v+"'>"+this.k+"</option>");
+								});
+		                        
+			
+		}
+
+        function BindToDiv(data)
+        {
+                                    
+            $("#9446538638612913").bindEntity($.toJsResult(data.ProjectInfo));
+                                    
+        }
+
+        $(function()
+        {
+			
+        });
+
+        /*增加验证信息----------Start*/
+					
+					var f36070379533192814=new tt.Field("申报号","","36070379533192814");
+					
+                            
+							tt.vf.req.add(f36070379533192814);
+							
+					
+					var f47556345054230853=new tt.Field("项目名称","","47556345054230853");
+					
+                            
+							tt.vf.req.add(f47556345054230853);
+							
+					
+					var f7972532373909347=new tt.Field("申报类型","","7972532373909347");
+					
+					
+					var f06402659016996731=new tt.Field("占地面积","","06402659016996731");
+					
+                            
+							tt.vf.req.add(f06402659016996731);
+							
+                            tt.vf.num.add(f06402659016996731);
+                            new tt.LV().set('--', '10').add(f06402659016996731);
+					
+					var f8545380899966937=new tt.Field("状态","","8545380899966937");
+					
+					
+					var f33926479668517795=new tt.Field("项目封面","","33926479668517795");
+					
+                            
+							tt.vf.req.add(f33926479668517795);
+							
+					
+					var f3221054956560825=new tt.Field("项目描述","","3221054956560825");
+					
+                            
+							tt.vf.req.add(f3221054956560825);
+							
+		
+        /*增加验证信息----------End*/
+		
+			
+			$("#7399924080715265").bind('click',function()
+			{
+				if(!tt.validateForm("9446538638612913"))
+				{
+					return false;
+				}
+				var update=$("#9446538638612913").getContext();
+				update.ran_g=Math.random();
+				$.post("/Simple/SaveProject",update,function(r)
+				{
+					r=$.toJsResult(r);
+					//提交之后的操作
+				    //...
+					if (r.id > 0) {
+					    $.success("保存成功。");
+					}
+				});
+			});
+			
+	</script>
+</body>
+</html>

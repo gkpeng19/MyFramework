@@ -167,10 +167,17 @@ var datatable = function (table, pageSize) {
 
     this.currIdentity = -1;
 
+    this.datasource = [];
+    this.length = 0;
+    this.maxIdentity = 0;
+
     var hers = [];
     this.datagrid.find("thead th,thead td").each(function (index) {
         var option = eval('(' + $(this).attr("data-option") + ')');
         if (option != undefined) {
+            if (option && option.bind) {
+                option.bind = option.bind.toLowerCase();
+            }
             hers[index] = option;
         }
     });
@@ -340,14 +347,22 @@ datatable.prototype.initByData = function (data, page, pagecount) {
             var ckCurr = $(this).find(".ckbox");
             if (ckCurr.length > 0) {
                 var ckBefores = dg.datagrid.find("tr.info .ckbox");
+                var isExists = false;
                 if (ckBefores.length > 0) {
                     $(ckBefores).each(function () {
-                        this.checked = false;
-                        $(this).trigger('change');
+                        if (!isExists && this == ckCurr[0]) {
+                            isExists = true;
+                        }
+                        else {
+                            this.checked = false;
+                            $(this).trigger('change');
+                        }
                     });
                 }
-                ckCurr[0].checked = true;
-                ckCurr.trigger('change');
+                if (!isExists) {
+                    ckCurr[0].checked = true;
+                    ckCurr.trigger('change');
+                }
             }
         });
     });
@@ -385,6 +400,10 @@ datatable.prototype.initByData = function (data, page, pagecount) {
             });
         }
     });
+
+    if (dg.selectChanged&&dg.datasource.length>0) {
+        dg.selectChanged(dg.datasource[0]);
+    }
 
     /*----Init Pager Start--------------------------*/
     this.datagrid.parent().find(".pager").remove();
@@ -448,7 +467,7 @@ datatable.prototype.initLineHtml = function (json, identity) {
             }
 
             if (option.onload) {
-                vhtm = option.onload(vhtm);
+                vhtm = option.onload(json, vhtm);
             }
 
             html += "<td>" + vhtm + "</td>";
@@ -471,14 +490,22 @@ datatable.prototype.initDataGridLine = function (json) {
         var ckCurr = $(this).find(".ckbox");
         if (ckCurr.length > 0) {
             var ckBefores = dg.datagrid.find("tr.info .ckbox");
+            var isExists = false;
             if (ckBefores.length > 0) {
                 $(ckBefores).each(function () {
-                    this.checked = false;
-                    $(this).trigger('change');
+                    if (!isExists && this == ckCurr[0]) {
+                        isExists = true;
+                    }
+                    else {
+                        this.checked = false;
+                        $(this).trigger('change');
+                    }
                 });
             }
-            ckCurr[0].checked = true;
-            ckCurr.trigger('change');
+            if (!isExists) {
+                ckCurr[0].checked = true;
+                ckCurr.trigger('change');
+            }
         }
     });
 
@@ -527,9 +554,11 @@ datatable.prototype.getCurrData = function () {
 };
 
 datatable.prototype.addRow = function (json) {
+    json.update_g = true;
+
     var tr = this.initDataGridLine(json);
 
-    this.datagrid.find("tbody").append(tr);
+    this.datagrid.append(tr);
     this.datasource[this.length] = json;
     this.length++;
 
@@ -538,6 +567,8 @@ datatable.prototype.addRow = function (json) {
 };
 
 datatable.prototype.insertRow = function (index, json) {
+    json.update_g = true;
+
     var tr = this.initDataGridLine(json);
 
     //更新界面
@@ -546,12 +577,12 @@ datatable.prototype.insertRow = function (index, json) {
     if (index == 0) {
         //在该元素前插入
         var identity = this.datasource[index][this.trIdentity];
-        $("#" + identity + this.trIdentity).before(tr);
+        this.datagrid.find("#" + identity + this.trIdentity).before(tr);
     }
     else {
         //在该元素前的一个元素后插入
         var identity = this.datasource[index - 1][this.trIdentity];
-        $("#" + identity + this.trIdentity).after(tr);
+        this.datagrid.find("#" + identity + this.trIdentity).after(tr);
     }
 
     //维护数据源
@@ -625,6 +656,21 @@ datatable.prototype.hasChildren = function () {
     return false;
 };
 
+datatable.prototype.getAll = function () {
+    return this.datasource;
+};
+
+datatable.prototype.getUpdate = function () {
+    var updates = [];
+    for (var i = 0; i < this.datasource.length; ++i) {
+        var json = this.datasource[i];
+        if (json && json.update_g) {
+            updates.push(json);
+        }
+    }
+    return updates;
+}
+
 //-----------------------------------------------------------------------------------
 
 datatable.prototype.onEdit = function (event) {
@@ -682,7 +728,6 @@ $.fn.extend({
         }
     }
 });
-
 
 var gtree = function (target) {
     this.nodes = null;
@@ -1109,6 +1154,139 @@ gtree.prototype.beforeDeleteNode = function (event) {
     this._beforeDeleteNode = event;
 };
 
+/*-----文件上传----------------------------------------------------*/
+$.fn.extend({
+    /*filter:image,video,application;uploadUrl:文件接收url;progressUrl:获取进度url;maxSize:最大文件大小;success:回调函数 */
+    upload: function (args) {
+        if (!args || !args.success) {
+            return;
+        }
+
+        var me = this;
+        if (me.attr("type") != "file") {
+            return;
+        }
+
+        if (args.filter) {
+            me.attr("accept", args.filter + "/*");
+        }
+        me.hide();
+        var id = me.attr("id");
+        var name = me.attr("name");
+        me.attr("id", "file_" + id);
+        me.attr("name", "upfile_g");
+        var fInput = $('<input type="text" readonly="readonly" name="' + name + '" id="' + id + '" class="span11" />');
+        var fSubmit = $('<label for="file_' + id + '" class="btn btn-primary btn-mini" style="margin-top:-10px;margin-left:-57px;">&nbsp;上&nbsp;传&nbsp;</label>');
+        var fContainer = $("<span></span>");
+        fContainer.append(fInput).append(fSubmit).insertAfter(me);
+
+        if (!args.uploadUrl) {
+            args.uploadUrl = "/Scripts/umeditor/net/fileUp.ashx?iseditor=0";
+            args.progressUrl = "/Scripts/umeditor/net/fileUpProgress.ashx";
+        }
+        var progresskey = Math.random();
+        args.uploadUrl = (args.uploadUrl + "&progresskey=" + progresskey);
+        if (args.maxSize) {
+            args.uploadUrl = args.uploadUrl + "&maxSize=" + args.maxSize;
+        }
+        if (args.filter) {
+            args.uploadUrl = args.uploadUrl + "&filter=" + args.filter;
+        }
+
+        me.on("change", function () {
+            if ($(this).val().length == 0) {
+                return;
+            }
+
+            $('<iframe name="up"  style="display:none;"></iframe>').insertBefore(me).on('load', function () {
+                var r = this.contentWindow.document.body.innerHTML;
+
+                if (r != "") {
+                    var result = eval('(' + r + ')');
+                    if (result.state != "1") {
+                        args.isError = true;
+                        me.parent().find(".remove").click();
+                        $.alert(result.state);
+                        return;
+                    }
+                    args.success(result);
+                }
+
+                $(this).unbind('load');
+                $(this).remove();
+            });
+
+            var form = $('<form style="display:none;" target="up" method="post" action="' + args.uploadUrl + '" enctype="multipart/form-data"></form>');
+
+            form.append(me);
+            $("body").append(form);
+            form[0].submit();
+
+            //初始化进度条
+            if (args.progressUrl) {
+                var pbar = $('<div class="progress progress-success progress-striped" style="height:4px;margin-bottom:0px;"><div class="bar" style=""></div></div>');
+                pbar.css({
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    zIndex: 20000000
+                }).width(fInput.width() + 13).show().appendTo("body");
+                var top = fInput.offset().top;
+                var left = fInput.offset().left;
+                pbar[0].style.left = left + "px";
+                pbar[0].style.top = (top + 30) + "px";
+                //更新进度条进度
+                var progress = { length: 1.00, increment: 1.00, lastLength: 0.00, newIncre: 0.00 };
+                var tInterval = setInterval(function () {
+                    if (tInterval) {
+                        progress.length += progress.increment;
+                        progress.newIncre += progress.increment;
+                        pbar.find(".bar").css({ width: progress.length + "%" });
+                        if (progress.newIncre >= (100.00 - progress.lastLength) / 5) {
+                            progress.newIncre = 0.00;
+                            progress.lastLength = progress.length;
+                            progress.increment = (100 - progress.length) / 100.00;
+                        }
+                    }
+                }, 1000);
+
+                var pInterval = setInterval(function () {
+                    if (args.isError) {
+                        clearInterval(pInterval);
+                        pbar.remove();
+                        return;
+                    }
+                    if (progress.length == 100) {
+                        clearInterval(pInterval);
+                        return;
+                    }
+                    $.get(args.progressUrl, { progresskey: progresskey, ran: Math.random() }, function (r) {
+                        if (r >= progress.length) {
+                            if (tInterval) {
+                                clearInterval(tInterval);
+                                tInterval = null;
+                            }
+
+                            if (r == 100) {
+                                progress.length = 100;
+                                var pTimeout = setTimeout(function () {
+                                    clearTimeout(pTimeout);
+                                    pbar.remove();
+                                }, 1000);
+                            }
+                            pbar.find(".bar").css({ width: r + "%" });
+                        }
+                    });
+                }, 500);
+            }
+
+            me.insertBefore(fContainer);
+            form.remove();
+        });
+    }
+});
+
+
 /*-----Json数组的二分查找------------------------------------------------------*/
 $.extend({
     binarySearch: function (array, key, keyv, start, end) {
@@ -1149,6 +1327,7 @@ $.fn.extend({
             var name = $(this).attr("name");
             var tagName = $(this)[0].tagName;
             if (name != undefined) {
+                name = name.toLowerCase();
                 var value = json[name];
                 if (value != undefined) {
                     if (tagName == "TEXTAREA") {
@@ -1168,7 +1347,9 @@ $.fn.extend({
                         }
                     }
                     else {
-                        $(this).val(value);
+                        if ($(this).attr("type") != "file") {
+                            $(this).val(value);
+                        }
                     }
                 }
                 else {
@@ -1178,7 +1359,7 @@ $.fn.extend({
                             json[name] = $(this).val();
                             var exname = $(this).attr("data-exname");
                             if (exname != undefined && exname.length > 0) {
-                                json[exname] = $(this).find("option:selected").text();
+                                json[exname.toLowerCase()] = $(this).find("option:selected").text();
                             }
                         }
                     }
@@ -1212,7 +1393,9 @@ $.fn.extend({
         this.find("input,textarea").each(function () {
             var name = $(this).attr("name");
             if (name != undefined) {
-                if ($(this).attr("type") == "checkbox") {
+                name = name.toLowerCase();
+                var tagType = $(this).attr("type");
+                if (tagType == "checkbox") {
                     if (this.checked) {
                         newjson[name] = 1;
                     }
@@ -1220,7 +1403,7 @@ $.fn.extend({
                         newjson[name] = 0;
                     }
                 }
-                else {
+                else if (tagType != "file") {
                     newjson[name] = $.trim($(this).val());
                 }
             }
@@ -1229,6 +1412,7 @@ $.fn.extend({
         this.find("select").each(function () {
             var name = $(this).attr("name");
             if (name != undefined) {
+                name = name.toLowerCase();
                 newjson[name] = $(this).val();
                 var exname = $(this).attr("data-exname");
                 if (exname != undefined && exname.length > 0) {
@@ -1254,11 +1438,11 @@ $.extend({
                 var d = {};
                 for (var item in json[i]) {
                     if (typeof (json[i][item]) != "object") {
-                        d[item] = json[i][item];
+                        d[item.toLowerCase()] = json[i][item];
                     }
                 }
                 for (var item in json[i].Collection) {
-                    d[item] = json[i].Collection[item].Value;
+                    d[item.toLowerCase()] = json[i].Collection[item].Value;
                 }
                 data[i] = d;
             }
@@ -1271,44 +1455,44 @@ $.extend({
             data = {};
             for (var item in json) {
                 if (typeof (json[item]) != "object") {
-                    data[item] = json[item];
+                    data[item.toLowerCase()] = json[item];
                 }
             }
             for (var item in json.Collection) {
-                data[item] = json.Collection[item].Value;
+                data[item.toLowerCase()] = json.Collection[item].Value;
             }
         }
 
         return data;
     },
-    updateJson: function (oldjson, newjson) {
+    combineJson: function (oldjson, newjson, newjson2) {
         var json = {};
         for (var item in oldjson) {
-            if (typeof (oldjson[item]) != "object") {
+            if (oldjson[item] && typeof (oldjson[item]) != "object") {
                 json[item] = oldjson[item];
             }
         }
-
         for (var item in newjson) {
-            if (typeof (newjson[item]) != "object") {
-                var index = item.indexOf("_G");
-                if (index > 0) {
-                    var str = item.substring(0, index);
-                    if (newjson[str]) {
-                        json[item] = newjson[item];
-                    }
-                }
-                else {
-                    json[item] = newjson[item];
+            if (newjson[item] && typeof (newjson[item]) != "object") {
+                json[item] = newjson[item];
+            }
+        }
+
+        if (newjson2) {
+            for (var item in newjson2) {
+                if (newjson2[item] && typeof (newjson2[item]) != "object") {
+                    json[item] = newjson2[item];
                 }
             }
         }
+
         return json;
     }
 });
 
 /*-------layer插件扩展-----------------------------------------------------------*/
 $.extend({
+    msg: function (msg) { layer.msg(msg, { icon: 0, time: 1000 }); },
     alert: function (msg) { layer.alert(msg, { icon: 0 }); },
     success: function (msg) { layer.alert(msg, { icon: 1 }); },
     error: function (msg) { layer.alert(msg, { icon: 2 }); },
@@ -1327,7 +1511,7 @@ $.extend({
 });
 
 $.fn.extend({
-    open: function (title, yes, no, close, cancle) {
+    open: function (title, yes, no, close, cancle, exoptions) {
         if (!title || (title.length && title.length == 0)) {
             title = false;
         }
@@ -1357,7 +1541,7 @@ $.fn.extend({
                 }
             }
         };
-        if (close == false) {
+        if (close != undefined && close == false) {
             options.closeBtn = false;
         }
         var btns = [];
@@ -1396,11 +1580,11 @@ $.fn.extend({
         });
         /*设置弹出层中的Editor结束*/
 
-        var height = this[0].clientHeight + 46 + 20 + editorheight;
+        var height = this[0].clientHeight + (title == false ? 0 : 45) + 20 + editorheight;
 
         if (btns.length > 0) {
             options.btn = btns;
-            height += 70;
+            height += 55;
         }
 
         options.area = [];
@@ -1412,6 +1596,11 @@ $.fn.extend({
         }
         options.area[1] = height + "px";
 
+        if (options) {
+            for (var it in exoptions) {
+                options[it] = exoptions[it];
+            }
+        }
         var win = layer.open(options);
 
         this.parent().parent().find(".layui-layer-btn").append("<span id='layer-error-msg'></span>");
@@ -1447,12 +1636,8 @@ $.fn.extend({
             container = this;
         }
         container.find(".loading").remove();
-    }
-});
-
-/*------在指定元素上创建遮罩---------------------------------------------*/
-$.fn.extend({
-    shade: function () {
+    },
+    shade: function () {/*在指定元素上创建遮罩*/
         var sdiv = $("<div></div>");
         sdiv.css({
             position: 'absolute',
@@ -1460,7 +1645,7 @@ $.fn.extend({
             left: 0,
             backgroundColor: "#808080",
             opacity: 0,
-            zIndex: 300
+            zIndex: 20000000
         }).height(this.height()).width(this.width()).show().appendTo("body");
         var top = this.offset().top;
         var left = this.offset().left;
@@ -1488,5 +1673,7 @@ $.extend({
         }
 
         _pageParameters.init = true;
+
+        return _pageParameters[pname];
     }
 });

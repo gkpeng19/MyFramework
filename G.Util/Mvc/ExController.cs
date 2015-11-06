@@ -1,8 +1,11 @@
-﻿using System;
+﻿using G.Util.Tool;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http;
 using System.Web.Mvc;
 
 namespace G.Util.Mvc
@@ -52,6 +55,24 @@ namespace G.Util.Mvc
                 ContentType = contentType,
                 ContentEncoding = contentEncoding,
                 JsonRequestBehavior = behavior
+            };
+        }
+    }
+}
+
+namespace G.Util.Net.Http
+{
+    public static class ExController
+    {
+        public static HttpResponseMessage JsonMessage(object data)
+        {
+            return JsonMessage(null, data);
+        }
+        public static HttpResponseMessage JsonMessage(this ApiController controller, object data)
+        {
+            return new HttpResponseMessage()
+            {
+                Content = new StringContent(JSON.Stringify(data), Encoding.UTF8)
             };
         }
     }

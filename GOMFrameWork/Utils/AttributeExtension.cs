@@ -11,10 +11,10 @@ namespace GOMFrameWork.Utils
     {
         public static T GetPropertyAttribute<T>(this Type type, string propertyName) where T : Attribute
         {
-            var pi = type.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
-            if (pi != null)
+            var propertyInfo = type.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+            if (propertyInfo != null)
             {
-                var attrs = pi.GetCustomAttribute<T>(false);
+                var attrs = propertyInfo.GetCustomAttribute<T>(false);
                 if (attrs != null)
                 {
                     return attrs;

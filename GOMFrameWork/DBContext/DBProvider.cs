@@ -4,9 +4,9 @@ using System.Text;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Data;
-using System.Data.OracleClient;
 using GOMFrameWork.Utils;
 using System.Threading;
+using Oracle.DataAccess.Client;
 
 namespace GOMFrameWork.DBContext
 {

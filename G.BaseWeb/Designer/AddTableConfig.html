@@ -10,6 +10,7 @@
     <script src="Scripts/GExtension.js"></script>
     <script src="Scripts/site.js"></script>
     <link href="GoogleChart/css/orgchart.css" rel="stylesheet" />
+    <link href="Scripts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <style type="text/css">
         body {
             font-family: 'Microsoft YaHei';
@@ -50,6 +51,19 @@
         .selectchart {
             border: solid 2px #e3ca4b;
         }
+
+        .fa {
+            cursor: pointer;
+            color: #007acc;
+        }
+
+        .fa-remove {
+            color: #ff0000;
+        }
+
+        .fa:nth-of-type(n+2) {
+            margin-left: 15px;
+        }
     </style>
 </head>
 <body>
@@ -67,6 +81,7 @@
                     </td>
                     <td><input type="text" name="header" /></td>
                     <td><input type="text" name="property" /></td>
+                    <td><i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i> <i class="fa fa-remove"></i></td>
                 </tr>
                 <tr data-type="sequence">
                     <td>
@@ -79,6 +94,7 @@
                     </td>
                     <td><input type="text" name="header" value="序号" /></td>
                     <td></td>
+                    <td><i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i> <i class="fa fa-remove"></i></td>
                 </tr>
                 <tr data-type="checkbox">
                     <td>
@@ -91,6 +107,7 @@
                     </td>
                     <td></td>
                     <td></td>
+                    <td><i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i> <i class="fa fa-remove"></i></td>
                 </tr>
                 <tr data-type="operator">
                     <td>
@@ -109,6 +126,7 @@
                         <input type="checkbox" onclick="AddTableDelete(this)" id="cbx_addDelete" />
                         <label for="cbx_addDelete">添加删除</label>
                     </td>
+                    <td><i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i> <i class="fa fa-remove"></i></td>
                 </tr>
             </tbody>
         </table>
@@ -126,6 +144,63 @@
                 <tr><td>Action：</td><td><input type="text" id="table_delete_action" /></td></tr>
             </table>
         </div>
+
+        <table id="table_commoncolumn" class="temp">
+            <tbody>
+                <tr data-type="normal">
+                    <td>
+                        <select name="type" onchange="OnTableHeaderTypeChanged(this)">
+                            <option value="0" selected="selected">普通</option>
+                            <option value="3">全选</option>
+                            <option value="1">序列</option>
+                            <option value="2">操作项</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="header" value="创建人" /></td>
+                    <td><input type="text" name="property" value="CreateBy" /></td>
+                    <td><i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i> <i class="fa fa-remove"></i></td>
+                </tr>
+                <tr data-type="normal">
+                    <td>
+                        <select name="type" onchange="OnTableHeaderTypeChanged(this)">
+                            <option value="0" selected="selected">普通</option>
+                            <option value="3">全选</option>
+                            <option value="1">序列</option>
+                            <option value="2">操作项</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="header" value="创建时间" /></td>
+                    <td><input type="text" name="property" value="CreateOn_G" /></td>
+                    <td><i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i> <i class="fa fa-remove"></i></td>
+                </tr>
+                <tr data-type="normal">
+                    <td>
+                        <select name="type" onchange="OnTableHeaderTypeChanged(this)">
+                            <option value="0" selected="selected">普通</option>
+                            <option value="3">全选</option>
+                            <option value="1">序列</option>
+                            <option value="2">操作项</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="header" value="修改人" /></td>
+                    <td><input type="text" name="property" value="EditBy" /></td>
+                    <td><i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i> <i class="fa fa-remove"></i></td>
+                </tr>
+                <tr data-type="normal">
+                    <td>
+                        <select name="type" onchange="OnTableHeaderTypeChanged(this)">
+                            <option value="0" selected="selected">普通</option>
+                            <option value="3">全选</option>
+                            <option value="1">序列</option>
+                            <option value="2">操作项</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="header" value="修改时间" /></td>
+                    <td><input type="text" name="property" value="EditOn_G" /></td>
+                    <td><i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i> <i class="fa fa-remove"></i></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <div>
@@ -134,7 +209,7 @@
                 <td>URL：</td>
                 <td><input type="text" id="table_url" /></td>
                 <td>PageSize：</td>
-                <td><input type="number" id="table_psize" /></td>
+                <td><input type="number" id="table_psize" value="10" /></td>
             </tr>
             <tr>
                 <td>PrimaryKey：</td>
@@ -150,10 +225,11 @@
             </tr>
         </table>
         <input type="button" value="添加列" onclick="AddTableColumn()" />
+        <input type="button" value="添加操作人信息" onclick="AddCommonColumn()" />
 
-        <table id="s_table" style="width:500px;margin-top:10px;" cellpadding="0" cellspacing="0">
+        <table id="s_table" style="width:100%;margin-top:10px;" cellpadding="0" cellspacing="0">
             <thead>
-                <tr><th width="25%">类型</th><th width="38%">表头</th><th width="42%">属性</th></tr>
+                <tr><th width="15%">类型</th><th width="28%">表头</th><th width="28%">属性</th><th>操作</th></tr>
             </thead>
             <tbody></tbody>
         </table>
@@ -170,6 +246,55 @@
     <script type="text/javascript">
         function AddTableColumn() {
             $("#s_table tbody").append($("#tr_table tr[data-type=normal]")[0].outerHTML);
+            InitMoveEvent();
+        }
+
+        function AddCommonColumn() {
+            $("#s_table tbody").append($("#table_commoncolumn tbody").html());
+            InitMoveEvent();
+        }
+
+        function InitMoveEvent() {
+            $("#s_table .fa-arrow-up").each(function () {
+                if ($(this).attr("data-event") == "1") {
+                    return;
+                }
+
+                $(this).attr("data-event", "1");
+                var btn = $(this);
+                $(this).bind("click", function () {
+                    var prevEle = btn.parent().parent().prev();
+                    if (prevEle) {
+                        btn.parent().parent().insertBefore(prevEle);
+                    }
+                });
+            });
+
+            $("#s_table .fa-arrow-down").each(function () {
+                if ($(this).attr("data-event") == "1") {
+                    return;
+                }
+
+                $(this).attr("data-event", "1");
+                var btn = $(this);
+                $(this).bind("click", function () {
+                    var nextEle = btn.parent().parent().next();
+                    if (nextEle) {
+                        btn.parent().parent().insertAfter(nextEle);
+                    }
+                });
+            });
+
+            $("#s_table .fa-remove").each(function () {
+                if ($(this).attr("data-event") == "1") {
+                    return;
+                }
+
+                $(this).bind("click", function () {
+                    $(this).attr("data-event", "1");
+                    $(this).parent().parent().remove();
+                });
+            });
         }
 
         function AddTableEdit(src) {
@@ -275,8 +400,7 @@
             }
 
             var tr_type = "";
-            switch(type)
-            {
+            switch (type) {
                 case "0":
                     tr_type = "normal";
                     break;

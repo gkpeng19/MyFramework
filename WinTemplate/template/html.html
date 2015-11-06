@@ -72,7 +72,7 @@
 									}
 									else if(t=="2")
 									{
-                                        <input class="span11 datepicker" name="@d.c[0].fld" id="@d.c[0].v" type="text" data-date-format="yyyy-mm-dd">
+                                    <input class="span11 datepicker" name="@d.c[0].fld" id="@d.c[0].v" type="text" />
 									}
 									else if(t=="3")
 									{
@@ -85,6 +85,10 @@
 									else if(t=="5")
 									{
 									<textarea name="@d.c[0].fld" id="@d.c[0].v" class="span12 text_editor@(hide)"></textarea>
+									}
+									else if(t=="6")
+									{
+									<input type="file" id="@d.c[0].v" name="@d.c[0].fld" />
 									}
 									</div>
 									break;
@@ -132,7 +136,6 @@
 }
 
     <script src="/Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/Scripts/laydate/laydate.js"></script>
     <script src="/Scripts/layer/layer.js"></script>
     <script src="/Scripts/umeditor/umeditor.config.js"></script>
     <script src="/Scripts/umeditor/umeditor.min.js"></script>
@@ -141,6 +144,25 @@
     <script src="/Scripts/ace/ace.min.js"></script>
     <script src="/Scripts/GOMFrameWork.js"></script>
 	<script type="text/javascript">
+	@foreach(var fm in Model.forms)
+    {
+        foreach(var exd in fm.extdata.extdatas)
+        {
+			if(exd.uploader!=null)
+			{
+			<text>
+			$("#@exd.dataid").upload({
+				filter: "@exd.uploader.filter",
+				maxSize:@exd.uploader.maxSize,
+				success: function (result) {
+					$("#@exd.dataid").val(result.path);
+				}
+			});
+			</text>
+			}
+		}
+	}
+	
 	@foreach(var json in Model.jsons)
 	{
 		<text>
@@ -175,7 +197,7 @@
 		{
 		<text>
 		$("#@btn.id").bind("click",function(win){
-			var sels = $("#@table.id").datagrid("getSelected");
+			var sels = $("#@table.id").datagrid("getSelecteds");
 			if(sels.length==0)
 			{
 				$.error("请选择一条数据！");
@@ -304,13 +326,13 @@
                                 if(d.c[2].t=="-1")
                                 {
                                     <text>
-                                    $("#@(bind.data[1].c[0].v)").bindEntity(data);
+                                    $("#@(bind.data[1].c[0].v)").bindEntity($.toJsResult(data));
                                     </text>
                                 }
                                 else
                                 {
                                     <text>
-                                    $("#@(bind.data[1].c[0].v)").bindEntity(data.@(d.c[0].fld));
+                                    $("#@(bind.data[1].c[0].v)").bindEntity($.toJsResult(data.@(d.c[0].fld)));
                                     </text>
                                 }
                             }
@@ -539,7 +561,7 @@
 						{
 						<text>
 						$("#@table.id").parent().prev().find(".btn-more-move").bind('click', function () {
-							var sels = $("#@table.id").datagrid("getSelected");
+							var sels = $("#@table.id").datagrid("getSelecteds");
 							if (sels.length == 0) {
 								$.error("请勾选数据！");
 								return;

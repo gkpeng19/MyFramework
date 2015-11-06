@@ -166,12 +166,13 @@ var formconfig = function (selector, id, pkey, isshow, size, btns) {
     this.btn_textarea = $('<input type="button" value="添加 TextArea" data-type="3" />');
     this.btn_cbx = $('<input type="button" value="添加 CheckBox" data-type="4" />');
     this.btn_editor = $('<input type="button" value="添加 HtmlEditor" data-type="5" />');
+    this.btn_uploader = $('<input type="button" value="添加 FileUploader" data-type="6" />');
     this.btn_btns = $('<input type="button" value="编辑提交按钮"/>');
     this.btn_fmdisable = $('<input type="button" value="只读开关"/>');
     this.btn_removeNode = $("<input type='button' value='移除' style='display:none;' />");
     this.btn_removeCon = $("<input type='button' value='移除该对象' />");
     this.chartCon.append(this.btn_input).append(this.btn_select).append(this.btn_datetime).append(this.btn_textarea)
-        .append(this.btn_cbx).append(this.btn_editor);
+        .append(this.btn_cbx).append(this.btn_editor).append(this.btn_uploader);
 
     if (this.isshow == 1) {
         this.chartCon.append(this.btn_btns).append(this.btn_fmdisable);
@@ -184,6 +185,14 @@ var formconfig = function (selector, id, pkey, isshow, size, btns) {
         if (!target.selectNode) {
             alert("请选中一个节点！");
             return;
+        }
+
+        var uploader_filter = null;
+        var uploader_maxSize = null;
+        if (type == 6) {
+            uploader_filter = $("<tr><td class='td-title'>文件类型：</td><td><select style='width:173px;'><option value='image'>图片</option><option value='video'>视频</option><option value='application'>文档</option></select></td></tr>");
+            uploader_maxSize = $("<tr><td class='td-title'>最大MB：</td><td><input type='number' value='10'></td></tr>");
+            $("#form_propertyName tbody:first").append(uploader_filter).append(uploader_maxSize);
         }
 
         $("#form_propertyName").open("属性", function () {
@@ -227,16 +236,39 @@ var formconfig = function (selector, id, pkey, isshow, size, btns) {
                     this.checked = false;
                 }
             });
+
+            if (uploader_filter) {
+                extData.filter = uploader_filter.find("select").val();
+            }
+            if (uploader_maxSize) {
+                var size = uploader_maxSize.find("input").val();
+                var truesize = 0;
+                try {
+                    truesize = parseInt(size);
+                } catch (e) { }
+                if (isNaN(truesize) || truesize == 0) {
+                    alert("请维护文件最大MB！");
+                    return false;
+                }
+                extData.maxSize = truesize;
+            }
             /*初始化额外数据--------End*/
 
             $("#txt_formPropertyName").val('');
             $("#txt_formShowName").val('');
             $("#txt_formCtrSize").val('');
 
+            if (uploader_filter) {
+                uploader_filter.remove();
+            }
+            if (uploader_maxSize) {
+                uploader_maxSize.remove();
+            }
+
             target.AddNode(type, name, extData);
         });
     };
-    this.ctrTypes = ['I', 'S', 'DT', 'TA', 'CB', 'HE', '', '', '', 'PK'];
+    this.ctrTypes = ['I', 'S', 'DT', 'TA', 'CB', 'HE', 'UP', '', '', 'PK'];
 
     this.btn_input.bind('click', function () { click_func(0); });
     this.btn_select.bind('click', function () { click_func(1); });
@@ -244,6 +276,7 @@ var formconfig = function (selector, id, pkey, isshow, size, btns) {
     this.btn_textarea.bind('click', function () { click_func(3); });
     this.btn_cbx.bind('click', function () { click_func(4); });
     this.btn_editor.bind('click', function () { click_func(5); });
+    this.btn_uploader.bind('click', function () { click_func(6); });
 
     if (this.isshow == 1) {
         this.btn_btns.bind("click", function () {
@@ -371,8 +404,12 @@ formconfig.prototype.AddNode = function (type, text, exData) {
     this.chart.draw(this.data, { allowHtml: true, allowCollapse: true, size: "large" });
     this.bindNodeSelectEvent();
     this.selectNode = null;
-
-    this.extData.extdatas.push({ dataid: v, showname: exData.showname, size: exData.size, validates: exData.validates });
+    if (type == 6) {/*上传文件*/
+        this.extData.extdatas.push({ dataid: v, showname: exData.showname, size: exData.size, validates: exData.validates, uploader: { filter: exData.filter, maxSize: exData.maxSize } });
+    }
+    else {
+        this.extData.extdatas.push({ dataid: v, showname: exData.showname, size: exData.size, validates: exData.validates });
+    }
 };
 
 formconfig.prototype.RemoveSelectNode = function () {

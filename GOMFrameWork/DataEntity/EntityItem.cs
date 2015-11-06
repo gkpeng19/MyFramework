@@ -50,7 +50,7 @@ namespace GOMFrameWork.DataEntity
             }
         }
 
-        internal string ToString(string identify)
+        internal string ToSqlString(string identify)
         {
             if (Value is string)
             {
@@ -70,6 +70,30 @@ namespace GOMFrameWork.DataEntity
             else if (Operator == SearchOperator.IsNullZeroEqual)
             {
                 return "isnull(" + Field + ",0) = " + Value;
+            }
+            return Field + OperatorToString() + identify + Key;
+        }
+
+        internal string ToOracleString(string identify)
+        {
+            if (Value is string)
+            {
+                if (Operator == SearchOperator.Like)
+                {
+                    return Field + OperatorToString() + "N'%" + Value + "%'";
+                }
+                else if (Operator == SearchOperator.In)
+                {
+                    return Field + OperatorToString() + "(" + Value + ")";
+                }
+            }
+            if (Operator == SearchOperator.IsNull || Operator == SearchOperator.IsNotNull)
+            {
+                return OperatorToString();
+            }
+            else if (Operator == SearchOperator.IsNullZeroEqual)
+            {
+                return "nvl(" + Field + ",0) = " + Value;
             }
             return Field + OperatorToString() + identify + Key;
         }

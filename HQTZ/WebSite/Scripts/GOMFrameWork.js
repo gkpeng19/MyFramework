@@ -1190,14 +1190,16 @@ $.fn.extend({
                 pbar[0].style.left = left + "px";
                 pbar[0].style.top = (top + 30) + "px";
                 //更新进度条进度
-                var progress = 1;
-                var increment = 1.00;
+                var progress = { length: 1.00, increment: 1.00, lastLength: 0.00, newIncre: 0.00 };
                 var tInterval = setInterval(function () {
                     if (tInterval) {
-                        progress += increment;
-                        pbar.find(".bar").css({ width: progress + "%" });
-                        if (progress % 10 == 0) {
-                            increment = (100 - progress) / 100.00;
+                        progress.length += progress.increment;
+                        progress.newIncre += progress.increment;
+                        pbar.find(".bar").css({ width: progress.length + "%" });
+                        if (progress.newIncre >= (100.00 - progress.lastLength) / 5) {
+                            progress.newIncre = 0.00;
+                            progress.lastLength = progress.length;
+                            progress.increment = (100 - progress.length) / 100.00;
                         }
                     }
                 }, 1000);
@@ -1208,19 +1210,19 @@ $.fn.extend({
                         pbar.remove();
                         return;
                     }
-                    if (progress == 100) {
+                    if (progress.length == 100) {
                         clearInterval(pInterval);
                         return;
                     }
                     $.get(args.progressUrl, { progresskey: progresskey, ran: Math.random() }, function (r) {
-                        if (r >= progress) {
+                        if (r >= progress.length) {
                             if (tInterval) {
                                 clearInterval(tInterval);
                                 tInterval = null;
                             }
 
                             if (r == 100) {
-                                progress = 100;
+                                progress.length = 100;
                                 var pTimeout = setTimeout(function () {
                                     clearTimeout(pTimeout);
                                     pbar.remove();
@@ -1229,7 +1231,7 @@ $.fn.extend({
                             pbar.find(".bar").css({ width: r + "%" });
                         }
                     });
-                }, 400);
+                }, 500);
             }
 
             me.insertBefore(fContainer);

@@ -33,19 +33,17 @@
 					<input name="Code" class="input-medium" type="text">
 					</label>
 					<label>开始日期: 
-					<div class="inline laydate-icon input-medium" onclick="initLaydate(this)" style="text-align:left;">&nbsp;</div>
-					<input type="hidden" name="StartTime" />
+                        <input class="inline input-medium datepicker" name="StartTime" type="text" data-date-format="yyyy-mm-dd">
 					</label>
 					<label>结束日期: 
-					<div class="inline laydate-icon input-medium" onclick="initLaydate(this)" style="text-align:left;">&nbsp;</div>
-					<input type="hidden" name="EndTime" />
+                        <input class="inline input-medium datepicker" name="EndTime" type="text" data-date-format="yyyy-mm-dd">
 					</label>
-				<label><input type="button" class="btn btn-primary btn-mini" value="查询" onclick="$('#6335655622551988').datagrid('refresh')" /></label>
+				<label><input type="button" class="btn btn-primary btn-mini" value="查询" onclick="$('#9785094739812615').datagrid('refresh')" /></label>
 				</div>
 			</div>
 		</div>
 		<div class="table-container">
-		<table id="6335655622551988" class=" table table-striped table-bordered table-hover">
+		<table id="9785094739812615" class=" table table-striped table-bordered table-hover">
 			<thead>
 				<tr>
                     <th data-option="{sequence:true}">序号</th>
@@ -73,8 +71,7 @@
 									</div>
 									<div class="span12">
 									<label>时间</label>
-									<div class="laydate-icon"  class="span11" onclick="initLaydate(this)"></div>
-									<input type="hidden" name="CreateTime" id="23886886539163632" />
+                                    <input class="span11 datepicker" name="CreateTime" id="23886886539163632" type="text" />
 									</div>
 									<div class="span12">
 									<label>客户姓名</label>
@@ -83,6 +80,10 @@
 									<div class="span12">
 									<label>总金额</label>
 									<input type="text" name="Acount" id="3268969398391429" class="span11" />
+									</div>
+									<div class="span6">
+									<label>上传封面</label>
+									<input type="file" id="00952416000821621" name="ImgName" />
 									</div>
                     </div>
                 </div>
@@ -101,6 +102,16 @@
     <script src="/Scripts/ace/ace.min.js"></script>
     <script src="/Scripts/GOMFrameWork.js"></script>
 	<script type="text/javascript">
+			
+			$("#00952416000821621").upload({
+				filter: "image",
+				maxSize:10,
+				success: function (result) {
+					$("#00952416000821621").val(result.path);
+				}
+			});
+			
+	
 	
 	
 	
@@ -118,10 +129,10 @@
         {
 			
 				
-				$("#6335655622551988").datagrid({ url: "/Item/GetItemList" ,search:'#5358878746510701',psize:10 });
+				$("#9785094739812615").datagrid({ url: "/Item/GetItemList" ,search:'#5358878746510701',psize:10 });
 				
 									
-									$("#6335655622551988").parent().prev().find(".btn-table-add").bind('click',function()
+									$("#9785094739812615").parent().prev().find(".btn-table-add").bind('click',function()
 									{
 										$("#6182678291385544").bindEntity({});
 										$("#6182678291385544").open("新增",function(win)
@@ -136,7 +147,7 @@
 												r = $.combineJson(update,$.toJsResult(r));
 												if(r.ID>0)
 												{
-													$("#6335655622551988").datagrid("addRow",r);
+													$("#9785094739812615").datagrid("addRow",r);
 													layer.close(win);
 												}
 												else
@@ -150,8 +161,8 @@
 									});
 									
                                 
-                                $("#6335655622551988").datagrid("onEdit", function () {
-                                    var json = $("#6335655622551988").datagrid("getCurrData");
+                                $("#9785094739812615").datagrid("onEdit", function () {
+                                    var json = $("#9785094739812615").datagrid("getCurrData");
                                     $("#6182678291385544").bindEntity(json);
                                     $("#6182678291385544").open("编辑",function(win)
                                     {
@@ -165,7 +176,7 @@
 											var newjson = $.combineJson(json,update,$.toJsResult(r));
                                             if(r.ID>0)
                                             {
-                                                $("#6335655622551988").datagrid("updateRow",json,newjson);
+                                                $("#9785094739812615").datagrid("updateRow",json,newjson);
                                                 layer.close(win);
                                             }
                                             else
@@ -179,15 +190,15 @@
                                 });
                                 
                                 
-                                $("#6335655622551988").datagrid("onDelete", function () {
+                                $("#9785094739812615").datagrid("onDelete", function () {
 									$.confirm("确定要删除吗？",function()
 									{
-										var json = $("#6335655622551988").datagrid("getCurrData");
+										var json = $("#9785094739812615").datagrid("getCurrData");
                                         $.post("/Item/DeleteItem",{ID:json["ID"]},function(r)
                                         {
                                             if(r>0)
                                             {
-                                                $("#6335655622551988").datagrid("removeCurrRow");
+                                                $("#9785094739812615").datagrid("removeCurrRow");
                                             }
                                             else{
                                                 $.error("删除失败，请重试！");
@@ -222,6 +233,12 @@
 					
                             
 							tt.vf.req.add(f3268969398391429);
+							
+					
+					var f00952416000821621=new tt.Field("上传封面","","00952416000821621");
+					
+                            
+							tt.vf.req.add(f00952416000821621);
 							
 		
         /*增加验证信息----------End*/

@@ -100,6 +100,8 @@
     <Content Include="Designer\GoogleChart\js\format_zh_cn.js" />
     <Content Include="Designer\GoogleChart\js\jsapi.js" />
     <Content Include="Designer\GoogleChart\js\test.js" />
+    <Content Include="Designer\Scripts\font-awesome\css\font-awesome.css" />
+    <Content Include="Designer\Scripts\font-awesome\css\font-awesome.min.css" />
     <Content Include="Designer\Scripts\GExtension.js" />
     <Content Include="Designer\Scripts\jquery-1.10.2.min.js" />
     <Content Include="Designer\Scripts\json2.js" />
@@ -126,32 +128,61 @@
     <Content Include="Designer\Scripts\page.js" />
     <Content Include="Designer\Scripts\site.js" />
     <Content Include="Designer\Styles\GExtension.css" />
+    <Content Include="Simple\EditPage.html" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\ace\ace-elements.min.js" />
     <Content Include="Scripts\ace\ace.min.js" />
     <Content Include="Scripts\ace\css\ace-responsive.min.css" />
     <Content Include="Scripts\ace\css\ace-skins.min.css" />
     <Content Include="Scripts\ace\css\ace.min.css" />
+    <Content Include="Scripts\bootstrap\bootstrap-datepicker.css" />
+    <Content Include="Scripts\bootstrap\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap\bootstrap-timepicker.css" />
+    <Content Include="Scripts\bootstrap\bootstrap-timepicker.min.js" />
     <Content Include="Scripts\bootstrap\css\bootstrap-responsive.min.css" />
     <Content Include="Scripts\bootstrap\css\bootstrap.min.css" />
     <Content Include="Scripts\bootstrap\js\bootstrap.js" />
     <Content Include="Scripts\bootstrap\js\bootstrap.min.js" />
     <Content Include="Scripts\bootstrap\js\npm.js" />
-    <Content Include="Scripts\common.js" />
     <Content Include="Scripts\font-awesome\css\font-awesome.css" />
     <Content Include="Scripts\font-awesome\css\font-awesome.min.css" />
     <Content Include="Scripts\GOMFrameWork.js" />
+    <Content Include="Designer\Scripts\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Designer\Scripts\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Designer\Scripts\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Designer\Scripts\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Designer\Scripts\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Designer\Scripts\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Designer\Scripts\font-awesome\less\animated.less" />
+    <Content Include="Designer\Scripts\font-awesome\less\bordered-pulled.less" />
+    <Content Include="Designer\Scripts\font-awesome\less\core.less" />
+    <Content Include="Designer\Scripts\font-awesome\less\fixed-width.less" />
+    <Content Include="Designer\Scripts\font-awesome\less\font-awesome.less" />
+    <Content Include="Designer\Scripts\font-awesome\less\icons.less" />
+    <Content Include="Designer\Scripts\font-awesome\less\larger.less" />
+    <Content Include="Designer\Scripts\font-awesome\less\list.less" />
+    <Content Include="Designer\Scripts\font-awesome\less\mixins.less" />
+    <Content Include="Designer\Scripts\font-awesome\less\path.less" />
+    <Content Include="Designer\Scripts\font-awesome\less\rotated-flipped.less" />
+    <Content Include="Designer\Scripts\font-awesome\less\stacked.less" />
+    <Content Include="Designer\Scripts\font-awesome\less\variables.less" />
+    <Content Include="Designer\Scripts\font-awesome\scss\_animated.scss" />
+    <Content Include="Designer\Scripts\font-awesome\scss\_bordered-pulled.scss" />
+    <Content Include="Designer\Scripts\font-awesome\scss\_core.scss" />
+    <Content Include="Designer\Scripts\font-awesome\scss\_fixed-width.scss" />
+    <Content Include="Designer\Scripts\font-awesome\scss\_icons.scss" />
+    <Content Include="Designer\Scripts\font-awesome\scss\_larger.scss" />
+    <Content Include="Designer\Scripts\font-awesome\scss\_list.scss" />
+    <Content Include="Designer\Scripts\font-awesome\scss\_mixins.scss" />
+    <Content Include="Designer\Scripts\font-awesome\scss\_path.scss" />
+    <Content Include="Designer\Scripts\font-awesome\scss\_rotated-flipped.scss" />
+    <Content Include="Designer\Scripts\font-awesome\scss\_stacked.scss" />
+    <Content Include="Designer\Scripts\font-awesome\scss\_variables.scss" />
+    <Content Include="Designer\Scripts\font-awesome\scss\font-awesome.scss" />
+    <Content Include="GOMFrameWork.md" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\laydate\laydate.js" />
-    <Content Include="Scripts\laydate\need\laydate.css" />
-    <Content Include="Scripts\laydate\skins\dahong\icon.png" />
-    <Content Include="Scripts\laydate\skins\dahong\laydate.css" />
-    <Content Include="Scripts\laydate\skins\default\icon.png" />
-    <Content Include="Scripts\laydate\skins\default\laydate.css" />
-    <Content Include="Scripts\laydate\skins\molv\icon.png" />
-    <Content Include="Scripts\laydate\skins\molv\laydate.css" />
     <Content Include="Scripts\layer.mobile-v1.6\layer.m.js" />
     <Content Include="Scripts\layer.mobile-v1.6\need\layer.css" />
     <Content Include="Scripts\layer\extend\layer.ext.js" />
@@ -293,6 +324,8 @@
     <Content Include="Scripts\validate\validator\RequiredValidator.js" />
     <Content Include="Scripts\validate\validator\SelectCountValidator.js" />
     <Content Include="Scripts\validate\validator\ValidatorFactory.js" />
+    <Content Include="Simple\Order.html" />
+    <Content Include="Simple\OrderEdit.html" />
     <Content Include="Styles\GOMFrameWork.css" />
     <Content Include="Styles\gtree\themes\default-dark\32px.png" />
     <Content Include="Styles\gtree\themes\default-dark\40px.png" />
@@ -304,6 +337,7 @@
     <Content Include="Styles\gtree\themes\default\style.css" />
     <Content Include="Styles\gtree\themes\default\style.min.css" />
     <Content Include="Styles\gtree\themes\default\throbber.gif" />
+    <Content Include="Simple\GreenManage.html" />
     <Content Include="Views\Menu.html" />
     <Content Include="Views\Role.html" />
     <Content Include="Views\RoleMenu.html" />
@@ -314,6 +348,8 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\SimpleController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\RoleMenuController.cs" />
@@ -327,8 +363,15 @@
     <Compile Include="Models\BW_RoleMenu.cs" />
     <Compile Include="Models\BW_User.cs" />
     <Compile Include="Models\ExtensionModel.cs" />
+    <Compile Include="Models\SimpleEntities.cs" />
     <Compile Include="Models\SysEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripts\umeditor\net\fileUp.ashx.cs">
+      <DependentUpon>fileUp.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Scripts\umeditor\net\fileUpProgress.ashx.cs">
+      <DependentUpon>fileUpProgress.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Scripts\umeditor\net\UMeditorUploader.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -372,7 +415,6 @@
     <Content Include="Scripts\font-awesome\scss\_variables.scss" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Scripts\umeditor\net\getContent.ashx" />
-    <Content Include="Scripts\umeditor\net\imageUp.ashx" />
     <Content Include="Scripts\umeditor\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.eot" />
     <Content Include="Scripts\umeditor\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.svg" />
     <Content Include="Scripts\umeditor\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.ttf" />
@@ -396,6 +438,8 @@
     <Content Include="Scripts\umeditor\third-party\mathquill\font\Symbola.woff" />
     <Content Include="Scripts\validate\_cmd.bat" />
     <Content Include="Scripts\validate\_run.bat" />
+    <Content Include="Scripts\umeditor\net\fileUp.ashx" />
+    <Content Include="Scripts\umeditor\net\fileUpProgress.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

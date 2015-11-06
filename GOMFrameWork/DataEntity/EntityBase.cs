@@ -54,6 +54,10 @@ namespace GOMFrameWork.DataEntity
 
         protected virtual bool IsNullUIValue(string key, object value)
         {
+            if (value is DateTime)
+            {
+                return false;
+            }
             string v = value.ToString();
             if (v.Length == 0)
             {
@@ -397,17 +401,6 @@ namespace GOMFrameWork.DataEntity
             }
         }
 
-        private void Remove_G()
-        {
-            foreach (string key in Collection.Keys)
-            {
-                if (key.EndsWith("_g", StringComparison.OrdinalIgnoreCase))
-                {
-                    Collection.Remove(key);
-                }
-            }
-        }
-
         #region 数据库操作
 
         public virtual long Save()
@@ -417,8 +410,6 @@ namespace GOMFrameWork.DataEntity
 
         private long Save(EntityProvider provider)
         {
-            this.Remove_G();
-
             bool isReuse = false;
             var entityProvider = GetProvider(provider, out isReuse);
 
@@ -476,7 +467,7 @@ namespace GOMFrameWork.DataEntity
                                         {
                                             if (data.ID == 0 && fkey != null && fkey.FKey != null && fkey.FKey.Length > 0)
                                             {
-                                                data.SetDbValue(fkey.FKey, this.ID);
+                                                data.SetDbValue(fkey.FKey, id);
                                             }
                                             data.Save(entityProvider);
                                         }

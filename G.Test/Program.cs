@@ -3,11 +3,15 @@ using G.Util.Tool;
 using GOMFrameWork;
 using GOMFrameWork.DataEntity;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ServiceStack.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,84 +19,76 @@ namespace G.Test
 {
     class Program
     {
+        static Regex reggerDate = new Regex(@"^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$");
         static void Main(string[] args)
         {
-            //Student s = new Student();
-            //s.SetUIValue("ID"/ 1);
-            //s.Name = "gkpeng";
-            //s.Age = 18;
-            //s.Time = DateTime.Now;
-            //s.Price = 12.88M;
-            //s.PriceD = 12.88;
-            //s.Save();
-
-            //s.Age = 20;
-            //s.PriceD = 20.20;
-            //s.Price = 20.20M;
-            //s.Time = DateTime.Now.AddDays(5);
-            //s.Name = "kiven";
-            //s.Save();
-
-            //RedisClient master = RedisManager.GetMaster();
-            //RedisClient selve = RedisManager.GetClient();
-
-            //master.Set<string>("test"/ "aa");
-            //var v = selve.Get<string>("test");
-            //System.Diagnostics.Debug.WriteLine(v);
-
-            //RedisRepository res = new RedisRepository();
-            //var v = res.Exist<Student>();
-            //Console.WriteLine(v);
-            //var list= res.GetAll<Student>();
-
-            //var s1= new Student();
-            //s1.SetUIValue("ID"/1);
-            //var target = res.Find<Student>(s1);
-
-            //var list= RedisRepository.Default.GetAll<Student>();
-
-            string pagehtml = Pager.InitLinkPager(2, 15);
-
-            return;
-
-            DbContext.InitContext<Park>("ParkConnection");
-
-            List<string> headers = new List<string>{
-                "ID","Name","COMPLETETIME",
-                "OPENDATE","PARKGRADE","HIGHQUALITYPARK","FREEPARK","PROPERTY","PEAKLOWSEASON","ONOFFTIMEPEAK","ONOFFLOW","OWEDDISTINCE","OWEDSTREET",
-                "DETAILADDRESS","ZIPCODE","TRAFFICWAY","INTRODUCT","FEATURESPOT","TOTALAREA","WATERAREA","LANDAREA","BUILDAREA","ANCIENTBUILDAREA",
-                "EXTEBUILDAREA","ADMINBUILDAREA","LANDSCAPEAREA","MANAGEBUILDAREA","GREENSPACEAREA","MATAREA","LENPAVEROAD","SQUAREPAVEAREA","GREENRATE","GREENCOVERAGE",
-                "RATEGREENCOVERAGE","TURFAREA","FLOWGRASSAREA","FLOWVAR","TREESNUM","RBORNUM","SHURBNUM","ANCIENTTREENUM","SIGNALBOARDNUM","MULSIGBOARD",
-                "CHAIRNUM","GARBAGENUM","LAMPNUM","FIRSTWCNUM","SECONDWCNUM","OTHERWCNUM","TOTALWCNUM","URINALNUM","MALEWCNUM","FEMALEWCNUM",
-                "PARK","INNERPARKNUM","BESIDEPARKNUM","BROADFAC","BIKEPARK","BIKEPARKNUM","BULLECTINBOARDNUM","BULLECTINSCREENNUM","BODYBUILDEQUNUM","ATHLETICGROUND",
-                "ATHLETICGROUNDNUM","BODYBUILDWALKLEN","SOLARLAMPNUM","VOLTAICPLANT","ANNALLPOWERPLANT","SOLARLAMPANNUSEPOWER","TOTALANNUALPOWER","COLLECTRAINWAY","COLLECTRAINAREA","ANNUALWATERSUM",
-                "RECLAIMEDWATER","RECLAIMEDWATERAPP","ANNUSECOUNTREWATER","REWATERHADLEFAC","REWATERHANDLEFACINTR","SPRINKAREA","DRIPAREA","GEOTHERMAL","GEOTHERMALUSEINTR","OTHERSAVEENERWAYINTR",
-                "SPECIALWICKETNUM","SPECIALPARKNUM","WHEELCHAIRNUM","RAMPNUM","RAMPLEN","LOWPOOLNUM","UNSEXWCNUM","ACCWCNUM","LOWTELNUM",
-                "OTHERACCFACINTR","INDEPTADMIOFFICE","ADMOFFICENAME","ADMAGENCYLEVEL","SUPERADMDEPT","ONSTAFFNUM","TECPERSONNUM","INDEPTLEGALENTITY","CHARGEPERSONNAME","CONTRACTPERSONNAME",
-                "FIXEDPHONE","MOBILETEL","CONSULTPHONE","FAX","Email","WEBSET","LANDBELOGN","ANNCONSINVE","RELCATIONCOST","COMULATIVEINVE",
-                "CONSINVESSOURCE","OVERALLPLAN","PLANAPPROVEDEPT","OPENTYPE","MONICAMERNUM","EMERSHELTER","EMERSHELTERCAPA","BUFFETNUM","BUFFETTOTALAREA","RESTAURANTNUMBER",
-                "RESTAURANTAREA","HOTELNUMBER","HOTELAREA","HOTELFLOORAREA","OLDBRAND","OLDBRANDINTRO","BOATNUM","ACTIVITYSPACENUM","CABLECAR","CABLEWAYLEN",
-                "SLIDEWAY","SLIDEWAYLEN","AMUSEFAC","AMUSEFACINTR","ICEACTIVITY","ENTRANCETICKETPRICE","OFFSEASONTICKETPRIC","PEAKSEASONTICKETPRICE","COUPONPRICE","MONTHTICKETPRICE",
-                "SEASONTICKETPRIC","ANNUALTICKETPRICE","SPEPERSONDISCOUNTINTR","GARDENNUM","GARDENNAME","GARDENTICKETPRICE","ENTRANCETICKETREVENUE","OFFSEASONTICKETREVENUE","PEAKSEASONTICKETREVENUE","COUPONREVENUE",
-                "MONTHTICKETREVENUE","SEASONTICKETREVENUE","ANNTICKETREVENUE","SPEPERSONDISCOUNTNUMINTRO","GARDENTICKETREVENUE","IMPORHOLIDAYTOURISTNUM","GARDENTOURISTNUM","BOATTYPE","BOATTICKETPRICE","HOLDICEACTIVITYANN",
-                "PROJECTNAME","PROJECTTYPE","PROJECTINVE"
-            };
-
-            for (var i = headers.Count - 1; i >= 0; --i)
+            if (reggerDate.IsMatch("2014-01-23"))
             {
-                var key = headers[i];
-                for (var j = i - 1; j >= 0; --j)
-                {
-                    if (headers[j] == key)
-                    {
-                        headers.RemoveAt(i);
-                        break;
-                    }
-                }
+                Console.WriteLine("1");
             }
+            if (reggerDate.IsMatch("2014-11-23"))
+            {
+                Console.WriteLine("1");
+            }
+            if (reggerDate.IsMatch("2014-01-23 12:11:22"))
+            {
+                Console.WriteLine("1");
+            }
+            if (reggerDate.IsMatch("2014-11-23 12:11:22"))
+            {
+                Console.WriteLine("1");
+            }
+            Console.ReadKey();
+            return;
+            OAuthClientTest test = new OAuthClientTest();
+            var t = test.Get_Accesss_Token_By_Resource_Owner_Password_Credentials_Grant();
+            Console.ReadKey();
+        }
+    }
 
-            var path = @"C:\Users\gkpeng\Desktop\parks.xlsx";
-            var parkList = ExcelHelper.Read<Park>(path, headers.ToArray(), 1);
+    public class OAuthClientTest
+    {
+        private HttpClient _httpClient;
+
+        public OAuthClientTest()
+        {
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri("http://localhost:50185");
+        }
+
+        public async Task Get_Accesss_Token_By_Resource_Owner_Password_Credentials_Grant()
+        {
+            var token = await GetAccessToken();
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            Console.WriteLine(await (await _httpClient.GetAsync("/api/Test/GetName")).Content.ReadAsStringAsync());
+        }
+
+        async Task<string> GetAccessToken()
+        {
+            var clientId = "1234";
+            var clientSecret = "5678";
+
+            var parameters = new Dictionary<string, string>();
+            parameters.Add("grant_type", "password");
+            parameters.Add("username", "gkpeng");
+            parameters.Add("password", "123456");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                "Basic",
+                Convert.ToBase64String(Encoding.ASCII.GetBytes(clientId + ":" + clientSecret))
+                );
+
+            var response = await _httpClient.PostAsync("/token", new FormUrlEncodedContent(parameters));
+            var responseValue = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return JObject.Parse(responseValue)["access_token"].Value<string>();
+            }
+            else
+            {
+                Console.WriteLine(responseValue);
+                return string.Empty;
+            }
         }
     }
 
