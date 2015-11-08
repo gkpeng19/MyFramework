@@ -64,7 +64,7 @@ function getUrlParam(pname) {
 
 function getUrl(url) {
     if (url.indexOf('/') == 0) {
-        return "http://localhost:55611" + url;
+        return "http://123.57.153.47" + url;
     }
-    return "http://localhost:55611/" + url;
+    return "http://123.57.153.47/" + url;
 }

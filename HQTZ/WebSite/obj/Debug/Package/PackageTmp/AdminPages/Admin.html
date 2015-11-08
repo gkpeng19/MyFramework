@@ -1,0 +1,250 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>后台管理</title>
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="../Scripts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="../Scripts/ace/css/ace.min.css" rel="stylesheet" />
+    <link href="../Scripts/ace/css/ace-responsive.min.css" rel="stylesheet" />
+    <link href="../Styles/GOMFrameWork.css" rel="stylesheet" />
+    <style type="text/css">
+        .nav-list > li > a > i {
+            line-height: 36px;
+        }
+    </style>
+</head>
+<body class="navbar-fixed">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a class="brand" href="#"><small><i class="fa fa-leaf"></i> Hqtz Admin</small> </a>
+                <ul class="nav ace-nav pull-right">
+                    <li class="light-blue user-profile">
+                        <a class="user-menu dropdown-toggle" href="#">
+                            <span>
+                                <small>欢迎您,</small> <span id="username"></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="purple">
+                        <a href="/ClientBase/LoginOut"><i class="fa fa-sign-out"></i> 退 出</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" id="main-container">
+        <a href="#" id="menu-toggler"><span></span></a>
+        <div id="sidebar" class="fixed">
+            <div class="alert alert-info alert-nomargin" style="padding:8px;">
+                <i class="fa fa-th"></i>
+                <span>菜单</span>
+            </div>
+            <ul class="nav nav-list">
+                <li class="active open">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="fa fa-user"></i>
+                        <span>管理员</span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <ul class="submenu">
+                        <li class="active"><a href="User.html" target="page-content">管理员列表</a></li>
+                        <li><a href="#" onclick="ChangePsw()">修改密码</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="fa fa-users"></i>
+                        <span>会员中心</span>
+                        <b class="arrow fa fa-angle-down"></b>
+                    </a>
+                    <ul class="submenu">
+                        <li><a href="Member.html" target="page-content">会员信息</a></li>
+                        <li><a href="MemberOrder.html" target="page-content">会员订单</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="Destination.html" target="page-content">
+                        <i class="fa fa-dashboard"></i>
+                        <span>目的地</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="DestinationDetails.html" target="page-content">
+                        <i class="fa fa-ship"></i>
+                        <span>度假村</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="VillageRoom.html" target="page-content">
+                        <i class="fa fa-bed"></i>
+                        <span>度假村房间</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="MemberBenefit.html" target="page-content">
+                        <i class="fa fa-diamond"></i>
+                        <span>得天独厚</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="BenefitDetails.html" target="page-content">
+                        <i class="fa fa-forumbee"></i>
+                        <span>得天独厚详细</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="MemberService.html" target="page-content">
+                        <i class="fa fa-server"></i>
+                        <span>尊享服务</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="ServiceDetails.html" target="page-content">
+                        <i class="fa fa-server"></i>
+                        <span>尊享服务详细</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="NewCheaper.html" target="page-content">
+                        <i class="fa fa-anchor"></i>
+                        <span>最新优惠</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="CheaperDetails.html" target="page-content">
+                        <i class="fa fa-anchor"></i>
+                        <span>最新优惠详细</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Agenter.html" target="page-content">
+                        <i class="fa fa-child"></i>
+                        <span>代理人信息</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Article.html?atype=1" target="page-content">
+                        <i class="fa fa-question"></i>
+                        <span>旅居指南</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="ContactUs.html" target="page-content">
+                        <i class="fa fa-phone-square"></i>
+                        <span>联系我们</span>
+                    </a>
+                </li>
+            </ul>
+            <div id="sidebar-collapse"><i class="icon-"></i></div>
+        </div>
+        <div id="main-content" class="clearfix">
+            <iframe class="clearfix" id="page-content" name="page-content" scrolling="no" src="User.html"
+                    frameborder="0" style="padding: 0px; width: 100%;"></iframe>
+        </div>
+    </div>
+
+    <div class="layerout" id="div_ChangePsw" style="width:350px;">
+        <table>
+            <tr><td class="tdtitle">旧密码：</td><td><input type="password" id="u_oldpsw" /></td></tr>
+            <tr><td class="tdtitle">新密码：</td><td><input type="password" id="u_newpsw" /></td></tr>
+            <tr><td class="tdtitle">重复新密码：</td><td><input type="password" id="u_tnewpsw" /></td></tr>
+        </table>
+    </div>
+
+    <script src="../Scripts/jquery-1.10.2.min.js"></script>
+    <script src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../Scripts/ace/ace.min.js"></script>
+    <script src="../Scripts/layer/layer.js"></script>
+    <script src="../Scripts/GOMFrameWork.js"></script>
+    <script type="text/javascript">
+        var lastWidth = 0;
+        var lastHeight = 0;
+        function startInit(iframe, minWidth, minHeight) {
+            setInterval(function () {
+                try {
+                    var width = $(window).width() - iframe.offset().left;
+                    var height = $(window).height() - iframe.offset().top;
+                    if (width < minWidth) {
+                        width = minWidth;
+                    }
+                    if (height < minHeight) {
+                        height = minHeight;
+                    }
+
+                    if (width != lastWidth) {
+                        iframe.width(width);
+                        lastWidth = width;
+                    }
+                    if (height != lastHeight) {
+                        iframe.height(height);
+                        lastHeight = height;
+                    }
+                } catch (ex) { }
+            }, 100);
+        }
+
+        startInit($('#page-content'), 800, 560);
+
+        $.post("/ClientBase/GetLoginUserName", {}, function (name) {
+            $("#username").text(name);
+        });
+
+        $(function () {
+            $(".nav-list>li,.nav-list>li>ul.submenu>li").bind('click', function () {
+                if (!$(this).hasClass("active")) {
+                    if ($(this).find("ul.submenu").length == 0) {
+                        $(".nav-list .active").removeClass("active");
+                    }
+                    $(this).addClass("active");
+                }
+            });
+        });
+
+        function ChangePsw() {
+            $("#div_ChangePsw").open("修改密码", function (idx) {
+                var oldpsw = $.trim($("#u_oldpsw").val());
+                var newpsw = $.trim($("#u_newpsw").val());
+                var tnewpsw = $.trim($("#u_tnewpsw").val());
+                if (oldpsw.length == 0) {
+                    ShowMsg("旧密码不能为空！");
+                    return false;
+                }
+
+                if (newpsw.length == 0) {
+                    ShowMsg("新密码不能为空！");
+                    return false;
+                }
+
+                if (newpsw != tnewpsw) {
+                    ShowMsg("两次新密码不相同！");
+                    return false;
+                }
+
+                $.post("/Base/ChangeUserPsw", { oldPsw: oldpsw, newPsw: newpsw, ran: Math.random() }, function (r) {
+                    if (r == 0) {
+                        ShowMsg("旧密码错误！");
+                    }
+                    else {
+                        layer.close(idx);
+                        $.msg("密码修改成功。");
+                    }
+                });
+
+                return false;
+            });
+        }
+
+        function ShowMsg(msg) {
+            if (msg.length == 0) {
+                $("#layer-error-msg").html("");
+            }
+            else {
+                $("#layer-error-msg").html('<span class="alert alert-error" style="font-size: 11px; padding: 3px 15px 3px 5px;"><i class="fa fa-warning"></i> ' + msg + '</span>');
+            }
+        }
+    </script>
+</body>
+</html>

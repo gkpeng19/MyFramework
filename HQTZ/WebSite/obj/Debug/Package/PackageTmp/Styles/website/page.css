@@ -1,0 +1,152 @@
+﻿body {
+    margin: 0px;
+    padding: 0px;
+    background-color: #eef3f9;
+    font-family: "Microsoft YaHei", "微软雅黑",Arial,Helvetica, Tahoma, STXihei, "华文细黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
+}
+
+a {
+    font-family: "Microsoft YaHei", "微软雅黑",Arial,Helvetica, Tahoma, STXihei, "华文细黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
+    text-decoration: none;
+}
+
+body .page {
+    width: 1180px;
+    margin: 0px auto;
+    background-color: white;
+}
+
+.clear {
+    clear: both;
+}
+
+.content {
+    width: 980px;
+    margin: 0px auto;
+}
+
+#menu div {
+    width: 196px;
+    line-height: 70px;
+    float: left;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#top {
+    padding: 10px 0px;
+}
+
+#menu div span {
+    font-size: 16px;
+    position: relative;
+    top: -5px;
+    left: -5px;
+}
+
+#menu .menu-normal {
+    background-image: url("/Images/menudbg.jpg");
+    background-repeat: repeat-x;
+}
+
+
+#menu .menu-curr {
+    background-image: url("/Images/menubg.jpg");
+    background-repeat: no-repeat;
+}
+
+#menu .green-menu-curr {
+    background-image: url("/Images/green-menubg.jpg");
+    background-repeat: no-repeat;
+}
+
+#trave {
+    text-align: center;
+    height: 170px;
+}
+
+.bottomflow {
+    position: fixed;
+}
+
+.flow_tab {
+    height: 28px;
+    width: 148px;
+    text-align: center;
+    background-image: url('/Images/contactus.png');
+    background-repeat: no-repeat;
+    color: white;
+    padding-top: 13px;
+    cursor: pointer;
+    margin-left: 100px;
+}
+
+.flow_content {
+    width: 980px;
+    background-color: #444444;
+    padding: 3px 100px 0px 100px;
+    color: white;
+    font-size: 13px;
+}
+
+.flow_ctx {
+    display: none;
+    padding: 5px 0px 0px 0px;
+}
+
+    .flow_ctx .contact_ctx_icon {
+        vertical-align: middle;
+    }
+
+.contact_ctx {
+    padding-right: 15px;
+}
+
+    .contact_ctx a {
+        color: white;
+    }
+
+        .contact_ctx a:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+/*---------页面--------------------------------------*/
+.panel {
+    width: 227px;
+    height: 165px;
+    float: left;
+}
+
+    .panel img {
+        width: 215px;
+        height: 155px;
+    }
+
+#panel_more {
+    text-align: right;
+}
+
+    #panel_more img {
+        width: 84px;
+        height: 22px;
+        margin-top: 140px;
+        cursor: pointer;
+    }
+
+.dc_content {
+    color: white;
+    padding: 10px;
+}
+
+.dc_title {
+    font-weight: bolder;
+    font-size: 16px;
+}
+
+.dc_ctx a {
+    color: white;
+    font-size: 15px;
+}

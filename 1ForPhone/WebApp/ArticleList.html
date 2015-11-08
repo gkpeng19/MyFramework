@@ -19,7 +19,6 @@
     </header>
     <div class="mui-content">
         <ul class="mui-table-view" id="traveList">
-           
         </ul>
     </div>
     <nav class="mui-bar mui-bar-tab bottom-bar">
@@ -66,6 +65,7 @@
         }
         
         var ptype=getUrlParam("ptype");
+       
         function initPage(topage){
 		    switch (ptype){
 		    	case "1":
@@ -82,7 +82,7 @@
         initPage(1);
         
 		function getListItem(id,imgpath,name,description){
-			return '<li class="mui-table-view-cell"><a class="mui-navigate-right" href="ArticleDetail.html?ptype='+ptype+'&vid='+id+'"><img class="mui-media-object mui-pull-left" src="' + getUrl(imgpath) + '"><div class="mui-media-body">' + name + '<p class="mui-ellipsis">' + description + '</p></div></a></li>';
+			return '<li class="mui-table-view-cell"><a class="mui-navigate-right" href="ArticleDetail.html?ptype='+ptype+'&vid='+id+'"><img class="mui-media-object mui-pull-left" src="' + getUrl(imgpath) + '"><div class="mui-media-body">' + description + '<p class="mui-ellipsis">旅居地-' + name + '</p></div></a></li>';
 		}
     </script>
 </body>

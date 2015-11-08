@@ -56,3 +56,17 @@ D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.xml
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OOXML.xml
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OpenXml4Net.xml
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.csprojResolveAssemblyReference.cache
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\ServiceStack.Redis.dll
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\log4net.dll
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.dll
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OOXML.dll
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\ServiceStack.Interfaces.dll
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\ServiceStack.Text.dll
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\ServiceStack.Common.dll
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\ICSharpCode.SharpZipLib.dll
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OpenXmlFormats.dll
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OpenXml4Net.dll
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\log4net.xml
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.xml
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OOXML.xml
+D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OpenXml4Net.xml

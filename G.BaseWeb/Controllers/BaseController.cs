@@ -98,7 +98,7 @@ namespace G.BaseWeb.Controllers
             return File(bytes, @"image/Jpeg");
         }
 
-        [LoginVerify]
+        [LoginVerify("Client")]
         public long ChangeUserPsw(string oldPsw, string newPsw)
         {
             BaseSearchModel se = new BaseSearchModel("bw_user");
