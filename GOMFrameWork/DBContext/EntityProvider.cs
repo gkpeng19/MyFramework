@@ -149,7 +149,6 @@ namespace GOMFrameWork.DBContext
             return result;
         }
 
-
         internal virtual CommonResult<T> ExcuteProcResult<T>(ProcEntity entity) where T : EntityBase, new()
         {
             CommonResult<T> result = new CommonResult<T>();
@@ -454,9 +453,20 @@ namespace GOMFrameWork.DBContext
             List<DbParameter> parameters = new List<DbParameter>();
             foreach (SearchItem item in entity.Collection)
             {
-                if (item.Operator != SearchOperator.Like && item.Operator != SearchOperator.IsNull && item.Operator != SearchOperator.IsNullZeroEqual && item.Operator != SearchOperator.IsNotNull && item.Operator != SearchOperator.In)
+                if (item.Operator != SearchOperator.Like &&
+                    item.Operator != SearchOperator.IsNull &&
+                    item.Operator != SearchOperator.IsNullZeroEqual &&
+                    item.Operator != SearchOperator.IsNotNull &&
+                    item.Operator != SearchOperator.In)
                 {
-                    parameters.Add(new SqlParameter(item.Key, item.Value));
+                    if (item.Value is DateTime && (item.Operator == SearchOperator.LessEqual || item.Operator == SearchOperator.Less))
+                    {
+                        parameters.Add(new SqlParameter(item.Key, ((DateTime)item.Value).AddDays(1)));
+                    }
+                    else
+                    {
+                        parameters.Add(new SqlParameter(item.Key, item.Value));
+                    }
                 }
             }
 
@@ -704,9 +714,20 @@ namespace GOMFrameWork.DBContext
             List<DbParameter> parameters = new List<DbParameter>();
             foreach (SearchItem item in entity.Collection)
             {
-                if (item.Operator != SearchOperator.Like && item.Operator != SearchOperator.IsNull && item.Operator != SearchOperator.IsNullZeroEqual && item.Operator != SearchOperator.IsNotNull && item.Operator != SearchOperator.In)
+                if (item.Operator != SearchOperator.Like &&
+                    item.Operator != SearchOperator.IsNull &&
+                    item.Operator != SearchOperator.IsNullZeroEqual &&
+                    item.Operator != SearchOperator.IsNotNull &&
+                    item.Operator != SearchOperator.In)
                 {
-                    parameters.Add(new OracleParameter(item.Key, item.Value));
+                    if (item.Value is DateTime && (item.Operator == SearchOperator.LessEqual || item.Operator == SearchOperator.Less))
+                    {
+                        parameters.Add(new OracleParameter(item.Key, ((DateTime)item.Value).AddDays(1)));
+                    }
+                    else
+                    {
+                        parameters.Add(new OracleParameter(item.Key, item.Value));
+                    }
                 }
             }
 

@@ -31,14 +31,15 @@ namespace G.Util.Mvc
             }
             else { }
 
+            var target = Activator.CreateInstance(bindingContext.ModelType);
+
             if (ValueCollection.Count <= 0)
             {
-                return null;
+                return target;
             }
 
             Dictionary<string, object> instanceDic = null;
 
-            var target = Activator.CreateInstance(bindingContext.ModelType);
             if (target is EntityBase)
             {
                 var pkey = (target as EntityBase).PrimaryKey.ToLower();
@@ -193,14 +194,15 @@ namespace G.Util.Net.Http
             }
             else { }
 
+            var target = Activator.CreateInstance(bindingContext.ModelType);
             if (ValueCollection.Count <= 0)
             {
+                bindingContext.Model = target;
                 return true;
             }
 
             Dictionary<string, object> instanceDic = null;
 
-            var target = Activator.CreateInstance(bindingContext.ModelType);
             if (target is EntityBase)
             {
                 var pkey = (target as EntityBase).PrimaryKey.ToLower();

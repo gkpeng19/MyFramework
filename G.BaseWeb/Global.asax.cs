@@ -1,6 +1,7 @@
 ﻿using G.BaseWeb.Models;
 using G.Util.Account;
 using GOMFrameWork;
+using GOMFrameWork.DataEntity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +24,11 @@ namespace G.BaseWeb
             DbContext.InitContext<BaseSearchModel>("BaseWeb");
             DbContext.InitContext<BaseProcModel>("BaseWeb");
 
-            DbContext.InitContext<SimpleBase>("Simple");
-            DbContext.InitContext<SimpleSearchModel>("Simple");
+            DbContext.InitContext<SimpleBase>("SimpleOracle");
+            DbContext.InitContext<SimpleSearchModel>("SimpleOracle");
+            DbContext.InitContext<OracleProcEntity>("SimpleOracle");
+            //DbContext.InitContext<SimpleBase>("SimpleSqlServer");
+            //DbContext.InitContext<SimpleSearchModel>("SimpleSqlServer");
         }
 
         void Application_OnPostAuthenticateRequest(object sender, EventArgs e)

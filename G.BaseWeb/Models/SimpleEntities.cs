@@ -77,7 +77,7 @@ namespace G.BaseWeb.Models
                 {
                     return string.Empty;
                 }
-                return CreateOn.ToString("yyyy-MM-dd HH:mm:ss");
+                return CreateOn.ToString("yyyy-MM-dd");
             }
         }
         public string EditOn_G
@@ -88,7 +88,7 @@ namespace G.BaseWeb.Models
                 {
                     return string.Empty;
                 }
-                return EditOn.ToString("yyyy-MM-dd HH:mm:ss");
+                return EditOn.ToString("yyyy-MM-dd");
             }
         }
     }

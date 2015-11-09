@@ -16,6 +16,6 @@ D:\Work\MyFramework\GOMFrameWork\bin\Debug\Newtonsoft.Json.dll
 D:\Work\MyFramework\GOMFrameWork\bin\Debug\Newtonsoft.Json.xml
 D:\Gkpeng\MyFramework\GOMFrameWork\bin\Debug\Newtonsoft.Json.dll
 D:\Gkpeng\MyFramework\GOMFrameWork\bin\Debug\Newtonsoft.Json.xml
-D:\Gkpeng\MyFramework\GOMFrameWork\obj\Debug\GOMFrameWork.csprojResolveAssemblyReference.cache
 D:\Gkpeng\MyFramework\GOMFrameWork\bin\Debug\Oracle.DataAccess.dll
 D:\Work\MyFramework\GOMFrameWork\bin\Debug\Oracle.DataAccess.dll
+D:\Gkpeng\MyFramework\GOMFrameWork\obj\Debug\GOMFrameWork.csprojResolveAssemblyReference.cache

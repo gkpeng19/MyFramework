@@ -3,16 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using G.Util.Mvc;
-using GOMFrameWork.DataEntity;
 using G.Util.Html;
 using System.Web.Mvc;
 using G.Util.Extension;
 using G.BaseWeb.Models;
+using G.Util.Oracle;
+using GOMFrameWork.DataEntity;
 
 namespace Project1.Controllers
 {
+    [ModelBinder(typeof(EntityModelBinder))]
+    [OracleOutParam("DList", "DEntity")]
+    public class OracleDataProcEntity : OracleResultProcEntity
+    {
+        public OracleDataProcEntity() { }
+    }
+
+    public class DataResult
+    {
+        public List<GreenLand> DList { get; set; }
+        public S_Order DEntity { get; set; }
+    }
+
     public class SimpleController : Controller
     {
+        public void TestListProc(OracleListProcEntity pe)
+        {
+            pe.ProcName = "usp_outlist";
+            var result = pe.Execute<GreenLand>();
+        }
+
+        public void TestPagerProc(OraclePagerProcEntity pe)
+        {
+            pe.ProcName = "usp_outpager";
+            var result = pe.Execute<GreenLand>();
+        }
+
+        public void TestDataProc(OracleDataProcEntity pe)
+        {
+            pe.ProcName = "usp_outdata";
+            var result = pe.ExecuteData<DataResult>();
+        }
+
 
         public JsonResult LoadPContent()
         {
@@ -23,7 +55,7 @@ namespace Project1.Controllers
         {
             SimpleSearchModel se = new SimpleSearchModel("GreenLand");
             se["ID"] = pid;
-            var green= se.LoadEntity<GreenLand>();
+            var green = se.LoadEntity<GreenLand>();
             return ExController.JsonNet(new
             {
                 STypes = HtmlSelect.GetHtmlSelectByEnum(typeof(EnumSType)),

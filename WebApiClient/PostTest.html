@@ -7,7 +7,7 @@
 </head>
 <body>
     <script type="text/javascript">
-        $.post("/api/test/getextname", { name: "gkpeng", psw: "123456", ran: Math.random() }, function (r) {
+        $.get("/api/test/getextname", { name: "你好", psw: "打算嘎的所发生的", ran: Math.random() }, function (r) {
             document.write("获得Json类型：</br>");
             document.write("name：" + r.name + "</br>");
             document.write("psw：" + r.psw + "</br></br></br>");

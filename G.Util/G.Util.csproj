@@ -101,6 +101,7 @@
     <Compile Include="Extension\EnumExtension.cs" />
     <Compile Include="Html\HtmlSelect.cs" />
     <Compile Include="Html\HtmlTree.cs" />
+    <Compile Include="Oracle\OracleProcEntity.cs" />
     <Compile Include="Redis\RedisConfig.cs" />
     <Compile Include="Redis\RedisRepository.cs" />
     <Compile Include="Redis\RedisManager.cs" />

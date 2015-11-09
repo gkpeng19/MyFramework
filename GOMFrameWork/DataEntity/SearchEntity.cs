@@ -388,26 +388,6 @@ namespace GOMFrameWork.DataEntity
         }
     }
 
-    [OracleOutParam("o_cursor")]
-    public class OracleResultProcEntity : OracleProcEntity
-    {
-        public OracleResultProcEntity() { }
-        public OracleResultProcEntity(string procName)
-            : base(procName)
-        {
-        }
-    }
-
-    [OracleOutParam("o_cursor", "o_count")]
-    public class OraclePagerProcEntity : OracleProcEntity
-    {
-        public OraclePagerProcEntity() { }
-        public OraclePagerProcEntity(string procName)
-            : base(procName)
-        {
-        }
-    }
-
     public class OracleOutParamAttribute : Attribute
     {
         public OracleOutParamAttribute(params string[] paramName)
