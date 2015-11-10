@@ -19,27 +19,8 @@ namespace G.Test
 {
     class Program
     {
-        static Regex reggerDate = new Regex(@"^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$");
         static void Main(string[] args)
         {
-            if (reggerDate.IsMatch("2014-01-23"))
-            {
-                Console.WriteLine("1");
-            }
-            if (reggerDate.IsMatch("2014-11-23"))
-            {
-                Console.WriteLine("1");
-            }
-            if (reggerDate.IsMatch("2014-01-23 12:11:22"))
-            {
-                Console.WriteLine("1");
-            }
-            if (reggerDate.IsMatch("2014-11-23 12:11:22"))
-            {
-                Console.WriteLine("1");
-            }
-            Console.ReadKey();
-            return;
             OAuthClientTest test = new OAuthClientTest();
             var t = test.Get_Accesss_Token_By_Resource_Owner_Password_Credentials_Grant();
             Console.ReadKey();

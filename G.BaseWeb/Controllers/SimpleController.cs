@@ -7,14 +7,13 @@ using G.Util.Html;
 using System.Web.Mvc;
 using G.Util.Extension;
 using G.BaseWeb.Models;
-using G.Util.Oracle;
 using GOMFrameWork.DataEntity;
 
 namespace Project1.Controllers
 {
     [ModelBinder(typeof(EntityModelBinder))]
     [OracleOutParam("DList", "DEntity")]
-    public class OracleDataProcEntity : OracleResultProcEntity
+    public class OracleDataProcEntity : OracleProcEntity
     {
         public OracleDataProcEntity() { }
     }
@@ -27,6 +26,10 @@ namespace Project1.Controllers
 
     public class SimpleController : Controller
     {
+        public void TestProc(OracleProcEntity pe)
+        {
+        }
+
         public void TestListProc(OracleListProcEntity pe)
         {
             pe.ProcName = "usp_outlist";

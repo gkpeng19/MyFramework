@@ -665,6 +665,7 @@ datatable.prototype.getUpdate = function () {
     for (var i = 0; i < this.datasource.length; ++i) {
         var json = this.datasource[i];
         if (json && json.update_g) {
+            json.update_g = null;
             updates.push(json);
         }
     }

@@ -251,12 +251,12 @@ namespace GOMFrameWork.DataEntity
     {
         public List<EntityItem> Collection { get; private set; }
 
-        public ProcEntity()
+        protected ProcEntity()
         {
             Collection = new List<EntityItem>();
         }
 
-        public ProcEntity(string procName)
+        protected ProcEntity(string procName)
         {
             ProcName = procName;
             Collection = new List<EntityItem>();
@@ -378,15 +378,6 @@ namespace GOMFrameWork.DataEntity
     }
 
     #region ForOracle
-
-    public class OracleProcEntity : ProcEntity
-    {
-        public OracleProcEntity() { }
-        public OracleProcEntity(string procName)
-            : base(procName)
-        {
-        }
-    }
 
     public class OracleOutParamAttribute : Attribute
     {
