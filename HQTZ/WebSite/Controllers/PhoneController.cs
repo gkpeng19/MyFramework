@@ -46,6 +46,9 @@ namespace WebSite.Controllers
                     d.Title = title;
                 }
                 var content = System.Text.RegularExpressions.Regex.Replace(d.AContent, "<[^>]*>", "");
+                content = System.Text.RegularExpressions.Regex.Replace(content, @"&(nbsp|#160);", "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                content = System.Text.RegularExpressions.Regex.Replace(content, @"　+", "");
+                content = System.Text.RegularExpressions.Regex.Replace(content, @" +", "");
                 if (content.Length > 30)
                 {
                     content = content.Substring(0, 30);

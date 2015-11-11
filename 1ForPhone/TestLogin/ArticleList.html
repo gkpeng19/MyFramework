@@ -42,7 +42,7 @@
     <script type="text/javascript" src="js/GOMFrameWork.js"></script>
     <script type="text/javascript" charset="UTF-8">
         function loadValliges(page) {
-            mui.getJSON(getUrl("/Phone/LoadAllValliages"), { page: page }, function (r) {
+            mui.getJSON(getUrl("/Phone/LoadAllValliages"), { page: page,ran:Math.random() }, function (r) {
                 var list = toJsResult(r.Data);
                 var html = "";
                 for (var i = 0; i < list.length; ++i) {
@@ -58,7 +58,7 @@
                 var list = toJsResult(r.Data);
                 var html = "";
                 for (var i = 0; i < list.length; ++i) {
-                    html += getListItem(list[i].ID,list[i].TitleImg,list[i].Title,list[i].AContent);
+                    html += getListItem(list[i].ID,list[i].TitleImg,list[i].AContent,list[i].Title);
                 }
                 document.getElementById("traveList").innerHTML=html;
             });
@@ -112,7 +112,7 @@
         initPage(1);
         
 		function getListItem(id,imgpath,name,description){
-			return '<li class="mui-table-view-cell"><a class="mui-navigate-right" href="ArticleDetail.html?ptype='+ptype+'&vid='+id+'"><img style="width:42px;" class="mui-media-object mui-pull-left" src="' + getUrl(imgpath) + '?size=42"><div class="mui-media-body">' + description + '<p class="mui-ellipsis">旅居地-' + name + '</p></div></a></li>';
+			return '<li class="mui-table-view-cell"><a class="mui-navigate-right" href="ArticleDetail.html?ptype='+ptype+'&vid='+id+'"><img style="width:42px;" class="mui-media-object mui-pull-left" src="' + getUrl(imgpath) + '?size=42"><div class="mui-media-body">' + description + '<p class="mui-ellipsis">' + name + '</p></div></a></li>';
 		}
     </script>
 </body>

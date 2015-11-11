@@ -35,7 +35,7 @@ mhea<!DOCTYPE html>
 	   </div>
 		<div class="mui-card">
 			<ul class="mui-table-view mui-grid-view mui-grid-9" style="background-color: white;">
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" >
 					<a href="ArticleList.html?ptype=1">
 						<img src="images/ljjd1.png"/>
 						<div class="mui-media-body">旅居佳地</div>
@@ -84,10 +84,7 @@ mhea<!DOCTYPE html>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="userState">
-					<a href="login.html">
-						<img src="images/hydl1.png" />
-						<div class="mui-media-body">会员登录</div>
-					</a>
+
 				</li>
 			</ul>
 		</div>
@@ -116,19 +113,53 @@ mhea<!DOCTYPE html>
 	<script type="text/javascript" charset="utf-8">
       	mui.init(); 
       	mui.plusReady(function() {
-      		var settings = app.getSettings();
 			var state = app.getState();
-			if (settings.autoLogin && state.token){
-				document.getElementById("userState").innerHTML='<a href="javascript:void(0)" onclick="LoginOut()"><img src="images/hydl1.png" /><div class="mui-media-body">退出登录</div></a>';
+			if (state.token){
+				initLoginOut();
+			}
+			else{
+				initLoginIn();
 			}
       	});
       	
-      	function LoginOut(){
-      		app.setState({});
-      		document.getElementById("userState").innerHTML='<a href="login.html"><img src="images/hydl1.png" /><div class="mui-media-body">会员登录</div></a>';
+      	function initLoginOut(){
+      		document.getElementById("userState").innerHTML='<a href="javascript:void(0)" id="exit"><img src="images/hydl1.png" /><div class="mui-media-body">退出登录</div></a>';
+      		document.getElementById('exit').addEventListener('tap', function() {
+				app.setState({});
+				initLoginIn();
+				plus.nativeUI.toast('已成功退出');
+     	});
+    }
+      	
+      	function initLoginIn(){
+      		document.getElementById("userState").innerHTML='<a href="javascript:void(0)" id="login"><img src="images/hydl1.png" /><div class="mui-media-body">会员登录</div></a>';
+      		document.getElementById('login').addEventListener('tap', function() {
+					mui.openWindow({
+							url: 'login.html',
+							id: 'login',
+							show: {
+								aniShow: 'pop-in'
+							},
+							waiting: {
+								autoShow: false
+							}
+						});
+				});
       	}
       	
-      	
+      	var backButtonPress = 0;
+		mui.back = function(event) {
+			backButtonPress++;
+			if (backButtonPress > 1) {
+				plus.runtime.quit();
+			} else { 
+				plus.nativeUI.toast('再按一次退出应用');
+			}
+			setTimeout(function() {
+				backButtonPress = 0;
+			}, 1000);
+			return false;
+		};
     </script>
 </body>
 </html>

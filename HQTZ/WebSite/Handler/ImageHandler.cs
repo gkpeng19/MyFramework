@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -11,7 +12,7 @@ namespace WebSite.Handler
         public void ProcessRequest(HttpContext context)
         {
             context.Response.ContentType = "text/html";
-            string path = context.Request.RawUrl;
+            string path = context.Request.Path;
 
             var size = context.Request["size"];
             if (size != null && size.Length > 0)
@@ -24,11 +25,17 @@ namespace WebSite.Handler
                         (width == wsizes[i] || (width > wsizes[i] && width <= wsizes[i + 1])))
                     {
                         path = path.Insert(path.IndexOf('/', 8), "/size" + wsizes[i]);
+                        break;
                     }
                 }
             }
-
-            context.Response.WriteFile(context.Server.MapPath(path));
+            path = context.Server.MapPath(path);
+            if (File.Exists(path))
+            {
+                context.Response.WriteFile(path);
+                return;
+            }
+            context.Response.Write(null);
         }
 
         public bool IsReusable

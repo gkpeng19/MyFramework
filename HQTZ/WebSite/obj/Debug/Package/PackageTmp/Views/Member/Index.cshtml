@@ -370,7 +370,7 @@
                     return false;
                 }
 
-                $.post("/Base/ChangeUserPsw", { oldPsw: oldpsw, newPsw: newpsw, ran: Math.random() }, function (r) {
+                $.post("/Member/ChangeUserPsw", { oldPsw: oldpsw, newPsw: newpsw, ran: Math.random() }, function (r) {
                     if (r > 0) {
                         layer.close(idx);
                         $.success("密码修改成功。");

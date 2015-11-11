@@ -14,7 +14,6 @@
 .top-bar{
 	background-image: url(../images/topbg.png);
 	background-repeat: repeat-x;
-	top: -1px;
 }
 
 .top-bar a{

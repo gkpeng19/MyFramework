@@ -242,5 +242,21 @@ namespace WebSite.Controllers
                 }
             }
         }
+
+        [LoginVerify("Client")]
+        public long ChangeUserPsw(string oldPsw, string newPsw)
+        {
+            SearchModel se = new SearchModel("hq_member");
+            se["ID"] = LoginInfo.Current.UserID;
+            var user = se.LoadEntity<HQ_Member>();
+            if (user.UserPsw.Equals(Encryption.GetMD5(oldPsw)))
+            {
+                user = new HQ_Member();
+                user["ID"] = LoginInfo.Current.UserID;
+                user.UserPsw = Encryption.GetMD5(newPsw);
+                return user.Save();
+            }
+            return 0;
+        }
     }
 }
