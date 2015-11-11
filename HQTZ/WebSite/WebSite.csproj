@@ -157,6 +157,7 @@
     <Content Include="Images\menubg.jpg" />
     <Content Include="Images\menudbg.jpg" />
     <Content Include="Images\more.jpg" />
+    <Content Include="Images\order.jpg" />
     <Content Include="Images\password.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -235,7 +236,6 @@
     <Content Include="Scripts\font-awesome\scss\_rotated-flipped.scss" />
     <Content Include="Scripts\font-awesome\scss\_stacked.scss" />
     <Content Include="Scripts\font-awesome\scss\_variables.scss" />
-    <Content Include="App_Start\HtmlHandler.ashx" />
     <None Include="Properties\PublishProfiles\HQTZ.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -411,9 +411,6 @@
     <Compile Include="AdminControllers\AdminMemberController.cs" />
     <Compile Include="AdminControllers\MemberOrderController.cs" />
     <Compile Include="AdminControllers\VillageRoomController.cs" />
-    <Compile Include="App_Start\HtmlHandler.ashx.cs">
-      <DependentUpon>HtmlHandler.ashx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="AdminControllers\DPanelContentController.cs" />
     <Compile Include="AdminControllers\DPanelController.cs" />
@@ -428,6 +425,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Handler\AdminPageHandler.cs" />
+    <Compile Include="Handler\ImageHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\umeditor\net\fileUp.ashx.cs">
       <DependentUpon>fileUp.ashx</DependentUpon>

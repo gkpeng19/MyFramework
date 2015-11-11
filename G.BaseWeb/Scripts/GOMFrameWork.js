@@ -401,7 +401,7 @@ datatable.prototype.initByData = function (data, page, pagecount) {
         }
     });
 
-    if (dg.selectChanged&&dg.datasource.length>0) {
+    if (dg.selectChanged && dg.datasource.length > 0) {
         dg.selectChanged(dg.datasource[0]);
     }
 
@@ -1192,6 +1192,9 @@ $.fn.extend({
         }
         if (args.filter) {
             args.uploadUrl = args.uploadUrl + "&filter=" + args.filter;
+        }
+        if (args.thumbs) {
+            args.uploadUrl = args.uploadUrl + "&thumbs=" + args.thumbs;
         }
 
         me.on("change", function () {

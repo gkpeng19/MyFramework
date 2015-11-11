@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 
 namespace WebSite.Scripts.umeditor.net
@@ -14,6 +15,8 @@ namespace WebSite.Scripts.umeditor.net
             context.Response.ContentEncoding = System.Text.Encoding.UTF8;
 
             string progresskey = context.Request["progresskey"];
+
+            int[,] thumbs = null;
 
             //上传配置
             string pathbase = "upload/"; //保存路径
@@ -28,6 +31,8 @@ namespace WebSite.Scripts.umeditor.net
                 pathbase = pathbase + "images/";
 
                 callback = context.Request["callback"];
+
+                thumbs = new int[,] { { 260, 0 }, { 420, 0 }, { 480, 0 }, { 580, 0 } };
             }
             else
             {
@@ -50,6 +55,26 @@ namespace WebSite.Scripts.umeditor.net
                         pathbase = pathbase + "documents/";
                     }
                 }
+
+                string thumbstr = context.Request["thumbs"];
+                if (thumbstr != null && thumbstr.Length > 0)
+                {
+                    var ts = thumbstr.Split(',');
+                    thumbs = new int[ts.Length, 2];
+                    for (var i = 0; i < ts.Length; ++i)
+                    {
+                        var tstr = ts[i].Split('*');
+                        thumbs[i, 0] = int.Parse(tstr[0]);
+                        if (tstr.Length > 1)
+                        {
+                            thumbs[i, 1] = int.Parse(tstr[1]);
+                        }
+                        else
+                        {
+                            thumbs[i, 1] = 0;
+                        }
+                    }
+                }
             }
 
             int size = 0;                     //文件大小限制,单位mb
@@ -67,8 +92,32 @@ namespace WebSite.Scripts.umeditor.net
             Hashtable info;
             UMeditorUploader up = new UMeditorUploader();
             info = up.upFile(context, "../../../" + pathbase, filetypes, size, progresskey); //获取上传状态
-            info["path"] = pathbase + info["path"];
+            var path = info["path"];
+            var savepath = pathbase + path;
+            info["path"] = savepath;
             string json = BuildJson(info);
+
+            #region 生成缩略图
+
+            if (thumbs != null)
+            {
+                Thread thread = new Thread((ctx) =>
+                {
+                    var server = ((HttpContext)ctx).Server;
+                    for (var i = 0; i < thumbs.GetLength(0); ++i)
+                    {
+                        try
+                        {
+                            G.Util.Tool.ImageUtil.MakeThumbnail(server.MapPath("~/" + savepath),
+                            server.MapPath("~/" + pathbase + "size" + thumbs[i, 0] + "/" + path), thumbs[i, 0], thumbs[i, 1]);
+                        }
+                        catch { }
+                    }
+                });
+                thread.Start(context);
+            }
+
+            #endregion
 
             context.Response.ContentType = "text/html";
             if (callback != null)

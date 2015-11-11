@@ -135,15 +135,16 @@
             display: none;
             padding: 20px 55px;
         }
+
         #div_ChangePsw {
             display: none;
             font-size: 12px;
             padding: 20px 10px 0px 30px;
         }
 
-         #loginDiv tr td:first-child, #regDiv tr td:first-child {
-                width: 4.5em;
-            }
+        #loginDiv tr td:first-child, #regDiv tr td:first-child {
+            width: 4.5em;
+        }
 
         #div_ChangePsw tr td:first-child {
             width: 6.5em;
@@ -315,10 +316,14 @@
 
         function changeUIWhenIsLogin() {
             var links = $("#panel_container a");
-            $('<a href="#" onclick="ChangePsw()" id="panel_ChangePsw"><div class="panel"><img src="/Images/changePsw.jpg" class="traveImg" /><div class="traveTitle"><i>修改密码</i></div></div></a>').insertAfter(links.eq(0));
+            var cpswobj = $('<a href="#" onclick="ChangePsw()" id="panel_ChangePsw"><div class="panel"><img src="/Images/changePsw.jpg" class="traveImg" /><div class="traveTitle"><i>修改密码</i></div></div></a>');
+            cpswobj.insertAfter(links.eq(0));
 
             links.eq(0).remove();
             links.eq(1).remove();
+
+            var orderobj = $('<a href="/Member/OrderIndex"><div class="panel"><img src="/Images/order.jpg" /><div class="traveTitle"><i>我的订单</i></div></div></a>');
+            orderobj.insertAfter(cpswobj);
         }
 
         function AgenterSearch() {

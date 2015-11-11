@@ -63,8 +63,23 @@ function getUrlParam(pname) {
 /*自定义方法*/
 
 function getUrl(url) {
-    if (url.indexOf('/') == 0) {
-        return "http://123.57.153.47" + url;
+	if(!url){
+		return "";
+	}
+	if(url.indexOf('/')>=0){
+        //return "http://123.57.153.47" + url;
+        return "http://localhost:55611"+url;
     }
     return "http://123.57.153.47/" + url;
+}
+
+function initImages(containerId){
+	var width=document.getElementById(containerId).clientWidth;
+	var imgs= document.getElementById(containerId).getElementsByClassName("uimg");
+	   for(var i=0;i<imgs.length;++i){
+	    var src=imgs[i].getAttribute("_src");
+	    if(src&&src.length>0){
+	    	imgs[i].src=src+"?size="+width;
+	    }
+	}
 }

@@ -25,10 +25,11 @@ namespace G.BaseWeb.Controllers
                 if (user.UserPsw.Equals(Encryption.GetMD5(psw)))
                 {
                     LoginInfo loginInfo = new LoginInfo(uname);
-                    loginInfo.UserID = user.ID;
+                    var uid = user.ID;
+                    loginInfo.UserID = uid;
                     loginInfo.UserRole = user.UserRole;
                     LoginInfo.SetLoginToken(loginInfo, remember == 1 ? true : false);
-                    return this.JsonNet(new { result = 1, url = "" });
+                    return this.JsonNet(new { result = uid, url = "" });
                 }
             }
 

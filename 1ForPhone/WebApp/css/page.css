@@ -4,16 +4,6 @@
 }
 .mui-card{
 	margin: 0px;
-	border: 0px;
-	
-}
-.mui-grid-view.mui-grid-9 .mui-table-view-cell.card-border{
-	border-radius: 0px;
-	border-right: solid 2px #ddd;
-	border-left: solid 2px #ddd;
-}
-.mui-grid-view.mui-grid-9 .mui-table-view-cell:nth-of-type(n+4){
-	border-top: solid 2px #ddd;
 }
 .mui-icon-destination{
 	height: 62px;

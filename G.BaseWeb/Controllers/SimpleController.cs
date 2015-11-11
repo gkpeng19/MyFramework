@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using G.Util.Extension;
 using G.BaseWeb.Models;
 using GOMFrameWork.DataEntity;
+using System.Text.RegularExpressions;
 
 namespace Project1.Controllers
 {
@@ -26,6 +27,15 @@ namespace Project1.Controllers
 
     public class SimpleController : Controller
     {
+        public void AAAAA()
+        {
+            SimpleSearchModel se = new SimpleSearchModel("GreenLand");
+            se["ID"] = 1;
+            var green = se.LoadEntity<GreenLand>();
+            Regex reg = new Regex(@"<img\b[^<>]*?\bsrc[\s\t\r\n]*=[\s\t\r\n]*[""']?[\s\t\r\n]*(?<imgUrl>[^\s\t\r\n""'<>]*)[^<>]*?/?[\s\t\r\n]*>", RegexOptions.IgnoreCase);
+            var value= reg.Replace(green.Description, (match) => { return string.Format("<img _src='{0}' />", match.Groups[1].Value); });
+        }
+
         public void TestProc(OracleProcEntity pe)
         {
         }

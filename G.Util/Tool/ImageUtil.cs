@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace G.Util.Tool
         /// <param name="rMarkImgPath">水印图片的物理路径</param>    
         /// <param name="rMarkText">水印文字（不显示水印文字设为空串）</param>    
         /// <param name="rDstImgPath">输出合成后的图片的物理路径</param>    
-        public void MakeWatermark(string rSrcImgPath, string rMarkImgPath, string rMarkText, string rDstImgPath)
+        public static void MakeWatermark(string rSrcImgPath, string rMarkImgPath, string rMarkText, string rDstImgPath)
         {
             //以下（代码）从一个指定文件创建了一个Image 对象，然后为它的 Width 和 Height定义变量。    
             //这些长度待会被用来建立一个以24 bits 每像素的格式作为颜色数据的Bitmap对象。    
@@ -153,9 +154,25 @@ namespace G.Util.Tool
             imgPhoto = bmWatermark;
             grPhoto.Dispose();
             grWatermark.Dispose();
-            imgPhoto.Save(rDstImgPath, ImageFormat.Jpeg);
-            imgPhoto.Dispose();
-            imgWatermark.Dispose();
+
+            try
+            {
+                var directory = rDstImgPath.Substring(0, rDstImgPath.LastIndexOf('\\'));
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                imgPhoto.Save(rDstImgPath, ImageFormat.Jpeg);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                imgPhoto.Dispose();
+                imgWatermark.Dispose();
+            }
         }
 
         /// <summary>
@@ -229,6 +246,11 @@ namespace G.Util.Tool
 
             try
             {
+                var directory = thumbnailPath.Substring(0, thumbnailPath.LastIndexOf('\\'));
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
                 //以jpg格式保存缩略图 
                 bitmap.Save(thumbnailPath, System.Drawing.Imaging.ImageFormat.Jpeg);
             }

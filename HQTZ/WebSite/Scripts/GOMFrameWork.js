@@ -1146,6 +1146,9 @@ $.fn.extend({
         if (args.filter) {
             args.uploadUrl = args.uploadUrl + "&filter=" + args.filter;
         }
+        if (args.thumbs) {
+            args.uploadUrl = args.uploadUrl + "&thumbs=" + args.thumbs;
+        }
 
         me.on("change", function () {
             if ($(this).val().length == 0) {
