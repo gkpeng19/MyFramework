@@ -1,0 +1,47 @@
+*{
+	font-size: 14px;
+	font-family: "Microsoft YaHei", "微软雅黑",Arial,Helvetica, Tahoma, STXihei, "华文细黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
+}
+.mui-card{
+	margin: 0px;
+}
+.mui-icon-destination{
+	height: 62px;
+	width: 62px;
+	background-image: url(../images/Destination.png);
+}
+
+.top-bar{
+	background-image: url(../images/topbg.png);
+	background-repeat: repeat-x;
+}
+
+.top-bar a{
+	color: white;
+}
+
+.top-bar h1{
+	color: white;
+}
+
+.bottom-bar{
+	background-image: url(../images/bottombg.png);
+	background-repeat: repeat-x;
+	padding-top: 5px;
+}
+.mui-bar-tab .mui-tab-item{
+	color:white;
+}
+.mui-bar-tab .mui-tab-item.mui-active{
+	color:#88d05b;
+}
+
+#loading{
+	text-align: center;
+	padding-right: 36px;
+}
+
+#loading img{
+	position: absolute;
+	margin-top: 15px;
+}
