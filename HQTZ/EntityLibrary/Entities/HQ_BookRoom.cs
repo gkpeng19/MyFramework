@@ -105,7 +105,7 @@ namespace EntityLibrary.Entities
                 return 1;
             }
         }
-
+        
         [JsonIgnore]
         public string MemberName_G
         {

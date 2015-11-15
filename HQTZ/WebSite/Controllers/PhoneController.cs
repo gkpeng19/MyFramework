@@ -17,7 +17,7 @@ namespace WebSite.Controllers
     public class PhoneController : Controller
     {
         static Regex reg = new Regex(@"<img\b[^<>]*?\bsrc[\s\t\r\n]*=[\s\t\r\n]*[""']?[\s\t\r\n]*(?<imgUrl>[^\s\t\r\n""'<>]*)[^<>]*?/?[\s\t\r\n]*>", RegexOptions.IgnoreCase);
-        public void LoadAllValliages(int page = 1, int psize = 10)
+        public void LoadAllValliages(int page = 1, int psize = 999)
         {
             SearchModel sm = new SearchModel("uv_DisplayContent");
             sm["DPanelType"] = (int)EnumDPanelType.Distination;
@@ -29,7 +29,7 @@ namespace WebSite.Controllers
             OutResult(result);
         }
 
-        public void LoadTraveGuides(int page = 1, int psize = 10)
+        public void LoadTraveGuides(int page = 1, int psize = 999)
         {
             SearchModel sm = new SearchModel("HQ_Article");
             sm["ACategory"] = (int)EnumArticleCategory.TravelGuide;
@@ -63,7 +63,7 @@ namespace WebSite.Controllers
             OutResult(result);
         }
 
-        public void LoadMemberBenefit(int page = 1, int psize = 10)
+        public void LoadMemberBenefit(int page = 1, int psize = 999)
         {
             SearchModel sm = new SearchModel("uv_DisplayContent");
             sm["DPanelType"] = (int)EnumDPanelType.MemberBenefit;
@@ -75,7 +75,7 @@ namespace WebSite.Controllers
             OutResult(result);
         }
 
-        public void LoadMemberService(int page = 1, int psize = 10)
+        public void LoadMemberService(int page = 1, int psize = 999)
         {
             SearchModel sm = new SearchModel("uv_DisplayContent");
             sm["DPanelType"] = (int)EnumDPanelType.MemberService;
@@ -85,6 +85,33 @@ namespace WebSite.Controllers
             sm.AddSearch("id", "DPanel_G", "Name", "ImgName_G");
             var result = sm.Load<HQ_DisplayContent>();
             OutResult(result);
+        }
+
+        public void LoadUserOrders(int uid,int page=1,int psize=20)
+        {
+            SearchModel sm = new SearchModel("uv_memberorder");
+            sm["MemberID"] = uid;
+            sm.OrderBy("id", EnumOrderBy.Desc);
+            sm.PageIndex = page;
+            sm.PageSize = psize;
+            var result = sm.Load<HQ_BookRoom>();
+            OutResult(new { List = result.Data, PageCount = result.PageCount });
+        }
+
+        public void CancelBook(HQ_BookRoom broom)
+        {
+            var sm = new SearchModel("hq_bookroom");
+            sm["id"] = broom.ID;
+            var room = sm.LoadEntity<HQ_BookRoom>();
+            if (room.CanCancelBook_G==1)
+            {
+                broom.Delete();
+                OutResult(1);
+            }
+            else
+            {
+                OutResult(0);
+            }
         }
 
         public void LoadArticleDetail(int ptype, int vid)
@@ -116,6 +143,57 @@ namespace WebSite.Controllers
             }
 
             OutResult(new { Name = "...", Content = "您要查找的内容不存在！" });
+        }
+
+        public void LoadAllRooms()
+        {
+            SearchModel sm = new SearchModel("uv_VillageRoomWithImg");
+            var result = sm.Load<HQ_Room>();
+            OutResult(result);
+        }
+
+        public void LoadRoomDetail(int roomid)
+        {
+            SearchModel sm = new SearchModel("hq_room");
+            sm["id"] = roomid;
+            var result = sm.LoadEntity<HQ_Room>();
+            if (result != null)
+            {
+                OutResult(new { Name = result.Name, Description = reg.Replace(result.Description, (match) => { return "<img class='uimg' _src='" + match.Groups[1].Value + "' />"; }) });
+            }
+        }
+
+
+        public void BookRoom(int roomid, int userid, DateTime sdate, DateTime edate)
+        {
+            if (sdate.AddDays(1) < DateTime.Now)
+            {
+                OutResult(-1);
+                return;
+            }
+            if (edate < sdate)
+            {
+                OutResult(-2);
+                return;
+            }
+            lock (MemberController._object)
+            {
+                if (MemberController.IsRoomEnough(roomid, sdate, edate) > 0)
+                {
+                    HQ_BookRoom entity = new HQ_BookRoom();
+                    entity.MemberID = userid;
+                    entity.RoomID = roomid;
+                    entity.BookStartTime = sdate;
+                    entity.BookEndTime = edate;
+                    entity.CreateOn = DateTime.Now;
+                    var rid = entity.Save();
+                    OutResult(1);
+                }
+                else
+                {
+                    OutResult(0);
+                }
+            }
         }
 
         public void Login(string uname, string psw)

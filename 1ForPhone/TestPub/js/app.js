@@ -19,31 +19,19 @@
 			return callback('密码最短为 6 个字符');
 		}
 		
-		var users = JSON.parse(localStorage.getItem('$users') || '[]');
-		var authed = users.some(function(user) {
-			return loginInfo.account == user.account && loginInfo.password == user.password;
+		mui.post(getUrl("/Phone/Login"),{uname:loginInfo.account,psw:loginInfo.password,ran:Math.random()},function(r){
+			if(!r||r==0){
+				return callback('用户名或密码错误');
+			}
+			else{
+				return owner.createState(r, loginInfo.account, callback);
+			}
 		});
-		if(authed){
-			return owner.createState(loginInfo.account, callback);
-		}
-		else{
-			mui.post(getUrl("/Phone/Login"),{uname:loginInfo.account,psw:loginInfo.password,ran:Math.random()},function(r){
-				if(!r||r==0){
-					return callback('用户名或密码错误');
-				}
-				else{
-					users=[];
-					loginInfo.UID=r;
-					users.push(loginInfo);
-					localStorage.setItem("$users",JSON.stringify(users));
-					return owner.createState(loginInfo.account, callback);
-				}
-			});
-		}
 	};
 
-	owner.createState = function(name, callback) {
+	owner.createState = function(uid, name, callback) {
 		var state = owner.getState();
+		state.uid=uid;
 		state.account = name;
 		state.token = "token123456789";
 		owner.setState(state);
@@ -73,10 +61,10 @@
 				callback(r.Error);
 			}
 			else{
-				var users = [];
-				regInfo.UID=r.ResultID;
-				users.push(regInfo);
-				localStorage.setItem('$users', JSON.stringify(users));
+				//var users = [];
+				//regInfo.UID=r.ResultID;
+				//users.push(regInfo);
+				//localStorage.setItem('$users', JSON.stringify(users));
 		 		callback();
 			}
 		});

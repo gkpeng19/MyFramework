@@ -190,10 +190,17 @@ namespace WebSite.Controllers
 
         public long CancelBook(HQ_BookRoom broom)
         {
-            return broom.Delete();
+            var sm = new SearchModel("hq_bookroom");
+            sm["id"] = broom.ID;
+            var room = sm.LoadEntity<HQ_BookRoom>();
+            if (room.CanCancelBook_G == 1)
+            {
+                return broom.Delete();
+            }
+            return -1;
         }
 
-        public int IsRoomEnough(int roomid, DateTime sdate, DateTime edate)
+        public static int IsRoomEnough(int roomid, DateTime sdate, DateTime edate)
         {
             if (sdate > edate)
             {
@@ -216,7 +223,7 @@ namespace WebSite.Controllers
             return 1;
         }
 
-        static object _object = new object();
+        public static object _object = new object();
         public long BookRoom(int roomid, DateTime sdate, DateTime edate)
         {
             if (!LoginVerify.IsLogin("Client"))

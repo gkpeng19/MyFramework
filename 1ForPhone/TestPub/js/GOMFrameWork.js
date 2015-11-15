@@ -61,11 +61,44 @@ function initImages(containerId){
 	}
 }
 
+function openQQ() {
+	if (plus.os.name == "Android") {
+		var main = plus.android.runtimeMainActivity();
+		var Intent = plus.android.importClass('android.content.Intent');
+		var Uri = plus.android.importClass('android.net.Uri');
+		var intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=1002934864"));
+		main.startActivity(intent);
+	}
+	
+	if (plus.os.name == "iOS") {
+		plus.runtime.launchApplication({
+			action: "mqq://im/chat?chat_type=wpa&uin=1002934864&version=1&src_type=web"
+		}, function(e) {
+			plus.nativeUI.confirm("检查到您未安装qq，请先到appstore搜索下载？", function(i) {
+				if (i.index == 0) {
+					iosAppstore("itunes.apple.com/cn/app/mqq/");
+				}
+			});
+		});
+	}
+}
+
 (function($,doc){
 	$.plusReady(function(){
 		var tel=doc.getElementById("tel");
-		tel.addEventListener("tap",function(){
-			plus.device.dial("13126704233");
-		},false);
+		if(tel){
+			tel.addEventListener("tap",function(){
+				plus.device.dial("13126704233");
+			},false);
+		}
+		
+		var qq=doc.getElementById("qq");
+		if(qq){
+			qq.addEventListener("tap",function(){
+				openQQ();
+			},false);
+		}
 	});
 }(mui,document));
+
+

@@ -19,25 +19,26 @@
     	</div>
         <ul class="mui-table-view" id="traveList">
         </ul>
+        <div style="height: 51px;"></div>
     </div>
     <nav class="mui-bar mui-bar-tab bottom-bar">
-        <a class="mui-tab-item mui-active">
-            <span class="mui-icon iconfont icon-dingwei"></span>
-            <span class="mui-tab-label">旅居首页</span>
-        </a>
-        <a class="mui-tab-item">
-            <span class="mui-icon iconfont icon-youjian"></span>
-            <span class="mui-tab-label">信息咨询</span>
-        </a>
-        <a class="mui-tab-item">
-            <span class="mui-icon iconfont icon-dianhua"></span>
-            <span class="mui-tab-label">电话咨询</span>
-        </a>
-        <a class="mui-tab-item">
-            <span class="mui-icon iconfont icon-qq"></span>
-            <span class="mui-tab-label">QQ客服</span>
-        </a>
-    </nav>
+		<a class="mui-tab-item" id="home">
+			<span class="mui-icon iconfont icon-dingwei"></span>
+			<span class="mui-tab-label">旅居首页</span>
+		</a>
+		<a class="mui-tab-item" id="msg">
+			<span class="mui-icon iconfont icon-youjian"></span>
+			<span class="mui-tab-label">信息咨询</span>
+		</a>
+		<a class="mui-tab-item" id="tel"> 
+			<span class="mui-icon iconfont icon-dianhua"></span>
+			<span class="mui-tab-label">电话咨询</span>
+		</a>
+		<a class="mui-tab-item" id="qq">
+			<span class="mui-icon iconfont icon-qq"></span>
+			<span class="mui-tab-label">QQ客服</span>
+		</a>
+	</nav>
     <script src="js/mui.min.js"></script>
     <script src="js/GOMFrameWork.js" ></script>
     <script>
@@ -162,6 +163,11 @@
 				ptype=event.detail.ptype
 				initPage(1);
 	    	});
+	    	
+	    	var home=doc.getElementById("home");
+	    	home.addEventListener("tap",function(){
+	    		$.back();
+	    	},false);
     	});
     }(mui,document));
     </script>

@@ -7,31 +7,42 @@ mhea<!DOCTYPE html>
     <link href="css/mui.min.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="css/icon.custom.css"/>
     <link rel="stylesheet" type="text/css" href="css/page.css"/>
+    <style>
+    	.mui-bar-tab .mui-tab-item:first-child{
+			color:#88d05b;
+		}
+    </style>
 </head>
 <body>
-	<header class="mui-bar mui-bar-nav top-bar">
-		<a class="mui-icon mui-icon-bars mui-pull-left"></a>
-		<h1 class="mui-title">旅居中国</h1>
+	<header class="mui-bar mui-bar-nav top-bar"> 
+		<a class="mui-icon mui-pull-left" id="user" style="display: none;">
+			<img src="images/user-photo.png" width="20" />
+			<span id="uname" style="position: relative;top:-5px;"></span>
+		</a>
+		<h1 class="mui-title">旅居中国</h1> 
+		<a class="mui-icon mui-icon-bars mui-pull-right" id="order" style="display: none;"></a> 
 	</header>
+	
 	<div class="mui-content" style="padding-top: 0px;">
-	   <div class="mui-slider">
-	   	<div class="mui-slider-group">
-	   		<div class="mui-slider-item">
-	   			<a href="#">
-	   				<img src="images/shuijiao.jpg" alt="" />
-	   			</a>
-	   		</div>
-	   		<div class="mui-slider-item">
-	   			<a href="#">
-	   				<img src="images/cbd.jpg">
-	   			</a>
-	   		</div>
-	   	</div>
-	   	<div class="mui-slider-indicator">
-	   		<div class="mui-indicator mui-active"></div>
-	   		<div class="mui-indicator"></div>
-	   	</div>
-	   </div>
+		<div class="mui-slider">
+		    <div class="mui-slider-group">
+		        <div class="mui-slider-item">
+		            <a href="#">
+		                <img src="images/cbd.jpg">
+		            </a>
+		        </div>
+		        <div class="mui-slider-item">
+		            <a href="#">
+		                <img src="images/shuijiao.jpg">
+		            </a>
+		        </div>
+		    </div>
+		    <div class="mui-slider-indicator">
+		        <div class="mui-indicator mui-active"></div>
+		        <div class="mui-indicator"></div>
+		    </div>
+		</div>
+
 		<div class="mui-card">
 			<ul class="mui-table-view mui-grid-view mui-grid-9" style="background-color: white;">
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4 article" data-id = "1">
@@ -70,7 +81,7 @@ mhea<!DOCTYPE html>
 						<div class="mui-media-body">旅居推荐</div>
 					</a>
 				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="book">
 					<a>
 						<img src="images/wyyd1.png" />
 						<div class="mui-media-body">我要预定</div>
@@ -86,22 +97,22 @@ mhea<!DOCTYPE html>
 				</li>
 			</ul>
 		</div>
-		<div style="height: 56px;"></div>
+		<div style="height: 51px;"></div>
 	</div>
 	<nav class="mui-bar mui-bar-tab bottom-bar">
 		<a class="mui-tab-item mui-active">
 			<span class="mui-icon iconfont icon-dingwei"></span>
 			<span class="mui-tab-label">旅居首页</span>
 		</a>
-		<a class="mui-tab-item">
+		<a class="mui-tab-item" id="msg">
 			<span class="mui-icon iconfont icon-youjian"></span>
 			<span class="mui-tab-label">信息咨询</span>
 		</a>
-		<a class="mui-tab-item" id="tel">
+		<a class="mui-tab-item" id="tel"> 
 			<span class="mui-icon iconfont icon-dianhua"></span>
 			<span class="mui-tab-label">电话咨询</span>
 		</a>
-		<a class="mui-tab-item">
+		<a class="mui-tab-item" id="qq">
 			<span class="mui-icon iconfont icon-qq"></span>
 			<span class="mui-tab-label">QQ客服</span>
 		</a>
@@ -118,18 +129,18 @@ mhea<!DOCTYPE html>
 			setTimeout(function() {
 				//关闭 splash
 				plus.navigator.closeSplashscreen();
-			}, 600);
+			}, 400);
 			
 			var initLoginIn=function(){
 				doc.getElementById("userState").innerHTML='<a href="javascript:void(0)" id="login"><img src="images/hydl1.png" /><div class="mui-media-body">会员登录</div></a>';
       			doc.getElementById('login').addEventListener('tap', function() {
-				mui.openWindow({
-					url: 'login.html',
-					id: 'login',
-					waiting: {
-						autoShow: false
-					}
-				});
+					mui.openWindow({
+						url:'login.html',
+						id: 'login',
+						waiting: {
+							autoShow: false
+						}
+					});
 				},false);
 			};
 		
@@ -139,11 +150,18 @@ mhea<!DOCTYPE html>
 					app.setState({});
 					initLoginIn();
 					plus.nativeUI.toast('已成功退出');
+					
+					doc.getElementById("user").style.display="none";
+					doc.getElementById("order").style.display="none";
      			});
 			};
-			
+			 
 			var state = app.getState();
 			if (state.token){
+				doc.getElementById("user").style.display="block";
+				doc.getElementById("uname").innerText=state.account;
+				doc.getElementById("order").style.display="block";
+				
 				initLoginOut();
 			}
 			else{
@@ -167,6 +185,52 @@ mhea<!DOCTYPE html>
 							}
 						});
 					}, 50);
+				},false);
+			}
+			
+			
+			
+			$.preload({
+				id:'book',
+				url:'book.html'
+			});
+			
+			var book=doc.getElementById("book");
+			book.addEventListener("tap",function(){
+				state=app.getState();
+				if (state.token){
+					mui.openWindow({
+						id: 'book',
+						waiting: {
+							autoShow: false
+						}
+					});
+				}
+				else{
+					mui.openWindow({
+						url:'login.html',
+						id: 'login',
+						waiting: {
+							autoShow: false
+						}
+					});
+				}
+			},false);
+			
+			$.preload({
+				url:'order.html',
+				id:'order'
+			});
+			
+			if(state.uid){
+				var orderBtn= doc.getElementById("order");
+				orderBtn.addEventListener("tap",function(){
+					$.openWindow({
+						id: 'order',
+						waiting: {
+							autoShow: false
+						}
+					});
 				},false);
 			}
 			
