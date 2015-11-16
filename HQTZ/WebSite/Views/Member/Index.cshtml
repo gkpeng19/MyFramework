@@ -85,9 +85,9 @@
         </td>
     </tr>
     <tr>
-        <td><label for="phone">手机号码：</label></td>
+        <td><label for="email">Email地址：</label></td>
         <td>
-            <input type="text" id="phone" value="" />
+            <input type="text" id="email" value="" />
         </td>
     </tr>
     <tr>
@@ -187,6 +187,7 @@
 
 @section scripts{
     <script src="~/Scripts/layer/layer.js"></script>
+    <script src="~/Scripts/website/page.js"></script>
     <script type="text/javascript">
         setCurrMenu(2);
 
@@ -281,13 +282,18 @@
                 return;
             }
 
-            var phone = $.trim($("#phone").val());
-            if (phone.length == 0) {
-                $.msg("手机号码不能为空！");
+            var email = $.trim($("#email").val());
+            if (email.length == 0) {
+                $.msg("Email地址不能为空！");
                 return;
             }
 
-            $.post("/Member/MemberReg", { username: username, userpsw: userpsw, phone: phone, ran: Math.random() }, function (r) {
+            if (!IsValidEmail(email)) {
+                $.msg("请输入有效的Emial地址！");
+                return;
+            }
+
+            $.post("/Member/MemberReg", { username: username, userpsw: userpsw, email: email, ran: Math.random() }, function (r) {
                 if (r == -1) {
                     $.msg("用户名已存在！");
                 }

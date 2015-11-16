@@ -85,7 +85,7 @@ namespace WebSite.Controllers
             return 1;
         }
 
-        public int MemberReg(string username, string userpsw, string phone)
+        public int MemberReg(string username, string userpsw, string email)
         {
             var exist = IsMemberExist(username);
             if (exist == -1)
@@ -99,7 +99,8 @@ namespace WebSite.Controllers
             HQ_Member member = new HQ_Member();
             member.UserName = username;
             member.UserPsw = Encryption.GetMD5(userpsw);
-            member.PhoneNum = phone;
+            member.Email = email;
+            //member.PhoneNum = phone;
             member.UserType = (int)EnumUserType.Normal;
             if (member.Save() > 0)
             {

@@ -113,6 +113,7 @@
     <Compile Include="Mvc\ExController.cs" />
     <Compile Include="Mvc\JsonNetResult.cs" />
     <Compile Include="Mvc\ViewHelper.cs" />
+    <Compile Include="Tool\MailHelper.cs" />
     <Compile Include="Tool\Pager.cs" />
     <Compile Include="Mvc\Permission\LoginVerify.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

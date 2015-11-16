@@ -332,7 +332,6 @@
     <Content Include="Designer\Scripts\font-awesome\scss\_stacked.scss" />
     <Content Include="Designer\Scripts\font-awesome\scss\_variables.scss" />
     <Content Include="Designer\Scripts\font-awesome\scss\font-awesome.scss" />
-    <Content Include="GOMFrameWork.md" />
     <Content Include="Simple\Order.html" />
     <Content Include="Simple\OrderEdit.html" />
     <Content Include="Styles\GOMFrameWork.css" />
@@ -347,6 +346,7 @@
     <Content Include="Styles\gtree\themes\default\style.min.css" />
     <Content Include="Styles\gtree\themes\default\throbber.gif" />
     <Content Include="Simple\GreenManage.html" />
+    <Content Include="Views\FindPwd.html" />
     <Content Include="Views\Menu.html" />
     <Content Include="Views\Role.html" />
     <Content Include="Views\RoleMenu.html" />

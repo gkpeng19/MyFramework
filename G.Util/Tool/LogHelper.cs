@@ -9,6 +9,12 @@ namespace G.Util.Tool
 {
     public static class LogHelper
     {
+        static LogHelper()
+        {
+            string path = AppDomain.CurrentDomain.BaseDirectory + @"\log.config.xml";
+            log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(path));
+        }
+
         public static log4net.ILog Logger
         {
             get

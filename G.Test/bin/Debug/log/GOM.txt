@@ -1,0 +1,6 @@
+2015-11-16 11:01:33,316 [9](d:\Gkpeng\MyFramework\G.Util\Tool\MailHelper.cs:43) DEBUG G.Util.Tool.MailHelper [(null)] - 已发送邮件
+2015-11-16 11:10:02,507 [10](d:\Gkpeng\MyFramework\G.Util\Tool\MailHelper.cs:49) FATAL G.Util.Tool.MailHelper [(null)] - 操作已超时。
+System.Net.Mail.SmtpException: 操作已超时。
+   在 System.Net.Mail.SmtpClient.Send(MailMessage message)
+   在 G.Util.Tool.MailHelper.SendMail(String send, String pwd, String recieve, String subject, String mailbody, String[] attachments) 位置 d:\Gkpeng\MyFramework\G.Util\Tool\MailHelper.cs:行号 44
+2015-11-16 11:14:58,393 [10](d:\Gkpeng\MyFramework\G.Util\Tool\MailHelper.cs:45) DEBUG G.Util.Tool.MailHelper [(null)] - 已发送邮件

@@ -76,3 +76,4 @@ D:\Work\MyFramework\G.Test\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll
 D:\Work\MyFramework\G.Test\bin\Debug\zh-Hans\System.Web.Http.resources.dll
 D:\Work\MyFramework\G.Test\bin\Debug\zh-Hans\System.Net.Http.Formatting.resources.dll
 D:\Work\MyFramework\G.Test\obj\Debug\G.Test.csprojResolveAssemblyReference.cache
+D:\Gkpeng\MyFramework\G.Test\bin\Debug\App.config
