@@ -1,3 +1,5 @@
+#注意事项：从后台获取的Json数据的属性均为小写，使用示例：json.classname。
+
 #关于DataGrid表格插件API
 
 ##1、表格初始化：
