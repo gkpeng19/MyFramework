@@ -12,6 +12,8 @@ using System.Web.Mvc;
 using G.Util.Mvc;
 using System.Data.SqlClient;
 using GOMFrameWork.DataEntity;
+using NM.Util;
+using System.Text.RegularExpressions;
 
 namespace WebSite.Controllers
 {
@@ -85,7 +87,7 @@ namespace WebSite.Controllers
             return 1;
         }
 
-        public int MemberReg(string username, string userpsw, string email)
+        public int MemberReg(string username, string userpsw, string phone, string msgcode)
         {
             var exist = IsMemberExist(username);
             if (exist == -1)
@@ -96,11 +98,21 @@ namespace WebSite.Controllers
             {
                 return -1;
             }
+
+            var omcode = base.HttpContext.Cache["msg-" + phone];
+            if (omcode == null || omcode.ToString().Length == 0)
+            {
+                return -3;
+            }
+            if (msgcode == null || msgcode.Length == 0 || !msgcode.Equals(omcode.ToString()))
+            {
+                return -4;
+            }
+
             HQ_Member member = new HQ_Member();
             member.UserName = username;
             member.UserPsw = Encryption.GetMD5(userpsw);
-            member.Email = email;
-            //member.PhoneNum = phone;
+            member.PhoneNum = phone;
             member.UserType = (int)EnumUserType.Normal;
             if (member.Save() > 0)
             {
@@ -265,6 +277,99 @@ namespace WebSite.Controllers
                 return user.Save();
             }
             return 0;
+        }
+
+        public int SendMsgCode(string phone, string type)
+        {
+            if (type == null || type.Length == 0)
+            {
+                return -2;//系统错误
+            }
+
+            if (phone != null && phone.Length > 0 && Regex.Match(phone, @"^[1][3,5,8][0-9]{9}$", RegexOptions.Compiled).Success)
+            {
+                var msgKey = string.Empty;
+                if ("1".Equals(type))
+                {
+                    SearchModel se = new SearchModel("hq_member");
+                    se["PhoneNum"] = phone;
+                    se.AddSearch("count(1)");
+                    var count = se.LoadValue<int>();
+                    if (count > 0)
+                    {
+                        return 9;
+                    }
+
+                    msgKey = "用户注册短信验证码：";
+                }
+
+                if ("2".Equals(type))
+                {
+                    msgKey = "用户找回密码验证码：";
+                }
+
+                var yzm = string.Empty;
+                foreach (var i in Ran.GetRandomArray(6, 0, 9))
+                {
+                    yzm += i.ToString();
+                }
+                SendUserInfo _U = new SendUserInfo() { isLog = 1, orgid = 555, username = phone };
+                if (MsgSend.DirectSend(msgKey + yzm, phone, _U))
+                {
+                    base.HttpContext.Cache["msg-" + phone] = yzm;
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        public int FindPsw(string phone, string psw, string msgcode)
+        {
+            if (phone == null || phone.Length == 0)
+            {
+                return -1;
+            }
+
+            if (psw == null || psw.Length == 0)
+            {
+                return 0;
+            }
+
+            var omcode = base.HttpContext.Cache["msg-" + phone];
+            if (omcode == null || omcode.ToString().Length == 0)
+            {
+                return -2;
+            }
+
+            if (msgcode == null || msgcode.Length == 0 || !msgcode.Equals(omcode.ToString()))
+            {
+                return -3;
+            }
+
+            SearchModel sm = new SearchModel("hq_member");
+            sm["phonenum"] = phone;
+            sm.AddSearch("id");
+            var id = sm.LoadValue<int>();
+            if (id > 0)
+            {
+                HQ_Member member = new HQ_Member();
+                member["id"] = id;
+                member.UserPsw = G.Util.Tool.Encryption.GetMD5(psw);
+                if (member.Save() > 0)
+                {
+                    return 1;
+                }
+                return 0;
+            }
+
+            return -4;
         }
     }
 }

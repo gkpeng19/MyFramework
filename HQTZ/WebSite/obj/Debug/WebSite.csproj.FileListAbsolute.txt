@@ -173,3 +173,5 @@ D:\Work\MyFramework\HQTZ\WebSite\bin\log4net.xml
 D:\Work\MyFramework\HQTZ\WebSite\bin\NPOI.xml
 D:\Work\MyFramework\HQTZ\WebSite\bin\NPOI.OOXML.xml
 D:\Work\MyFramework\HQTZ\WebSite\bin\NPOI.OpenXml4Net.xml
+D:\Work\MyFramework\HQTZ\WebSite\bin\NM.Server.Util.dll
+D:\Work\MyFramework\HQTZ\WebSite\bin\NM.Server.Util.pdb
