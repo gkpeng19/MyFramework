@@ -6,6 +6,7 @@ using RazorEngine;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -301,7 +302,12 @@ namespace WinTemplate
 
             var tab = tabControl.AddNewTab(name, path);
             WebBrowser browser = new WebBrowser();
-            browser.Url = new Uri("http://localhost/Designer/Default.html");
+            var defaultPage = ConfigurationManager.AppSettings["defaultPage"];
+            if (defaultPage == null || defaultPage.Length == 0)
+            {
+                throw new Exception("系统配置错误，初始页面不能为空，请检查配置文件！");
+            }
+            browser.Url = new Uri(defaultPage);
             browser.ObjectForScripting = this;
             browser.Dock = DockStyle.Fill;
             tab.Container.Controls.Add(browser);

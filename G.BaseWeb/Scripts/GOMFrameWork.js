@@ -1681,3 +1681,63 @@ $.extend({
         return _pageParameters[pname];
     }
 });
+
+/*------导航插件开始-------link,level,text-------------------------------------*/
+var crumbs = $.cookie('nav-crumbs');
+if (crumbs) {
+    crumbs = JSON.parse(crumbs);
+}
+else {
+    crumbs = [];
+}
+
+$(function () {
+    var ccrumb = $(body).attr("data-curmb");
+    if (ccrumb) {
+        ccrumb = JSON.parse(ccrumb);
+        var afterIndex = 100;
+        for (var i = 0; i < crumbs.length; ++i) {
+            if (!crumbs[i]) {
+                afterIndex = i;
+                crumbs[i] = ccrumb;
+                break;
+            }
+            if (i > afterIndex) {
+                crumbs[i] = undefined;
+            }
+            else {
+                if (ccrumb.level > crumbs[i].level) {
+                    afterIndex = i;
+                    crumbs[i] = ccrumb;
+                }
+            }
+        }
+
+        if (afterIndex == 100) {
+            crumbs.push(ccrumb);
+        }
+
+        $.cookie('nav-crumbs', JSON.stringify(crumbs), { path: '/' });
+    }
+});
+
+$.fn.extend({
+    crumb: function () {
+        var html = "";
+        $(crumbs).each(function (idx) {
+            if (this) {
+                if (idx == 0) {
+                    html += "<a href='" + this.link + "'>" + this.text + "</a>";
+                }
+                else {
+                    html += "<a href='" + this.link + "'>" + this.text + "</a><span class='crumb-left'> > </span>";
+                }
+            }
+        });
+
+        this.html(html);
+    }
+});
+/*------导航插件结束--------------------------------------------------------------*/
+
+

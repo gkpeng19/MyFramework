@@ -154,6 +154,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.floatDiv.js" />
     <Content Include="Scripts\layer.mobile-v1.6\layer.m.js" />
     <Content Include="Scripts\layer.mobile-v1.6\need\layer.css" />

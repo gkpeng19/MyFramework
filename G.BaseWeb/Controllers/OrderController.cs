@@ -42,7 +42,6 @@ namespace Project1.Controllers
 
             se.PageIndex = page_g;
             se.PageSize = psize_g;
-
             var result = se.Load<S_OrderItem>();
             return ExController.JsonNet(result);
         }
