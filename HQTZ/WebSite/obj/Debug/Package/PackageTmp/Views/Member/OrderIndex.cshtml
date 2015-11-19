@@ -6,6 +6,7 @@
 <div style="padding:0px 35px;">
     <img src="~/Images/leader.gif" />
     <div style="margin-top:10px;" id="fdw-pricing-table">
+        <div style="text-align: center; min-height: 100px; color: gray; padding-top: 80px;">您暂无订单信息！</div>
     </div>
     <div class="pager" style="text-align:center;padding-top:30px;"></div>
 </div>
@@ -73,8 +74,10 @@
                     (this.CanCancelBook_G == 0 ? '<a class="signup" style="background-color:gray;">&nbsp;退 订&nbsp;</a>' : '<a class="signup cancelBook" href="javascript:void(0)" data-id="' + this.ID + '">&nbsp;退 订&nbsp;</a>') +
             '</div>';
                 });
-                $("#fdw-pricing-table").html(html);
-                $(".pager").html(r.pager);
+                if (html.length > 0) {
+                    $("#fdw-pricing-table").html(html);
+                    $(".pager").html(r.pager);
+                }
 
                 $(".cancelBook").bind('click', function () {
                     var bid = $(this).attr("data-id");

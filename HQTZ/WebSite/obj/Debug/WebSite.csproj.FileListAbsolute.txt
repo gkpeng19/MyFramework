@@ -175,3 +175,5 @@ D:\Work\MyFramework\HQTZ\WebSite\bin\NPOI.OOXML.xml
 D:\Work\MyFramework\HQTZ\WebSite\bin\NPOI.OpenXml4Net.xml
 D:\Work\MyFramework\HQTZ\WebSite\bin\NM.Server.Util.dll
 D:\Work\MyFramework\HQTZ\WebSite\bin\NM.Server.Util.pdb
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\NM.Server.Util.dll
+D:\Gkpeng\MyFramework\HQTZ\WebSite\bin\NM.Server.Util.pdb

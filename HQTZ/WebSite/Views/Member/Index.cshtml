@@ -59,7 +59,7 @@
         <label class="control-label"></label>
         <div class="controls">
             <input type="checkbox" checked="checked" id="keepactive" />
-            <label class="lbl" for="keepactive"> 记住我</label>
+            <label class="lbl" for="keepactive" style="display:inline;position:relative;top:3px;"> 记住我</label>
             <a style="margin-left: 40px;" href="javascript://void(0)" onclick="reguser()">免费注册</a> | <a href="javascript://void(0)"
                                                                                                         onclick="findpsw()">忘记密码</a>
         </div>
@@ -70,9 +70,8 @@
             <input id="btn_login" class="btn btn-danger" type="button" value="登&nbsp;&nbsp;录" onclick="submitlogin()" style="width:220px;" />
         </div>
     </div>
-
 </div>
-
+<!--会员注册-->
 <div class="form-horizontal span6" id="regDiv">
     <div class="control-group">
         <label class="control-label">用 户 名：</label>
@@ -101,8 +100,8 @@
     <div class="control-group">
         <label class="control-label">短信验证码：</label>
         <div class="controls">
-            <input type="text" id="msgcode" maxlength="6" style="width:120px;" />
-            <input type="button" value="获取验证码" class="btn noradius btn-msgcode" style="width:80px;padding:0px;" data-type="1" data-target="phone" />
+            <input type="text" id="msgcode" maxlength="6" style="width:105px;" />
+            <input type="button" value="获取验证码" class="btn noradius btn-msgcode" data-type="1" data-target="phone" />
         </div>
     </div>
     <div class="control-group">
@@ -163,7 +162,6 @@
 
 @section styles{
     <link href="~/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Scripts/ace/css/ace.min.css" rel="stylesheet" />
     <style type="text/css">
         .form-horizontal .control-label {
             width: 120px;

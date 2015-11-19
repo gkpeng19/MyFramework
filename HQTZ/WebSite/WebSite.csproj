@@ -121,6 +121,7 @@
     <Content Include="AdminPages\CheaperDetails.html" />
     <Content Include="AdminPages\ContactUs.html" />
     <Content Include="AdminPages\Member.html" />
+    <Content Include="AdminPages\MemberAsk.html" />
     <Content Include="AdminPages\MemberOrder.html" />
     <Content Include="AdminPages\ServiceDetails.html" />
     <Content Include="AdminPages\Login.html" />
@@ -412,6 +413,7 @@
     <Compile Include="AdminControllers\AgenterController.cs" />
     <Compile Include="AdminControllers\ArticleController.cs" />
     <Compile Include="AdminControllers\AdminMemberController.cs" />
+    <Compile Include="AdminControllers\MemberAskController.cs" />
     <Compile Include="AdminControllers\MemberOrderController.cs" />
     <Compile Include="AdminControllers\VillageRoomController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />

@@ -20,7 +20,6 @@ mhea<!DOCTYPE html>
 			<span id="uname" style="position: relative;top:-5px;"></span>
 		</a>
 		<h1 class="mui-title">旅居中国</h1> 
-		<a class="mui-icon mui-icon-bars mui-pull-right" id="order" style="display: none;"></a> 
 	</header>
 	
 	<div class="mui-content" style="padding-top: 0px;">
@@ -63,22 +62,16 @@ mhea<!DOCTYPE html>
 						<div class="mui-media-body">得天独厚</div>
 					</a>
 				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
-					<a>
-						<img src="images/jssp1.png" />
-						<div class="mui-media-body">居所实拍</div>
-					</a>
-				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4 article" data-id = "4">
 					<a>
 						<img src="images/ljzx1.png" />
 						<div class="mui-media-body">旅居尊享</div>
 					</a>
 				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4 article" data-id = "5">
 					<a>
 						<img src="images/ljtj1.png" />
-						<div class="mui-media-body">旅居推荐</div>
+						<div class="mui-media-body">最新优惠</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="book">
@@ -87,10 +80,16 @@ mhea<!DOCTYPE html>
 						<div class="mui-media-body">我要预定</div>
 					</a>
 				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="order">
+					<a>
+						<img src="images/jssp1.png" />
+						<div class="mui-media-body">个人订单</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="map">
 					<a>
 						<img src="images/lxss1.png" />
-						<div class="mui-media-body">路线搜索</div>
+						<div class="mui-media-body">我的位置</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="userState">
@@ -152,7 +151,6 @@ mhea<!DOCTYPE html>
 					plus.nativeUI.toast('已成功退出');
 					
 					doc.getElementById("user").style.display="none";
-					doc.getElementById("order").style.display="none";
      			});
 			};
 			 
@@ -160,7 +158,6 @@ mhea<!DOCTYPE html>
 			if (state.token){
 				doc.getElementById("user").style.display="block";
 				doc.getElementById("uname").innerText=state.account;
-				doc.getElementById("order").style.display="block";
 				
 				initLoginOut();
 			}
@@ -218,21 +215,45 @@ mhea<!DOCTYPE html>
 			},false);
 			
 			$.preload({
+				url:'map.html',
+				id:'map'
+			});
+			var mapBtn=doc.getElementById("map");
+			mapBtn.addEventListener("tap",function(){
+				mui.openWindow({
+						id: 'map',
+						waiting: {
+							autoShow: false
+						}
+					});
+			},false);
+			
+			$.preload({
 				url:'order.html',
 				id:'order'
 			});
 			
-			if(state.uid){
-				var orderBtn= doc.getElementById("order");
-				orderBtn.addEventListener("tap",function(){
+			var orderBtn= doc.getElementById("order");
+			orderBtn.addEventListener("tap",function(){
+				state=app.getState();
+				if (state.uid){
 					$.openWindow({
 						id: 'order',
 						waiting: {
 							autoShow: false
 						}
 					});
-				},false);
-			}
+				}
+				else{
+					mui.openWindow({
+						url:'login.html',
+						id: 'login',
+						waiting: {
+							autoShow: false
+						}
+					});
+				}
+			},false);
 			
 			//双击返回键退出
 			$.oldBack = mui.back;
@@ -249,6 +270,12 @@ mhea<!DOCTYPE html>
 				}, 1000);
 				return false;
 			};
+			
+			//初始化底部Bar功能
+			initBottomBarFunc(doc);
+			
+			//自动更新
+			app.autoUpdate();
 		});
 	}(mui, document));
     </script>

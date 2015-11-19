@@ -120,4 +120,66 @@
 		var settingsText = localStorage.getItem('$settings') || "{}";
 		return JSON.parse(settingsText);
 	}
+	
+	owner.checkUpdate=function(callback){
+		var w= plus.nativeUI.showWaiting("检测更新中...");
+		plus.runtime.getProperty(plus.runtime.appid,function(inf){
+        	wgtVer=inf.version;
+        	$.getJSON("/Phone/CheckUpdate",{pversion:wgtVer,ran:Math.random()},function(r){
+        		w.close();
+        		if(r.updated){
+        			plus.nativeUI.toast('检测到新版本，正在下载');
+        			owner.installUpdate(r.path);
+        		}
+        		else{
+        			plus.nativeUI.toast("无新版本可更新");
+        		}
+        	});
+    	});
+	}
+	
+	owner.installUpdate=function(path){
+		if(mui.os.android){
+			var dtask = plus.downloader.createDownload( url, {}, function ( d, status ) {
+    			if ( status == 200 ) { // 下载成功
+    				plus.runtime.install(d.filename);
+    			} else {//下载失败
+    				plus.nativeUI.toast("新版本下载失败");
+    			}
+			});
+			dtask.start(); 
+		}
+		else if(mui.os.ios){
+			// HelloH5应用在appstore的地址
+			var url='itms-apps://itunes.apple.com/cn/app/hello-h5+/id682211190?l=zh&mt=8';
+			plus.runtime.openURL(url);
+		}
+	}
+	
+	owner.autoUpdate=function(){
+		plus.runtime.getProperty(plus.runtime.appid,function(inf){
+        	wgtVer=inf.version;
+        	$.getJSON(getUrl("/Phone/CheckUpdate"),{pversion:wgtVer,ran:Math.random()},function(r){
+        		if(r.updated){
+        			plus.nativeUI.confirm("检测到新版本，是否更新？",function(e){
+        				if(e.index==0){
+        					if(mui.os.android){
+								var dtask = plus.downloader.createDownload( r.path, {}, function ( d, status ) {
+					    			if ( status == 200 ) { // 下载成功
+					    				plus.runtime.install(d.filename);
+					    			}
+								});
+								dtask.start(); 
+							}
+							else if(mui.os.ios){
+								// HelloH5应用在appstore的地址
+								var url='itms-apps://itunes.apple.com/cn/app/hello-h5+/id682211190?l=zh&mt=8';
+								plus.runtime.openURL(url);
+							}
+        				}
+        			},"自动更新提示",['确定','取消']);
+        		}
+        	});
+        });
+	}
 }(mui, window.app = {}));

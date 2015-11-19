@@ -35,6 +35,10 @@
           <Text>Test</Text>
           <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\Test</SPath>
         </GFile>
+        <GFile>
+          <Text>MemberAsk</Text>
+          <SPath>D:\Gkpeng\MyFramework\Document\GTemplate\HQWZ\MemberAsk</SPath>
+        </GFile>
       </Files>
       <Folders />
       <Text>HQWZ</Text>

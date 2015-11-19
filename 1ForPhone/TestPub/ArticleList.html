@@ -138,6 +138,22 @@
 	            });
 	    	};
 	    	
+	    	var loadNewCheaper=function(page){
+	    		doc.getElementById("title").innerText="最新优惠";
+	        	$.getJSON(getUrl("/Phone/LoadNewCheaper"), { page: page }, function (r) {
+	        		doc.getElementById("loading").style.display="none";
+	                
+	                var list = toJsResult(r.Data);
+	                var html = "";
+	                for (var i = 0; i < list.length; ++i) {
+	                    html += getListItem(list[i].ID,list[i].ImgName_G,list[i].DPanel_G,list[i].Name);
+	                }
+	                doc.getElementById("traveList").innerHTML=html;
+	                
+	                initLink();
+	            });
+	    	};
+	    	
 	    	var initPage=function(pindex){
 	    		switch (ptype){
 			    	case "1":
@@ -151,6 +167,9 @@
 			    		break;
 			    		case "4":
 			    		loadMemberService(pindex);
+			    		break;
+			    		case "5":
+			    		loadNewCheaper(pindex);
 			    		break;
 			    	default:
 			    		break;
@@ -168,6 +187,10 @@
 	    	home.addEventListener("tap",function(){
 	    		$.back();
 	    	},false);
+	    	
+			//初始化底部Bar功能
+			initBottomBarFunc(doc);
+			
     	});
     }(mui,document));
     </script>

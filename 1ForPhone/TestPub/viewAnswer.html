@@ -11,7 +11,7 @@
 <body>
     <header class="mui-bar mui-bar-nav top-bar">
         <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-        <h1 class="mui-title" id="title">...</h1>
+        <h1 class="mui-title" id="title">回复内容</h1>
     </header>
     <div class="mui-content">
     	<div id="loading">
@@ -45,19 +45,15 @@
     (function($,doc){
     	$.init();
     	$.plusReady(function(){
-    		var ptype=0;
-    		var vid=0;
+    		var answerid=0;
 	    	window.addEventListener("show",function(event){
-	    		doc.getElementById("title").innerText='...';
 	    		doc.getElementById("content").innerHTML='';
 	    		
-	    		ptype=event.detail.ptype;
-	    		vid=event.detail.vid;
-	    		$.getJSON(getUrl("/Phone/LoadArticleDetail"),{ptype:ptype, vid:vid},function(r){
+	    		answerid=event.detail.answerid;
+	    		$.getJSON(getUrl("/Phone/LoadAnswer"),{answerid:answerid},function(r){
 	    			doc.getElementById("loading").style.display="none";
 	    			
-	    			doc.getElementById("title").innerText=r.Name;
-	    			doc.getElementById("content").innerHTML=r.Content;
+	    			doc.getElementById("content").innerHTML=r;
 	    			initImages("content");
 	    		});
 	    	});

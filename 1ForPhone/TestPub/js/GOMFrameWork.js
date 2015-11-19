@@ -43,9 +43,9 @@ function getUrl(url) {
 		return "";
 	}
 	if(url.indexOf('/')==0){ 
-        return "http://123.57.153.47" + url;
+        //return "http://123.57.153.47" + url;
         //return "http://localhost:55611"+url;
-        //return "http://192.168.1.101:8073"+url;
+        return "http://10.2.8.35:8073"+url;
     }
     return "http://123.57.153.47/" + url;
 }
@@ -83,22 +83,46 @@ function openQQ() {
 	}
 }
 
-(function($,doc){
-	$.plusReady(function(){
-		var tel=doc.getElementById("tel");
-		if(tel){
-			tel.addEventListener("tap",function(){
-				plus.device.dial("13126704233");
-			},false);
-		}
-		
-		var qq=doc.getElementById("qq");
-		if(qq){
-			qq.addEventListener("tap",function(){
-				openQQ();
-			},false);
-		}
-	});
-}(mui,document));
+function initBottomBarFunc(doc){
+	var msg=doc.getElementById("msg");
+	if(msg){
+		msg.addEventListener("tap",function(){
+			if(app&&!app.getState().uid){
+				mui.openWindow({
+					id: 'login',
+					url:'login.html',
+					waiting: {
+						autoShow: false
+					}
+				});
+			}
+			else{
+				if(plus.webview.currentWebview().id!="askList"){
+					mui.openWindow({
+						url:'askList.html',
+						id:'askList',
+						waiting: {
+							autoShow: false
+						}
+					});
+				}
+			}
+		},false);
+	}
+	
+	var tel=doc.getElementById("tel");
+	if(tel){
+		tel.addEventListener("tap",function(){
+			plus.device.dial("13126704233");
+		},false);
+	}
+
+	var qq=doc.getElementById("qq");
+	if(qq){
+		qq.addEventListener("tap",function(){
+			openQQ();
+		},false);
+	}
+}
 
 

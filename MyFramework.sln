@@ -20,9 +20,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrameWork", "FrameWork", "{564F8DC4-E552-4D4B-8056-C49DE78E9C08}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Template", "Template", "{01627CAF-D78A-41EA-9292-B7B87C9F2AA2}"
-	ProjectSection(SolutionItems) = preProject
-		WinTemplate.md = WinTemplate.md
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApplication", "WebApplication", "{0A10D1B1-569F-477E-B4D0-90885B980E65}"
 	ProjectSection(SolutionItems) = preProject

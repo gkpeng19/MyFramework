@@ -87,7 +87,19 @@ namespace WebSite.Controllers
             OutResult(result);
         }
 
-        public void LoadUserOrders(int uid,int page=1,int psize=20)
+        public void LoadNewCheaper(int page = 1, int psize = 999)
+        {
+            SearchModel sm = new SearchModel("uv_DisplayContent");
+            sm["DPanelType"] = (int)EnumDPanelType.NewCheaper;
+            sm.OrderBy("id");
+            sm.PageIndex = page;
+            sm.PageSize = psize;
+            sm.AddSearch("id", "DPanel_G", "Name", "ImgName_G");
+            var result = sm.Load<HQ_DisplayContent>();
+            OutResult(result);
+        }
+
+        public void LoadUserOrders(int uid, int page = 1, int psize = 20)
         {
             SearchModel sm = new SearchModel("uv_memberorder");
             sm["MemberID"] = uid;
@@ -103,7 +115,7 @@ namespace WebSite.Controllers
             var sm = new SearchModel("hq_bookroom");
             sm["id"] = broom.ID;
             var room = sm.LoadEntity<HQ_BookRoom>();
-            if (room.CanCancelBook_G==1)
+            if (room.CanCancelBook_G == 1)
             {
                 broom.Delete();
                 OutResult(1);
@@ -117,7 +129,7 @@ namespace WebSite.Controllers
         public void LoadArticleDetail(int ptype, int vid)
         {
             SearchModel sm = null;
-            if (ptype == 1 || ptype == 3 || ptype == 4)
+            if (ptype == 1 || ptype == 3 || ptype == 4 || ptype == 5)
             {
                 sm = new SearchModel("HQ_DisplayContent");
                 sm["ID"] = vid;
@@ -234,6 +246,39 @@ namespace WebSite.Controllers
             else
             {
                 OutResult(new { ResultID = 0, Error = "注册失败，请重试！" });
+            }
+        }
+
+        public void SaveAsk(int uid, string ask)
+        {
+            HQ_MemberAsk entity = new HQ_MemberAsk();
+            entity.MemberID = uid;
+            entity.AskContent = ask;
+            var id = entity.Save();
+            OutResult(new { r = id });
+        }
+
+        public void LoadMyAsk(int uid)
+        {
+            SearchModel sm = new SearchModel("uv_memberask");
+            sm["MemberID"] = uid;
+            sm.OrderBy("id", EnumOrderBy.Desc);
+            var result = sm.Load<HQ_MemberAsk>();
+            OutResult(new { List = result.Data });
+        }
+
+        public void LoadAnswer(int answerid)
+        {
+            SearchModel sm = new SearchModel("HQ_MemberAnswer");
+            sm["id"] = answerid;
+            var entity = sm.LoadEntity<HQ_MemberAnswer>();
+            if (entity != null)
+            {
+                OutResult(new { Answer = entity.Answer });
+            }
+            else
+            {
+                OutResult(new { Answer = string.Empty });
             }
         }
 
