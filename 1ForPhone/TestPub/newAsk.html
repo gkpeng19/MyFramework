@@ -22,7 +22,7 @@
   				<fieldset>  
     				<legend>咨询内容</legend>
     				<p><textarea class="noscrollbars" onkeyup="autoGrow(this);" id="textarea"></textarea></p>
-    				<input type="submit" value="Send" style="margin-top: -15px;float: right;" id="submit" />
+    				<button id='sendMsg' class="mui-btn mui-btn-block mui-btn-primary" style="margin-top: -15px;float: right;padding: 5px;">发送</button>
   				</fieldset>
 			</form>
 		</div>
@@ -37,19 +37,28 @@
 		}
 		
 		(function($, doc) {
-			$.init();
+			$.init({
+				beforeback: function(){
+					//获得列表界面的webview
+					var askList = plus.webview.getWebviewById('askList');
+					askList.reload(true);
+					return true;
+				}
+			});
+			
 			$.plusReady(function() {
 				var uid=app.getState().uid;
 				if(uid){
-					var submitBtn=doc.getElementById("submit");
+					var submitBtn=doc.getElementById("sendMsg");
 					submitBtn.addEventListener("tap",function(){
-						var ask= $.trim(doc.getElementById("textarea").value);
+						var ask=doc.getElementById("textarea").value.trim();
 						if(ask.length==0){
 							plus.nativeUI.toast("咨询内容不能为空");
 						}
 						else{
 							$.getJSON(getUrl("/Phone/SaveAsk"),{uid:uid,ask:ask,ran:Math.random()},function(r){
-								if(r>0){
+								if(r.ID>0){
+									doc.getElementById("textarea").value="";
 									$.back();
 									plus.nativeUI.toast("已提交咨询，请等待客服人员回复");
 								}

@@ -40,6 +40,7 @@
 	</nav>
     
     <script src="js/mui.min.js"></script>
+    <script src="js/app.js"></script>
     <script src="js/GOMFrameWork.js" ></script>
     <script> 
     (function($,doc){
@@ -53,8 +54,13 @@
 	    		$.getJSON(getUrl("/Phone/LoadAnswer"),{answerid:answerid},function(r){
 	    			doc.getElementById("loading").style.display="none";
 	    			
-	    			doc.getElementById("content").innerHTML=r;
-	    			initImages("content");
+	    			if(r.Answer.length==0){
+	    				doc.getElementById("content").innerHTML="暂无信息回复！";
+	    			}
+	    			else{
+	    				doc.getElementById("content").innerHTML=r.Answer;
+	    				initImages("content");
+	    			}
 	    		});
 	    	});
 	    	

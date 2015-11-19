@@ -171,5 +171,21 @@ namespace EntityLibrary.Entities
         }
 
         #endregion
+
+        #region 是否有新消息回复查询
+        
+
+        [Search(Field="AnswerID_G",Operator=SearchOperator.IsNotNull)]
+        public int NewAnswerID
+        {
+            set { SetValue("NewAnswerID", value); }
+        }
+        [Search(Field = "IsView_G", Operator = SearchOperator.IsNull)]
+        public int AnswerViewed
+        {
+            set { SetValue("AnswerViewed", value); }
+        }
+
+        #endregion
     }
 }

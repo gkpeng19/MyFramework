@@ -127,7 +127,7 @@
         	wgtVer=inf.version;
         	$.getJSON("/Phone/CheckUpdate",{pversion:wgtVer,ran:Math.random()},function(r){
         		w.close();
-        		if(r.updated){
+        		if(r.updated==1){
         			plus.nativeUI.toast('检测到新版本，正在下载');
         			owner.installUpdate(r.path);
         		}
@@ -160,7 +160,7 @@
 		plus.runtime.getProperty(plus.runtime.appid,function(inf){
         	wgtVer=inf.version;
         	$.getJSON(getUrl("/Phone/CheckUpdate"),{pversion:wgtVer,ran:Math.random()},function(r){
-        		if(r.updated){
+        		if(r.updated==1){
         			plus.nativeUI.confirm("检测到新版本，是否更新？",function(e){
         				if(e.index==0){
         					if(mui.os.android){

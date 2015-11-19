@@ -7,11 +7,17 @@
     <link href="css/mui.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="css/icon.custom.css" />
     <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <style>
+    	.newIcon{
+    		margin-left: 10px;
+    	}
+    </style>
 </head>
 <body>
     <header class="mui-bar mui-bar-nav top-bar">
         <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
         <h1 class="mui-title" id="title">信息咨询列表</h1>
+        <a class="mui-icon mui-pull-right" id="addAsk"><img src="images/iconfont-tianjia.png" style="width: 25px;"></a>
     </header>
     <div class="mui-content">
     	<div id="loading">
@@ -49,7 +55,7 @@
     		var uid=app.getState().uid;
     		if(uid){
     			var getAskItem=function(item){
-    				return '<li class="mui-table-view-cell"><a class="mui-navigate-right link" data-id="1"><div class="mui-media-body">'+item.CreateOn_G+((item.AnswerID_G&&!item.IsView_G)?'<img src="images/new.gif">':'')+'<p class="mui-ellipsis">'+item.AskContent+'</p></div></a></li>';
+    				return '<li class="mui-table-view-cell"><a class="mui-navigate-right link" data-id="'+(item.AnswerID_G?item.AnswerID_G:"-1")+'"><div class="mui-media-body">'+item.CreateOn_G+((item.AnswerID_G&&!item.IsView_G)?'<img src="images/new.gif" class="newIcon">':'')+'<p class="mui-ellipsis">'+item.AskContent+'</p></div></a></li>';
     			};
     			
     			var answerPage=$.preload({
@@ -60,7 +66,7 @@
     			$.getJSON(getUrl("/Phone/LoadMyAsk"),{uid:uid,ran:Math.random()},function(r){
     				doc.getElementById("loading").style.display="none";
     				
-    				var list=toJsResult(r);
+    				var list=toJsResult(r.List);
     				var html="";
     				for(var i=0;i<list.length;++i){
     					html+=getAskItem(list[i]);
@@ -77,6 +83,10 @@
 		    				if(links[i].getAttribute("data-id")&&!links[i].getAttribute("data-exist")){
 		    					links[i].setAttribute("data-exist",1);
 		    					links[i].addEventListener("tap",function(event){
+		    						var newIcon= this.getElementsByClassName("newIcon")[0];
+		    						if(newIcon){
+		    							newIcon.remove();
+		    						}
 		    						$.fire(answerPage, 'show', {answerid:this.getAttribute("data-id")});
 		    						setTimeout(function() {
 										$.openWindow({
@@ -92,6 +102,20 @@
     				}
     			});
     		}
+    		
+    		$.preload({
+    			url:'newAsk.html',
+    			id:'newAsk'
+    		});
+    		var addBtn=doc.getElementById("addAsk");
+    		addBtn.addEventListener("tap",function(){
+    			$.openWindow({
+					id: 'newAsk',
+					waiting: {
+						autoShow: false
+					}
+				});
+    		},false);
     		
     		var home=doc.getElementById("home");
 	    	home.addEventListener("tap",function(){

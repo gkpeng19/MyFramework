@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using GOMFrameWork.DataEntity;
 using System.Text.RegularExpressions;
 using G.Util.Account;
+using System.Configuration;
 
 namespace WebSite.Controllers
 {
@@ -254,8 +255,9 @@ namespace WebSite.Controllers
             HQ_MemberAsk entity = new HQ_MemberAsk();
             entity.MemberID = uid;
             entity.AskContent = ask;
+            entity.CreateOn = DateTime.Now;
             var id = entity.Save();
-            OutResult(new { r = id });
+            OutResult(new { ID = id });
         }
 
         public void LoadMyAsk(int uid)
@@ -274,11 +276,39 @@ namespace WebSite.Controllers
             var entity = sm.LoadEntity<HQ_MemberAnswer>();
             if (entity != null)
             {
+                var e = new HQ_MemberAnswer();
+                e["ID"] = entity.ID;
+                e.IsView = 1;
+                e.Save();
                 OutResult(new { Answer = entity.Answer });
             }
             else
             {
                 OutResult(new { Answer = string.Empty });
+            }
+        }
+
+        public void CheckNewAnswer(int uid)
+        {
+            SearchModel sm = new SearchModel("uv_memberask");
+            sm["MemberID"] = uid;
+            sm.NewAnswerID = 0;
+            sm.AnswerViewed = 0;
+            sm.AddSearch("count(1)");
+            var newcount = sm.LoadValue<int>();
+            OutResult(new { ncount = newcount });
+        }
+
+        public void CheckUpdate(string pversion)
+        {
+            var newversion = ConfigurationManager.AppSettings["appversion"];
+            if (newversion == null || pversion.Equals(newversion))
+            {
+                OutResult(new { updated = 0 });
+            }
+            else
+            {
+                OutResult(new { updated = 1, path = ConfigurationManager.AppSettings["apppath"] });
             }
         }
 

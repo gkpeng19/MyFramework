@@ -45,7 +45,6 @@
 	</nav>
 	<script src="js/mui.min.js"></script>
 	<script src="js/app.js"></script>
-	<script src="js/layer.m/layer.m.js"></script>
 	<script src="js/GOMFrameWork.js" ></script>
 	<script type="text/javascript">
 		(function($,doc){
@@ -112,15 +111,11 @@
 							cbooks[i].addEventListener("tap",function(){
 								var srcLi=this.parentElement.parentElement.parentElement.parentElement.parentElement;
 								var bookid=this.getAttribute("data-id");
-								layer.open({
-								    content: '确定要取消预定吗？',
-								    btn: ['确 定', '取 消'],
-								    shadeClose: false,
-								    yes: function(){
-								        cancelBook(bookid,srcLi);
-								        layer.closeAll();
-								    }, no: function(){}
-								}); 
+								plus.nativeUI.confirm("确定要取消预定吗？",function(event){
+									if(event.index==0){
+										cancelBook(bookid,srcLi);
+									}
+								},"消息提示",['确定','取消']);
 							},false);
 						}
 					});

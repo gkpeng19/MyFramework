@@ -44,8 +44,8 @@ function getUrl(url) {
 	}
 	if(url.indexOf('/')==0){ 
         //return "http://123.57.153.47" + url;
-        //return "http://localhost:55611"+url;
-        return "http://10.2.8.35:8073"+url;
+        return "http://192.168.1.101:8073"+url;
+        //return "http://10.2.8.35:8073"+url;
     }
     return "http://123.57.153.47/" + url;
 }
@@ -83,11 +83,12 @@ function openQQ() {
 	}
 }
 
+
 function initBottomBarFunc(doc){
 	var msg=doc.getElementById("msg");
 	if(msg){
 		msg.addEventListener("tap",function(){
-			if(app&&!app.getState().uid){
+			if(!app.getState().uid){
 				mui.openWindow({
 					id: 'login',
 					url:'login.html',

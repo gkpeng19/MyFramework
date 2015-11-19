@@ -34,7 +34,10 @@
 	color: white;
 }
 
-
+.bottom-bar-new{
+	position: relative;
+	top: -7px;
+}
 
 #loading{
 	text-align: center;

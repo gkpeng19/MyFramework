@@ -490,6 +490,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="appstore\" />
     <Folder Include="App_Data\" />
     <Folder Include="Views\Phone\" />
   </ItemGroup>
