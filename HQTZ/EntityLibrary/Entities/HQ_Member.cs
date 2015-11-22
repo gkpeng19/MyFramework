@@ -63,6 +63,26 @@ namespace EntityLibrary.Entities
         }
 
         [JsonIgnore]
+        public string HeaderImg
+        {
+            get { return GetString("HeaderImg"); }
+            set { SetValue("HeaderImg", value); }
+        }
+
+        public string HeaderImg_G
+        {
+            get
+            {
+                var img = HeaderImg;
+                if (img == null||img.Length==0)
+                {
+                    return "Images/header.jpg";
+                }
+                return img;
+            }
+        }
+
+        [JsonIgnore]
         [UIValueZeroNotEqualNull]
         public int IsDelete
         {

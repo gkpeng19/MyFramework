@@ -148,6 +148,7 @@
     <Content Include="Images\hand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\header.jpg" />
     <Content Include="Images\img1.gif" />
     <Content Include="Images\leader.gif" />
     <Content Include="Images\left-handing.png">
@@ -156,6 +157,7 @@
     <Content Include="Images\left_hand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\locker.png" />
     <Content Include="Images\login.jpg" />
     <Content Include="Images\logo.gif" />
     <Content Include="Images\menubg.jpg" />
@@ -165,6 +167,7 @@
     <Content Include="Images\password.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\phone.png" />
     <Content Include="Images\phonecall.png" />
     <Content Include="Images\register.jpg" />
     <Content Include="Images\right_hand.png">
@@ -482,6 +485,7 @@
     <Content Include="Views\Member\TraveGuide.cshtml" />
     <Content Include="Views\Member\ViewGuidInfo.cshtml" />
     <Content Include="Views\ClientBase\ContactIndex.cshtml" />
+    <Content Include="Views\Member\MemberIndex.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

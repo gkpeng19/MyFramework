@@ -15,9 +15,6 @@
 		if (loginInfo.account.length < 5) {
 			return callback('账号最短为 5 个字符');
 		}
-		if (loginInfo.password.length < 6) {
-			return callback('密码最短为 6 个字符');
-		}
 		
 		mui.post(getUrl("/Phone/Login"),{uname:loginInfo.account,psw:loginInfo.password,ran:Math.random()},function(r){
 			if(!r||r==0){
@@ -46,26 +43,32 @@
 		regInfo = regInfo || {};
 		regInfo.account = regInfo.account || '';
 		regInfo.password = regInfo.password || '';
-		if (regInfo.account.length < 5) {
-			return callback('用户名最短需要 5 个字符');
-		}
-		if (regInfo.password.length < 6) {
-			return callback('密码最短需要 6 个字符');
-		}
-		if (!checkEmail(regInfo.email)) {
-			return callback('邮箱地址不合法');
-		}
 		
-		mui.post(getUrl("/Phone/Register"),{uname:regInfo.account,psw:regInfo.password,email:regInfo.email,ran:Math.random()},function(r){
-			if(r.ResultID==0){
-				callback(r.Error);
-			}
-			else{
+		mui.getJSON(getUrl("/Phone/Register"),{uname:regInfo.account,psw:regInfo.password,phone:regInfo.phone,yzm:regInfo.yzm,ran:Math.random()},function(r){
+			r=r.ResultID;
+			if(r==1){
 				//var users = [];
 				//regInfo.UID=r.ResultID;
 				//users.push(regInfo);
 				//localStorage.setItem('$users', JSON.stringify(users));
 		 		callback();
+			}
+			else{
+				var error=null;
+				if(r==-1){
+					error="用户名已存在！";
+				}
+				else if (r == -3) {
+                    error="请获取短信验证码后重新输入！";
+                }
+                else if (r == -4) {
+                    error="短信验证码输入错误！";
+                }
+                else {
+                    error="注册失败，请重试！";
+                }
+                
+                callback(error);
 			}
 		});
 	};
@@ -95,14 +98,30 @@
 	};
 
 	/**
-	 * 找回密码
+	 * 重置密码
 	 **/
-	owner.forgetPassword = function(email, callback) {
-		callback = callback || $.noop;
-		if (!checkEmail(email)) {
-			return callback('邮箱地址不合法');
-		}
-		return callback(null, '新的随机密码已经发送到您的邮箱，请查收邮件。');
+	owner.forgetPassword = function(phone,psw,yzm, callback) {
+		$.getJSON(getUrl("/Phone/FindPsw"), { phone: phone, psw: psw, msgcode: yzm, ran: Math.random() }, function (r) {
+            var r=r.r;
+            if (r == 1) {
+             	callback(1,"密码重置成功，请登录。");
+            }
+            else if (r == -1) {
+              	callback(0,"请输入手机号码！");
+            }
+            else if (r == -2) {
+                callback(0,"请获取短信验证码后重新输入！");
+            }
+            else if (r == -3) {
+                callback(0,"短信验证码输入错误！");
+            }
+            else if (r == -4) {
+                callback(0,"手机号码未注册！");
+            }
+            else if (r == 0) {
+                callback(0,"重置密码失败，请重试！");
+            }
+        });
 	};
 
 	/**
@@ -121,11 +140,39 @@
 		return JSON.parse(settingsText);
 	}
 	
+	owner.sendMessageCode=function(phone,type){
+		if (phone.length == 0) {
+			plus.nativeUI.toast("手机号码不能为空！");
+            return;
+        }
+        if (!(/^[1][3,5,8][0-9]{9}$/g).test(phone)) {
+        	plus.nativeUI.toast("请输入有效的手机号码！");
+            return;
+        }
+        mui.getJSON(getUrl("/Phone/SendMsgCode"), { phone: phone, type: type, ran: Math.random() }, function (r) {
+        	r=r.r;
+            if (r == -1) {
+            	plus.nativeUI.toast("手机号码输入错误！");
+                return;
+            }
+
+            if (r == 9) {
+            	plus.nativeUI.toast("该手机号码已被注册！");
+            }
+            else if (r == 1) {
+                plus.nativeUI.toast("短信验证码已发送成功。");
+            }
+            else if (r == 0) {
+            	plus.nativeUI.toast("短信验证码发送失败，请重试！");
+            }
+        });
+	}
+	
 	owner.checkUpdate=function(callback){
 		var w= plus.nativeUI.showWaiting("检测更新中...");
 		plus.runtime.getProperty(plus.runtime.appid,function(inf){
         	wgtVer=inf.version;
-        	$.getJSON("/Phone/CheckUpdate",{pversion:wgtVer,ran:Math.random()},function(r){
+        	mui.getJSON("/Phone/CheckUpdate",{pversion:wgtVer,ran:Math.random()},function(r){
         		w.close();
         		if(r.updated==1){
         			plus.nativeUI.toast('检测到新版本，正在下载');

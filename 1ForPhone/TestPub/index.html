@@ -228,17 +228,13 @@ mhea<!DOCTYPE html>
 					});
 			},false);
 			
-			$.preload({
-				url:'order.html',
-				id:'order'
-			});
-			
 			var orderBtn= doc.getElementById("order");
 			orderBtn.addEventListener("tap",function(){
 				state=app.getState();
 				if (state.uid){
 					$.openWindow({
-						id: 'order',
+						url:'order.html',
+						id:'order',
 						waiting: {
 							autoShow: false
 						}

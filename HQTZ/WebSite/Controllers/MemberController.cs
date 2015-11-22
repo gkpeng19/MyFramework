@@ -371,5 +371,27 @@ namespace WebSite.Controllers
 
             return -4;
         }
+
+        [LoginVerify("Client")]
+        public ActionResult MemberIndex()
+        {
+            SearchModel sm = new SearchModel("hq_member");
+            sm["id"] = LoginInfo.Current.UserID;
+            ViewBag.Member = sm.LoadEntity<HQ_Member>();
+
+            sm = new SearchModel("uv_bookroom");
+            sm.BeginInDate = DateTime.Now.Date;
+            sm["MemberID"] = LoginInfo.Current.UserID;
+            sm.OrderBy("id", EnumOrderBy.Desc);
+            ViewBag.Orders = sm.Load<HQ_BookRoom>().Data;
+
+            return View();
+        }
+
+        public long SaveMemberInfo(HQ_Member member)
+        {
+            member["id"] = LoginInfo.Current.UserID;
+            return member.Save();
+        }
     }
 }
