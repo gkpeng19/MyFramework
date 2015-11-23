@@ -1,18 +1,21 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>旅居中国-首页</title>
-    <link href="Styles/website/page.css" rel="stylesheet" />
-    <link href="Scripts/website/slider/css/silder.css" rel="stylesheet" />
-    <link href="Scripts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Styles/website/page.css" rel="stylesheet" />
+    <link href="~/Scripts/website/slider/css/silder.css" rel="stylesheet" />
+    <link href="~/Scripts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
 </head>
 <body>
     <div class="page">
         <div class="content">
             <div id="top">
-                <img src="Images/logo.gif" style="margin-left:50px;" />
-                <img src="Images/server-tel.gif" style="margin-left:300px;" />
+                <img src="~/Images/logo.gif" style="margin-left:50px;" />
+                <img src="~/Images/server-tel.gif" style="margin-left:300px;" />
             </div>
             <div id="menu">
                 <a href="/Destination"><div class="menu-normal"><span>目的地</span></div></a>
@@ -30,26 +33,35 @@
                 </a>
             </div>
             <div class="clear"></div>
-            <div id="banner_tabs" class="flexslider">
-                <ul class="slides">
-                    
-                    <li style="list-style-type:none;">
-                        <a title="" target="_blank" href="#">
-                            <div style="width: 980px; height: 488px; background: url(/Images/banner2.jpg) no-repeat center;"></div>
-                        </a>
-                    </li>
-                </ul>
-                <ul class="flex-direction-nav">
-                    <li><a class="flex-prev" href="javascript:;">Previous</a></li>
-                    <li><a class="flex-next" href="javascript:;">Next</a></li>
-                </ul>
-                <ol id="bannerCtrl" class="flex-control-nav flex-control-paging">
-                    <li><a>1</a></li>
-                    <li><a>2</a></li>
-                </ol>
-            </div>
+            @if (ViewBag.SilderImgs.Length > 0)
+            {
+                var imgs = ViewBag.SilderImgs.Split(';');
+                <div id="banner_tabs" class="flexslider">
+                    <ul class="slides">
+                        @foreach (var img in imgs)
+                        {
+                            <li style="list-style-type:none;">
+                                <a href="#">
+                                    <div style="width:980px;height:488px; background: url(../../@img) no-repeat center;"></div>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="flex-direction-nav">
+                        <li><a class="flex-prev" href="javascript:;">Previous</a></li>
+                        <li><a class="flex-next" href="javascript:;">Next</a></li>
+                    </ul>
+                    <ol id="bannerCtrl" class="flex-control-nav flex-control-paging">
+                        @for (var i = 1; i <= imgs.Length; ++i)
+                        {
+                            <li><a>@i</a></li>
+                        }
+                    </ol>
+                </div>
+            }
+            
             <div id="trave">
-                <img src="Images/trave.gif" />
+                <img src="~/Images/trave.gif" />
             </div>
         </div>
         <div id="bottom" class="bottomflow">
@@ -61,7 +73,7 @@
                     <table>
                         <tr>
                             <td>
-                                <img class="contact_ctx_icon" src="Images/phonecall.png" />
+                                <img class="contact_ctx_icon" src="~/Images/phonecall.png" />
                             </td>
                             <td class="contact_ctx">
                                 <span>咨询您的假期顾问</span>
@@ -76,7 +88,7 @@
                             </td>
                             <td class="contact_ctx">
                                 <a href="/ClientBase/ContactIndex">
-                                    <img class="contact_ctx_icon" src="Images/contactus.jpg" />
+                                    <img class="contact_ctx_icon" src="~/Images/contactus.jpg" />
                                     <span>&nbsp;联系我们</span>
                                 </a>
                             </td>
@@ -86,9 +98,9 @@
             </div>
         </div>
     </div>
-    <script src="Scripts/jquery-1.10.2.min.js"></script>
-    <script src="Scripts/website/slider/js/slider.js"></script>
-    <script src="Scripts/website/page.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/website/slider/js/slider.js"></script>
+    <script src="~/Scripts/website/page.js"></script>
     <script type="text/javascript">
         var defaultMenu = $(".menu-curr");
         $("#menu div").bind("mouseover", function () {

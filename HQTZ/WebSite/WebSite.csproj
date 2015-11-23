@@ -128,6 +128,7 @@
     <Content Include="AdminPages\NewCheaper.html" />
     <Content Include="AdminPages\MemberService.html" />
     <Content Include="AdminPages\Article.html" />
+    <Content Include="AdminPages\SliderImgSetting.html" />
     <Content Include="AdminPages\User.html" />
     <Content Include="AdminPages\VillageRoom.html" />
     <Content Include="Default.htm" />
@@ -251,7 +252,6 @@
     <Content Include="Scripts\website\page.js" />
     <Content Include="Scripts\website\slider\css\silder.css" />
     <Content Include="Scripts\website\slider\images\ad_ctr.png" />
-    <Content Include="Scripts\website\slider\images\alpha.png" />
     <Content Include="Scripts\website\slider\images\dot.png" />
     <Content Include="Scripts\website\slider\js\slider.js" />
     <Content Include="Styles\gtree\themes\default-dark\32px.png" />
@@ -423,6 +423,7 @@
     <Compile Include="AdminControllers\DPanelContentController.cs" />
     <Compile Include="AdminControllers\DPanelController.cs" />
     <Compile Include="Controllers\ClientBaseController.cs" />
+    <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\DestinationController.cs" />
     <Compile Include="Controllers\DetailController.cs" />
     <Compile Include="Controllers\MemberBenefitController.cs" />
@@ -486,6 +487,7 @@
     <Content Include="Views\Member\ViewGuidInfo.cshtml" />
     <Content Include="Views\ClientBase\ContactIndex.cshtml" />
     <Content Include="Views\Member\MemberIndex.cshtml" />
+    <Content Include="Views\Default\Default.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -58,11 +58,40 @@ namespace WebSite.Controllers
             SearchModel sm = new SearchModel("HQ_Article");
             sm["ACategory"] = (int)EnumArticleCategory.ContactUs;
             var entity = sm.LoadEntity<HQ_Article>();
-            if(entity==null)
+            if (entity == null)
             {
                 return View(new HQ_Article() { AContent = "维护中。。。" });
             }
             return View(entity);
+        }
+
+        public JsonResult GetSilderImg()
+        {
+            SearchModel sm = new SearchModel("HQ_Article");
+            sm["ACategory"] = (int)EnumArticleCategory.SilderImg;
+            var entity = sm.LoadEntity<HQ_Article>();
+            if (entity != null)
+            {
+                return this.JsonNet(entity);
+            }
+            return null;
+        }
+
+        public long SaveSilderImg(HQ_Article entity)
+        {
+            if (entity.ID > 0)
+            {
+                entity.EditBy = LoginInfo.Current.UserName;
+                entity.EditOn = DateTime.Now;
+            }
+            else
+            {
+                entity.ACategory = (int)EnumArticleCategory.SilderImg;
+                entity.CreateBy = LoginInfo.Current.UserName;
+                entity.CreateOn = DateTime.Now;
+            }
+
+            return entity.Save();
         }
     }
 }

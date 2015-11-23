@@ -20,7 +20,8 @@ namespace EntityLibrary.Entities
 
     public enum EnumArticleCategory
     {
-        TravelGuide=1,
-        ContactUs=2
+        TravelGuide = 1,
+        ContactUs = 2,
+        SilderImg = 3
     }
 }
