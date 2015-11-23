@@ -1,8 +1,0 @@
-D:\Gkpeng\MyFramework\WebApiClient\bin\WebApiClient.dll.config
-D:\Gkpeng\MyFramework\WebApiClient\bin\WebApiClient.dll
-D:\Gkpeng\MyFramework\WebApiClient\bin\WebApiClient.pdb
-D:\Gkpeng\MyFramework\WebApiClient\bin\Newtonsoft.Json.dll
-D:\Gkpeng\MyFramework\WebApiClient\bin\Newtonsoft.Json.xml
-D:\Gkpeng\MyFramework\WebApiClient\obj\Debug\WebApiClient.dll
-D:\Gkpeng\MyFramework\WebApiClient\obj\Debug\WebApiClient.pdb
-D:\Gkpeng\MyFramework\WebApiClient\obj\Debug\WebApiClient.csprojResolveAssemblyReference.cache

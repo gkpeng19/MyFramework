@@ -1,4 +1,5 @@
 ﻿using G.Util.Account;
+using G.Util.Web.Permission;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,10 @@ namespace G.Util.Mvc.Permission
             }
         }
     }
+}
 
+namespace G.Util.Web.Permission
+{
     public static class LoginVerify
     {
         public static bool IsLogin(string systemId = null)

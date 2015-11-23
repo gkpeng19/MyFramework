@@ -72,7 +72,6 @@ namespace GOMFrameWork.DataEntity
         }
 
         public int PageSize { get; set; }
-
         public int PageIndex { get; set; }
 
         protected override EntityItem GetItem(string key)
@@ -89,6 +88,18 @@ namespace GOMFrameWork.DataEntity
 
         public override void SetUIValue(string key, object value)
         {
+            if (key.ToLower().Equals("pageindex"))
+            {
+                PageIndex = int.Parse(value.ToString());
+                return;
+            }
+
+            if (key.ToLower().Equals("pagesize"))
+            {
+                PageSize = int.Parse(value.ToString());
+                return;
+            }
+
             EntityItem item = GetItem(key);
             if (item != null)
             {
