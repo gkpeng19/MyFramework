@@ -104,8 +104,8 @@
         @if (ViewBag.IsBookRoom != null && ViewBag.IsBookRoom == 1)
         {
             <text>
-        $("#startDate").datepicker({ startDate: new Date().toLocaleDateString() });
-        $("#endDate").datepicker({ startDate: new Date().toLocaleDateString() });
+        $("#startDate").datepicker({ startDate: new Date().toLocaleDateString(),autoclose:true });
+        $("#endDate").datepicker({ startDate: new Date().toLocaleDateString() ,autoclose:true});
         //$("#startTime").timepicker({
         //    minuteStep: 10,
         //    showSeconds: false,

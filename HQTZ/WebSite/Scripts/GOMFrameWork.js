@@ -1136,6 +1136,8 @@ $.fn.extend({
 
         if (!args.uploadUrl) {
             args.uploadUrl = "/Scripts/umeditor/net/fileUp.ashx?iseditor=0";
+        }
+        if (args.progressUrl==null||args.progressUrl==undefined) {
             args.progressUrl = "/Scripts/umeditor/net/fileUpProgress.ashx";
         }
         var progresskey = Math.random();
@@ -1180,7 +1182,7 @@ $.fn.extend({
             form[0].submit();
 
             //初始化进度条
-            if (args.progressUrl) {
+            if (args.progressUrl && args.progressUrl.length > 0) {
                 var pbar = $('<div class="progress progress-success progress-striped" style="height:4px;margin-bottom:0px;"><div class="bar" style=""></div></div>');
                 pbar.css({
                     position: 'absolute',

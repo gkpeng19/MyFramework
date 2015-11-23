@@ -8,7 +8,7 @@ namespace WebSite.Handler
 {
     public class ImageHandler : IHttpHandler
     {
-        static int[] wsizes = new int[] { 42, 260, 420, 480, 580 };
+        static int[] wsizes = new int[] { 42, 80, 260, 420, 480, 580 };
         public void ProcessRequest(HttpContext context)
         {
             context.Response.ContentType = "text/html";
@@ -22,7 +22,7 @@ namespace WebSite.Handler
                 {
                     if ((i == 0 && width < wsizes[0]) ||
                         (i == wsizes.Length - 1) ||
-                        (width == wsizes[i] || (width > wsizes[i] && width <= wsizes[i + 1])))
+                        (width == wsizes[i] || (width > wsizes[i] && width < wsizes[i + 1])))
                     {
                         path = path.Insert(path.IndexOf('/', 8), "/size" + wsizes[i]);
                         break;

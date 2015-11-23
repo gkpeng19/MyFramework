@@ -187,5 +187,15 @@ namespace EntityLibrary.Entities
         }
 
         #endregion
+
+        #region 订单提醒，入住时间大于等于现在时间
+        
+        [Search(Field="BookStartTime",Operator=SearchOperator.GreaterEqual)]
+        public DateTime BeginInDate
+        {
+            set { SetValue("BeginInDate", value); }
+        }
+
+        #endregion
     }
 }

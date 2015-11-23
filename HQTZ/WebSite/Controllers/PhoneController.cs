@@ -12,6 +12,7 @@ using GOMFrameWork.DataEntity;
 using System.Text.RegularExpressions;
 using G.Util.Account;
 using System.Configuration;
+using NM.Util;
 
 namespace WebSite.Controllers
 {
@@ -100,7 +101,7 @@ namespace WebSite.Controllers
             OutResult(result);
         }
 
-        public void LoadUserOrders(int uid, int page = 1, int psize = 20)
+        public void LoadUserOrders(int uid, int page = 1, int psize = 15)
         {
             SearchModel sm = new SearchModel("uv_memberorder");
             sm["MemberID"] = uid;
@@ -223,31 +224,90 @@ namespace WebSite.Controllers
             OutResult(member.ID);
         }
 
-        public void Register(string uname, string psw, string email)
+        public void Register(string uname, string psw, string phone, string yzm)
         {
             SearchModel sm = new SearchModel("HQ_Member");
             sm.MemberName = uname;
             var entity = sm.LoadEntity<HQ_Member>();
             if (entity != null)
             {
-                OutResult(new { ResultID = 0, Error = "用户名已存在！" });
+                OutResult(new { ResultID = -1 });
                 return;
             }
 
-            entity = new HQ_Member();
-            entity.UserName = uname;
-            entity.UserPsw = Encryption.GetMD5(psw);
-            entity.Email = email;
-            entity.UserType = (int)EnumUserType.Normal;
-            var uid = entity.Save();
-            if (uid > 0)
+            var omcode = base.HttpContext.Cache["msg-" + phone];
+            if (omcode == null || omcode.ToString().Length == 0)
             {
-                OutResult(new { ResultID = uid });
+                OutResult(new { ResultID = -3 });
+                return;
             }
-            else
+            if (yzm == null || yzm.Length == 0 || !yzm.Equals(omcode.ToString()))
             {
-                OutResult(new { ResultID = 0, Error = "注册失败，请重试！" });
+                OutResult(new { ResultID = -4 });
+                return;
             }
+
+            HQ_Member member = new HQ_Member();
+            member.UserName = uname;
+            member.UserPsw = Encryption.GetMD5(psw);
+            member.PhoneNum = phone;
+            member.UserType = (int)EnumUserType.Normal;
+            if (member.Save() > 0)
+            {
+                OutResult(new { ResultID = 1 });
+                return;
+            }
+            OutResult(new { ResultID = 0 });
+            return;
+        }
+
+        public void FindPsw(string phone, string psw, string msgcode)
+        {
+            if (phone == null || phone.Length == 0)
+            {
+                OutResult(new { r = -1 });
+                return;
+            }
+
+            if (psw == null || psw.Length == 0)
+            {
+                OutResult(new { r = 0 });
+                return;
+            }
+
+            var omcode = base.HttpContext.Cache["msg-" + phone];
+            if (omcode == null || omcode.ToString().Length == 0)
+            {
+                OutResult(new { r = -2 });
+                return;
+            }
+
+            if (msgcode == null || msgcode.Length == 0 || !msgcode.Equals(omcode.ToString()))
+            {
+                OutResult(new { r = -3 });
+                return;
+            }
+
+            SearchModel sm = new SearchModel("hq_member");
+            sm["phonenum"] = phone;
+            sm.AddSearch("id");
+            var id = sm.LoadValue<int>();
+            if (id > 0)
+            {
+                HQ_Member member = new HQ_Member();
+                member["id"] = id;
+                member.UserPsw = G.Util.Tool.Encryption.GetMD5(psw);
+                if (member.Save() > 0)
+                {
+                    OutResult(new { r = 1 });
+                    return;
+                }
+                OutResult(new { r = 0 });
+                return;
+            }
+
+            OutResult(new { r = -4 });
+            return;
         }
 
         public void SaveAsk(int uid, string ask)
@@ -309,6 +369,62 @@ namespace WebSite.Controllers
             else
             {
                 OutResult(new { updated = 1, path = ConfigurationManager.AppSettings["apppath"] });
+            }
+        }
+
+        public void SendMsgCode(string phone, string type)
+        {
+            if (type == null || type.Length == 0)
+            {
+                OutResult(new { r = -2 });//系统错误
+                return;
+            }
+
+            if (phone != null && phone.Length > 0 && Regex.Match(phone, @"^[1][3,5,8][0-9]{9}$", RegexOptions.Compiled).Success)
+            {
+                var msgKey = string.Empty;
+                if ("1".Equals(type))
+                {
+                    SearchModel se = new SearchModel("hq_member");
+                    se["PhoneNum"] = phone;
+                    se.AddSearch("count(1)");
+                    var count = se.LoadValue<int>();
+                    if (count > 0)
+                    {
+                        OutResult(new { r = 9 });
+                        return;
+                    }
+
+                    msgKey = "用户注册短信验证码：";
+                }
+
+                if ("2".Equals(type))
+                {
+                    msgKey = "用户找回密码验证码：";
+                }
+
+                var yzm = string.Empty;
+                foreach (var i in Ran.GetRandomArray(6, 0, 9))
+                {
+                    yzm += i.ToString();
+                }
+                SendUserInfo _U = new SendUserInfo() { isLog = 1, orgid = 555, username = phone };
+                if (MsgSend.DirectSend(msgKey + yzm, phone, _U))
+                {
+                    base.HttpContext.Cache["msg-" + phone] = yzm;
+                    OutResult(new { r = 1 });
+                    return;
+                }
+                else
+                {
+                    OutResult(new { r = 0 });
+                    return;
+                }
+            }
+            else
+            {
+                OutResult(new { r = -1 });
+                return;
             }
         }
 

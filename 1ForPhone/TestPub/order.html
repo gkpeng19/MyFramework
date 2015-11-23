@@ -104,8 +104,13 @@
 						for (var i = 0; i < list.length; ++i) {
 	                    	html += '<li class="mui-table-view-cell"><table width="100%"><tr><td colspan="3">'+list[i].RoomName_G+'<a class="mui-pull-right">'+list[i].VillageName_G+'</a></td></tr><tr><td><p>入住日期：'+list[i].BookStartTime_G+'</p><p>离开日期：'+list[i].BookEndTime_G+'</p></td><td><a>共 '+list[i].BookDays_G+' 天&nbsp;&nbsp;&nbsp;&nbsp;￥'+list[i].AllPrice_G+'</a></td><td align="right" width="1%">'+(list[i].CanCancelBook_G==1?'<button type="button" class="mui-btn mui-btn-blue cancelbook" data-id="'+list[i].ID+'">退订</button>':'<button type="button" class="mui-btn"  disabled="disabled">退订</button>')+'</td></tr></table></li>';
 	                	}
-						doc.getElementById("orderList").innerHTML=html;
 						
+						if(html.length==0){
+							doc.getElementById("orderList").innerHTML="<p style='padding-top: 10px;text-align: center;'>暂无订单信息！</p>";
+							return;
+						}
+						
+						doc.getElementById("orderList").innerHTML=html;
 						var cbooks= doc.getElementsByClassName("cancelbook");
 						for(var i=0;i<cbooks.length;++i){
 							cbooks[i].addEventListener("tap",function(){
@@ -123,6 +128,9 @@
 				
 				if(state.uid){
 					loadOrder(1);
+				}
+				else{
+					doc.getElementById("loading").style.display="none";
 				}
 				
 				var home=doc.getElementById("home");
