@@ -20,7 +20,42 @@ namespace WinTemplate
             binds = new List<GBind>();
         }
 
+        private GTable _ptable = null;
+
+        public GTable ptable
+        {
+            get
+            {
+                if (_ptable == null)
+                {
+                    for (var i = 0; i < tables.Count; ++i)
+                    {
+                        if (tables[i].ischild == "0")
+                        {
+                            _ptable = tables[i];
+                            tables.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
+                return _ptable;
+            }
+        }
+
+        public List<GTable> ctables
+        {
+            get
+            {
+                if (_ptable == null)
+                {
+                    var pt = ptable;
+                }
+                return tables;
+            }
+        }
+
         public List<GTree> trees { get; set; }
+        
         public List<GTable> tables { get; set; }
         public List<GJson> jsons { get; set; }
         public List<GForm> forms { get; set; }
@@ -68,6 +103,8 @@ namespace WinTemplate
         }
         public string id { get; set; }
         public string searchid { get; set; }
+
+        public string ischild { get; set; }
 
         public List<string> defaultbtns { get; set; }
         public List<GTableSearchItem> searchitems { get; set; }

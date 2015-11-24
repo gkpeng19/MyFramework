@@ -71,7 +71,7 @@ namespace @(Model.ProjectName).Controllers
 		@foreach(var action in Model.LoadTableActions)
 		{
 		<text>
-		public JsonResult @(action)(*SearchEntityType* se, int page_g, int psize_g)
+		public JsonResult @(action)(*SearchEntityType* se)
         {
             #region 查询条件初始化 Example：se["Field"] = "value";
 
@@ -80,9 +80,6 @@ namespace @(Model.ProjectName).Controllers
             se.OrderBy("id", EnumOrderBy.Desc);
 
             #endregion
-
-            se.PageIndex = page_g;
-            se.PageSize = psize_g;
 
             var result = se.Load<*EntityType*>();
             return ExController.JsonNet(result);

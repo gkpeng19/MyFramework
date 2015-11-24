@@ -65,7 +65,7 @@
             <div id="sidebar-collapse"><i class="icon-"></i></div>
         </div>
         <div id="main-content" class="clearfix" style="overflow-y:no-display;">
-            <iframe class="clearfix" id="page-content" name="page-content" src="Index.html" 
+            <iframe class="clearfix" id="page-content" name="page-content" src="Index.html"
                     frameborder="0" style="padding: 0px; width: 100%;"></iframe>
         </div>
     </div>
@@ -123,6 +123,17 @@
                         $(".nav-list .active").removeClass("active");
                     }
                     $(this).addClass("active");
+                }
+            });
+            $(".nav-list>li>a").bind("click", function () {
+                var src = $(this).parent();
+                if ($(this).parent().hasClass("open")) {
+                    $(".nav-list>li.open").each(function () {
+                        if (this != src[0]) {
+                            $(this).removeClass("open");
+                            $(this).find(".submenu").hide(200);
+                        }
+                    });
                 }
             });
         });

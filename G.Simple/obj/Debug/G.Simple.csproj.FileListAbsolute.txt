@@ -51,3 +51,5 @@ D:\Gkpeng\MyFramework\G.Simple\bin\zh-Hans\System.Web.Mvc.resources.dll
 D:\Gkpeng\MyFramework\G.Simple\bin\zh-Hans\System.Web.Http.resources.dll
 D:\Gkpeng\MyFramework\G.Simple\obj\Debug\G.Simple.dll
 D:\Gkpeng\MyFramework\G.Simple\obj\Debug\G.Simple.pdb
+D:\Gkpeng\MyFramework\G.Simple\bin\System.Net.Http.Formatting.dll
+D:\Gkpeng\MyFramework\G.Simple\bin\zh-Hans\System.Net.Http.Formatting.resources.dll

@@ -102,3 +102,4 @@ D:\Work\MyFramework\WinTemplate\bin\Debug\System.Net.Http.Formatting.xml
 D:\Work\MyFramework\WinTemplate\bin\Debug\NPOI.OpenXml4Net.xml
 D:\Work\MyFramework\WinTemplate\bin\Debug\zh-Hans\System.Web.Http.resources.dll
 D:\Work\MyFramework\WinTemplate\bin\Debug\zh-Hans\System.Net.Http.Formatting.resources.dll
+D:\Gkpeng\MyFramework\WinTemplate\bin\Debug\template\table_bak.html

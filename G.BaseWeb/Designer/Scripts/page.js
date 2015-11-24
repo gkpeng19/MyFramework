@@ -282,6 +282,20 @@ function AddTableSubmit(tablejson, defaultbtns) {
     });
     table.find("tr").append($("<th class='tablebtn'></th>").append(customBtn));
 
+    var toChild = $("<input type='button' value='标记为子表' />");
+    toChild.bind('click', function () {
+        temptables[tid].ischild = "1";
+        alert("标记为子表成功。");
+    });
+    table.find("tr").append($("<th class='tablebtn'></th>").append(toChild));
+
+    var toParent = $("<input type='button' value='标记为主表' />");
+    toParent.bind('click', function () {
+        temptables[tid].ischild = "0";
+        alert("标记为主表成功。");
+    });
+    table.find("tr").append($("<th class='tablebtn'></th>").append(toParent));
+
     var removeBtn = $("<input type='button' value='移除表格' />");
     $(removeBtn).bind("click", function () {
         if (confirm("确定要移除该表格吗？")) {
@@ -292,7 +306,7 @@ function AddTableSubmit(tablejson, defaultbtns) {
 
     $("#div_forTable").append(table);
 
-    var tablejson = { id: tid, data: tablejson, searchid: "0", searchitems: [], defaultbtns: defaultbtns };
+    var tablejson = { id: tid, ischild: "0", data: tablejson, searchid: "0", searchitems: [], defaultbtns: defaultbtns };
     temptables[tid] = tablejson;
 
     $("#div_forTable .table").each(function () {
@@ -685,7 +699,7 @@ function InitUI(jsonstr) {
     if (json.authorities) {
         _authorities = json.authorities;
     }
-    
+
 
     $(json.trees).each(function () {
         AddTreeSubmit(this.id, this.nodeField, this.parentIdField, this.loadurl, this.saveurl, this.delurl, this.reftableid, this.defaultbtns);

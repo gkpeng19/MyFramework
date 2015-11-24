@@ -85,6 +85,7 @@
     <Content Include="Global.asax" />
     <Content Include="Index.html" />
     <Content Include="Login.html" />
+    <Content Include="Pages\Order_new.html" />
     <Content Include="Pages\EditPage.html" />
     <Content Include="Pages\GreenManage.html" />
     <Content Include="Pages\Order.html" />

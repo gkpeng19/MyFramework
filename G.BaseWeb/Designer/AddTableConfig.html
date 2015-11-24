@@ -437,6 +437,9 @@
                     var btns = eval('(' + $(this).find("input[name=btns]").val() + ')').btns;
                     json.headers.push({ type: type, header: $(this).find("input[name=header]").val(), actionbtns: btns });
                 }
+                else if (type == 3) {
+                    json.headers.push({ type: type, header: '全选' });
+                }
             });
 
             return json;

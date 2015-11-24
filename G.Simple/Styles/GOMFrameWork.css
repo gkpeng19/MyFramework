@@ -2,6 +2,10 @@
     font-family: 'Microsoft YaHei','Microsoft JhengHei UI','Microsoft Tai Le','Microsoft YaHei UI';
 }
 
+.page-content{
+    margin:10px;
+}
+
 .btn {
     font-family: 'Microsoft YaHei','Microsoft JhengHei UI','Microsoft Tai Le','Microsoft YaHei UI';
 }

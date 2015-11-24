@@ -304,8 +304,8 @@ datatable.prototype.initByUrl = function (url, search, page) {
         }
     }
     page = page ? page : 1;
-    search.page_g = page;
-    search.psize_g = this.psize;
+    search.pageindex = page;
+    search.pagesize = this.psize;
 
     var dg = this;
     $.post(url, search, function (r) {
@@ -1683,7 +1683,11 @@ $.extend({
 });
 
 /*------导航插件开始-------link,level,text-------------------------------------*/
-var crumbs = $.cookie('nav-crumbs');
+var crumbs = null;
+try {
+    crumbs = $.cookie('nav-crumbs');
+}
+catch (ex) { }
 if (crumbs) {
     crumbs = JSON.parse(crumbs);
 }
@@ -1692,7 +1696,7 @@ else {
 }
 
 $(function () {
-    var ccrumb = $(body).attr("data-curmb");
+    var ccrumb = $("body").attr("data-curmb");
     if (ccrumb) {
         ccrumb = JSON.parse(ccrumb);
         var afterIndex = 100;

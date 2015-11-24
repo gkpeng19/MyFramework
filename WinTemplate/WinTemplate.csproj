@@ -168,6 +168,9 @@
     <Content Include="template\content.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="template\table_bak.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="template\table.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -1,5 +1,6 @@
 ﻿using G.Simple.Entity;
 using G.Util.Account;
+using G.Util.Extension;
 using GOMFrameWork;
 using System;
 using System.Collections.Generic;
@@ -19,11 +20,11 @@ namespace G.Simple
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            //DbContext.InitContext<SimpleBase>("SimpleOracle");
-            //DbContext.InitContext<SimpleSearchModel>("SimpleOracle");
-            //DbContext.InitContext<OracleProcEntity>("SimpleOracle");
-            DbContext.InitContext<SimpleBase>("SimpleSqlServer");
-            DbContext.InitContext<SimpleSearchModel>("SimpleSqlServer");
+            DbContext.InitContext<SimpleBase>("SimpleOracle");
+            DbContext.InitContext<SimpleSearchModel>("SimpleOracle");
+            DbContext.InitContext<OracleProcEntity>("SimpleOracle");
+            //DbContext.InitContext<SimpleBase>("SimpleSqlServer");
+            //DbContext.InitContext<SimpleSearchModel>("SimpleSqlServer");
         }
 
         void Application_OnPostAuthenticateRequest(object sender, EventArgs e)
