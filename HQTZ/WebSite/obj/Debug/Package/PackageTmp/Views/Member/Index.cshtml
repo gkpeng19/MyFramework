@@ -152,14 +152,6 @@
     <div id="agenterInfo" style="height:400px;overflow-y:auto;"></div>
 </div>
 
-<div id="div_ChangePsw" style="width:350px;padding:30px 0px 0px 50px;display:none;">
-    <table>
-        <tr><td>旧&nbsp;&nbsp; 密 &nbsp;&nbsp;码：</td><td><input type="password" id="u_oldpsw" /></td></tr>
-        <tr><td>新&nbsp;&nbsp; 密 &nbsp;&nbsp;码：</td><td><input type="password" id="u_newpsw" /></td></tr>
-        <tr><td>重复新密码：</td><td><input type="password" id="u_tnewpsw" /></td></tr>
-    </table>
-</div>
-
 @section styles{
     <link href="~/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <style type="text/css">
@@ -175,11 +167,6 @@
             display: none;
             font-size: 12px;
             padding-top: 40px;
-        }
-
-        #layer-error-msg {
-            float: left;
-            padding-left: 10px;
         }
 
         .traveTitle {
@@ -350,7 +337,7 @@
                 $.error("请输入短信验证码！");
                 return;
             }
-            if (ophone && ophone != phone) {
+            if (!ophone||( ophone && ophone != phone)) {
                 $.error("短信验证码输入错误！");
                 return;
             }
@@ -391,7 +378,7 @@
                 $.error("请输入短信验证码！");
                 return;
             }
-            if (ophone && ophone != phone) {
+            if (!ophone || (ophone && ophone != phone)) {
                 $.error("短信验证码输入错误！");
                 return;
             }
@@ -444,7 +431,7 @@
 
         function changeUIWhenIsLogin() {
             var links = $("#panel_container a");
-            var cpswobj = $('<a href="#" onclick="ChangePsw()" id="panel_ChangePsw"><div class="panel"><img src="/Images/changePsw.jpg" class="traveImg" /><div class="traveTitle"><i>修改密码</i></div></div></a>');
+            var cpswobj = $('<a href="/Member/MemberIndex"><div class="panel"><img src="/Images/changePsw.jpg" class="traveImg" /><div class="traveTitle"><i>会员中心</i></div></div></a>');
             cpswobj.insertAfter(links.eq(0));
 
             links.eq(0).remove();
@@ -477,48 +464,6 @@
                 });
             });
         });
-
-        function ChangePsw() {
-            $("#div_ChangePsw").open("修改密码", function (idx) {
-                var oldpsw = $.trim($("#u_oldpsw").val());
-                var newpsw = $.trim($("#u_newpsw").val());
-                var tnewpsw = $.trim($("#u_tnewpsw").val());
-                if (oldpsw.length == 0) {
-                    ShowMsg("旧密码不能为空！");
-                    return false;
-                }
-
-                if (newpsw.length == 0) {
-                    ShowMsg("新密码不能为空！");
-                    return false;
-                }
-
-                if (newpsw != tnewpsw) {
-                    ShowMsg("两次新密码不相同！");
-                    return false;
-                }
-
-                $.post("/Member/ChangeUserPsw", { oldPsw: oldpsw, newPsw: newpsw, ran: Math.random() }, function (r) {
-                    if (r > 0) {
-                        layer.close(idx);
-                        $.success("密码修改成功。");
-                    }
-                    else {
-                        ShowMsg("旧密码错误！");
-                    }
-                });
-
-                return false;
-            });
-        }
-        function ShowMsg(msg) {
-            if (msg.length == 0) {
-                $("#layer-error-msg").html("");
-            }
-            else {
-                $("#layer-error-msg").html('<span class="alert alert-error" style="font-size: 11px; padding: 3px 15px 3px 5px;color:#e32c2d;"><i class="fa fa-warning"></i> ' + msg + '</span>');
-            }
-        }
 
         @if(ViewBag.Action!=null&&ViewBag.Action=="login")
         {

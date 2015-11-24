@@ -38,11 +38,13 @@
                 var imgs = ViewBag.SilderImgs.Split(';');
                 <div id="banner_tabs" class="flexslider">
                     <ul class="slides">
-                        @foreach (var img in imgs)
+                        @foreach (string img in imgs)
                         {
-                            <li style="list-style-type:none;">
-                                <a href="#">
-                                    <div style="width:980px;height:488px; background: url(../../@img) no-repeat center;"></div>
+                            var pls = img.Split(':');
+                            var classstr = pls[1].Length > 0 ? ("href=" + pls[1] + " target=_blank") : "href=javascript:void(0)";
+                            <li>
+                                <a @classstr>
+                                    <div style="width:980px;height:488px; background: url(../../@pls[0]) no-repeat center;"></div>
                                 </a>
                             </li>
                         }
@@ -59,7 +61,7 @@
                     </ol>
                 </div>
             }
-            
+
             <div id="trave">
                 <img src="~/Images/trave.gif" />
             </div>

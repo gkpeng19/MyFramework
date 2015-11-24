@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <File Include="AdminPages/Admin.html">
-      <publishTime>11/19/2015 20:51:53</publishTime>
+      <publishTime>11/23/2015 23:10:12</publishTime>
     </File>
     <File Include="AdminPages/Agenter.html">
       <publishTime>10/25/2015 19:51:57</publishTime>
@@ -31,7 +31,7 @@
       <publishTime>11/11/2015 20:32:20</publishTime>
     </File>
     <File Include="AdminPages/DestinationDetails.html">
-      <publishTime>10/25/2015 19:51:57</publishTime>
+      <publishTime>11/22/2015 23:31:01</publishTime>
     </File>
     <File Include="AdminPages/Login.html">
       <publishTime>09/26/2015 11:36:16</publishTime>
@@ -57,6 +57,9 @@
     <File Include="AdminPages/ServiceDetails.html">
       <publishTime>10/25/2015 19:51:57</publishTime>
     </File>
+    <File Include="AdminPages/SliderImgSetting.html">
+      <publishTime>11/24/2015 22:09:23</publishTime>
+    </File>
     <File Include="AdminPages/User.html">
       <publishTime>10/25/2015 19:51:57</publishTime>
     </File>
@@ -67,10 +70,10 @@
       <publishTime>09/22/2015 21:58:50</publishTime>
     </File>
     <File Include="bin/EntityLibrary.dll">
-      <publishTime>11/21/2015 17:55:55</publishTime>
+      <publishTime>11/24/2015 22:26:51</publishTime>
     </File>
     <File Include="bin/EntityLibrary.pdb">
-      <publishTime>11/21/2015 17:55:55</publishTime>
+      <publishTime>11/24/2015 22:26:51</publishTime>
     </File>
     <File Include="bin/ExcelLibrary.dll">
       <publishTime>08/08/2015 13:29:36</publishTime>
@@ -196,10 +199,10 @@
       <publishTime>08/08/2015 13:29:36</publishTime>
     </File>
     <File Include="bin/WebSite.dll">
-      <publishTime>11/21/2015 17:58:30</publishTime>
+      <publishTime>11/24/2015 22:26:51</publishTime>
     </File>
     <File Include="bin/WebSite.pdb">
-      <publishTime>11/21/2015 17:58:30</publishTime>
+      <publishTime>11/24/2015 22:26:51</publishTime>
     </File>
     <File Include="bin/zh-Hans/System.Web.Helpers.resources.dll">
       <publishTime>08/08/2015 13:29:36</publishTime>
@@ -267,6 +270,9 @@
     <File Include="Images/hand.png">
       <publishTime>08/16/2015 18:41:48</publishTime>
     </File>
+    <File Include="Images/header.jpg">
+      <publishTime>11/22/2015 17:07:40</publishTime>
+    </File>
     <File Include="Images/img1.gif">
       <publishTime>09/26/2015 11:36:16</publishTime>
     </File>
@@ -278,6 +284,9 @@
     </File>
     <File Include="Images/left_hand.png">
       <publishTime>08/16/2015 18:41:48</publishTime>
+    </File>
+    <File Include="Images/locker.png">
+      <publishTime>11/22/2015 17:36:16</publishTime>
     </File>
     <File Include="Images/login.jpg">
       <publishTime>10/17/2015 14:34:13</publishTime>
@@ -299,6 +308,9 @@
     </File>
     <File Include="Images/password.png">
       <publishTime>08/16/2015 18:41:48</publishTime>
+    </File>
+    <File Include="Images/phone.png">
+      <publishTime>11/22/2015 17:36:16</publishTime>
     </File>
     <File Include="Images/phonecall.png">
       <publishTime>10/17/2015 14:34:13</publishTime>
@@ -349,7 +361,7 @@
       <publishTime>09/26/2015 11:36:16</publishTime>
     </File>
     <File Include="Scripts/bootstrap/bootstrap-datepicker.min.js">
-      <publishTime>11/08/2015 10:49:23</publishTime>
+      <publishTime>11/22/2015 19:03:41</publishTime>
     </File>
     <File Include="Scripts/bootstrap/bootstrap-timepicker.css">
       <publishTime>09/26/2015 11:36:16</publishTime>
@@ -490,7 +502,7 @@
       <publishTime>08/08/2015 13:29:36</publishTime>
     </File>
     <File Include="Scripts/GOMFrameWork.js">
-      <publishTime>11/11/2015 20:32:20</publishTime>
+      <publishTime>11/22/2015 18:38:41</publishTime>
     </File>
     <File Include="Scripts/jquery-1.10.2.js">
       <publishTime>08/08/2015 13:29:36</publishTime>
@@ -1015,7 +1027,7 @@
       <publishTime>11/17/2015 22:02:30</publishTime>
     </File>
     <File Include="Scripts/website/slider/css/silder.css">
-      <publishTime>09/26/2015 11:36:16</publishTime>
+      <publishTime>11/24/2015 21:33:37</publishTime>
     </File>
     <File Include="Scripts/website/slider/images/ad_ctr.png">
       <publishTime>09/26/2015 11:36:16</publishTime>
@@ -1063,7 +1075,7 @@
       <publishTime>08/30/2015 16:54:21</publishTime>
     </File>
     <File Include="Styles/website/orderstyles.css">
-      <publishTime>11/11/2015 20:32:20</publishTime>
+      <publishTime>11/22/2015 19:09:42</publishTime>
     </File>
     <File Include="Styles/website/page.css">
       <publishTime>10/17/2015 14:34:13</publishTime>
@@ -1074,14 +1086,20 @@
     <File Include="Views/ClientBase/ContactIndex.cshtml">
       <publishTime>10/17/2015 14:34:13</publishTime>
     </File>
+    <File Include="Views/Default/Index.cshtml">
+      <publishTime>11/24/2015 22:13:12</publishTime>
+    </File>
     <File Include="Views/Destination/Index.cshtml">
       <publishTime>10/11/2015 14:13:33</publishTime>
     </File>
     <File Include="Views/Detail/Index.cshtml">
-      <publishTime>10/25/2015 19:29:01</publishTime>
+      <publishTime>11/24/2015 21:33:52</publishTime>
     </File>
     <File Include="Views/Member/Index.cshtml">
-      <publishTime>11/19/2015 20:54:59</publishTime>
+      <publishTime>11/22/2015 17:58:58</publishTime>
+    </File>
+    <File Include="Views/Member/MemberIndex.cshtml">
+      <publishTime>11/22/2015 19:24:38</publishTime>
     </File>
     <File Include="Views/Member/OrderIndex.cshtml">
       <publishTime>11/18/2015 23:32:33</publishTime>
@@ -1114,7 +1132,7 @@
       <publishTime>08/08/2015 13:29:36</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/21/2015 17:56:02</publishTime>
+      <publishTime>11/24/2015 22:26:59</publishTime>
     </File>
   </ItemGroup>
 </Project>

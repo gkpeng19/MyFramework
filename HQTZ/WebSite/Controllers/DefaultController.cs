@@ -10,7 +10,7 @@ namespace WebSite.Controllers
 {
     public class DefaultController : Controller
     {
-        public ActionResult Default()
+        public ActionResult Index()
         {
             SearchModel sm = new SearchModel("HQ_Article");
             sm["ACategory"] = (int)EnumArticleCategory.SilderImg;

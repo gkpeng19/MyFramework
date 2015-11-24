@@ -177,7 +177,6 @@ namespace WebSite.Controllers
             }
         }
 
-
         public void BookRoom(int roomid, int userid, DateTime sdate, DateTime edate)
         {
             if (sdate.AddDays(1) < DateTime.Now)
@@ -426,6 +425,19 @@ namespace WebSite.Controllers
                 OutResult(new { r = -1 });
                 return;
             }
+        }
+
+        public void LoadSilderImgs()
+        {
+            SearchModel sm = new SearchModel("HQ_Article");
+            sm["ACategory"] = (int)EnumArticleCategory.SilderImg;
+            var entity = sm.LoadEntity<HQ_Article>();
+            string plstr=string.Empty;
+            if (entity != null)
+            {
+                plstr = entity.AContent;
+            }
+            OutResult(plstr);
         }
 
         void OutResult(object result)

@@ -131,11 +131,8 @@
     <Content Include="AdminPages\SliderImgSetting.html" />
     <Content Include="AdminPages\User.html" />
     <Content Include="AdminPages\VillageRoom.html" />
-    <Content Include="Default.htm" />
     <Content Include="Global.asax" />
     <Content Include="Images\agentersearch.jpg" />
-    <Content Include="Images\banner1.jpg" />
-    <Content Include="Images\banner2.jpg" />
     <Content Include="Images\bar.png" />
     <Content Include="Images\bgnoise_lg.png" />
     <Content Include="Images\book.jpg" />
@@ -487,7 +484,7 @@
     <Content Include="Views\Member\ViewGuidInfo.cshtml" />
     <Content Include="Views\ClientBase\ContactIndex.cshtml" />
     <Content Include="Views\Member\MemberIndex.cshtml" />
-    <Content Include="Views\Default\Default.cshtml" />
+    <Content Include="Views\Default\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

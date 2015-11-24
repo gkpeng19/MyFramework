@@ -90,3 +90,6 @@
 	display: block;
 }
 
+#banner_tabs li{
+    list-style-type:none;
+}

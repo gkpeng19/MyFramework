@@ -24,7 +24,7 @@ mhea<!DOCTYPE html>
 	
 	<div class="mui-content" style="padding-top: 0px;">
 		<div class="mui-slider">
-		    <div class="mui-slider-group">
+		    <div class="mui-slider-group" id="divslider">
 		        <div class="mui-slider-item">
 		            <a href="#">
 		                <img src="images/cbd.jpg">
@@ -121,7 +121,19 @@ mhea<!DOCTYPE html>
 	<script src="js/GOMFrameWork.js" ></script>
 	<script>
 	(function($,doc){
-		$.init();
+		$.get(getUrl("/Phone/LoadSilderImgs"),{},function(r){
+			r=r.split(';');
+			var html="";
+			for(var i=0;i<r.length;++i){
+				var path= r[i].split(':')[0];
+				path=getUrl(path)+"?size=480";
+				html+='<div class="mui-slider-item"><a href="#"><img src="'+path+'"></a></div>';
+
+			doc.innerHTML=html;
+			alert(html);
+			
+			$.init();
+		});
 		
 		$.plusReady(function() {
 			// close splash

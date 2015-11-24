@@ -39,7 +39,7 @@ namespace WebSite
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            if (Context.Request.FilePath == "/") Context.RewritePath("Default.htm");
+            if (Context.Request.FilePath == "/") Context.RewritePath("/Default/Index");
         }
     }
 }
