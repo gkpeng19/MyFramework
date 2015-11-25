@@ -16,20 +16,22 @@
 			return callback('账号最短为 5 个字符');
 		}
 		
-		mui.post(getUrl("/Phone/Login"),{uname:loginInfo.account,psw:loginInfo.password,ran:Math.random()},function(r){
-			if(!r||r==0){
+		mui.getJSON(getUrl("/Phone/Login"),{uname:loginInfo.account,psw:loginInfo.password,ran:Math.random()},function(r){
+			if(!r||r.id==0){
 				return callback('用户名或密码错误');
 			}
 			else{
-				return owner.createState(r, loginInfo.account, callback);
+				return owner.createState(r.id,loginInfo.account,r.phone,r.header, callback);
 			}
 		});
 	};
 
-	owner.createState = function(uid, name, callback) {
+	owner.createState = function(uid, name,phone,header, callback) {
 		var state = owner.getState();
 		state.uid=uid;
 		state.account = name;
+		state.phone=phone;
+		state.header=header;
 		state.token = "token123456789";
 		owner.setState(state);
 		return callback();
@@ -174,7 +176,7 @@
         	wgtVer=inf.version;
         	mui.getJSON("/Phone/CheckUpdate",{pversion:wgtVer,ran:Math.random()},function(r){
         		w.close();
-        		if(r.updated==1){
+        		if(r&&r.updated==1){
         			plus.nativeUI.toast('检测到新版本，正在下载');
         			owner.installUpdate(r.path);
         		}

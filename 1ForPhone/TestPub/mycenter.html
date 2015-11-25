@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/style.css" rel="stylesheet" />
+		<style>
+		.mui-content{
+			background-color: white;
+			font-size: 16px;
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+			.bottom-border{
+				border-bottom: solid 1px #DDDDDD;
+			}
+			.line
+			{
+				padding: 10px 0px 8px 10px;
+			}
+			.line img{
+				position: relative;
+				top: 1px;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">个人中心</h1>
+		</header>
+		<div class="mui-content">
+			<div class="bottom-border" style="padding: 10px 10px 5px 10px;">
+				<table>
+					<tr>
+						<td>
+							<img src="images/user-photo.png" width="50" id="header" />
+						</td>
+						<td style="padding-left: 10px;" valign="center">
+							<div id="username"></div>
+							<span style="font-size: 14px;">手机号码：<span id="phone"></span></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="bottom-border line" id="aboutus">
+				<table>
+					<tr>
+						<td><img src="images/aboutus.png" width="20"></td>
+						<td style="padding-left: 10px;">App版本：<span id="version"></span></td>
+					</tr>
+				</table>
+			</div>
+			<!--
+            	<div class="bottom-border line" id="aboutus">
+				<table>
+					<tr>
+						<td><img src="images/aboutus.png" width="20"></td>
+						<td style="padding-left: 10px;">关于我们</td>
+					</tr>
+				</table>
+			</div>
+            -->
+			<div class="bottom-border line" id="checkUpdate">
+				<table>
+					<tr>
+						<td><img src="images/update.png" width="20"></td>
+						<td style="padding-left: 10px;">检查更新</td>
+					</tr>
+				</table>
+			</div>
+			<!--
+            	<div class="bottom-border line">
+				<table>
+					<tr>
+						<td><img src="images/set.png" width="20"></td>
+						<td style="padding-left: 10px;">允许自动更新</td>
+					</tr>
+				</table>
+			</div>
+            -->
+            <div class="bottom-border line" id="loginOut">
+				<table>
+					<tr>
+						<td><img src="images/loginout.png" width="20"></td>
+						<td style="padding-left: 10px;">退出登录</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script type="text/javascript" src="js/GOMFrameWork.js" ></script>
+		<script>
+			(function($, doc) {
+				$.init();
+				
+				$.plusReady(function(){
+					var state=app.getState();
+					if(state.uid){
+						doc.getElementById("username").innerText=state.account;
+						doc.getElementById("phone").innerText=state.phone;
+						doc.getElementById("header").src=getUrl("/"+state.header);
+					}
+					
+				plus.runtime.getProperty(plus.runtime.appid,function(inf){
+        			doc.getElementById("version").innerText=inf.version;
+     			});
+					
+					var btnUpdate=doc.getElementById("checkUpdate");
+					btnUpdate.addEventListener("tap",function(){
+						app.checkUpdate();
+					},false);
+					
+					var btnLoginOut=doc.getElementById("loginOut");
+					btnLoginOut.addEventListener("tap",function(){
+						plus.nativeUI.confirm("确定要退出登录吗？",function(event){
+							if(event.index==0){
+								app.setState({});
+								var indexpage = plus.webview.getWebviewById('index');
+								indexpage.reload(true);
+								
+								setTimeout(function(){
+									$.openWindow({
+										id: 'index'
+									});
+								},300);
+							}
+						},"消息提示",['确定','取消']);
+					},false);
+				});
+			}(mui, document));
+		</script>
+	</body>
+</html>

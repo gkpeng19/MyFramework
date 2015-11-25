@@ -68,7 +68,7 @@
         $("#btnUpload").upload({
             filter: 'image',
             progressUrl: '',
-            thumbs: '480',
+            thumbs: '500',
             success: function (r) {
                 var timeout = setTimeout(function () {
                     addImgItem(r.path);
@@ -80,7 +80,10 @@
             var pls = pathAndLink.split(':');
             var path = pls[0];
             var link = pls[1];
-            var html = '<div class="imgDiv rightImgDiv"><div><img src="/' + path + '?size=480" data-path="' + path + '" data-link="' + link + '" /></div><a class="deleteImg" href="javascript:void(0)" onclick="$(this).parent().remove();">删除</a>  <a class="deleteImg" href="javascript:void(0)" onclick="SetImgLink(this)">设置链接</a></div>';
+            if (!link) {
+                link = "";
+            }
+            var html = '<div class="imgDiv rightImgDiv"><div><img src="/' + path + '?size=500" data-path="' + path + '" data-link="' + link + '" /></div><a class="deleteImg" href="javascript:void(0)" onclick="$(this).parent().remove();">删除</a>  <a class="deleteImg" href="javascript:void(0)" onclick="SetImgLink(this)">设置链接</a></div>';
             $(html).insertBefore("#lastImgDiv");
         }
 
@@ -91,8 +94,9 @@
         function SetImgLink(src) {
             var img = $(src).parent().find("img");
             $("#txtImgLink").val(img.attr("data-link"));
+            
             $("#divImgLink").open("设置图片链接", function () {
-                var link = $.trim($("#txtImgLink").val());
+                link = $.trim($("#txtImgLink").val());
                 img.attr("data-link", link);
             });
         }

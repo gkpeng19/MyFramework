@@ -121,13 +121,14 @@
 					var state = app.getState();
 					
 					var toMain = function() {
-						$.openWindow({
-							url: 'index.html',
-							id:'index'+Math.random(),
-							waiting: {
-								autoShow: false
-							}
-						});
+						var indexpage = plus.webview.getWebviewById('index');
+						indexpage.reload(true);
+								
+						setTimeout(function(){
+							$.openWindow({
+								id: 'index'
+							});
+						},1000);
 					};
 					
 					//检查 "登录状态/锁屏状态" 开始
@@ -158,8 +159,9 @@
 						app.login(loginInfo, function(err) {
 							if (err) {
 								plus.nativeUI.toast(err);
-								return;
+								return; 
 							}
+							plus.nativeUI.toast('登录成功，跳转中...');
 							toMain();
 						});
 					});

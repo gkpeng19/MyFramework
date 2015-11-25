@@ -216,11 +216,11 @@ namespace WebSite.Controllers
             var member = sm.LoadEntity<HQ_Member>();
             if (member == null || member.UserPsw != Encryption.GetMD5(psw))
             {
-                OutResult(0);
+                OutResult(new { id = 0 });
                 return;
             }
 
-            OutResult(member.ID);
+            OutResult(new {id=member.ID, phone = member.PhoneNum, header = member.HeaderImg_G });
         }
 
         public void Register(string uname, string psw, string phone, string yzm)

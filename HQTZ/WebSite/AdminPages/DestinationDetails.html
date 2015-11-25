@@ -135,7 +135,7 @@
         $("#btnUpload").upload({
             filter: 'image',
             progressUrl: '',
-            thumbs: '480',
+            thumbs: '500',
             success: function (r) {
                 var timeout = setTimeout(function () {
                     addImgItem(r.path);
@@ -144,7 +144,7 @@
         });
 
         function addImgItem(path) {
-            var html = '<div class="imgDiv rightImgDiv"><div><img src="/' + path + '?size=480" data-path="' + path + '" /></div><a class="deleteImg" href="javascript:void(0)" onclick="$(this).parent().remove();">删除</a></div>';
+            var html = '<div class="imgDiv rightImgDiv"><div><img src="/' + path + '?size=500" data-path="' + path + '" /></div><a class="deleteImg" href="javascript:void(0)" onclick="$(this).parent().remove();">删除</a></div>';
             $(html).insertBefore("#lastImgDiv");
         }
 

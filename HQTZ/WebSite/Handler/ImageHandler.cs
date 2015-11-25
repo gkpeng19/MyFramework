@@ -8,7 +8,7 @@ namespace WebSite.Handler
 {
     public class ImageHandler : IHttpHandler
     {
-        static int[] wsizes = new int[] { 42, 80, 260, 420, 480, 580 };
+        static int[] wsizes = new int[] { 42, 80, 260, 420, 480,500, 580 };
         public void ProcessRequest(HttpContext context)
         {
             context.Response.ContentType = "text/html";

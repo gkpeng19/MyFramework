@@ -180,6 +180,7 @@
     </Content>
     <Content Include="Images\trave.gif" />
     <Content Include="Images\traveguid.jpg" />
+    <Content Include="Images\tuichu.png" />
     <Content Include="Images\username.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

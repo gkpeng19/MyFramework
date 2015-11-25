@@ -63,6 +63,14 @@
     				url:'viewAnswer.html'
     			});
     			
+    			refresh(uid);
+    			
+    			window.addEventListener("refresh",function(event){
+    				refresh(uid);
+    			});
+    		}
+    		
+    		function refresh(uid){
     			$.getJSON(getUrl("/Phone/LoadMyAsk"),{uid:uid,ran:Math.random()},function(r){
     				doc.getElementById("loading").style.display="none";
     				
