@@ -115,22 +115,12 @@
 				$.init({
 					statusBarBackground: '#f7f7f7'
 				});
+				
 				$.plusReady(function() {
 					plus.screen.lockOrientation("portrait-primary");
 					var settings = app.getSettings();
 					var state = app.getState();
-					
-					var toMain = function() {
-						var indexpage = plus.webview.getWebviewById('index');
-						indexpage.reload(true);
-								
-						setTimeout(function(){
-							$.openWindow({
-								id: 'index'
-							});
-						},1000);
-					};
-					
+
 					//检查 "登录状态/锁屏状态" 开始
 					if (settings.autoLogin && state.token && settings.gestures) {
 						$.openWindow({
@@ -141,7 +131,7 @@
 							}
 						});
 					} else if (settings.autoLogin && state.token) {
-						toMain();
+						
 					}
 					
 					//检查 "登录状态/锁屏状态" 结束
@@ -161,8 +151,10 @@
 								plus.nativeUI.toast(err);
 								return; 
 							}
-							plus.nativeUI.toast('登录成功，跳转中...');
-							toMain();
+							plus.nativeUI.toast('登录成功。');
+							var indexpage = plus.webview.getWebviewById('index');
+							$.fire(indexpage, 'refresh', {});
+							$.back();
 						});
 					});
 					$.enterfocus('#login-form input', function() {

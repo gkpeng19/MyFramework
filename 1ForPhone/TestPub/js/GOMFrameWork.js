@@ -44,7 +44,7 @@ function getUrl(url) {
 	}
 	if(url.indexOf('/')==0){ 
         //return "http://123.57.153.47" + url;
-        return "http://192.168.1.102:8073"+url;
+        return "http://192.168.1.108:8073"+url;
         //return "http://10.2.8.35:8073"+url;
     }
     return "http://123.57.153.47/" + url;

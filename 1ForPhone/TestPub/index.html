@@ -147,70 +147,20 @@ mhea<!DOCTYPE html>
 		$.init();
 
 		$.plusReady(function() {
-			initPage();
-		});
-			
-		function initPage(){
 			// close splash
 			setTimeout(function() {
 				//关闭 splash
 				plus.navigator.closeSplashscreen();
 			}, 400);
 			
-			var initLoginIn=function(){
-				doc.getElementById("userState").innerHTML='<a href="javascript:void(0)" id="login"><img src="images/hydl1.png" /><div class="mui-media-body">会员登录</div></a>';
-      			doc.getElementById('login').addEventListener('tap', function() {
-					mui.openWindow({
-						url:'login.html',
-						id: 'login',
-						waiting: {
-							autoShow: false
-						}
-					});
-				},false);
-			};
-		
-			var initLoginOut=function(){
-				doc.getElementById("userState").innerHTML='<a href="javascript:void(0)" id="exit"><img src="images/hydl1.png" /><div class="mui-media-body">退出登录</div></a>';
-      			doc.getElementById('exit').addEventListener('tap', function() {
-      				plus.nativeUI.confirm("确定要退出登录吗？",function(event){
-						if(event.index==0){
-							app.setState({});
-							initLoginIn();
-							plus.nativeUI.toast('已成功退出');
-							
-							doc.getElementById("user").style.display="none";
-						}
-					});
-     			});
-			};
-			 
-			var state = app.getState();
-			if (state.token){
-				doc.getElementById("user").style.display="block";
-				doc.getElementById("uname").innerText=state.account;
-				
-				initLoginOut();
-			}
-			else{
-				initLoginIn();
-			}
-			
-			if(state.uid){
-				$.preload({
-					id: 'mycenter',
-					url:'mycenter.html'
-				});
-			}
+			initPage();
 			
 			var areaUserName=doc.getElementById("user");
 			areaUserName.addEventListener("tap",function(){
-				if(state.uid){
-					$.openWindow({
-						id: 'mycenter',
-						url:'mycenter.html'
-					});
-				}
+				$.openWindow({
+					id: 'mycenter',
+					url:'mycenter.html'
+				});
 			},false);
 			
 			var articleListPage = $.preload({
@@ -317,7 +267,61 @@ mhea<!DOCTYPE html>
 			initBottomBarFunc(doc);
 			
 			//自动更新
-			app.autoUpdate();
+			setTimeout(function(){
+				app.autoUpdate();
+			},5000);
+			
+			window.addEventListener("refresh",function(){
+				initPage();
+			});
+		});
+			
+		function initPage(){
+			var initLoginIn=function(){
+				doc.getElementById("userState").innerHTML='<a href="javascript:void(0)" id="login"><img src="images/hydl1.png" /><div class="mui-media-body">会员登录</div></a>';
+      			doc.getElementById('login').addEventListener('tap', function() {
+					mui.openWindow({
+						url:'login.html',
+						id: 'login',
+						waiting: {
+							autoShow: false
+						}
+					});
+				},false);
+			};
+		
+			var initLoginOut=function(){
+				doc.getElementById("userState").innerHTML='<a href="javascript:void(0)" id="exit"><img src="images/hydl1.png" /><div class="mui-media-body">退出登录</div></a>';
+      			doc.getElementById('exit').addEventListener('tap', function() {
+      				plus.nativeUI.confirm("确定要退出登录吗？",function(event){
+						if(event.index==0){
+							app.setState({});
+							initLoginIn();
+							plus.nativeUI.toast('已成功退出');
+							
+							doc.getElementById("user").style.display="none";
+						}
+					});
+     			});
+			};
+			 
+			var state = app.getState();
+			if (state.token){
+				doc.getElementById("user").style.display="block";
+				doc.getElementById("uname").innerText=state.account;
+				
+				initLoginOut();
+			}
+			else{
+				initLoginIn();
+			}
+			
+			if(state.uid){
+				$.preload({
+					id: 'mycenter',
+					url:'mycenter.html'
+				});
+			}
 		}
 	}(mui, document));
     </script>

@@ -174,11 +174,15 @@
 		var w= plus.nativeUI.showWaiting("检测更新中...");
 		plus.runtime.getProperty(plus.runtime.appid,function(inf){
         	wgtVer=inf.version;
-        	mui.getJSON("/Phone/CheckUpdate",{pversion:wgtVer,ran:Math.random()},function(r){
+        	mui.getJSON(getUrl("/Phone/CheckUpdate"),{pversion:wgtVer,ran:Math.random()},function(r){
         		w.close();
         		if(r&&r.updated==1){
-        			plus.nativeUI.toast('检测到新版本，正在下载');
-        			owner.installUpdate(r.path);
+        			plus.nativeUI.confirm("检测到新版本，是否更新？",function(e){
+        				if(e.index==0){
+        					plus.nativeUI.toast('正在下载...');
+        					owner.installUpdate(r.path);
+        				}
+        			});
         		}
         		else{
         			plus.nativeUI.toast("无新版本可更新");
@@ -189,7 +193,7 @@
 	
 	owner.installUpdate=function(path){
 		if(mui.os.android){
-			var dtask = plus.downloader.createDownload( url, {}, function ( d, status ) {
+			var dtask = plus.downloader.createDownload( path, {}, function ( d, status ) {
     			if ( status == 200 ) { // 下载成功
     				plus.runtime.install(d.filename);
     			} else {//下载失败
@@ -212,6 +216,7 @@
         		if(r.updated==1){
         			plus.nativeUI.confirm("检测到新版本，是否更新？",function(e){
         				if(e.index==0){
+        					plus.nativeUI.toast("正在下载...");
         					if(mui.os.android){
 								var dtask = plus.downloader.createDownload( r.path, {}, function ( d, status ) {
 					    			if ( status == 200 ) { // 下载成功
