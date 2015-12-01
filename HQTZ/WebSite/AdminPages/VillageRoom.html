@@ -73,13 +73,17 @@
                             <label>所属度假村</label>
                             <select name="VillageID" id="9247951704099395" class="span11" data-exname="Village_G"></select>
                         </div>
-                        <div class="span6">
+                        <div class="span4">
                             <label>单价</label>
                             <input type="text" name="Price" id="7912347175185488" class="span11" />
                         </div>
-                        <div class="span6">
+                        <div class="span4">
                             <label>数量</label>
                             <input type="text" name="RCount" id="7912347175185489" class="span11" />
+                        </div>
+                        <div class="span4">
+                            <label>封面图片(330*232)</label>
+                            <input type="file" id="6903831546189698" name="CoverImg" />
                         </div>
                         <div class="span12">
                             <label>房间描述</label>
@@ -101,6 +105,13 @@
     <script src="/Scripts/ace/ace.min.js"></script>
     <script src="/Scripts/GOMFrameWork.js"></script>
     <script type="text/javascript">
+        $("#6903831546189698").upload({
+            filter: "image",
+            thumbs: "42*42",
+            success: function (result) {
+                $("#6903831546189698").val(result.path);
+            }
+        });
 
         $.post("/VillageRoom/LoadJsonData", { ran: Math.random() }, function (r) {
             $(function () {
@@ -216,6 +227,10 @@
         tt.vf.req.add(f7912347175185489);
         tt.vf.int.add(f7912347175185489);
         new tt.LV().set('--', '8').add(f7912347175185489);
+
+        var f6903831546189698 = new tt.Field("图片", "", "6903831546189698").setMsgId("layer-error-msg");
+
+        tt.vf.req.add(f6903831546189698);
 
 
         var f3280650432639937 = new tt.Field("详细信息", "", "3280650432639937").setMsgId("layer-error-msg");

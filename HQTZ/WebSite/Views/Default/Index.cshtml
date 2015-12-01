@@ -14,7 +14,9 @@
     <div class="page">
         <div class="content">
             <div id="top">
-                <img src="~/Images/logo.gif" style="margin-left:50px;" />
+                <a href="http://123.57.153.47/">
+                    <img src="~/Images/logo.gif" style="margin-left:50px;" />
+                </a>
                 <img src="~/Images/server-tel.gif" style="margin-left:300px;" />
             </div>
             <div id="menu">
@@ -61,10 +63,27 @@
                     </ol>
                 </div>
             }
-
-            <div id="trave">
-                <img src="~/Images/trave.gif" />
+        </div>
+        <div id="dcontent">
+            <div class="m-column-name">
+                <h2>度假村推荐</h2>
+                <i class="line"></i>
             </div>
+            <div class="m-tabs-link" id="SpecialLevelOneCategoryContainer">
+                @foreach (EntityLibrary.Entities.HQ_DisplayPanel d in ViewBag.DistList)
+                {
+                    <a data-id="@d.ID" href="javascript:;">@d.Name</a>
+                }
+            </div>
+            <div class="destn-house-list j-specialunit-container" style="min-height:280px;padding-bottom:50px;">
+                <div style="text-align: center;display:none;" id="loading">
+                    <img src="images/loading2.gif" style="position:relative;top:70px;width:100px;height:100px;" />
+                </div>
+                <ul id="hotroomlist"></ul>
+            </div>
+        </div>
+        <div id="trave">
+            <img src="~/Images/trave.gif" />
         </div>
         <div id="bottom" class="bottomflow">
             <div class="flow_tab">
@@ -101,6 +120,7 @@
         </div>
     </div>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/GOMFrameWork.js"></script>
     <script src="~/Scripts/website/slider/js/slider.js"></script>
     <script src="~/Scripts/website/page.js"></script>
     <script type="text/javascript">
@@ -142,6 +162,29 @@
         });
         $('#banner_tabs .flex-next').click(function () {
             bannerSlider.next()
+        });
+
+        function LoadRoomsByDist(did) {
+            $("#hotroomlist").html("");
+            $("#loading").show();
+            var html = "";
+            $.post("/Default/LoadHotRoom", { destinationid: did }, function (r) {
+                $("#loading").hide();
+                r = $.toJsResult(r);
+                $(r).each(function () {
+                    var name = this.Name.length > 12 ? this.Name.substring(0, 12) : this.Name;
+                    html += '<li><a href="/Detail/RoomIndex/' + this.VillageID + '" target="_blank" class="pic-box"><img src="/' + this.CoverImg + '" /></a><div class="house-info"><h2><a href="" class="house-tit" target="_blank" title="' + this.Name + '">' + name + '</a></h2><span class="price-box"><dfn>¥</dfn><b>' + this.Price + '</b>/晚</span></div></li>';
+                });
+                $("#hotroomlist").html(html);
+            });
+        }
+
+        $("#SpecialLevelOneCategoryContainer a:first").addClass("current");
+        LoadRoomsByDist($("#SpecialLevelOneCategoryContainer a:first").attr("data-id"));
+        $("#SpecialLevelOneCategoryContainer a").bind("click", function () {
+            $("#SpecialLevelOneCategoryContainer a.current").removeClass("current");
+            $(this).addClass("current");
+            LoadRoomsByDist($(this).attr("data-id"));
         });
 
         initBottomFlow();

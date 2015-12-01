@@ -62,5 +62,11 @@ namespace EntityLibrary.Entities
             get { return GetString("ImgName_G"); }
             set { SetValue("ImgName_G", value); }
         }
+        [JsonIgnore]
+        public string CoverImg
+        {
+            get { return GetString("CoverImg"); }
+            set { SetValue("CoverImg", value); }
+        }
     }
 }

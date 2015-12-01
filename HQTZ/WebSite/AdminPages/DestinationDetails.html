@@ -99,6 +99,10 @@
                             <label>目的地</label>
                             <select name="DPanelID" id="9482227414632911" class="span11" data-exname="DPanel_G"></select>
                         </div>
+                        <!--<div class="span4">
+                            <label>封面图片</label>
+                            <input type="file" id="6903831546189698" name="CoverImg" />
+                        </div>-->
                         <div class="span12">
                             <label>详细信息</label>
                             <textarea name="DContent" id="3280650432639937" class="span12 text_editor_hide"></textarea>
@@ -132,6 +136,14 @@
     <script src="/Scripts/ace/ace.min.js"></script>
     <script src="/Scripts/GOMFrameWork.js"></script>
     <script type="text/javascript">
+        //$("#6903831546189698").upload({
+        //    filter: "image",
+        //    thumbs: "42*42",
+        //    success: function (result) {
+        //        $("#6903831546189698").val(result.path);
+        //    }
+        //});
+
         $("#btnUpload").upload({
             filter: 'image',
             progressUrl: '',
@@ -168,7 +180,7 @@
                 })
             }
 
-            var layerout= $("#div_images").open("设置轮播图片", function () {
+            var layerout= $("#div_images").open("设置轮播图片(980*422)", function () {
                 var paths = "";
                 $("#div_images .imgDiv img").each(function (idx) {
                     if (idx == 0) {
@@ -300,7 +312,6 @@
 
 
         tt.vf.req.add(f9482227414632911);
-
 
         var f3280650432639937 = new tt.Field("详细信息", "", "3280650432639937").setMsgId("layer-error-msg");
 

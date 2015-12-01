@@ -220,7 +220,7 @@ namespace WebSite.Controllers
                 return;
             }
 
-            OutResult(new {id=member.ID, phone = member.PhoneNum, header = member.HeaderImg_G });
+            OutResult(new { id = member.ID, phone = member.PhoneNum, header = member.HeaderImg_G });
         }
 
         public void Register(string uname, string psw, string phone, string yzm)
@@ -432,12 +432,19 @@ namespace WebSite.Controllers
             SearchModel sm = new SearchModel("HQ_Article");
             sm["ACategory"] = (int)EnumArticleCategory.SilderImg;
             var entity = sm.LoadEntity<HQ_Article>();
-            string plstr=string.Empty;
+            string plstr = string.Empty;
             if (entity != null)
             {
                 plstr = entity.AContent;
             }
             OutResult(plstr);
+        }
+
+        public ActionResult AppDownload()
+        {
+            var appname = ConfigurationManager.AppSettings["appname"];
+            var path = Server.MapPath("~/appstore/" + appname);
+            return File(path, "application/octet-stream");
         }
 
         void OutResult(object result)

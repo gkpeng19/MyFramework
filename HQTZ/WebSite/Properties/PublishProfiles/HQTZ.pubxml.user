@@ -31,7 +31,7 @@
       <publishTime>11/11/2015 20:32:20</publishTime>
     </File>
     <File Include="AdminPages/DestinationDetails.html">
-      <publishTime>11/25/2015 21:05:58</publishTime>
+      <publishTime>12/01/2015 21:54:41</publishTime>
     </File>
     <File Include="AdminPages/Login.html">
       <publishTime>09/26/2015 11:36:16</publishTime>
@@ -64,16 +64,16 @@
       <publishTime>10/25/2015 19:51:57</publishTime>
     </File>
     <File Include="AdminPages/VillageRoom.html">
-      <publishTime>10/25/2015 19:51:55</publishTime>
+      <publishTime>12/01/2015 21:56:27</publishTime>
     </File>
     <File Include="App_Start/HtmlHandler.ashx">
       <publishTime>09/22/2015 21:58:50</publishTime>
     </File>
     <File Include="bin/EntityLibrary.dll">
-      <publishTime>11/24/2015 22:26:51</publishTime>
+      <publishTime>12/01/2015 21:55:22</publishTime>
     </File>
     <File Include="bin/EntityLibrary.pdb">
-      <publishTime>11/24/2015 22:26:51</publishTime>
+      <publishTime>12/01/2015 21:55:22</publishTime>
     </File>
     <File Include="bin/ExcelLibrary.dll">
       <publishTime>08/08/2015 13:29:36</publishTime>
@@ -199,10 +199,10 @@
       <publishTime>08/08/2015 13:29:36</publishTime>
     </File>
     <File Include="bin/WebSite.dll">
-      <publishTime>11/25/2015 23:59:46</publishTime>
+      <publishTime>12/01/2015 22:58:53</publishTime>
     </File>
     <File Include="bin/WebSite.pdb">
-      <publishTime>11/25/2015 23:59:46</publishTime>
+      <publishTime>12/01/2015 22:58:53</publishTime>
     </File>
     <File Include="bin/zh-Hans/System.Web.Helpers.resources.dll">
       <publishTime>08/08/2015 13:29:36</publishTime>
@@ -284,6 +284,15 @@
     </File>
     <File Include="Images/left_hand.png">
       <publishTime>08/16/2015 18:41:48</publishTime>
+    </File>
+    <File Include="Images/loading.gif">
+      <publishTime>12/01/2015 22:35:07</publishTime>
+    </File>
+    <File Include="Images/loading1.gif">
+      <publishTime>12/01/2015 22:36:24</publishTime>
+    </File>
+    <File Include="Images/loading2.gif">
+      <publishTime>12/01/2015 22:40:45</publishTime>
     </File>
     <File Include="Images/locker.png">
       <publishTime>11/22/2015 17:36:16</publishTime>
@@ -1081,7 +1090,7 @@
       <publishTime>11/22/2015 19:09:42</publishTime>
     </File>
     <File Include="Styles/website/page.css">
-      <publishTime>10/17/2015 14:34:13</publishTime>
+      <publishTime>12/01/2015 22:15:49</publishTime>
     </File>
     <File Include="test.html">
       <publishTime>10/14/2015 17:37:21</publishTime>
@@ -1090,7 +1099,7 @@
       <publishTime>10/17/2015 14:34:13</publishTime>
     </File>
     <File Include="Views/Default/Index.cshtml">
-      <publishTime>11/24/2015 22:13:12</publishTime>
+      <publishTime>12/01/2015 22:45:33</publishTime>
     </File>
     <File Include="Views/Destination/Index.cshtml">
       <publishTime>10/11/2015 14:13:33</publishTime>
@@ -1135,7 +1144,7 @@
       <publishTime>08/08/2015 13:29:36</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/26/2015 00:19:45</publishTime>
+      <publishTime>12/01/2015 22:59:10</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -155,6 +155,9 @@
     <Content Include="Images\left_hand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\loading.gif" />
+    <Content Include="Images\loading1.gif" />
+    <Content Include="Images\loading2.gif" />
     <Content Include="Images\locker.png" />
     <Content Include="Images\login.jpg" />
     <Content Include="Images\logo.gif" />
