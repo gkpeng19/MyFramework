@@ -204,7 +204,7 @@ body .page {
         border-right: solid 1px #ddd;
     }
 
-        #SpecialLevelOneCategoryContainer a:hover,#SpecialLevelOneCategoryContainer a.current {
+        #SpecialLevelOneCategoryContainer a:hover, #SpecialLevelOneCategoryContainer a.current {
             background-color: #C73937;
             color: white;
         }
@@ -234,8 +234,8 @@ body .page {
 
     .destn-house-list img {
         background-color: #eee;
-        width:330px;
-        height:232px;
+        width: 330px;
+        height: 232px;
     }
 
     .destn-house-list .house-info {
@@ -246,7 +246,7 @@ body .page {
 .house-info h2 {
     font-size: 18px;
     text-align: left;
-    line-height:0px;
+    line-height: 0px;
 }
 
 .house-info .house-datelist {
@@ -264,8 +264,8 @@ body .page {
 
 .house-info .price-box {
     color: #666;
-    position:relative;
-    top:-30px;
+    position: relative;
+    top: -30px;
 }
 
     .house-info .price-box dfn {
@@ -279,4 +279,33 @@ body .page {
         font-family: Tahoma;
         font-weight: bold;
         color: #f60;
+    }
+
+#div2code {
+    display: none;
+    position: fixed;
+    bottom: 66px;
+    width: 200px;
+    border: solid 1px #888888;
+    border-radius: 5px;
+    background-color: white;
+    z-index: 999;
+}
+
+    #div2code .text {
+        text-align: center;
+        font-size: 12px;
+        padding-bottom: 3px;
+    }
+
+#close2code {
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 10px;
+    color: #C73937;
+    float: right;
+}
+
+    #close2code:hover {
+        color: red;
     }

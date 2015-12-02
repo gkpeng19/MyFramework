@@ -73,7 +73,7 @@
         $("#btnUpload").upload({
             filter: 'image',
             progressUrl: '',
-            thumbs: '500',
+            thumbs: '500*300',
             success: function (r) {
                 var timeout = setTimeout(function () {
                     addImgItem(r.path);

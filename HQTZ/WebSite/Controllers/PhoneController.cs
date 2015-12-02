@@ -440,11 +440,11 @@ namespace WebSite.Controllers
             OutResult(plstr);
         }
 
-        public ActionResult AppDownload()
+        public ActionResult LjzgApp()
         {
             var appname = ConfigurationManager.AppSettings["appname"];
             var path = Server.MapPath("~/appstore/" + appname);
-            return File(path, "application/octet-stream");
+            return File(path, "application/vnd.android.package-archive", "ljzgapp.apk");
         }
 
         void OutResult(object result)

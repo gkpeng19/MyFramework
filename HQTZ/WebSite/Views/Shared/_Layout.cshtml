@@ -71,10 +71,22 @@
                                     <span>&nbsp;联系我们</span>
                                 </a>
                             </td>
+                            <td class="contact_ctx">
+                                <a href="http://123.57.153.47/phone/ljzgapp" target="_blank" id="2codelink">
+                                    <img class="contact_ctx_icon" src="~/Images/2codesmall.png" width="35" />
+                                    <span>&nbsp;手机App下载</span>
+                                </a>
+                            </td>
                         </tr>
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+    <div id="div2code">
+        <img src="~/Images/2code.png" width="200" />
+        <div class="text">
+            手机扫一扫<i class="fa fa-close" id="close2code"></i>
         </div>
     </div>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
@@ -114,6 +126,16 @@
         }
 
         initBottomFlow();
+
+        $("#2codelink").bind("mouseover", function () {
+            var left = $(this).offset().left;
+            $("#div2code").css({ left: left });
+            $("#div2code").show();
+        });
+
+        $("#close2code").bind("click", function () {
+            $("#div2code").hide();
+        });
     </script>
     @RenderSection("scripts", required: false)
 </body>
