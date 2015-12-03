@@ -279,6 +279,32 @@ namespace WebSite.Controllers
             return 0;
         }
 
+        [LoginVerify("Client")]
+        public long ChangeUserPhone(string phone, string yzm)
+        {
+            if (phone == null || phone.Length == 0 || !(Regex.Match(phone, @"^[1][3,5,8][0-9]{9}$", RegexOptions.Compiled).Success))
+            {
+                return -1;//手机号码错误
+            }
+
+            var omcode = base.HttpContext.Cache["msg-" + phone];
+            if (omcode == null || omcode.ToString().Length == 0)
+            {
+                return -2;//已发送的短信验证码不存在
+            }
+
+            if (yzm == null || yzm.Length == 0 || !yzm.Equals(omcode.ToString()))
+            {
+                return -2;//输入的短信验证码错误
+            }
+
+
+            HQ_Member user = new HQ_Member();
+            user["ID"] = LoginInfo.Current.UserID;
+            user.PhoneNum = phone;
+            return user.Save();
+        }
+
         public int SendMsgCode(string phone, string type)
         {
             if (type == null || type.Length == 0)
@@ -301,6 +327,20 @@ namespace WebSite.Controllers
                     }
 
                     msgKey = "用户注册短信验证码：";
+                }
+
+                if ("3".Equals(type))
+                {
+                    SearchModel se = new SearchModel("hq_member");
+                    se["PhoneNum"] = phone;
+                    se.AddSearch("count(1)");
+                    var count = se.LoadValue<int>();
+                    if (count > 0)
+                    {
+                        return 9;
+                    }
+
+                    msgKey = "用户修改手机号码短信验证码：";
                 }
 
                 if ("2".Equals(type))

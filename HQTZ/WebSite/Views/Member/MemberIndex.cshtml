@@ -37,7 +37,7 @@
                     <img src="/Images/locker.png" />  <a onclick="ChangePsw()" style="cursor:pointer;">修改密码</a>
                 </div>
                 <div class="ctxLine">
-                    <img src="/Images/phone.png" /><span>手机号码：@ViewBag.Member.PhoneNum</span>
+                    <img src="/Images/phone.png" /><span>手机号码：@ViewBag.Member.PhoneNum</span> <a href="javascript:void(0)" onclick="changPhone()">[修改]</a>
                 </div>
                 <div class="ctxLine">
                     <img src="/Images/tuichu.png" width="20" />  <a href="/Base/LoginOut" style="text-decoration:none;color:black;">&nbsp;退出登录</a>
@@ -85,6 +85,19 @@
         <tr><td>旧&nbsp;&nbsp; 密 &nbsp;&nbsp;码：</td><td><input type="password" id="u_oldpsw" /></td></tr>
         <tr><td>新&nbsp;&nbsp; 密 &nbsp;&nbsp;码：</td><td><input type="password" id="u_newpsw" /></td></tr>
         <tr><td>重复新密码：</td><td><input type="password" id="u_tnewpsw" /></td></tr>
+    </table>
+</div>
+
+<div id="div_ChangePhone" style="width:350px;padding:30px 0px 0px 50px;display:none;">
+    <table>
+        <tr><td align="right">新手机号：</td><td><input type="text" id="u_newphone" /></td></tr>
+        <tr>
+            <td>短信验证码：</td>
+            <td>
+                <input type="text" id="u_yzm" maxlength="6" style="width:105px;" />
+                <input type="button" value="获取验证码" class="btn noradius" id="btn-getcode" style="position:relative;top:-5px;" />
+            </td>
+        </tr>
     </table>
 </div>
 
@@ -197,6 +210,74 @@
                     }
                     else {
                         ShowMsg("旧密码错误！");
+                    }
+                });
+
+                return false;
+            });
+        }
+
+        $("#btn-getcode").bind("click", function () {
+            var phone = $.trim($("#u_newphone").val());
+            if (phone.length == 0) {
+                ShowMsg("手机号码不能为空！");
+                return false;
+            }
+            if (!(/^[1][3,5,8][0-9]{9}$/g).test(phone)) {
+                ShowMsg("请输入有效的手机号码！");
+                return false;
+            }
+
+            this.disabled = "disabled";
+            var src = this;
+            $.post("/Member/SendMsgCode", { phone: phone, type: "3", ran: Math.random() }, function (r) {
+                src.disabled = "";
+                if (r == -1) {
+                    ShowMsg("手机号码输入错误！");
+                    return;
+                }
+
+                if (r == 9) {
+                    ShowMsg("该手机号码已被注册！");
+                }
+                else if (r == 1) {
+                    $.success("短信验证码已发送成功。");
+                }
+                else if (r == 0) {
+                    ShowMsg("短信验证码发送失败，请重试！");
+                }
+            });
+        });
+        function changPhone() {
+            $("#div_ChangePhone").open("修改手机号码", function () {
+                var phone = $.trim($("#u_newphone").val());
+                var mcode = $.trim($("#u_yzm").val());
+                if (phone.length == 0) {
+                    ShowMsg("手机号码不能为空！");
+                    return false;
+                }
+                if (!(/^[1][3,5,8][0-9]{9}$/g).test(phone)) {
+                    ShowMsg("请输入有效的手机号码！");
+                    return false;
+                }
+                if (mcode.length == 0) {
+                    ShowMsg("短信验证码不能为空！");
+                    return false;
+                }
+
+                $.post("/Member/ChangeUserPhone", { phone: phone, yzm: mcode, ran: Math.random() }, function (r) {
+                    if (r > 0) {
+                        ShowMsg("");
+                        $("#u_newphone").val("");
+                        $("#u_yzm").val("");
+                        layer.closeAll();
+                        $.success("修改手机号码成功。");
+                    }
+                    else if (r == -1) {
+                        ShowMsg("手机号码输入错误！");
+                    }
+                    else if (r == -2) {
+                        ShowMsg("短信验证码错误！");
                     }
                 });
 
