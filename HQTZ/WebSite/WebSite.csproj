@@ -134,7 +134,6 @@
     <Content Include="Global.asax" />
     <Content Include="Images\2code.png" />
     <Content Include="Images\2codesmall.png" />
-    <Content Include="Images\2icon.png" />
     <Content Include="Images\agentersearch.jpg" />
     <Content Include="Images\bar.png" />
     <Content Include="Images\bgnoise_lg.png" />
@@ -430,6 +429,7 @@
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\DestinationController.cs" />
     <Compile Include="Controllers\DetailController.cs" />
+    <Compile Include="Controllers\MD5.cs" />
     <Compile Include="Controllers\MemberBenefitController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MemberServiceController.cs" />

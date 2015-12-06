@@ -20,10 +20,8 @@
                 <img src="~/Images/server-tel.gif" style="margin-left:300px;" />
             </div>
             <div id="menu">
-                <a href="/Destination"><div class="menu-normal"><span>目的地</span></div></a>
-                <a href="/MemberBenefit">
-                    <div class="menu-normal"><span>得天独厚</span></div>
-                </a>
+                <a href="/Destination"><div class="menu-normal" data-class="menu-curr"><span>目的地</span></div></a>
+                <a href="/MemberBenefit"><div class="menu-normal" data-class="green-menu-curr"><span>得天独厚</span></div></a>
                 <a href="/Member">
                     <div class="menu-normal" data-class="menu-curr"><span>会员中心</span></div>
                 </a>
@@ -32,6 +30,9 @@
                 </a>
                 <a href="/NewCheaper">
                     <div class="menu-normal" data-class="green-menu-curr"><span>最新优惠</span></div>
+                </a>
+                <a href="#" onclick="toShop()">
+                    <div class="menu-normal" data-class="menu-curr"><span>旅居商城</span></div>
                 </a>
             </div>
             <div class="clear"></div>
@@ -131,6 +132,13 @@
             手机扫一扫<i class="fa fa-close" id="close2code"></i>
         </div>
     </div>
+
+    <form action="http://123.57.153.47:8099/Account/Login" method="post" style="display:none;" id="shop_form">
+        <input type="hidden" name="hfRegisterToggle" value="phone" />
+        <input type="hidden" name="UserName" id="shop_u" value="" />
+        <input type="hidden" name="Password" id="shop_p" value="" />
+    </form>
+
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/GOMFrameWork.js"></script>
     <script src="~/Scripts/website/slider/js/slider.js"></script>
@@ -144,7 +152,8 @@
                 if (!currMenu.hasClass("menu-normal")) {
                     currMenu.addClass("menu-normal");
                 }
-                $(this).addClass("menu-curr");
+                var classN = $(this).attr("data-class");
+                $(this).addClass(classN);
             }
         });
 
@@ -157,6 +166,7 @@
             }
             else {
                 $(".menu-curr").removeClass("menu-curr");
+                $(".green-menu-curr").removeClass("green-menu-curr");
             }
         });
 
@@ -210,6 +220,19 @@
         $("#close2code").bind("click", function () {
             $("#div2code").hide();
         });
+
+        function toShop() {
+            $.get("/Member/LoadCurrUserInfo", { ran: Math.random() }, function (r) {
+                if (r.Phone.length > 0) {
+                    $("#shop_u").val(r.Phone);
+                    $("#shop_p").val(r.Pwd);
+                    $("#shop_form")[0].submit();
+                }
+                else {
+                    location.href = "http://123.57.153.47:8099";
+                }
+            });
+        }
     </script>
 </body>
 </html>

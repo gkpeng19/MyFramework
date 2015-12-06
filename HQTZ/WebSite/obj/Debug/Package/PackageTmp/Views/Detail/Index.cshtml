@@ -1,0 +1,322 @@
+﻿@model EntityLibrary.Entities.HQ_DisplayContent
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model.Images.Length > 0)
+{
+    var imgs = Model.Images.Split(';');
+    <div id="banner_tabs" class="flexslider" style="position:relative;top:-10px;height:422px;">
+        <ul class="slides">
+            @foreach (var img in imgs)
+            {
+                <li>
+                    <a href="#">
+                        <div style="width:980px;height:422px; background: url(../../@img) no-repeat center;"></div>
+                    </a>
+                </li>
+            }
+        </ul>
+        <ul class="flex-direction-nav">
+            <li><a class="flex-prev" href="javascript:;">Previous</a></li>
+            <li><a class="flex-next" href="javascript:;">Next</a></li>
+        </ul>
+        <ol id="bannerCtrl" class="flex-control-nav flex-control-paging">
+            @for (var i = 1; i <= imgs.Length; ++i)
+            {
+                <li><a>@i</a></li>
+            }
+        </ol>
+    </div>
+}
+
+<div class="header blue" style="margin-bottom:5px;font-size:18px;font-weight:bold;"><i class="fa fa-info-circle"></i> @Model.Name</div>
+<div style="padding-top:10px;">
+    <div id="div_desc">@(new HtmlString(Model.DContent))</div>
+</div>
+
+    @if (ViewBag.IsBookRoom != null && ViewBag.IsBookRoom == 1)
+    {
+        <a href="#tagBookRoom" id="a_book" style="display:none;">
+            <div id="book"></div>
+        </a>
+        <div id="tagBookRoom" class="header blue" style="margin-bottom:5px;font-size:18px;font-weight:bold;"><i class="fa fa-cart-plus"></i> 预定房间</div>
+        <div id="roomlist" class="accordion">
+        </div>
+    }
+
+    <div class="layerout" id="div_bookroom" style="width:350px;padding-top:20px;">
+        <table>
+            <tr>
+                <td style="padding-right:15px;padding-top:3px;" valign="top">起始时间：</td>
+                <td><input id="startDate" type="text" data-date-format="yyyy-mm-dd"></td>
+            </tr>
+            <tr>
+                <td valign="top" style="padding-top:3px;">结束时间：</td>
+                <td><input id="endDate" type="text" data-date-format="yyyy-mm-dd"></td>
+            </tr>
+        </table>
+    </div>
+
+
+    @section styles{
+        <link href="~/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/Scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+        <link href="~/Scripts/bootstrap/bootstrap-datepicker.css" rel="stylesheet" />
+        <link href="~/Scripts/ace/css/ace.min.css" rel="stylesheet" />
+        <link href="~/Styles/GOMFrameWork.css" rel="stylesheet" />
+        <link href="~/Scripts/website/slider/css/silder.css" rel="stylesheet" />
+        <style type="text/css">
+            #a_book:hover {
+                text-decoration: none;
+            }
+
+            .rprice {
+                position: absolute;
+                left: 520px;
+            }
+
+            .rcount {
+                position: absolute;
+                left: 650px;
+            }
+
+            .rbook {
+                position: absolute;
+                left: 800px;
+                padding: 3px 8px;
+            }
+
+            .rdesc:link {
+                position: absolute;
+                left: 910px;
+                text-decoration: underline;
+            }
+
+            .rdesc:hover, .rdesc:visited, .rdesc:active {
+                text-decoration: underline;
+            }
+
+            .accordion {
+                margin-bottom: 0px;
+            }
+
+            .accordion-inner {
+                max-height: 450px;
+                overflow-y: auto;
+                padding: 0px 50px;
+            }
+
+            #book {
+                width: 71px;
+                height: 71px;
+                background-image: url('/Images/book-over.jpg');
+                background-repeat: no-repeat;
+            }
+
+                #book:hover {
+                    background-image: url('/Images/book.jpg');
+                }
+        </style>
+    }
+
+    @section scripts{
+        <script src="~/Scripts/bootstrap/js/bootstrap.min.js"></script>
+        <script src="~/Scripts/bootstrap/bootstrap-datepicker.min.js"></script>
+        <script src="~/Scripts/layer/layer.js"></script>
+        <script src="~/Scripts/GOMFrameWork.js"></script>
+        <script src="~/Scripts/jquery.floatDiv.js"></script>
+        <script src="~/Scripts/website/slider/js/slider.js"></script>
+        <script type="text/javascript">
+        @if (ViewBag.IsBookRoom != null && ViewBag.IsBookRoom == 1)
+        {
+            <text>
+            $("#startDate").datepicker({ startDate: new Date().toLocaleDateString(),autoclose:true });
+            $("#endDate").datepicker({ startDate: new Date().toLocaleDateString() ,autoclose:true});
+            //$("#startTime").timepicker({
+            //    minuteStep: 10,
+            //    showSeconds: false,
+            //    showMeridian: false
+            //});
+
+            var villageId = @(ViewBag.VillageID == null ? "0" : ViewBag.VillageID);
+
+            $(function () {
+                $.post("/Detail/LoadRooms", {villageId:villageId, ran: Math.random() }, function (r) {
+                    r=$.toJsResult(r);
+                    var html="";
+                    $(r).each(function(idx)
+                    {
+                        if(idx==0)
+                        {
+                            html+=GetRoomItem(this.ID,this.Name,this.Price,this.RCount,this.Description,true);
+                        }
+                        else
+                        {
+                            html+=GetRoomItem(this.ID,this.Name,this.Price,this.RCount,this.Description);
+                        }
+                    });
+                    $("#roomlist").html(html);
+
+                    $(".rdesc").bind("click",function()
+                    {
+                        var timeout=setTimeout(function()
+                        {
+                            clearTimeout(timeout);
+                            $("#book")[0].click();
+                        },200);
+                    });
+
+                    $(".rbook").bind("click",function()
+                    {
+                        targetRoomId=$(this).attr("data-id");
+
+                        $("#startDate").val("");
+                        $("#endDate").val("");
+
+                        var _layer=null;
+                        _layer=$("#div_bookroom").open("预定房间",function()
+                        {
+                            var r=CheckBookRoom();
+                            if(r)
+                            {
+                                $.post("/Member/BookRoom",bArgs,function(r)
+                                {
+                                    if(r==-2)
+                                    {
+                                        ShowMsg("该时段的房间已全部被预定！");
+                                    }
+                                    else if(r==-1)
+                                    {
+                                        layer.alert("未登录，请先登录系统！", { icon: 2 },function()
+                                        {
+                                            location.href="/Member/Index?op=login&ReturnUrl="+location.href;
+                                        });
+                                    }
+                                    else if(r>0)
+                                    {
+                                        layer.close(_layer);
+                                        $.success("房间预订成功。");
+                                    }
+                                });
+                            }
+
+                            return false;
+                        });
+                    });
+                });
+
+                var right=(($(window).width()- $(".content").width())/2-71)/2;
+                if(right<0)
+                {
+                    right=0;
+                }
+                $("#a_book").floatdiv({right:right,top:"200px"});
+                $("#a_book").show();
+
+                $("#startDate,#endDate").bind("change",function(){
+                    CheckBookRoom();
+                });
+            });
+
+            function GetRoomItem(id,name,price,count,desc,isopen)
+            {
+                return  '<div class="accordion-group">'+
+                '<div class="accordion-heading">'+
+                    '<div class="accordion-toggle">'+
+                        '<span>'+name+'</span>'+
+                        '<span class="rprice label label-success">￥'+price+' / 天</span>'+
+                        '<span class="rcount">'+
+                            '共 <span class="label label-warning arrowed-right">'+count+'</span> 间'+
+                        '</span>'+
+                        '<span class="label label-info rbook" data-id="'+id+'">预定</span>'+
+                        (isopen?('<a href="#collapse'+id+'" data-toggle="collapse" data-parent="#roomlist" class="rdesc">查看详情</a>'):('<a href="#collapse'+id+'" data-toggle="collapse" data-parent="#roomlist" class="collapsed rdesc">查看详情</a>'))+
+                    '</div>'+
+                '</div>'+
+                (isopen?('<div class="accordion-body in" id="collapse'+id+'">'):('<div class="accordion-body collapse" id="collapse'+id+'">'))+
+                    '<div class="accordion-inner">'+
+                        desc+
+                    '</div>'+
+                '</div>'+
+                '</div>'
+            }
+
+            function ShowMsg(msg)
+            {
+                if(msg.length==0)
+                {
+                    $("#layer-error-msg").html("");
+                }
+                else
+                {
+                    $("#layer-error-msg").html('<span class="alert alert-error" style="font-size: 11px; padding: 3px 15px 3px 5px;"><i class="fa fa-warning"></i> '+msg+'</span>');
+                }
+            }
+
+            var targetRoomId=0;
+            var bArgs=null;
+            function CheckBookRoom()
+            {
+                var sdate=$.trim($("#startDate").val());
+                if(sdate.length==0)
+                {
+                    ShowMsg("请输入起始时间！");
+                    return false;
+                }
+
+                var edate=$.trim($("#endDate").val());
+                if(edate.length==0)
+                {
+                    ShowMsg("请输入结束时间！");
+                    return false;
+                }
+
+                if(new Date(sdate.replace("-", "/").replace("-", "/"))>new Date(edate.replace("-", "/").replace("-", "/")))
+                {
+                    ShowMsg("结束日期不能小于起始时间！");
+                    return false;
+                }
+
+                ShowMsg("");
+
+                $.ajaxSetup({ async: false });
+                bArgs={roomid:targetRoomId,sdate:sdate,edate:edate,ran:Math.random()};
+                $.post("/Member/IsRoomEnough",bArgs,function(r){
+                    if(r==0)
+                    {
+                        $.ajaxSetup({ async: true });
+
+                        ShowMsg("该时段的房间已全部被预定！");
+                        return false;
+                    }
+                });
+
+                return true;
+            }
+
+            </text>
+        }
+
+            if($("#banner_tabs").length>0)
+            {
+                var bannerSlider = new Slider($('#banner_tabs'), {
+                    time: 5000,
+                    delay: 400,
+                    event: 'hover',
+                    auto: true,
+                    mode: 'fade',
+                    controller: $('#bannerCtrl'),
+                    activeControllerCls: 'active'
+                });
+                $('#banner_tabs .flex-prev').click(function () {
+                    bannerSlider.prev()
+                });
+                $('#banner_tabs .flex-next').click(function () {
+                    bannerSlider.next()
+                });
+            }
+        </script>
+    }
+
+

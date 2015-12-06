@@ -55,7 +55,7 @@ namespace WebSite.Controllers
                 return -1;
             }
 
-            if (member.UserPsw != Encryption.GetMD5(userpsw))
+            if (member.UserPsw != MD5.EncryptString(userpsw))
             {
                 return 0;
             }
@@ -111,7 +111,7 @@ namespace WebSite.Controllers
 
             HQ_Member member = new HQ_Member();
             member.UserName = username;
-            member.UserPsw = Encryption.GetMD5(userpsw);
+            member.UserPsw = MD5.EncryptString(userpsw);
             member.PhoneNum = phone;
             member.UserType = (int)EnumUserType.Normal;
             if (member.Save() > 0)
@@ -269,11 +269,11 @@ namespace WebSite.Controllers
             SearchModel se = new SearchModel("hq_member");
             se["ID"] = LoginInfo.Current.UserID;
             var user = se.LoadEntity<HQ_Member>();
-            if (user.UserPsw.Equals(Encryption.GetMD5(oldPsw)))
+            if (user.UserPsw.Equals(MD5.EncryptString(oldPsw)))
             {
                 user = new HQ_Member();
                 user["ID"] = LoginInfo.Current.UserID;
-                user.UserPsw = Encryption.GetMD5(newPsw);
+                user.UserPsw = MD5.EncryptString(newPsw);
                 return user.Save();
             }
             return 0;
@@ -401,7 +401,7 @@ namespace WebSite.Controllers
             {
                 HQ_Member member = new HQ_Member();
                 member["id"] = id;
-                member.UserPsw = G.Util.Tool.Encryption.GetMD5(psw);
+                member.UserPsw = MD5.EncryptString(psw);
                 if (member.Save() > 0)
                 {
                     return 1;
@@ -432,6 +432,22 @@ namespace WebSite.Controllers
         {
             member["id"] = LoginInfo.Current.UserID;
             return member.Save();
+        }
+
+        public JsonResult LoadCurrUserInfo()
+        {
+            var user = LoginInfo.Current;
+            if (user != null && user.UserID > 0)
+            {
+                SearchModel sm = new SearchModel("hq_member");
+                sm["id"] = user.UserID;
+                var member = sm.LoadEntity<HQ_Member>();
+                if (member != null)
+                {
+                    return this.JsonNet(new { Phone = member.PhoneNum, Pwd = MD5.DecryptString(member.UserPsw) });
+                }
+            }
+            return this.JsonNet(new { Phone = "" });
         }
     }
 }

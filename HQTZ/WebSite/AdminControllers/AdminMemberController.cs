@@ -8,6 +8,7 @@ using G.Util.Html;
 using System.Web.Mvc;
 using EntityLibrary.Entities;
 using G.Util.Account;
+using WebSite.Controllers;
 
 namespace HQWZ.Controllers
 {
@@ -53,7 +54,7 @@ namespace HQWZ.Controllers
             {
                 #region 维护新增数据
 
-                entity.UserPsw = G.Util.Tool.Encryption.GetMD5("123456");
+                entity.UserPsw = MD5.EncryptString("123456");
                 entity.CreateBy = LoginInfo.Current.UserName;
                 entity.CreateOn = DateTime.Now;
 

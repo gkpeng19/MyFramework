@@ -31,6 +31,9 @@
                 <a href="/NewCheaper">
                     <div class="menu-normal" data-class="green-menu-curr"><span>最新优惠</span></div>
                 </a>
+                <a href="#" onclick="toShop()">
+                    <div class="menu-normal" data-class="menu-curr"><span>旅居商城</span></div>
+                </a>
             </div>
             <div class="clear"></div>
             <div style="margin-top:10px;">
@@ -89,6 +92,13 @@
             手机扫一扫<i class="fa fa-close" id="close2code"></i>
         </div>
     </div>
+
+    <form action="http://123.57.153.47:8099/Account/Login" method="post" style="display:none;" id="shop_form">
+        <input type="hidden" name="hfRegisterToggle" value="phone" />
+        <input type="hidden" name="UserName" id="shop_u" value="" />
+        <input type="hidden" name="Password" id="shop_p" value="" />
+    </form>
+
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/GOMFrameWork.js"></script>
     <script src="~/Scripts/website/page.js"></script>
@@ -136,6 +146,19 @@
         $("#close2code").bind("click", function () {
             $("#div2code").hide();
         });
+
+        function toShop() {
+            $.get("/Member/LoadCurrUserInfo", { ran: Math.random() }, function (r) {
+                if (r.Phone.length > 0) {
+                    $("#shop_u").val(r.Phone);
+                    $("#shop_p").val(r.Pwd);
+                    $("#shop_form")[0].submit();
+                }
+                else {
+                    location.href = "http://123.57.153.47:8099";
+                }
+            });
+        }
     </script>
     @RenderSection("scripts", required: false)
 </body>

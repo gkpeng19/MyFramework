@@ -214,7 +214,7 @@ namespace WebSite.Controllers
             SearchModel sm = new SearchModel("HQ_Member");
             sm.MemberName = uname;
             var member = sm.LoadEntity<HQ_Member>();
-            if (member == null || member.UserPsw != Encryption.GetMD5(psw))
+            if (member == null || member.UserPsw != MD5.EncryptString(psw))
             {
                 OutResult(new { id = 0 });
                 return;
@@ -248,7 +248,7 @@ namespace WebSite.Controllers
 
             HQ_Member member = new HQ_Member();
             member.UserName = uname;
-            member.UserPsw = Encryption.GetMD5(psw);
+            member.UserPsw = MD5.EncryptString(psw);
             member.PhoneNum = phone;
             member.UserType = (int)EnumUserType.Normal;
             if (member.Save() > 0)
@@ -295,7 +295,7 @@ namespace WebSite.Controllers
             {
                 HQ_Member member = new HQ_Member();
                 member["id"] = id;
-                member.UserPsw = G.Util.Tool.Encryption.GetMD5(psw);
+                member.UserPsw = MD5.EncryptString(psw);
                 if (member.Save() > 0)
                 {
                     OutResult(new { r = 1 });
