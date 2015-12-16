@@ -34,15 +34,15 @@ namespace WebSite.Controllers
             return View();
         }
 
-        public JsonResult LoadHotRoom(int destinationid, int pindex = 1, int psize = 6)
+        public JsonResult LoadHotRoom(int destinationid, int pindex = 1, int psize = 3)
         {
-            SearchModel sm = new SearchModel("uv_VillageRoom");
+            SearchModel sm = new SearchModel("uv_VillageRoom_Hot");
             sm["DPanelID"] = destinationid;
             sm.PageIndex = pindex;
             sm.PageSize = psize;
-            sm.OrderBy("id");
+            sm.OrderBy("bcount", GOMFrameWork.DataEntity.EnumOrderBy.Desc);
             var rooms = sm.Load<HQ_Room>();
-            return this.JsonNet(rooms.Data);
+            return this.JsonNet(rooms);
         }
     }
 }

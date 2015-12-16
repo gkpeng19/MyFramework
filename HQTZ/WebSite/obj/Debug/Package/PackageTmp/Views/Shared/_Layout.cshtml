@@ -92,6 +92,13 @@
             手机扫一扫<i class="fa fa-close" id="close2code"></i>
         </div>
     </div>
+
+    <form action="http://123.57.153.47:8099/Account/Login" method="post" style="display:none;" id="shop_form" target="_blank">
+        <input type="hidden" name="hfRegisterToggle" value="phone" />
+        <input type="hidden" name="UserName" id="shop_u" value="" />
+        <input type="hidden" name="Password" id="shop_p" value="" />
+    </form>
+
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/GOMFrameWork.js"></script>
     <script src="~/Scripts/website/page.js"></script>
@@ -143,9 +150,9 @@
         function toShop() {
             $.get("/Member/LoadCurrUserInfo", { ran: Math.random() }, function (r) {
                 if (r.Phone.length > 0) {
-                    $.post("http://123.57.153.47:8099/Account/Login", { UserName: r.Phone, Password: r.Pwd }, function () {
-                        location.href = "http://123.57.153.47:8099";
-                    });
+                    $("#shop_u").val(r.Phone);
+                    $("#shop_p").val(r.Pwd);
+                    $("#shop_form")[0].submit();
                 }
                 else {
                     location.href = "http://123.57.153.47:8099";

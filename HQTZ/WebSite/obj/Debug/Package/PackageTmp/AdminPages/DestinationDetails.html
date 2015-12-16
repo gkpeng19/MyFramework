@@ -173,7 +173,7 @@
             var id = json.ID;
             var imagepaths = json.Images;
             $(".rightImgDiv").remove();
-            if (imagepaths.length > 0) {
+            if (imagepaths &&imagepaths.length > 0) {
                 var paths = imagepaths.split(';');
                 $(paths).each(function () {
                     addImgItem(this);

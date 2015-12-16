@@ -76,11 +76,14 @@
                     <a data-id="@d.ID" href="javascript:;">@d.Name</a>
                 }
             </div>
-            <div class="destn-house-list j-specialunit-container" style="min-height:280px;padding-bottom:50px;">
+            <div class="destn-house-list j-specialunit-container" style="min-height:280px;padding-bottom:30px;">
                 <div style="text-align: center;display:none;" id="loading">
                     <img src="images/loading2.gif" style="position:relative;top:70px;width:100px;height:100px;" />
                 </div>
                 <ul id="hotroomlist"></ul>
+            </div>
+            <div>
+                <div class="btnHotMore">查看更多  <i class="fa fa-arrow-right" style="font-size:12px;"></i></div>
             </div>
         </div>
         <div id="trave">
@@ -132,6 +135,13 @@
             手机扫一扫<i class="fa fa-close" id="close2code"></i>
         </div>
     </div>
+
+    <form action="http://123.57.153.47:8099/Account/Login" method="post" style="display:none;" id="shop_form" target="_blank">
+        <input type="hidden" name="hfRegisterToggle" value="phone" />
+        <input type="hidden" name="UserName" id="shop_u" value="" />
+        <input type="hidden" name="Password" id="shop_p" value="" />
+    </form>
+
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/GOMFrameWork.js"></script>
     <script src="~/Scripts/website/slider/js/slider.js"></script>
@@ -179,27 +189,51 @@
             bannerSlider.next()
         });
 
-        function LoadRoomsByDist(did) {
-            $("#hotroomlist").html("");
+        var currIndex = 0;
+        var lastDid = 0;
+        $(".btnHotMore").bind("click", function () {
+            LoadRoomsByDist(lastDid, currIndex + 1);
+        });
+
+        function LoadRoomsByDist(did, pindex) {
+            if (lastDid != did) {
+                lastDid = did;
+                pindex = 1;
+            }
+            currIndex = pindex;
+            $("#hotroomlist").hide();
             $("#loading").show();
             var html = "";
-            $.post("/Default/LoadHotRoom", { destinationid: did }, function (r) {
+            $.post("/Default/LoadHotRoom", { destinationid: did,pindex:currIndex }, function (r) {
                 $("#loading").hide();
-                r = $.toJsResult(r);
+                if (r.PageCount > r.PageIndex) {
+                    $(".btnHotMore").show();
+                }
+                else {
+                    $(".btnHotMore").hide();
+                }
+                r = $.toJsResult(r.Data);
                 $(r).each(function () {
                     var name = this.Name.length > 12 ? this.Name.substring(0, 12) : this.Name;
-                    html += '<li><a href="/Detail/RoomIndex/' + this.VillageID + '" target="_blank" class="pic-box"><img src="/' + this.CoverImg + '" /></a><div class="house-info"><h2><a href="" class="house-tit" target="_blank" title="' + this.Name + '">' + name + '</a></h2><span class="price-box"><dfn>¥</dfn><b>' + this.Price + '</b>/晚</span></div></li>';
+                    html += '<li><a href="/Detail/RoomIndex/' + this.VillageID + '" target="_blank" class="pic-box"><img src="/' + this.CoverImg + '" /></a><div class="house-info"><h2><a href="/Detail/RoomIndex/' + this.VillageID + '" class="house-tit" target="_blank" title="' + this.Name + '">' + name + '</a></h2><span class="price-box"><dfn>¥</dfn><b>' + this.Price + '</b>/晚</span></div></li>';
                 });
-                $("#hotroomlist").html(html);
+                if (currIndex == 1) {
+                    $("#hotroomlist").html(html);
+                }
+                else {
+                    $(html).insertAfter($("#hotroomlist li:last"));
+                }
+
+                $("#hotroomlist").show();
             });
         }
 
         $("#SpecialLevelOneCategoryContainer a:first").addClass("current");
-        LoadRoomsByDist($("#SpecialLevelOneCategoryContainer a:first").attr("data-id"));
+        LoadRoomsByDist($("#SpecialLevelOneCategoryContainer a:first").attr("data-id"), 1);
         $("#SpecialLevelOneCategoryContainer a").bind("click", function () {
             $("#SpecialLevelOneCategoryContainer a.current").removeClass("current");
             $(this).addClass("current");
-            LoadRoomsByDist($(this).attr("data-id"));
+            LoadRoomsByDist($(this).attr("data-id"), 1);
         });
 
         initBottomFlow();
@@ -217,9 +251,9 @@
         function toShop() {
             $.get("/Member/LoadCurrUserInfo", { ran: Math.random() }, function (r) {
                 if (r.Phone.length > 0) {
-                    $.post("http://123.57.153.47:8099/Account/Login", { UserName: r.Phone, Password: r.Pwd }, function () {
-                        location.href = "http://123.57.153.47:8099";
-                    });
+                    $("#shop_u").val(r.Phone);
+                    $("#shop_p").val(r.Pwd);
+                    $("#shop_form")[0].submit();
                 }
                 else {
                     location.href = "http://123.57.153.47:8099";
