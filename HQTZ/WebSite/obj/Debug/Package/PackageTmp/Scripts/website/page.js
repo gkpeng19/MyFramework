@@ -27,16 +27,13 @@ function initTraveImgShade(selector, color, func) {
 
                     sdiv.css({
                         position: 'absolute',
-                        top: 0,
-                        left: 0,
+                        top: $(this).offset().top,
+                        left: $(this).offset().left,
                         backgroundColor: color,
                         opacity: 0.8,
                         zIndex: 300
                     }).height($(this).height() - 20).width($(this).width() - 20).show().appendTo("body");
-                    var top = $(this).offset().top;
-                    var left = $(this).offset().left;
-                    sdiv[0].style.left = left + "px";
-                    sdiv[0].style.top = top + "px";
+
                     $(this).attr("data-index", targetImgIndex);
 
                     $(this).parent().find(".traveTitle").css("visibility", "hidden");

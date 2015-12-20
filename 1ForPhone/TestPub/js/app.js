@@ -179,7 +179,6 @@
         		if(r&&r.updated==1){
         			plus.nativeUI.confirm("检测到新版本，是否更新？",function(e){
         				if(e.index==0){
-        					plus.nativeUI.toast('正在下载...');
         					owner.installUpdate(r.path);
         				}
         			});
@@ -193,6 +192,7 @@
 	
 	owner.installUpdate=function(path){
 		if(mui.os.android){
+			plus.nativeUI.toast('正在下载...');
 			var dtask = plus.downloader.createDownload( path, {}, function ( d, status ) {
     			if ( status == 200 ) { // 下载成功
     				plus.runtime.install(d.filename);
