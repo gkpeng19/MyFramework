@@ -18,6 +18,7 @@
 
     .pager a:hover {
         background-color: rgba(237, 237, 237, 1);
+        text-decoration:none;
     }
 
 .pager .current:hover {

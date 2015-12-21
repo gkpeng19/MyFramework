@@ -198,6 +198,7 @@
     <Content Include="Scripts\ace\css\ace-responsive.min.css" />
     <Content Include="Scripts\ace\css\ace-skins.min.css" />
     <Content Include="Scripts\ace\css\ace.min.css" />
+    <Content Include="Scripts\Base64.js" />
     <Content Include="Scripts\bootstrap\bootstrap-datepicker.min.js" />
     <Content Include="Scripts\bootstrap\bootstrap-timepicker.css" />
     <Content Include="Scripts\bootstrap\bootstrap-timepicker.min.js" />

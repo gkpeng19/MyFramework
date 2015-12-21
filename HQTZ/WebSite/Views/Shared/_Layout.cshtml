@@ -31,7 +31,7 @@
                 <a href="/NewCheaper">
                     <div class="menu-normal" data-class="green-menu-curr"><span>最新优惠</span></div>
                 </a>
-                <a href="#" onclick="toShop()">
+                <a href="http://123.57.153.47:8099/" onclick="toShop()" target="_blank" id="linkToShop">
                     <div class="menu-normal" data-class="menu-curr"><span>旅居商城</span></div>
                 </a>
             </div>
@@ -93,15 +93,10 @@
         </div>
     </div>
 
-    <form action="http://123.57.153.47:8099/Account/Login" method="post" style="display:none;" id="shop_form">
-        <input type="hidden" name="hfRegisterToggle" value="phone" />
-        <input type="hidden" name="UserName" id="shop_u" value="" />
-        <input type="hidden" name="Password" id="shop_p" value="" />
-    </form>
-
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/GOMFrameWork.js"></script>
     <script src="~/Scripts/website/page.js"></script>
+    <script src="~/Scripts/Base64.js"></script>
     <script type="text/javascript">
         var defaultMenu = null;
         var lastMenu = null;
@@ -148,16 +143,16 @@
         });
 
         function toShop() {
+            $.ajaxSetup({ async: false });
             $.get("/Member/LoadCurrUserInfo", { ran: Math.random() }, function (r) {
                 if (r.Phone.length > 0) {
-                    $("#shop_u").val(r.Phone);
-                    $("#shop_p").val(r.Pwd);
-                    $("#shop_form")[0].submit();
-                }
-                else {
-                    location.href = "http://123.57.153.47:8099";
+                    var ppp = "su=" + r.Phone + "&sp=" + r.Pwd;
+                    ppp = new Base64().encode(ppp);
+                    var url = "http://123.57.153.47:8099/Account/Login?ppp=" + ppp;
+                    $("#linkToShop").attr("href", url);
                 }
             });
+            $.ajaxSetup({ async: true });
         }
     </script>
     @RenderSection("scripts", required: false)
