@@ -66,6 +66,7 @@
                             else
                             {
                                 <a class="signup cancelBook" href="javascript:void(0)" data-id="@order.ID">&nbsp;退 订&nbsp;</a>
+                                <a class="signup remarkBook" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" data-id="@order.ID" data-remark="@order.Remark">&nbsp;备 注&nbsp;</a>
                             }
                         </div>
                     }
@@ -101,9 +102,19 @@
     </table>
 </div>
 
+<div class="layerout" id="div_orderRemark" style="width:350px;padding-top:20px;">
+    <table>
+        <tr>
+            <td valign="top" style="padding-top:3px;">备注信息：</td>
+            <td><textarea id="remark" rows="4" style="width:250px;"></textarea></td>
+        </tr>
+    </table>
+</div>
+
 
 @section styles{
     <link href="~/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Styles/GOMFrameWork.css" rel="stylesheet" />
     <link href="~/Styles/website/orderstyles.css" rel="stylesheet" />
     <style type="text/css">
         .leftTd {
@@ -177,7 +188,7 @@
             }
         });
 
-        setCurrMenu(2);
+        setCurrMenu(3);
 
         function uploadHImg(src) {
             $(src).next().find("label")[0].click();
@@ -307,6 +318,22 @@
                     }
                     else {
                         $.error("退订失败，请重试！");
+                    }
+                });
+            });
+        });
+        $(".remarkBook").bind('click', function () {
+            var target = $(this);
+            var bid = target.attr("data-id");
+            $("#remark").val(target.attr("data-remark"));
+            $("#div_orderRemark").open("备注信息", function () {
+                $.post("/Member/SaveBRoomRemark", { id: bid, Remark: $("#remark").val() }, function (r) {
+                    if (r > 0) {
+                        target.attr("data-remark", $("#remark").val());
+                        $.msg("备注信息保存成功。");
+                    }
+                    else {
+                        $.error("备注信息保存失败，请重试！");
                     }
                 });
             });

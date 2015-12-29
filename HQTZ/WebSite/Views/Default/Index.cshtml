@@ -14,14 +14,22 @@
     <div class="page">
         <div class="content">
             <div id="top">
-                <a href="http://123.57.153.47/">
+                <a href="/">
                     <img src="~/Images/logo.gif" style="margin-left:50px;" />
                 </a>
                 <img src="~/Images/server-tel.gif" style="margin-left:300px;" />
             </div>
             <div id="menu">
+                <a href="/">
+                    <div class="menu-normal" data-class="menu-curr"><span>首 页</span></div>
+                </a>
                 <a href="/Destination"><div class="menu-normal" data-class="menu-curr"><span>目的地</span></div></a>
-                <a href="/MemberBenefit"><div class="menu-normal" data-class="green-menu-curr"><span>得天独厚</span></div></a>
+                <a href="/MemberBenefit">
+                    <div class="menu-normal" data-class="green-menu-curr"><span>旅居卡</span></div>
+                </a>
+                @*<a href="/MemberBenefit">
+                        <div class="menu-normal" data-class="green-menu-curr"><span>得天独厚</span></div>
+                    </a>*@
                 <a href="/Member">
                     <div class="menu-normal" data-class="menu-curr"><span>会员中心</span></div>
                 </a>
@@ -147,31 +155,38 @@
     <script src="~/Scripts/website/slider/js/slider.js"></script>
     <script src="~/Scripts/website/page.js"></script>
     <script type="text/javascript">
-        var defaultMenu = $(".menu-curr");
+        var defaultMenu = null;
+        var lastMenu = null;
         $("#menu div").bind("mouseover", function () {
-            if (!$(this).hasClass("menu-curr")) {
-                var currMenu = $(".menu-curr");
-                currMenu.removeClass("menu-curr");
-                if (!currMenu.hasClass("menu-normal")) {
-                    currMenu.addClass("menu-normal");
+            var toClass = $(this).attr("data-class");
+            if (!$(this).hasClass(toClass)) {
+                if (lastMenu) {
+                    lastMenu.removeClass(lastMenu.attr("data-class"));
                 }
-                var classN = $(this).attr("data-class");
-                $(this).addClass(classN);
+
+                $(this).addClass(toClass);
+                lastMenu = $(this);
             }
         });
 
         $("#menu").bind("mouseout", function () {
-            if (defaultMenu.length > 0) {
-                if (!defaultMenu.hasClass("menu-curr")) {
-                    $(".menu-curr").removeClass("menu-curr");
-                    defaultMenu.addClass("menu-curr");
+            lastMenu.removeClass(lastMenu.attr("data-class"));
+            lastMenu = null;
+            if (defaultMenu) {
+                var toClass = defaultMenu.attr("data-class");
+                if (!defaultMenu.hasClass(toClass)) {
+                    defaultMenu.addClass(toClass);
                 }
-            }
-            else {
-                $(".menu-curr").removeClass("menu-curr");
-                $(".green-menu-curr").removeClass("green-menu-curr");
+                lastMenu = defaultMenu;
             }
         });
+
+        function setCurrMenu(idx) {
+            defaultMenu = $("#menu div").eq(idx);
+            defaultMenu.addClass(defaultMenu.attr("data-class"));
+            lastMenu = defaultMenu;
+        }
+        setCurrMenu(0);
 
         var bannerSlider = new Slider($('#banner_tabs'), {
             time: 5000,
@@ -204,7 +219,7 @@
             $("#hotroomlist").hide();
             $("#loading").show();
             var html = "";
-            $.post("/Default/LoadHotRoom", { destinationid: did,pindex:currIndex }, function (r) {
+            $.post("/Default/LoadHotRoom", { destinationid: did, pindex: currIndex }, function (r) {
                 $("#loading").hide();
                 if (r.PageCount > r.PageIndex) {
                     $(".btnHotMore").show();

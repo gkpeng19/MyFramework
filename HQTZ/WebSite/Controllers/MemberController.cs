@@ -237,7 +237,7 @@ namespace WebSite.Controllers
         }
 
         public static object _object = new object();
-        public long BookRoom(int roomid, DateTime sdate, DateTime edate)
+        public long BookRoom(int roomid, DateTime sdate, DateTime edate, string remark)
         {
             if (!LoginVerify.IsLogin("Client"))
             {
@@ -254,6 +254,10 @@ namespace WebSite.Controllers
                     entity.BookStartTime = sdate;
                     entity.BookEndTime = edate;
                     entity.CreateOn = DateTime.Now;
+                    if (remark != null && remark.Length > 0)
+                    {
+                        entity.Remark = remark;
+                    }
                     return entity.Save();
                 }
                 else
@@ -261,6 +265,12 @@ namespace WebSite.Controllers
                     return -2;
                 }
             }
+        }
+
+        [LoginVerify("Client")]
+        public long SaveBRoomRemark(HQ_BookRoom broom)
+        {
+            return broom.Save();
         }
 
         [LoginVerify("Client")]

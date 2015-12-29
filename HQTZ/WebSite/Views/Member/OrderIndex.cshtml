@@ -11,8 +11,19 @@
     <div class="pager" style="text-align:center;padding-top:30px;"></div>
 </div>
 
+<div class="layerout" id="div_orderRemark" style="width:350px;padding-top:20px;">
+    <table>
+        <tr>
+            <td valign="top" style="padding-top:3px;">备注信息：</td>
+            <td><textarea id="remark" rows="4" style="width:250px;"></textarea></td>
+        </tr>
+    </table>
+</div>
+
 @section styles{
+    <link href="~/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Styles/website/orderstyles.css" rel="stylesheet" />
+    <link href="~/Styles/GOMFrameWork.css" rel="stylesheet" />
     <style type="text/css">
         /*Pager*/
         .pager a {
@@ -59,7 +70,7 @@
 @section scripts{
     <script src="~/Scripts/layer/layer.js"></script>
     <script type="text/javascript">
-        setCurrMenu(2);
+        setCurrMenu(3);
 
         function loadOrders(page) {
             $.post("/Member/LoadOrders", { page_g: page }, function (r) {
@@ -71,7 +82,7 @@
                     '<li>入住日期 <b>' + this.BookStartTime_G + '</b></li>' +
                     '<li>离开日期 <b>' + this.BookEndTime_G + '</b></li>' +
                     '<li>预定日期 <b>' + this.CreateOn_G + '</b> </li></ul>' +
-                    (this.CanCancelBook_G == 0 ? '<a class="signup" style="background-color:gray;">&nbsp;退 订&nbsp;</a>' : '<a class="signup cancelBook" href="javascript:void(0)" data-id="' + this.ID + '">&nbsp;退 订&nbsp;</a>') +
+                    (this.CanCancelBook_G == 0 ? '<a class="signup" style="background-color:gray;">&nbsp;退 订&nbsp;</a>' : '<a class="signup cancelBook" href="javascript:void(0)" data-id="' + this.ID + '">&nbsp;退 订&nbsp;</a> <a class="signup remarkBook" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" data-id="' + this.ID + '" data-remark="' + (this.Remark ? this.Remark : '') + '">&nbsp;备 注&nbsp;</a>') +
             '</div>';
                 });
                 if (html.length > 0) {
@@ -87,11 +98,27 @@
                                 $.msg("退订成功。");
                                 loadOrders(1);
                             }
-                            else if (r==-1){
+                            else if (r == -1) {
                                 $.error("对不起，该房间不在可允许的退订时间范围内！");
                             }
                             else {
                                 $.error("退订失败，请重试！");
+                            }
+                        });
+                    });
+                });
+                $(".remarkBook").bind('click', function () {
+                    var target = $(this);
+                    var bid = target.attr("data-id");
+                    $("#remark").val(target.attr("data-remark"));
+                    $("#div_orderRemark").open("备注信息", function () {
+                        $.post("/Member/SaveBRoomRemark", { id: bid, Remark: $("#remark").val() }, function (r) {
+                            if (r > 0) {
+                                target.attr("data-remark", $("#remark").val());
+                                $.msg("备注信息保存成功。");
+                            }
+                            else {
+                                $.error("备注信息保存失败，请重试！");
                             }
                         });
                     });

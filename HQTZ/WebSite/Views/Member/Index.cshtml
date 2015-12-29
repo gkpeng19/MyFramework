@@ -21,7 +21,7 @@
         <a href="#" onclick="AgenterSearch()">
             <div class="panel">
                 <img src="~/Images/agentersearch.jpg" />
-                <div class="traveTitle"><i>代理人查询</i></div>
+                <div class="traveTitle"><i>服务商查询</i></div>
             </div>
         </a>
         <a href="/Member/TraveGuide">
@@ -51,7 +51,7 @@
         <label class="control-label">验证码：</label>
         <div class="controls">
             <input type="text" id="tpyzm" style="width:120px;" />
-            <img class="help-inline" id="yzm_img" width="78" src="/Base/GetYzmImg" style="border:solid 1px #ddd;"
+            <img class="help-inline" id="yzm_img" width="78" src="/ClientBase/GetYzmImg" style="border:solid 1px #ddd;"
                  title="点击更换验证码" alt="验证码" onclick="changeYzmImg()" />
         </div>
     </div>
@@ -148,7 +148,7 @@
 </div>
 
 <div style="width:800px;display:none;padding:0px 20px;" id="agenterDiv">
-    <p style="border-bottom:dashed 1px #ddd;padding:10px 0px;">代理人姓名：<input type="text" id="agenterName" style="margin-bottom:0px;" /><input id="btnSearchAgenter" type="button" value=" 查  询 " class="btn btn-primary noradius" style="height:30px;" /></p>
+    <p style="border-bottom:dashed 1px #ddd;padding:10px 0px;">服务商姓名：<input type="text" id="agenterName" style="margin-bottom:0px;" /><input id="btnSearchAgenter" type="button" value=" 查  询 " class="btn btn-primary noradius" style="height:30px;" /></p>
     <div id="agenterInfo" style="height:400px;overflow-y:auto;"></div>
 </div>
 
@@ -194,7 +194,7 @@
     <script src="~/Scripts/layer/layer.js"></script>
     <script src="~/Scripts/website/page.js"></script>
     <script type="text/javascript">
-        setCurrMenu(2);
+        setCurrMenu(3);
 
         @if(ViewBag.IsLogin!=null)
         {
@@ -241,7 +241,7 @@
         });
 
         function changeYzmImg() {
-            $("#yzm_img").attr("src", "/Base/GetYzmImg/" + Math.random().toString().split('.')[1]);
+            $("#yzm_img").attr("src", "/ClientBase/GetYzmImg/" + Math.random().toString().split('.')[1]);
         }
 
         var layerLogin = null;
@@ -457,7 +457,7 @@
         }
 
         function AgenterSearch() {
-            $("#agenterDiv").open("代理人查询");
+            $("#agenterDiv").open("服务商查询");
         }
 
         $(function () {
@@ -471,7 +471,7 @@
                     $("#agenterInfo").loaded();
 
                     if (r.length == 0) {
-                        $("#agenterInfo").html("<p style='line-height:300px;text-align:center;color:gray;'>查询不到代理人信息！</p>");
+                        $("#agenterInfo").html("<p style='line-height:300px;text-align:center;color:gray;'>查询不到服务商信息！</p>");
                     }
                     else {
                         $("#agenterInfo").html(r);
