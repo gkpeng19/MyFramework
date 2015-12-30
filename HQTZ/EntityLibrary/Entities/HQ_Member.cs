@@ -63,6 +63,13 @@ namespace EntityLibrary.Entities
         }
 
         [JsonIgnore]
+        public string MemberMedical
+        {
+            get { return GetString("MemberMedical"); }
+            set { SetValue("MemberMedical", value); }
+        }
+
+        [JsonIgnore]
         public string HeaderImg
         {
             get { return GetString("HeaderImg"); }
@@ -74,7 +81,7 @@ namespace EntityLibrary.Entities
             get
             {
                 var img = HeaderImg;
-                if (img == null||img.Length==0)
+                if (img == null || img.Length == 0)
                 {
                     return "Images/header.jpg";
                 }

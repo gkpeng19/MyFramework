@@ -31,12 +31,10 @@ D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\G.Util.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\GOMFrameWork.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\Newtonsoft.Json.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\System.Web.Mvc.dll
-D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\ExcelLibrary.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\G.Util.pdb
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\GOMFrameWork.pdb
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\Newtonsoft.Json.xml
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\System.Web.Mvc.xml
-D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\ExcelLibrary.pdb
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.pdb
@@ -48,7 +46,6 @@ D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OOXML.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\ServiceStack.Interfaces.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\ServiceStack.Text.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\ServiceStack.Common.dll
-D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\ICSharpCode.SharpZipLib.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OpenXmlFormats.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OpenXml4Net.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\log4net.xml
@@ -70,3 +67,5 @@ D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\log4net.xml
 D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.xml
 D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OOXML.xml
 D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OpenXml4Net.xml
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\System.Web.Http.dll
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\System.Web.Http.xml

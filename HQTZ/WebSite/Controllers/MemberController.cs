@@ -14,6 +14,7 @@ using System.Data.SqlClient;
 using GOMFrameWork.DataEntity;
 using NM.Util;
 using System.Text.RegularExpressions;
+using G.Util.Web.Permission;
 
 namespace WebSite.Controllers
 {
@@ -87,7 +88,7 @@ namespace WebSite.Controllers
             return 1;
         }
 
-        public int MemberReg(string username, string userpsw, string phone, string msgcode)
+        public long MemberReg(string username, string userpsw, string phone, string msgcode)
         {
             var exist = IsMemberExist(username);
             if (exist == -1)
@@ -114,11 +115,13 @@ namespace WebSite.Controllers
             member.UserPsw = MD5.EncryptString(userpsw);
             member.PhoneNum = phone;
             member.UserType = (int)EnumUserType.Normal;
-            if (member.Save() > 0)
-            {
-                return 1;
-            }
-            return 0;
+            member.CreateOn = DateTime.Now;
+            return member.Save();
+        }
+
+        public long SaveMemberHis(HQ_Member member)
+        {
+            return member.Save();
         }
 
         public string SearchAgenter(string name)

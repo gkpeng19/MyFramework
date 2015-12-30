@@ -152,6 +152,11 @@
     <div id="agenterInfo" style="height:400px;overflow-y:auto;"></div>
 </div>
 
+<div style="width:280px;padding:10px 30px 0px 20px;display:none;" id="memberHis">
+    <p>病  历：</p>
+    <textarea rows="5" style="width:280px;" id="txt_memberHis"></textarea>
+</div>
+
 <form action="http://123.57.153.47:8099/Account/Register" method="post" target="shopifm" style="display:none;" id="shopForm">
     <input type="text" name="UserName" id="shop_username" />
     <input type="text" name="NickName" id="shop_nickname" />
@@ -367,7 +372,8 @@
                     $("#shopForm")[0].submit();
 
                     layer.close(layerReg);
-                    LoginClick();
+
+                    inputMemberHis(r);
 
                     //$.post("http://123.57.153.47:8099/Account/Register", { UserName: phone, NickName: username, Password: userpsw, ConfirmPassword: userpsw }, function () { });
                 }
@@ -375,6 +381,29 @@
                     $.error("注册失败，请重试！");
                 }
             });
+        }
+
+        function inputMemberHis(memberId) {
+            $("#memberHis").open("填写病历", function () {
+                var his = $.trim($("#txt_memberHis").val());
+                if (his.length == 0) {
+                    $.msg("请填写病历！");
+                    return false;
+                }
+                $.post("/Member/SaveMemberHis", { ID: memberId, MemberMedical: his }, function (r) {
+                    if (r > 0) {
+                        layer.closeAll();
+                        LoginClick();
+                        $.msg("病历信息保存成功。");
+                    }
+                    else {
+                        $.error("病历信息保存失败，请重试！");
+                    }
+                });
+                return false;
+            }, function () {
+                LoginClick();
+            }, false, true, { yesTxt: '确定完成', noTxt: '放弃' });
         }
 
         function findpswsubmit() {

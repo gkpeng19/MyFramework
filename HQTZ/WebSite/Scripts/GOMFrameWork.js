@@ -1137,7 +1137,7 @@ $.fn.extend({
         if (!args.uploadUrl) {
             args.uploadUrl = "/Scripts/umeditor/net/fileUp.ashx?iseditor=0";
         }
-        if (args.progressUrl==null||args.progressUrl==undefined) {
+        if (args.progressUrl == null || args.progressUrl == undefined) {
             args.progressUrl = "/Scripts/umeditor/net/fileUpProgress.ashx";
         }
         var progresskey = Math.random();
@@ -1500,12 +1500,24 @@ $.fn.extend({
         if (close != undefined && close == false) {
             options.closeBtn = false;
         }
+
+        var yesTxt = '确定';
+        if (exoptions && exoptions.yesTxt) {
+            yesTxt = exoptions.yesTxt;
+            exoptions.yesTxt = undefined;
+        }
+        var noTxt = '取消';
+        if (exoptions && exoptions.noTxt) {
+            noTxt = exoptions.noTxt;
+            exoptions.noTxt = undefined;
+        }
+
         var btns = [];
         if (yes) {
-            btns[0] = "确定";
+            btns[0] = yesTxt;
         }
         if (cancle) {
-            btns[btns.length] = "取消";
+            btns[btns.length] = noTxt;
         }
 
         var editorheight = 0;
@@ -1554,7 +1566,9 @@ $.fn.extend({
 
         if (options) {
             for (var it in exoptions) {
-                options[it] = exoptions[it];
+                if (exoptions[it]) {
+                    options[it] = exoptions[it];
+                }
             }
         }
         var win = layer.open(options);
