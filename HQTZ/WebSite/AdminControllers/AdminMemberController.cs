@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using EntityLibrary.Entities;
 using G.Util.Account;
 using WebSite.Controllers;
+using G.Util.Extension;
 
 namespace HQWZ.Controllers
 {
@@ -46,7 +47,29 @@ namespace HQWZ.Controllers
             return ExController.JsonNet(result);
         }
 
+        public long ImportMember(string fpath)
+        {
+            fpath = Server.MapPath("~/" + fpath);
+            if (System.IO.File.Exists(fpath))
+            {
+                var list = G.Util.Tool.ExcelHelper.Read<HQ_Member>(fpath, new string[] {
+                "UserName","PhoneNum"
+                }, 1, (e) =>
+                {
+                    e.UserPsw = MD5.EncryptString(e.PhoneNum.Substring(5));
+                    e.UserType = (int)EnumUserType.Normal;
+                    e.CreateBy = LoginInfo.Current.UserName;
+                    e.CreateOn = DateTime.Now;
+                });
 
+                EntityList<HQ_Member> elist = new EntityList<HQ_Member>() { List = list };
+                return elist.Save();
+            }
+            else
+            {
+                return 0;
+            }
+        }
 
         public JsonResult SaveMember(HQ_Member entity)
         {

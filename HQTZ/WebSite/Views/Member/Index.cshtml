@@ -21,7 +21,7 @@
         <a href="#" onclick="AgenterSearch()">
             <div class="panel">
                 <img src="~/Images/agentersearch.jpg" />
-                <div class="traveTitle"><i>代理人查询</i></div>
+                <div class="traveTitle"><i>服务商查询</i></div>
             </div>
         </a>
         <a href="/Member/TraveGuide">
@@ -51,7 +51,7 @@
         <label class="control-label">验证码：</label>
         <div class="controls">
             <input type="text" id="tpyzm" style="width:120px;" />
-            <img class="help-inline" id="yzm_img" width="78" src="/Base/GetYzmImg" style="border:solid 1px #ddd;"
+            <img class="help-inline" id="yzm_img" width="78" src="/ClientBase/GetYzmImg" style="border:solid 1px #ddd;"
                  title="点击更换验证码" alt="验证码" onclick="changeYzmImg()" />
         </div>
     </div>
@@ -148,8 +148,13 @@
 </div>
 
 <div style="width:800px;display:none;padding:0px 20px;" id="agenterDiv">
-    <p style="border-bottom:dashed 1px #ddd;padding:10px 0px;">代理人姓名：<input type="text" id="agenterName" style="margin-bottom:0px;" /><input id="btnSearchAgenter" type="button" value=" 查  询 " class="btn btn-primary noradius" style="height:30px;" /></p>
+    <p style="border-bottom:dashed 1px #ddd;padding:10px 0px;">服务商姓名：<input type="text" id="agenterName" style="margin-bottom:0px;" /><input id="btnSearchAgenter" type="button" value=" 查  询 " class="btn btn-primary noradius" style="height:30px;" /></p>
     <div id="agenterInfo" style="height:400px;overflow-y:auto;"></div>
+</div>
+
+<div style="width:280px;padding:10px 30px 0px 20px;display:none;" id="memberHis">
+    <p>病  历：</p>
+    <textarea rows="5" style="width:280px;" id="txt_memberHis"></textarea>
 </div>
 
 <form action="http://123.57.153.47:8099/Account/Register" method="post" target="shopifm" style="display:none;" id="shopForm">
@@ -196,7 +201,7 @@
     <script src="~/Scripts/layer/layer.js"></script>
     <script src="~/Scripts/website/page.js"></script>
     <script type="text/javascript">
-        setCurrMenu(2);
+        setCurrMenu(3);
 
         @if(ViewBag.IsLogin!=null)
         {
@@ -243,7 +248,7 @@
         });
 
         function changeYzmImg() {
-            $("#yzm_img").attr("src", "/Base/GetYzmImg/" + Math.random().toString().split('.')[1]);
+            $("#yzm_img").attr("src", "/ClientBase/GetYzmImg/" + Math.random().toString().split('.')[1]);
         }
 
         var layerLogin = null;
@@ -369,7 +374,8 @@
                     $("#shopForm")[0].submit();
 
                     layer.close(layerReg);
-                    LoginClick();
+
+                    inputMemberHis(r);
 
                     //$.post("http://123.57.153.47:8099/Account/Register", { UserName: phone, NickName: username, Password: userpsw, ConfirmPassword: userpsw }, function () { });
                 }
@@ -377,6 +383,29 @@
                     $.error("注册失败，请重试！");
                 }
             });
+        }
+
+        function inputMemberHis(memberId) {
+            $("#memberHis").open("填写病历", function () {
+                var his = $.trim($("#txt_memberHis").val());
+                if (his.length == 0) {
+                    $.msg("请填写病历！");
+                    return false;
+                }
+                $.post("/Member/SaveMemberHis", { ID: memberId, MemberMedical: his }, function (r) {
+                    if (r > 0) {
+                        layer.closeAll();
+                        LoginClick();
+                        $.msg("病历信息保存成功。");
+                    }
+                    else {
+                        $.error("病历信息保存失败，请重试！");
+                    }
+                });
+                return false;
+            }, function () {
+                LoginClick();
+            }, false, true, { yesTxt: '确定完成', noTxt: '放弃' });
         }
 
         function findpswsubmit() {
@@ -459,7 +488,7 @@
         }
 
         function AgenterSearch() {
-            $("#agenterDiv").open("代理人查询");
+            $("#agenterDiv").open("服务商查询");
         }
 
         $(function () {
@@ -473,7 +502,7 @@
                     $("#agenterInfo").loaded();
 
                     if (r.length == 0) {
-                        $("#agenterInfo").html("<p style='line-height:300px;text-align:center;color:gray;'>查询不到代理人信息！</p>");
+                        $("#agenterInfo").html("<p style='line-height:300px;text-align:center;color:gray;'>查询不到服务商信息！</p>");
                     }
                     else {
                         $("#agenterInfo").html(r);

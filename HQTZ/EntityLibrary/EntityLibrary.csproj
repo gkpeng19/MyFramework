@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\BaseModel.cs" />
+    <Compile Include="Entities\HQ_Advertisement.cs" />
     <Compile Include="Entities\HQ_Agenter.cs" />
     <Compile Include="Entities\HQ_Article.cs" />
     <Compile Include="Entities\HQ_Ask.cs" />

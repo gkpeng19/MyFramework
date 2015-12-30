@@ -19,7 +19,11 @@
     <div class="row-fluid">
         <div class="row-fluid header blue btn-header">
             <div class="span3">
-                <button class="btn btn-primary btn-mini btn-table-add btn-authority">&nbsp;&nbsp;新 增&nbsp;&nbsp;</button>
+                <label class="btn btn-primary btn-mini" for="file_inp_import"> 导 入 </label>
+                <span style="display:none;">
+                    <input type="file" id="inp_import" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                </span>
+                <button class="btn btn-primary btn-mini btn-table-add btn-authority"> 新 增 </button>
                 <span class="label label-warning">**默认密码为123456</span>
             </div>
             <div class="span9">
@@ -36,7 +40,7 @@
                         <th data-option="{sequence:true}">序号</th>
                         <th data-option="{bind:'UserName'}">用户名</th>
                         <th data-option="{bind:'PhoneNum'}">手机号码</th>
-                        <th data-option="{bind:'Email'}">Email地址</th>
+                        <th data-option="{bind:'MemberMedical'}">病历</th>
                         <th data-option="{bind:'CreateOn_G'}">注册时间</th>
                         <th data-option="{edit:true,del:false,onload:OnOptLoading}" class="th-operate">操作</th>
                     </tr>
@@ -80,6 +84,25 @@
     <script src="/Scripts/ace/ace.min.js"></script>
     <script src="/Scripts/GOMFrameWork.js"></script>
     <script type="text/javascript">
+        $("#inp_import").upload({
+            filter: "application",
+            uploadUrl: "/Scripts/umeditor/net/fileUp.ashx",
+            maxSize: 10,
+            success: function (r) {
+                $("#9739148752935891").loading();
+                $.post("/AdminMember/ImportMember", { fpath: r.path }, function (r) {
+                    if (r > 0) {
+                        $.success("导入成功。");
+                        $('#9739148752935891').datagrid('refresh');
+                        $("#9739148752935891").loaded();
+                    }
+                    else {
+                        $.error("导入失败，未知错误！");
+                    }
+                });
+            }
+        });
+
         function OnOptLoading(json, html) {
             if (json.IsDelete == 1) {
                 html += ' <a href="javascript:void(0)" class="btn btn-minier btn-danger" onclick="UseNMember(0)">启用</a> ';

@@ -48,6 +48,12 @@ namespace EntityLibrary.Entities
             get { return GetDateTime("CreateOn"); }
             set { SetValue("CreateOn", value); }
         }
+        [JsonIgnore]
+        public string Remark
+        {
+            get { return GetString("Remark"); }
+            set { SetValue("Remark", value); }
+        }
 
         public string BookStartTime_G
         {
@@ -105,7 +111,7 @@ namespace EntityLibrary.Entities
                 return 1;
             }
         }
-        
+
         [JsonIgnore]
         public string MemberName_G
         {

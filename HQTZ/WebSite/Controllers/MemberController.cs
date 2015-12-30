@@ -14,6 +14,7 @@ using System.Data.SqlClient;
 using GOMFrameWork.DataEntity;
 using NM.Util;
 using System.Text.RegularExpressions;
+using G.Util.Web.Permission;
 
 namespace WebSite.Controllers
 {
@@ -87,7 +88,7 @@ namespace WebSite.Controllers
             return 1;
         }
 
-        public int MemberReg(string username, string userpsw, string phone, string msgcode)
+        public long MemberReg(string username, string userpsw, string phone, string msgcode)
         {
             var exist = IsMemberExist(username);
             if (exist == -1)
@@ -114,11 +115,13 @@ namespace WebSite.Controllers
             member.UserPsw = MD5.EncryptString(userpsw);
             member.PhoneNum = phone;
             member.UserType = (int)EnumUserType.Normal;
-            if (member.Save() > 0)
-            {
-                return 1;
-            }
-            return 0;
+            member.CreateOn = DateTime.Now;
+            return member.Save();
+        }
+
+        public long SaveMemberHis(HQ_Member member)
+        {
+            return member.Save();
         }
 
         public string SearchAgenter(string name)
@@ -237,7 +240,7 @@ namespace WebSite.Controllers
         }
 
         public static object _object = new object();
-        public long BookRoom(int roomid, DateTime sdate, DateTime edate)
+        public long BookRoom(int roomid, DateTime sdate, DateTime edate, string remark)
         {
             if (!LoginVerify.IsLogin("Client"))
             {
@@ -254,6 +257,10 @@ namespace WebSite.Controllers
                     entity.BookStartTime = sdate;
                     entity.BookEndTime = edate;
                     entity.CreateOn = DateTime.Now;
+                    if (remark != null && remark.Length > 0)
+                    {
+                        entity.Remark = remark;
+                    }
                     return entity.Save();
                 }
                 else
@@ -261,6 +268,12 @@ namespace WebSite.Controllers
                     return -2;
                 }
             }
+        }
+
+        [LoginVerify("Client")]
+        public long SaveBRoomRemark(HQ_BookRoom broom)
+        {
+            return broom.Save();
         }
 
         [LoginVerify("Client")]
