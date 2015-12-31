@@ -199,10 +199,18 @@
                                         location.href="/Member/Index?op=login&ReturnUrl="+location.href;
                                     });
                                 }
+                                else if(r==-3)
+                                {
+                                    ShowMsg("您的余额已不足！");
+                                }
                                 else if(r>0)
                                 {
                                     layer.close(_layer);
                                     $.success("房间预订成功。");
+                                }
+                                else
+                                {
+                                    ShowMsg("未知错误！");
                                 }
                             });
                         }

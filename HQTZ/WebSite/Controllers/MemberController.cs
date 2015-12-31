@@ -15,6 +15,7 @@ using GOMFrameWork.DataEntity;
 using NM.Util;
 using System.Text.RegularExpressions;
 using G.Util.Web.Permission;
+using System.Transactions;
 
 namespace WebSite.Controllers
 {
@@ -239,6 +240,45 @@ namespace WebSite.Controllers
             return 1;
         }
 
+        public static int IsMoneyEnouth(int roomid, DateTime sdate, DateTime edate, out decimal balance)
+        {
+            balance = 0;
+
+            var days = edate.Subtract(sdate).Days;
+            if (days <= 0)
+            {
+                return 0;
+            }
+            decimal price = 0;
+            SearchModel sm = new SearchModel("hq_room");
+            sm["id"] = roomid;
+            sm.AddSearch("price");
+            var room = sm.LoadEntity<HQ_Room>();
+            if (room != null)
+            {
+                price = room.Price;
+            }
+            if (price == 0)
+            {
+                return 0;
+            }
+            decimal money = 0;
+            sm = new SearchModel("hq_member");
+            sm["id"] = LoginInfo.Current.UserID;
+            var member = sm.LoadEntity<HQ_Member>();
+            if (member != null)
+            {
+                money = member.Money;
+            }
+
+            balance = money - price * days;
+            if (balance < 0)
+            {
+                return -1;
+            }
+            return 1;
+        }
+
         public static object _object = new object();
         public long BookRoom(int roomid, DateTime sdate, DateTime edate, string remark)
         {
@@ -249,24 +289,53 @@ namespace WebSite.Controllers
 
             lock (_object)
             {
-                if (IsRoomEnough(roomid, sdate, edate) > 0)
-                {
-                    HQ_BookRoom entity = new HQ_BookRoom();
-                    entity.MemberID = (int)LoginInfo.Current.UserID;
-                    entity.RoomID = roomid;
-                    entity.BookStartTime = sdate;
-                    entity.BookEndTime = edate;
-                    entity.CreateOn = DateTime.Now;
-                    if (remark != null && remark.Length > 0)
-                    {
-                        entity.Remark = remark;
-                    }
-                    return entity.Save();
-                }
-                else
+                if (IsRoomEnough(roomid, sdate, edate) <= 0)
                 {
                     return -2;
                 }
+
+                decimal balance = 0;
+                var r = IsMoneyEnouth(roomid, sdate, edate, out balance);
+                if (r == 0)
+                {
+                    return 0;
+                }
+
+                if (r == -1)
+                {
+                    return -3;//余额不足
+                }
+
+                HQ_BookRoom entity = new HQ_BookRoom();
+                entity.MemberID = (int)LoginInfo.Current.UserID;
+                entity.RoomID = roomid;
+                entity.BookStartTime = sdate;
+                entity.BookEndTime = edate;
+                entity.CreateOn = DateTime.Now;
+                if (remark != null && remark.Length > 0)
+                {
+                    entity.Remark = remark;
+                }
+
+                try
+                {
+                    using (TransactionScope scope = new TransactionScope())
+                    {
+                        entity.Save();
+
+                        HQ_Member member = new HQ_Member();
+                        member["id"] = LoginInfo.Current.UserID;
+                        member.Money = balance;
+                        member.Save();
+
+                        scope.Complete();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+                return 1;
             }
         }
 

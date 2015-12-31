@@ -69,6 +69,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Cors">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
@@ -163,11 +164,13 @@
     <Content Include="Images\loading.gif" />
     <Content Include="Images\loading1.gif" />
     <Content Include="Images\loading2.gif" />
+    <Content Include="Images\lock.png" />
     <Content Include="Images\locker.png" />
     <Content Include="Images\login.jpg" />
     <Content Include="Images\logo.gif" />
     <Content Include="Images\menubg.jpg" />
     <Content Include="Images\menudbg.jpg" />
+    <Content Include="Images\money.png" />
     <Content Include="Images\more.jpg" />
     <Content Include="Images\order.jpg" />
     <Content Include="Images\password.png">
@@ -455,7 +458,6 @@
     <Compile Include="Scripts\umeditor\net\UMeditorUploader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\web.config" />
     <Content Include="packages.config" />
     <Content Include="Scripts\validate\_cmd.bat" />
     <Content Include="Scripts\validate\_run.bat" />

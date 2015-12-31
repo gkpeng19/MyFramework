@@ -34,13 +34,20 @@
                     快速通道
                 </div>
                 <div class="ctxLine">
-                    <img src="/Images/locker.png" />  <a onclick="ChangePsw()" style="cursor:pointer;">修改密码</a>
+                    <img src="/Images/money.png" style="width:20px;" />
+                    <span>余额：<a style="text-decoration:none;">@ViewBag.Member.Money</a> 元</span>
                 </div>
                 <div class="ctxLine">
-                    <img src="/Images/phone.png" /><span>手机号码：@ViewBag.Member.PhoneNum</span> <a href="javascript:void(0)" onclick="changPhone()">[修改]</a>
+                    <img src="/Images/locker.png" style="width:20px;" />
+                    <span><a onclick="ChangePsw()" style="cursor: pointer;">修改密码</a></span>
                 </div>
                 <div class="ctxLine">
-                    <img src="/Images/tuichu.png" style="width:20px;" />  <a href="/Base/LoginOut" style="text-decoration:none;color:black;">&nbsp;退出登录</a>
+                    <img src="/Images/phone.png" style="width:20px;" />
+                    <span><text>手机号码：@ViewBag.Member.PhoneNum</text> <a href="javascript:void(0)" onclick="changPhone()">[修改]</a></span>
+                </div>
+                <div class="ctxLine">
+                    <img src="/Images/tuichu.png" style="width:20px;" />
+                    <span><a href="/Base/LoginOut" style="text-decoration: none; color: black;">&nbsp;退出登录</a></span>
                 </div>
             </td>
             <td width="10"></td>
@@ -153,6 +160,8 @@
 
             .ctxLine span {
                 padding-left: 5px;
+                position: relative;
+                top: 2px;
             }
 
         #layer-error-msg {

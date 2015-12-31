@@ -53,7 +53,7 @@ namespace HQWZ.Controllers
             if (System.IO.File.Exists(fpath))
             {
                 var list = G.Util.Tool.ExcelHelper.Read<HQ_Member>(fpath, new string[] {
-                "UserName","PhoneNum"
+                "UserName","PhoneNum","Money"
                 }, 1, (e) =>
                 {
                     e.UserPsw = MD5.EncryptString(e.PhoneNum.Substring(5));

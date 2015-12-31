@@ -70,6 +70,13 @@ namespace EntityLibrary.Entities
         }
 
         [JsonIgnore]
+        public decimal Money
+        {
+            get { return GetDecimal("Money"); }
+            set { SetValue("Money", value); }
+        }
+
+        [JsonIgnore]
         public string HeaderImg
         {
             get { return GetString("HeaderImg"); }
