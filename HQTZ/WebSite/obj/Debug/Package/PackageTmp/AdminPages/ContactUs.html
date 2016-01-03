@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/Scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="/Scripts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/Scripts/validate/css/validate.css" rel="stylesheet" />
+    <link href="/Scripts/umeditor/themes/default/css/umeditor.min.css" rel="stylesheet" />
+    <link href="/Scripts/ace/css/ace.min.css" rel="stylesheet" />
+    <link href="/Scripts/ace/css/ace-responsive.min.css" rel="stylesheet" />
+    <link href="/Styles/GOMFrameWork.css" rel="stylesheet" />
+
+    <script src="/Scripts/jquery-1.10.2.min.js"></script>
+
+</head>
+<body>
+
+
+    <div class="row-fluid">
+        <div style="width:800px;margin:30px auto;">
+            <form name="28865852561780303" id="28865852561780303">
+                <div>
+                    <input type="hidden" name="ID" id="txt_Id" />
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <label>联系我们</label>
+                            <textarea name="AContent" id="795816694650178" class="span12 text_editor" style="height:320px;"></textarea>
+                        </div>
+                    </div>
+                    <div style="padding-top:5px;">
+                        <input type="button" id="14833382139301043" class="btn btn-primary btn-small btn-authority" value="保 存">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script src="/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/Scripts/layer/layer.js"></script>
+    <script src="/Scripts/umeditor/umeditor.config.js"></script>
+    <script src="/Scripts/umeditor/umeditor.min.js"></script>
+    <script src="/Scripts/umeditor/lang/zh-cn/zh-cn.js"></script>
+    <script src="/Scripts/validate/talent-validate-all-init.js"></script>
+    <script src="/Scripts/ace/ace.min.js"></script>
+    <script src="/Scripts/GOMFrameWork.js"></script>
+    <script type="text/javascript">
+
+        $.post("/ClientBase/GetContactUs", { ran: Math.random() }, function (r) {
+            $(function () {
+                if (r) {
+                    r = $.toJsResult(r);
+                    BindToDiv(r);
+                }
+            });
+        });
+
+        function BindToDiv(data) {
+
+            $("#28865852561780303").bindEntity(data);
+
+        }
+
+        /*增加验证信息----------Start*/
+
+        var f795816694650178 = new tt.Field("联系我们", "", "795816694650178");
+
+
+        tt.vf.req.add(f795816694650178);
+
+
+        /*增加验证信息----------End*/
+
+
+        $("#14833382139301043").bind('click', function () {
+            if (!tt.validateForm("28865852561780303")) {
+                return false;
+            }
+            var update = $("#28865852561780303").getContext();
+            update.ran_g = Math.random();
+            $.post("/ClientBase/SaveContactUs", update, function (r) {
+                if (r > 0) {
+                    $.msg("保存成功。");
+                    $("#txt_Id").val(r);
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

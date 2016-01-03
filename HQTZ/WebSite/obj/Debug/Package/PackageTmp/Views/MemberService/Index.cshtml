@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "尊享服务";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="padding:0px 35px;">
+    <img src="~/Images/leader.gif" />
+    <div style="margin-top:10px;" id="panel_container">
+    </div>
+    <div class="clear"></div>
+</div>
+
+@section styles{
+    <style type="text/css">
+        .traveTitle {
+            width: 83px;
+            text-align: center;
+            padding: 3px 0px;
+            background-color: red;
+            opacity: 0.7;
+            color: white;
+            font-weight: bolder;
+            font-size: 15px;
+            margin-top: -42px;
+        }
+    </style>
+}
+
+@section scripts{
+    <script type="text/javascript">
+        setCurrMenu(4);
+
+        var panelMore = $('<div class="panel" id="panel_more"><img src="/Images/more.jpg" /></td>');
+        var clickIndex = 1;
+        panelMore.find("img").bind("click", function () {
+            LoadDestinations(clickIndex + 1);
+            clickIndex++;
+        });
+
+        function LoadDestinations(page) {
+            $("#panel_more").remove();
+
+            $.post("/MemberService/LoadServices", { page: page }, function (r) {
+                var list = $.toJsResult(r.Data);
+                $(list).each(function () {
+                    $("#panel_container").append('<div class="panel"><img data-id="' + this.ID + '" data-name="' + this.Name + '" src="/' + this.ImgName + '" class="traveImg" /><div class="traveTitle"><i>' + this.Name + '</i></div></div>');
+                });
+
+                if (r.PageCount > page) {
+                    $("#panel_container").append(panelMore);
+                }
+
+                initTraveImgShade(".traveImg", "#E32c2d", function (target, container) {
+                    var name = $(target).attr("data-name");
+                    $.post("/MemberService/LoadServiceDetails", { serviceid: $(target).attr("data-id") }, function (r) {
+                        container.append("<div class='dc_title'>" + name + "</div>");
+                        var dc_ctx = $("<div class='dc_ctx'></div>");
+                        container.append(dc_ctx);
+                        var list = $.toJsResult(r);
+                        $(list).each(function () {
+                            dc_ctx.append("<div><a target='_blank' href='/Detail/Index/" + this.ID + "'><i class='fa fa-caret-right'></i>&nbsp; " + this.Name + "</a></div>");
+                        });
+                    });
+                });
+            });
+        }
+
+        LoadDestinations(1);
+    </script>
+}
+

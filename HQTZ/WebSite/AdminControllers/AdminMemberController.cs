@@ -10,6 +10,7 @@ using EntityLibrary.Entities;
 using G.Util.Account;
 using WebSite.Controllers;
 using G.Util.Extension;
+using System.Net.Http;
 
 namespace HQWZ.Controllers
 {
@@ -56,14 +57,37 @@ namespace HQWZ.Controllers
                 "UserName","PhoneNum","Money"
                 }, 1, (e) =>
                 {
-                    e.UserPsw = MD5.EncryptString(e.PhoneNum.Substring(5));
+                    e.PhoneNum = e.PhoneNum;
+                    e.UserPsw = e.PhoneNum.Substring(5);
                     e.UserType = (int)EnumUserType.Normal;
                     e.CreateBy = LoginInfo.Current.UserName;
                     e.CreateOn = DateTime.Now;
                 });
 
-                EntityList<HQ_Member> elist = new EntityList<HQ_Member>() { List = list };
-                return elist.Save();
+                HttpClient _httpClient = new HttpClient();
+                _httpClient.BaseAddress = new Uri("http://123.57.153.47:8099/");
+
+                try
+                {
+                    foreach (var l in list)
+                    {
+                        var dic = new Dictionary<string, string>();
+                        dic.Add("UserName", l.PhoneNum);
+                        dic.Add("NickName", l.UserName);
+                        dic.Add("Password", l.UserPsw);
+                        dic.Add("ConfirmPassword", l.UserPsw);
+
+                        _httpClient.PostAsync("Account/Register", new FormUrlEncodedContent(dic));
+
+                        l.UserPsw = MD5.EncryptString(l.UserPsw);
+                        l.Save();
+                    }
+                    return 1;
+                }
+                catch
+                {
+                    return 0;
+                }
             }
             else
             {

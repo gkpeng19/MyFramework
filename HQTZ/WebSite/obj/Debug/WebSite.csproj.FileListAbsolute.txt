@@ -10,7 +10,6 @@ D:\Work\MyFrameWork\HQTZ\WebSite\bin\System.Web.Razor.dll
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\System.Web.Webpages.Deployment.dll
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\System.Web.Webpages.dll
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\System.Web.Webpages.Razor.dll
-D:\Work\MyFrameWork\HQTZ\WebSite\bin\ExcelLibrary.dll
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\EntityLibrary.pdb
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\G.Util.pdb
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\GOMFrameWork.pdb
@@ -21,7 +20,6 @@ D:\Work\MyFrameWork\HQTZ\WebSite\bin\System.Web.Webpages.Deployment.xml
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\System.Web.Webpages.Razor.xml
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\System.Web.Helpers.xml
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\System.Web.Mvc.xml
-D:\Work\MyFrameWork\HQTZ\WebSite\bin\ExcelLibrary.pdb
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\zh-Hans\System.Web.Razor.resources.dll
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\zh-Hans\System.Web.Webpages.resources.dll
 D:\Work\MyFrameWork\HQTZ\WebSite\bin\zh-Hans\System.Web.Webpages.Deployment.resources.dll
@@ -159,7 +157,6 @@ D:\Work\MyFramework\HQTZ\WebSite\bin\NPOI.OOXML.dll
 D:\Work\MyFramework\HQTZ\WebSite\bin\ServiceStack.Interfaces.dll
 D:\Work\MyFramework\HQTZ\WebSite\bin\ServiceStack.Text.dll
 D:\Work\MyFramework\HQTZ\WebSite\bin\ServiceStack.Common.dll
-D:\Work\MyFramework\HQTZ\WebSite\bin\ICSharpCode.SharpZipLib.dll
 D:\Work\MyFramework\HQTZ\WebSite\bin\NPOI.OpenXmlFormats.dll
 D:\Work\MyFramework\HQTZ\WebSite\bin\NPOI.OpenXml4Net.dll
 D:\Work\MyFramework\HQTZ\WebSite\bin\System.Net.Http.Formatting.xml

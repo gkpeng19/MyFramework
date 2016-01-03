@@ -164,7 +164,6 @@
     <Content Include="Images\loading.gif" />
     <Content Include="Images\loading1.gif" />
     <Content Include="Images\loading2.gif" />
-    <Content Include="Images\lock.png" />
     <Content Include="Images\locker.png" />
     <Content Include="Images\login.jpg" />
     <Content Include="Images\logo.gif" />
@@ -254,6 +253,7 @@
     <Content Include="Scripts\font-awesome\scss\_rotated-flipped.scss" />
     <Content Include="Scripts\font-awesome\scss\_stacked.scss" />
     <Content Include="Scripts\font-awesome\scss\_variables.scss" />
+    <Content Include="Images\会员导入示例文件.xls" />
     <None Include="Properties\PublishProfiles\HQTZ.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -499,6 +499,7 @@
     <Content Include="Views\ClientBase\ContactIndex.cshtml" />
     <Content Include="Views\Member\MemberIndex.cshtml" />
     <Content Include="Views\Default\Index.cshtml" />
+    <Content Include="Views\web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

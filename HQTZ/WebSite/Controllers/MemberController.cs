@@ -207,12 +207,28 @@ namespace WebSite.Controllers
 
         public long CancelBook(HQ_BookRoom broom)
         {
-            var sm = new SearchModel("hq_bookroom");
+            var sm = new SearchModel("uv_bookroom");
             sm["id"] = broom.ID;
             var room = sm.LoadEntity<HQ_BookRoom>();
             if (room.CanCancelBook_G == 1)
             {
-                return broom.Delete();
+                sm = new SearchModel("hq_member");
+                sm["id"] = broom.MemberID;
+                sm.AddSearch("ID,Money");
+                var member = sm.LoadEntity<HQ_Member>();
+                if (member == null)
+                {
+                    return 0;
+                }
+                var money = member.Money;
+                member.Money = money + room.AllPrice_G;
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    broom.Delete();
+                    member.Save();
+                    scope.Complete();
+                    return 1;
+                }
             }
             return -1;
         }
@@ -244,7 +260,7 @@ namespace WebSite.Controllers
         {
             balance = 0;
 
-            var days = edate.Subtract(sdate).Days;
+            var days = edate.Subtract(sdate).Days + 1;
             if (days <= 0)
             {
                 return 0;
