@@ -78,8 +78,9 @@ namespace HQWZ.Controllers
                 {
                     foreach (var l in list)
                     {
-                        SearchModel se = new SearchModel("HQ_Member");
+                        SearchModel se = new SearchModel("uv_MemberWithAmount");
                         se["UserName"] = l.UserName;
+                        se.AddSearch("ID", "PhoneNum", "ShopUserID_G");
                         var member = se.LoadEntity<HQ_Member>();
                         if (member == null)
                         {
@@ -108,19 +109,15 @@ namespace HQWZ.Controllers
                         {
                             if (!l.PhoneNum.Equals(member.PhoneNum))
                             {
-                                ShopSearchEntity sse = new ShopSearchEntity("Accounts_Users");
-                                sse["UserName"] = member.PhoneNum;
-                                sse.AddSearch("UserId");
-                                var smem = sse.LoadEntity<Shop_Member>();
-                                if (smem != null)
-                                {
-                                    smem["UserName"] = l.PhoneNum;
-                                    smem.Save();
-                                }
+                                //手机号码变化时，修改商城用户手机号码
+                                Shop_Member s_mem = new Shop_Member();
+                                s_mem["UserID"] = member.ShopUserID_G;
+                                s_mem["UserName"] = l.PhoneNum;
+                                s_mem.Save();
                             }
 
                             var mem = new HQ_Member();
-                            mem["id"] = mem.ID;
+                            mem["id"] = member.ID;
                             mem.PhoneNum = l.PhoneNum;
                             mem.MemberMedical = l.MemberMedical;
                             mem.Save();

@@ -199,7 +199,6 @@ namespace EntityLibrary.Entities
         #endregion
     }
 
-    public class ShopEntityBase : EntityBase { }
     public class ShopSearchEntity : SearchEntity
     {
         public ShopSearchEntity() { }

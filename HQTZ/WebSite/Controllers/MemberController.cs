@@ -214,7 +214,7 @@ namespace WebSite.Controllers
             if (room.CanCancelBook_G == 1)
             {
                 sm = new SearchModel("uv_MemberWithAmount");
-                sm["id"] = broom.MemberID;
+                sm["id"] = room.MemberID;
                 sm.AddSearch("ShopUserID_G","Balance_G");
                 var member = sm.LoadEntity<HQ_Member>();
                 if (member == null)
@@ -523,7 +523,7 @@ namespace WebSite.Controllers
         [LoginVerify("Client")]
         public ActionResult MemberIndex()
         {
-            SearchModel sm = new SearchModel("hq_member");
+            SearchModel sm = new SearchModel("uv_MemberWithAmount");
             sm["id"] = LoginInfo.Current.UserID;
             ViewBag.Member = sm.LoadEntity<HQ_Member>();
 

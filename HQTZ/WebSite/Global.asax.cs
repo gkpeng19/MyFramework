@@ -24,7 +24,6 @@ namespace WebSite
             DbContext.InitContext<BaseSearchModel>("BaseWeb");
             DbContext.InitContext<BaseProcModel>("BaseWeb");
 
-            DbContext.InitContext<ShopEntityBase>("Shop");
             DbContext.InitContext<ShopSearchEntity>("Shop");
         }
 
