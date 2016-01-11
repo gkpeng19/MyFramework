@@ -49,11 +49,11 @@
 <div class="layerout" id="div_bookroom" style="width:350px;padding-top:20px;">
     <table>
         <tr>
-            <td style="padding-right:15px;padding-top:3px;" valign="top">起始时间：</td>
+            <td style="padding-right:15px;padding-top:3px;" valign="top">入住日期：</td>
             <td><input id="startDate" type="text" data-date-format="yyyy-mm-dd"></td>
         </tr>
         <tr>
-            <td valign="top" style="padding-top:3px;">结束时间：</td>
+            <td valign="top" style="padding-top:3px;">离店日期：</td>
             <td><input id="endDate" type="text" data-date-format="yyyy-mm-dd"></td>
         </tr>
         <tr>
@@ -274,20 +274,20 @@
             var sdate=$.trim($("#startDate").val());
             if(sdate.length==0)
             {
-                ShowMsg("请输入起始时间！");
+                ShowMsg("请输入入住日期！");
                 return false;
             }
 
             var edate=$.trim($("#endDate").val());
             if(edate.length==0)
             {
-                ShowMsg("请输入结束时间！");
+                ShowMsg("请输入离店日期！");
                 return false;
             }
 
-            if(new Date(sdate.replace("-", "/").replace("-", "/"))>new Date(edate.replace("-", "/").replace("-", "/")))
+            if(new Date(sdate.replace("-", "/").replace("-", "/"))>=new Date(edate.replace("-", "/").replace("-", "/")))
             {
-                ShowMsg("结束日期不能小于起始时间！");
+                ShowMsg("离店日期必须大于入住日期！");
                 return false;
             }
 

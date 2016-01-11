@@ -114,6 +114,7 @@ namespace WebSite.Controllers
             HQ_Member member = new HQ_Member();
             member.UserName = username;
             member.UserPsw = MD5.EncryptString(userpsw);
+            member.ShopPsw = member.UserPsw;
             member.PhoneNum = phone;
             member.UserType = (int)EnumUserType.Normal;
             member.CreateOn = DateTime.Now;
@@ -212,20 +213,25 @@ namespace WebSite.Controllers
             var room = sm.LoadEntity<HQ_BookRoom>();
             if (room.CanCancelBook_G == 1)
             {
-                sm = new SearchModel("hq_member");
+                sm = new SearchModel("uv_MemberWithAmount");
                 sm["id"] = broom.MemberID;
-                sm.AddSearch("ID,Money");
+                sm.AddSearch("ShopUserID_G","Balance_G");
                 var member = sm.LoadEntity<HQ_Member>();
                 if (member == null)
                 {
                     return 0;
                 }
-                var money = member.Money;
-                member.Money = money + room.AllPrice_G;
+                var toBalance = member.Balance_G + room.AllPrice_G;
+
                 using (TransactionScope scope = new TransactionScope())
                 {
                     broom.Delete();
-                    member.Save();
+
+                    Shop_Accounts_UsersExp uexp = new Shop_Accounts_UsersExp();
+                    uexp["UserID"] = member.ShopUserID_G;
+                    uexp["Balance"] = toBalance;
+                    uexp.Save();
+
                     scope.Complete();
                     return 1;
                 }
@@ -235,7 +241,7 @@ namespace WebSite.Controllers
 
         public static int IsRoomEnough(int roomid, DateTime sdate, DateTime edate)
         {
-            if (sdate > edate)
+            if (sdate >= edate)
             {
                 return 0;
             }
@@ -245,7 +251,7 @@ namespace WebSite.Controllers
             var rcount = smroom.LoadEntity<HQ_Room>().RCount;
 
             SearchEntity sm = SearchEntity.FormSql("select count(1) id from hq_bookroom where roomid=@roomid and isnull(isdelete,0)=0 and bookendtime>=@stime and bookstarttime<=@etime",
-            new SqlParameter("roomid", roomid), new SqlParameter("stime", sdate), new SqlParameter("etime", edate));
+            new SqlParameter("roomid", roomid), new SqlParameter("stime", sdate), new SqlParameter("etime", edate.Subtract(new TimeSpan(1, 0, 0, 0))));
 
             var bcount = sm.LoadValue<Int32>();
 
@@ -256,11 +262,12 @@ namespace WebSite.Controllers
             return 1;
         }
 
-        public static int IsMoneyEnouth(int roomid, DateTime sdate, DateTime edate, out decimal balance)
+        public static int IsMoneyEnouth(int roomid, DateTime sdate, DateTime edate, out decimal balance, out int shopUserId)
         {
             balance = 0;
+            shopUserId = 0;
 
-            var days = edate.Subtract(sdate).Days + 1;
+            var days = edate.Subtract(sdate).Days;
             if (days <= 0)
             {
                 return 0;
@@ -278,16 +285,18 @@ namespace WebSite.Controllers
             {
                 return 0;
             }
-            decimal money = 0;
-            sm = new SearchModel("hq_member");
+
+            sm = new SearchModel("uv_MemberWithAmount");
             sm["id"] = LoginInfo.Current.UserID;
+            sm.AddSearch("ShopUserID_G", "Balance_G");
             var member = sm.LoadEntity<HQ_Member>();
             if (member != null)
             {
-                money = member.Money;
+                balance = member.Balance_G;
+                shopUserId = member.ShopUserID_G;
             }
 
-            balance = money - price * days;
+            balance = balance - price * days;
             if (balance < 0)
             {
                 return -1;
@@ -311,7 +320,8 @@ namespace WebSite.Controllers
                 }
 
                 decimal balance = 0;
-                var r = IsMoneyEnouth(roomid, sdate, edate, out balance);
+                int shopUserId = 0;
+                var r = IsMoneyEnouth(roomid, sdate, edate, out balance, out shopUserId);
                 if (r == 0)
                 {
                     return 0;
@@ -339,10 +349,10 @@ namespace WebSite.Controllers
                     {
                         entity.Save();
 
-                        HQ_Member member = new HQ_Member();
-                        member["id"] = LoginInfo.Current.UserID;
-                        member.Money = balance;
-                        member.Save();
+                        Shop_Accounts_UsersExp uexp = new Shop_Accounts_UsersExp();
+                        uexp["UserID"] = shopUserId;
+                        uexp["Balance"] = balance;
+                        uexp.Save();
 
                         scope.Complete();
                     }
@@ -542,7 +552,7 @@ namespace WebSite.Controllers
                 var member = sm.LoadEntity<HQ_Member>();
                 if (member != null)
                 {
-                    return this.JsonNet(new { Phone = member.PhoneNum, Pwd = MD5.DecryptString(member.UserPsw) });
+                    return this.JsonNet(new { Phone = member.PhoneNum, Pwd = MD5.DecryptString(member.ShopPsw) });
                 }
             }
             return this.JsonNet(new { Phone = "" });

@@ -80,7 +80,7 @@
                     html += '<div class="plan plan' + (i % 4 + 1) + '"><div class="header"><p>' + this.RoomName_G + '</p></div>' +
                 '<div class="price">￥' + this.AllPrice_G + ' <span>/ 共 ' + this.BookDays_G + ' 天</span></div><ul>' +
                     '<li>入住日期 <b>' + this.BookStartTime_G + '</b></li>' +
-                    '<li>离开日期 <b>' + this.BookEndTime_G + '</b></li>' +
+                    '<li>离店日期 <b>' + this.BookEndTime_G + '</b></li>' +
                     '<li>预定日期 <b>' + this.CreateOn_G + '</b> </li></ul>' +
                     (this.CanCancelBook_G == 0 ? '<a class="signup" style="background-color:gray;">&nbsp;退 订&nbsp;</a>' : '<a class="signup cancelBook" href="javascript:void(0)" data-id="' + this.ID + '">&nbsp;退 订&nbsp;</a> <a class="signup remarkBook" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" data-id="' + this.ID + '" data-remark="' + (this.Remark ? this.Remark : '') + '">&nbsp;备 注&nbsp;</a>') +
             '</div>';

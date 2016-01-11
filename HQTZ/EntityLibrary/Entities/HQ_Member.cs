@@ -30,7 +30,12 @@ namespace EntityLibrary.Entities
             get { return GetString("UserPsw"); }
             set { SetValue("UserPsw", value); }
         }
-
+        [JsonIgnore]
+        public string ShopPsw
+        {
+            get { return GetString("ShopPsw"); }
+            set { SetValue("ShopPsw", value); }
+        }
         [JsonIgnore]
         public int UserType
         {
@@ -69,11 +74,24 @@ namespace EntityLibrary.Entities
             set { SetValue("MemberMedical", value); }
         }
 
+        //[JsonIgnore]
+        //public decimal Money
+        //{
+        //    get { return GetDecimal("Money"); }
+        //    set { SetValue("Money", value); }
+        //}
         [JsonIgnore]
-        public decimal Money
+        public int ShopUserID_G
         {
-            get { return GetDecimal("Money"); }
-            set { SetValue("Money", value); }
+            get { return GetInt32("ShopUserID_G"); }
+            set { SetValue("ShopUserID_G", value); }
+        }
+
+        [JsonIgnore]
+        public decimal Balance_G
+        {
+            get { return GetDecimal("Balance_G"); }
+            set { SetValue("Balance_G", value); }
         }
 
         [JsonIgnore]

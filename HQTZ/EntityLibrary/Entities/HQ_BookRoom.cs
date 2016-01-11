@@ -89,7 +89,7 @@ namespace EntityLibrary.Entities
             {
                 if (_days == 0)
                 {
-                    _days = BookEndTime.Subtract(BookStartTime).Days + 1;
+                    _days = BookEndTime.Subtract(BookStartTime).Days;
                 }
                 return _days;
             }

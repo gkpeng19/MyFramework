@@ -173,9 +173,9 @@ namespace EntityLibrary.Entities
         #endregion
 
         #region 是否有新消息回复查询
-        
 
-        [Search(Field="AnswerID_G",Operator=SearchOperator.IsNotNull)]
+
+        [Search(Field = "AnswerID_G", Operator = SearchOperator.IsNotNull)]
         public int NewAnswerID
         {
             set { SetValue("NewAnswerID", value); }
@@ -189,13 +189,23 @@ namespace EntityLibrary.Entities
         #endregion
 
         #region 订单提醒，入住时间大于等于现在时间
-        
-        [Search(Field="BookStartTime",Operator=SearchOperator.GreaterEqual)]
+
+        [Search(Field = "BookStartTime", Operator = SearchOperator.GreaterEqual)]
         public DateTime BeginInDate
         {
             set { SetValue("BeginInDate", value); }
         }
 
         #endregion
+    }
+
+    public class ShopEntityBase : EntityBase { }
+    public class ShopSearchEntity : SearchEntity
+    {
+        public ShopSearchEntity() { }
+        public ShopSearchEntity(string searchId)
+            : base(searchId)
+        {
+        }
     }
 }
