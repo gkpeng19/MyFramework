@@ -41,8 +41,8 @@
                         <th data-option="{sequence:true}">序号</th>
                         <th data-option="{bind:'UserName'}">用户名</th>
                         <th data-option="{bind:'PhoneNum'}">手机号码</th>
-                        <th data-option="{bind:'Money'}">余额</th>
-                        <th data-option="{bind:'MemberMedical'}">病历</th>
+                        <th data-option="{bind:'Balance_G'}">余额</th>
+                        <th data-option="{bind:'MemberMedical'}">健康档案</th>
                         <th data-option="{bind:'CreateOn_G'}">注册时间</th>
                         <th data-option="{edit:true,del:false,onload:OnOptLoading}" class="th-operate">操作</th>
                     </tr>
@@ -69,6 +69,25 @@
                         <div class="span12">
                             <label>Email地址</label>
                             <input type="text" name="Email" id="7990550769907716" class="span11" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span4">
+            <form id="formAddBalance" class="layerout form-layer">
+                <div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <label>余 额</label>
+                            <input type="text" id="txtBalance" class="span11" readonly="readonly" />
+                        </div>
+                        <div class="span12">
+                            <label>充值金额</label>
+                            <input type="text" id="txtAddAmount" class="span11" />
                         </div>
                     </div>
                 </div>
@@ -112,6 +131,7 @@
             else {
                 html += ' <a href="javascript:void(0)" class="btn btn-minier btn-danger" onclick="UseNMember(1)">禁用</a> ';
             }
+            html += ' <a href="javascript:void(0)" class="btn btn-minier btn-success" onclick="AddBalance(' + json.ShopUserID_G + ',' + json.Balance_G + ')">充值</a> ';
             return html;
         }
 
@@ -132,7 +152,30 @@
             });
         }
 
+        function AddBalance(shopUserId, balance) {
+            $("#txtBalance").val(balance);
+            $("#txtAddAmount").val("");
+            $("#formAddBalance").open("充值", function () {
+                var addAmount = $("#txtAddAmount").val();
+                addAmount = parseFloat(addAmount);
+                if (!addAmount || addAmount == 0) {
+                    $.error("充值金额填写错误！");
+                    return false;
+                }
+                $.post("/AdminMember/AddBlance", { shopUserId: shopUserId, amount: addAmount, ran: Math.random() }, function (r) {
+                    if (r > 0) {
+                        layer.closeAll();
+                        $("#9739148752935891").datagrid("refresh");
+                        $.success("充值成功。");
+                    }
+                    else {
+                        $.error("充值失败，请重试！");
+                    }
+                });
 
+                return false;
+            });
+        }
 
         function BindToSelect(data) {
 

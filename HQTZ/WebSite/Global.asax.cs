@@ -1,4 +1,5 @@
-﻿using G.BaseWeb.Models;
+﻿using EntityLibrary.Entities;
+using G.BaseWeb.Models;
 using G.Util.Account;
 using GOMFrameWork;
 using System;
@@ -22,6 +23,9 @@ namespace WebSite
             DbContext.InitContext<BaseModel>("BaseWeb");
             DbContext.InitContext<BaseSearchModel>("BaseWeb");
             DbContext.InitContext<BaseProcModel>("BaseWeb");
+
+            DbContext.InitContext<ShopEntityBase>("Shop");
+            DbContext.InitContext<ShopSearchEntity>("Shop");
         }
 
         void Application_OnPostAuthenticateRequest(object sender, EventArgs e)

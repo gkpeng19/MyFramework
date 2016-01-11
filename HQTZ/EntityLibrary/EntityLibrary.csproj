@@ -63,6 +63,7 @@
     <Compile Include="Entities\HQ_DisplayContent.cs" />
     <Compile Include="Entities\HQ_DisplayPanel.cs" />
     <Compile Include="Entities\HQ_Room.cs" />
+    <Compile Include="Entities\Shop_Member.cs" />
     <Compile Include="SysEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

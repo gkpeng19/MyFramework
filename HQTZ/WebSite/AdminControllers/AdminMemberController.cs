@@ -11,6 +11,8 @@ using G.Util.Account;
 using WebSite.Controllers;
 using G.Util.Extension;
 using System.Net.Http;
+using System.Data.SqlClient;
+using System.Transactions;
 
 namespace HQWZ.Controllers
 {
@@ -34,7 +36,7 @@ namespace HQWZ.Controllers
         {
             #region 查询条件初始化 Example：se["Field"] = "value";
 
-            se.SearchID = "HQ_Member";
+            se.SearchID = "uv_MemberWithAmount";
             //.........................
             se.OrderBy("isdelete", EnumOrderBy.Asc);
             se.OrderBy("id", EnumOrderBy.Desc);
@@ -51,10 +53,13 @@ namespace HQWZ.Controllers
         public long ImportMember(string fpath)
         {
             fpath = Server.MapPath("~/" + fpath);
-            if (System.IO.File.Exists(fpath))
+            if (!System.IO.File.Exists(fpath))
             {
-                var list = G.Util.Tool.ExcelHelper.Read<HQ_Member>(fpath, new string[] {
-                "UserName","PhoneNum","Money"
+                return 0;
+            }
+
+            var list = G.Util.Tool.ExcelHelper.Read<HQ_Member>(fpath, new string[] {
+                "UserName","PhoneNum","MemberMedical"
                 }, 1, (e) =>
                 {
                     e.PhoneNum = e.PhoneNum;
@@ -64,32 +69,69 @@ namespace HQWZ.Controllers
                     e.CreateOn = DateTime.Now;
                 });
 
-                HttpClient _httpClient = new HttpClient();
-                _httpClient.BaseAddress = new Uri("http://123.57.153.47:8099/");
+            HttpClient _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri("http://123.57.153.47:8099/");
 
-                try
+            try
+            {
+                using (var scope = new TransactionScope())
                 {
                     foreach (var l in list)
                     {
-                        var dic = new Dictionary<string, string>();
-                        dic.Add("UserName", l.PhoneNum);
-                        dic.Add("NickName", l.UserName);
-                        dic.Add("Password", l.UserPsw);
-                        dic.Add("ConfirmPassword", l.UserPsw);
+                        SearchModel se = new SearchModel("HQ_Member");
+                        se["UserName"] = l.UserName;
+                        var member = se.LoadEntity<HQ_Member>();
+                        if (member == null)
+                        {
+                            se = new SearchModel("HQ_Member");
+                            se["PhoneNum"] = l.PhoneNum;
+                            se.AddSearch("count(id)");
+                            var memCount = se.LoadValue<int>();
+                            if (memCount > 0)
+                            {
+                                continue;
+                            }
 
-                        _httpClient.PostAsync("Account/Register", new FormUrlEncodedContent(dic));
+                            var dic = new Dictionary<string, string>();
+                            dic.Add("UserName", l.PhoneNum);
+                            dic.Add("NickName", l.UserName);
+                            dic.Add("Password", l.UserPsw);
+                            dic.Add("ConfirmPassword", l.UserPsw);
 
-                        l.UserPsw = MD5.EncryptString(l.UserPsw);
-                        l.Save();
+                            _httpClient.PostAsync("Account/Register", new FormUrlEncodedContent(dic));
+
+                            l.UserPsw = MD5.EncryptString(l.UserPsw);
+                            l.ShopPsw = l.UserPsw;
+                            l.Save();
+                        }
+                        else
+                        {
+                            if (!l.PhoneNum.Equals(member.PhoneNum))
+                            {
+                                ShopSearchEntity sse = new ShopSearchEntity("Accounts_Users");
+                                sse["UserName"] = member.PhoneNum;
+                                sse.AddSearch("UserId");
+                                var smem = sse.LoadEntity<Shop_Member>();
+                                if (smem != null)
+                                {
+                                    smem["UserName"] = l.PhoneNum;
+                                    smem.Save();
+                                }
+                            }
+
+                            var mem = new HQ_Member();
+                            mem["id"] = mem.ID;
+                            mem.PhoneNum = l.PhoneNum;
+                            mem.MemberMedical = l.MemberMedical;
+                            mem.Save();
+                        }
                     }
-                    return 1;
+
+                    scope.Complete();
                 }
-                catch
-                {
-                    return 0;
-                }
+                return 1;
             }
-            else
+            catch
             {
                 return 0;
             }
@@ -125,6 +167,20 @@ namespace HQWZ.Controllers
             return ExController.JsonNet(new { ID = 0 });
         }
 
-
+        public int AddBlance(int shopUserId, decimal amount)
+        {
+            if (amount <= 0)
+            {
+                return 0;
+            }
+            ShopSearchEntity sse = new ShopSearchEntity("Accounts_UsersExp");
+            sse["UserID"] = shopUserId;
+            sse.AddSearch("Balance");
+            var uexp = sse.LoadEntity<Shop_Accounts_UsersExp>();
+            uexp["UserID"] = shopUserId;
+            uexp.Balance = uexp.Balance + amount;
+            uexp.Save();
+            return 1;
+        }
     }
 }
