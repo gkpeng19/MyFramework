@@ -20,6 +20,7 @@ http://www.freshdesignweb.com/free-beautiful-css3-table-style.html
 	/* --------------- */	
 
 	#fdw-pricing-table .plan {
+        height:266px;
 		background: #fff;      
 		border: 1px solid #ddd;
 		color: #333;
@@ -108,7 +109,11 @@ http://www.freshdesignweb.com/free-beautiful-css3-table-style.html
 
 	#fdw-pricing-table .plan4 .header{
 		border-bottom-color: #45D0DA;
-	}			
+	}
+    
+    #fdw-pricing-table .planDisabled .header{
+		border-bottom-color: gray;
+	}
 	
 	/* --------------- */
 
@@ -174,6 +179,9 @@ http://www.freshdesignweb.com/free-beautiful-css3-table-style.html
 
 	#fdw-pricing-table .plan4 .signup{
 		background: #45D0DA;
+	}
+    
+    #fdw-pricing-table .planDisabled .signup{
+		background: gray;
 	}	
-	
 	/* end --------------- */

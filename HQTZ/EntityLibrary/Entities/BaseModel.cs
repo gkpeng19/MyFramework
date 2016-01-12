@@ -188,12 +188,22 @@ namespace EntityLibrary.Entities
 
         #endregion
 
-        #region 订单提醒，入住时间大于等于现在时间
+        #region 订单提醒，最近操作时间在7天以内
 
-        [Search(Field = "BookStartTime", Operator = SearchOperator.GreaterEqual)]
-        public DateTime BeginInDate
+        [Search(Field = "LastOperateTime", Operator = SearchOperator.GreaterEqual)]
+        public DateTime LastOperateTime
         {
-            set { SetValue("BeginInDate", value); }
+            set { SetValue("LastOperateTime", value); }
+        }
+
+        #endregion
+
+        #region 会员订单按状态查询
+
+        [UIValueZeroNotEqualNull]
+        public int OStatus
+        {
+            set { SetValue("OStatus", value); }
         }
 
         #endregion

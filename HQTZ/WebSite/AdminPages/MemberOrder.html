@@ -37,6 +37,17 @@
                         退房日期:
                         <input class="inline input-medium datepicker" name="BookEndTime" type="text" data-date-format="yyyy-mm-dd">
                     </label>
+                    <label>
+                        类型：
+                        <select name="OStatus" class="inline input-medium">
+                            <option value="">全部类型</option>
+                            <option value="0">待处理</option>
+                            <option value="1">通过预订</option>
+                            <option value="2">未通过预订</option>
+                            <option value="3">已付款</option>
+                            <option value="4">已退订</option>
+                        </select>
+                    </label>
                     <label><input type="button" class="btn btn-primary btn-mini" value="查询" onclick="$('#07132892003594021').datagrid('refresh')" /></label>
                 </div>
             </div>
@@ -55,12 +66,16 @@
                         <th data-option="{bind:'BookEndTime_G'}">退房日期</th>
                         <th data-option="{bind:'BookDays_G'}">预订天数</th>
                         <th data-option="{bind:'AllPrice_G'}">总价</th>
-                        <th data-option="{bind:'CreateOn_G'}">预订日期</th>
-                        <th data-option="{onload:initOperation}">操作</th>
+                        <th data-option="{bind:'LongCreateOn_G'}">预订日期</th>
+                        <th data-option="{onload:initOperation}">操作 <div style="width:140px;"></div></th>
                     </tr>
                 </thead>
             </table>
         </div>
+    </div>
+
+    <div style="width:300px;" class="layerout" id="div_BookNoRemark">
+        <textarea rows="3" style="width:270px;margin-top:10px;"></textarea>
     </div>
 
     <script src="/Scripts/bootstrap/js/bootstrap.min.js"></script>
@@ -75,17 +90,98 @@
     <script type="text/javascript">
 
         function initOperation(json) {
-            return ' <a href="javascript:void(0)" class="btn btn-minier btn-danger" onclick="CancelBook(' + json.ID + ')">退订</a> ';
+            var html = "";
+            if (json.OStatus == 0) {//待处理
+                html += ' <a href="javascript:void(0)" class="btn btn-minier btn-primary" onclick="BookOk(' + json.ID + ')">通过</a> ';
+                html += ' <a href="javascript:void(0)" class="btn btn-minier btn-danger" onclick="BookNo(' + json.ID + ')">不通过</a> ';
+                if (json.Remark) {
+                    html += ' <a href="javascript:void(0)" class="btn btn-minier btn-info" onclick="ViewRemark(\'' + json.Remark + '\')">查看备注</a> ';
+                }
+            }
+            else if (json.OStatus == 1) {//预定通过，未付款
+                if (json.ShowPay_G == 1) {
+                    html += ' <a href="javascript:void(0)" class="btn btn-minier btn-primary" onclick="Pay(' + json.ID + ')">扣款</a> ';
+                }
+                if (json.CanCancelBook_G == 1) {
+                    html += ' <a href="javascript:void(0)" class="btn btn-minier btn-danger" onclick="CancelBook(' + json.ID + ')">退订</a> ';
+                }
+                if (json.Remark) {
+                    html += ' <a href="javascript:void(0)" class="btn btn-minier btn-info" onclick="ViewRemark(\'' + json.Remark + '\')">查看备注</a> ';
+                }
+            }
+            else if (json.OStatus == 3) {//预定通过,已付款
+                html += '<span class="label label-success">已扣款</span>';
+                if (json.Remark) {
+                    html += ' <a href="javascript:void(0)" class="btn btn-minier btn-info" onclick="ViewRemark(\'' + json.Remark + '\')">查看备注</a> ';
+                }
+            }
+            else if (json.OStatus == 2) {//预定不通过
+                html += '<span class="label label-info" style="cursor:pointer;" onclick="$.alert(\'' + json.Remark + '\')">预订未通过</span>';
+            }
+            else if (json.OStatus == 4) {
+                html += '<span class="label">已退订</span>';
+            }
+
+            return html;
+        }
+
+        function BookOk(bid) {
+            $.confirm("确定要通过预订吗？", function () {
+                $.post("/MemberOrder/BookOk", { bid: bid }, function (r) {
+                    if (r == 1) {
+                        $.success("通过预定成功。");
+                        var sel = $("#07132892003594021").datagrid("getCurrData");
+                        var update = {};
+                        for (var i in sel) {
+                            update[i] = sel[i];
+                        }
+                        update.OStatus = 1;
+                        $("#07132892003594021").datagrid("updateRow", sel, update);
+                    }
+                    else {
+                        $.error("通过预定失败，请重试！");
+                    }
+                });
+            });
+        }
+
+        function BookNo(bid) {
+            $("#div_BookNoRemark").open("填写预订未通过原因", function () {
+                var txt = $("#div_BookNoRemark textarea").val();
+                txt = $.trim(txt);
+                if (txt.length == 0) {
+                    $.error("请填写预订未通过原因！");
+                    return false;
+                }
+                $.post("/MemberOrder/BookNo", { bid: bid, remark: txt }, function (r) {
+                    if (r == 1) {
+                        layer.closeAll();
+                        $.success("不通过该预订成功。");
+                        var sel = $("#07132892003594021").datagrid("getCurrData");
+                        var update = {};
+                        for (var i in sel) {
+                            update[i] = sel[i];
+                        }
+                        update.OStatus = 2;
+                        update.Remark = txt;
+                        $("#07132892003594021").datagrid("updateRow", sel, update);
+
+                        $("#div_BookNoRemark textarea").val("");
+                    }
+                    else {
+                        $.error("不通过该预定失败，请重试！");
+                    }
+                });
+
+                return false;
+            });
         }
 
         function CancelBook(bid) {
-            $.confirm("确定要退订吗？该操作将退还会员的付款金额！", function () {
+            $.confirm("确定要退订吗？", function () {
                 $.post("/Member/CancelBook", { ID: bid }, function (r) {
                     if (r > 0) {
                         $("#07132892003594021").datagrid("removeCurrRow");
-                    }
-                    else if (r == -1) {
-                        $.error("对不起，该房间不在可允许的退订时间范围内！");
                     }
                     else {
                         $.error("退订失败，请重试！");
@@ -94,6 +190,25 @@
             });
         }
 
+        function ViewRemark(remark) {
+            $.alert(remark);
+        }
+
+        function Pay(bid) {
+            $.confirm("确定要继续扣款操作吗？", function () {
+                $.post("/MemberOrder/Pay", { bid: bid }, function (r) {
+                    if (r == 1) {
+                        $.success("扣款成功。");
+                    }
+                    else if (r == -1) {
+                        $.error("用户余额不足，请联系用户充值！");
+                    }
+                    else {
+                        $.error("扣款失败，请重试！");
+                    }
+                });
+            });
+        }
 
         function BindToSelect(data) {
 
