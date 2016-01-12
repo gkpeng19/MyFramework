@@ -67,3 +67,4 @@ D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\System.Web.Http.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\System.Web.Http.xml
 D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\System.Web.Http.dll
 D:\Work\MyFramework\HQTZ\EntityLibrary\bin\Debug\System.Web.Http.xml
+D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.csprojResolveAssemblyReference.cache

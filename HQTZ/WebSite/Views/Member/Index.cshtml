@@ -34,25 +34,26 @@
     <div class="clear"></div>
 </div>
 
-<div class="form-horizontal span6" id="loginDiv">
+<div class="form-horizontal span6" id="loginDiv" style="margin-left:0px;">
     <div class="control-group">
         <label class="control-label">用户名：</label>
         <div class="controls">
-            <input type="text" id="username" />
+            <input type="text" id="username" style="width:230px;" />
         </div>
     </div>
     <div class="control-group">
         <label class="control-label">密&nbsp;&nbsp;&nbsp;码：</label>
         <div class="controls">
-            <input type="password" id="userpsw" maxlength="20" />
+            <input type="password" id="userpsw" maxlength="20" style="width:230px;" />
         </div>
     </div>
     <div class="control-group">
         <label class="control-label">验证码：</label>
         <div class="controls">
-            <input type="text" id="tpyzm" style="width:120px;" />
+            <input type="text" id="tpyzm" style="width:100px;" />
             <img class="help-inline" id="yzm_img" width="78" src="/ClientBase/GetYzmImg" style="border:solid 1px #ddd;"
                  title="点击更换验证码" alt="验证码" onclick="changeYzmImg()" />
+            <a href="#" onclick="changeYzmImg()" style="color:blue;position:relative;top:2px;left:3px;">换一张</a>
         </div>
     </div>
     <div class="control-group">
@@ -67,7 +68,7 @@
     <div class="control-group">
         <label class="control-label"></label>
         <div class="controls">
-            <input id="btn_login" class="btn btn-danger" type="button" value="登&nbsp;&nbsp;录" onclick="submitlogin()" style="width:220px;" />
+            <input id="btn_login" class="btn btn-danger" type="button" value="登&nbsp;&nbsp;录" onclick="submitlogin()" style="width:230px;" />
         </div>
     </div>
 </div>
@@ -292,14 +293,19 @@
             var isRem = $("#keepactive")[0].checked ? 1 : 0;
             $.post("/Member/MemberLogin", { username: username, userpsw: userpsw, yzm: yzm, isrem: isRem, ran: Math.random() }, function (r) {
                 if (r == -2) {
+                    changeYzmImg();
                     $.error("验证码错误！");
                     $("#tpyzm").val("");
                     $("#tpyzm")[0].focus();
                 }
                 else if (r == -1) {
+                    changeYzmImg();
+                    $("#tpyzm").val("");
                     $.error("用户名不存在！");
                 }
                 else if (r == 0) {
+                    changeYzmImg();
+                    $("#tpyzm").val("");
                     $.error("用户名或密码错误！");
                 }
                 else if (r == 1) {

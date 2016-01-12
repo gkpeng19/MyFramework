@@ -208,33 +208,45 @@ namespace WebSite.Controllers
 
         public long CancelBook(HQ_BookRoom broom)
         {
-            var sm = new SearchModel("uv_bookroom");
+            var sm = new SearchModel("hq_bookroom");
+            //var sm = new SearchModel("uv_bookroom");
             sm["id"] = broom.ID;
             var room = sm.LoadEntity<HQ_BookRoom>();
             if (room.CanCancelBook_G == 1)
             {
-                sm = new SearchModel("uv_MemberWithAmount");
-                sm["id"] = room.MemberID;
-                sm.AddSearch("ShopUserID_G","Balance_G");
-                var member = sm.LoadEntity<HQ_Member>();
-                if (member == null)
-                {
-                    return 0;
-                }
-                var toBalance = member.Balance_G + room.AllPrice_G;
+                #region NoUse
 
-                using (TransactionScope scope = new TransactionScope())
-                {
-                    broom.Delete();
+                //sm = new SearchModel("uv_MemberWithAmount");
+                //sm["id"] = room.MemberID;
+                //sm.AddSearch("ShopUserID_G", "Balance_G");
+                //var member = sm.LoadEntity<HQ_Member>();
+                //if (member == null)
+                //{
+                //    return 0;
+                //}
+                //var toBalance = member.Balance_G + room.AllPrice_G;
 
-                    Shop_Accounts_UsersExp uexp = new Shop_Accounts_UsersExp();
-                    uexp["UserID"] = member.ShopUserID_G;
-                    uexp["Balance"] = toBalance;
-                    uexp.Save();
+                //using (TransactionScope scope = new TransactionScope())
+                //{
+                //    broom.OStatus = 4;
+                //    broom.Save();
 
-                    scope.Complete();
-                    return 1;
-                }
+                //    //扣款后不能退订，所以退订时不会涉及用户金额问题
+                //    //Shop_Accounts_UsersExp uexp = new Shop_Accounts_UsersExp();
+                //    //uexp["UserID"] = member.ShopUserID_G;
+                //    //uexp["Balance"] = toBalance;
+                //    //uexp.Save();
+
+                //    scope.Complete();
+                //    return 1;
+                //}
+
+                #endregion
+
+                broom.OStatus = 4;
+                broom.LastOperateTime = DateTime.Now;
+                broom.Save();
+                return 1;
             }
             return -1;
         }
@@ -262,7 +274,7 @@ namespace WebSite.Controllers
             return 1;
         }
 
-        public static int IsMoneyEnouth(int roomid, DateTime sdate, DateTime edate, out decimal balance, out int shopUserId)
+        public static int IsMoneyEnouth(int roomid, long userid, DateTime sdate, DateTime edate, out decimal balance, out int shopUserId)
         {
             balance = 0;
             shopUserId = 0;
@@ -287,7 +299,7 @@ namespace WebSite.Controllers
             }
 
             sm = new SearchModel("uv_MemberWithAmount");
-            sm["id"] = LoginInfo.Current.UserID;
+            sm["id"] = userid;
             sm.AddSearch("ShopUserID_G", "Balance_G");
             var member = sm.LoadEntity<HQ_Member>();
             if (member != null)
@@ -321,7 +333,7 @@ namespace WebSite.Controllers
 
                 decimal balance = 0;
                 int shopUserId = 0;
-                var r = IsMoneyEnouth(roomid, sdate, edate, out balance, out shopUserId);
+                var r = IsMoneyEnouth(roomid, LoginInfo.Current.UserID, sdate, edate, out balance, out shopUserId);
                 if (r == 0)
                 {
                     return 0;
@@ -337,7 +349,10 @@ namespace WebSite.Controllers
                 entity.RoomID = roomid;
                 entity.BookStartTime = sdate;
                 entity.BookEndTime = edate;
-                entity.CreateOn = DateTime.Now;
+                entity.OStatus = 0;
+                var nowTime = DateTime.Now;
+                entity.CreateOn = nowTime;
+                entity.LastOperateTime = nowTime;
                 if (remark != null && remark.Length > 0)
                 {
                     entity.Remark = remark;
@@ -349,10 +364,11 @@ namespace WebSite.Controllers
                     {
                         entity.Save();
 
-                        Shop_Accounts_UsersExp uexp = new Shop_Accounts_UsersExp();
-                        uexp["UserID"] = shopUserId;
-                        uexp["Balance"] = balance;
-                        uexp.Save();
+                        //预订时不扣款
+                        //Shop_Accounts_UsersExp uexp = new Shop_Accounts_UsersExp();
+                        //uexp["UserID"] = shopUserId;
+                        //uexp["Balance"] = balance;
+                        //uexp.Save();
 
                         scope.Complete();
                     }
@@ -527,13 +543,17 @@ namespace WebSite.Controllers
             sm["id"] = LoginInfo.Current.UserID;
             ViewBag.Member = sm.LoadEntity<HQ_Member>();
 
-            sm = new SearchModel("uv_bookroom");
-            sm.BeginInDate = DateTime.Now.Date;
-            sm["MemberID"] = LoginInfo.Current.UserID;
-            sm.OrderBy("id", EnumOrderBy.Desc);
-            ViewBag.Orders = sm.Load<HQ_BookRoom>().Data;
-
             return View();
+        }
+        [LoginVerify("Client")]
+        public JsonResult LoadChangedOrder()
+        {
+            var sm = new SearchModel("uv_bookroom");
+            sm.LastOperateTime = DateTime.Now.Subtract(new TimeSpan(7, 0, 0, 0));
+            sm["MemberID"] = LoginInfo.Current.UserID;
+            sm.OrderBy("LastOperateTime", EnumOrderBy.Desc);
+            var list = sm.Load<HQ_BookRoom>().Data;
+            return this.JsonNet(list);
         }
 
         public long SaveMemberInfo(HQ_Member member)

@@ -47,7 +47,7 @@
                 </div>
                 <div class="ctxLine">
                     <img src="/Images/tuichu.png" style="width:20px;" />
-                    <span><a href="/Base/LoginOut" style="text-decoration: none; color: black;">&nbsp;退出登录</a></span>
+                    <span><a href="javascript://void(0)" onclick="LoginOut()" style="text-decoration: none; color: black;">&nbsp;退出登录</a></span>
                 </div>
             </td>
             <td width="10"></td>
@@ -56,32 +56,33 @@
                     订单提醒
                 </div>
                 <div id="fdw-pricing-table" style="width: 699px; padding:10px; border-bottom: solid 1px #DDDDDD;">
-                    @for (int i = 0; i < ViewBag.Orders.Count; ++i)
-                    {
-                        EntityLibrary.Entities.HQ_BookRoom order = ViewBag.Orders[i];
-                        <div class="plan plan@(i % 3 + 1)">
-                            <div class="header"><p>@order.RoomName_G</p></div>
-                            <div class="price">￥@order.AllPrice_G <span>/ 共 @order.BookDays_G 天</span></div><ul>
-                                <li>入住日期 <b>@order.BookStartTime_G</b></li>
-                                <li>退房日期 <b>@order.BookEndTime_G</b></li>
-                                <li>预订日期 <b>@order.CreateOn_G</b> </li>
-                            </ul>
-                            @if (order.CanCancelBook_G == 0)
-                            {
-                                <a class="signup" style="background-color:gray;">&nbsp;退 订&nbsp;</a>
-                            }
-                            else
-                            {
-                                <a class="signup cancelBook" href="javascript:void(0)" data-id="@order.ID">&nbsp;退 订&nbsp;</a>
-                                <a class="signup remarkBook" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" data-id="@order.ID" data-remark="@order.Remark">&nbsp;备 注&nbsp;</a>
-                            }
-                        </div>
-                    }
+                    @*@for (int i = 0; i < ViewBag.Orders.Count; ++i)
+                        {
+                            EntityLibrary.Entities.HQ_BookRoom order = ViewBag.Orders[i];
+                            <div class="plan plan@(i % 3 + 1)">
+                                <div class="header"><p>@order.RoomName_G</p></div>
+                                <div class="price">￥@order.AllPrice_G <span>/ 共 @order.BookDays_G 天</span></div><ul>
+                                    <li>入住日期 <b>@order.BookStartTime_G</b></li>
+                                    <li>退房日期 <b>@order.BookEndTime_G</b></li>
+                                    <li>预订日期 <b>@order.CreateOn_G</b> </li>
+                                </ul>
+                                @if (order.CanCancelBook_G == 0)
+                                {
+                                    <a class="signup" style="background-color:gray;">&nbsp;退 订&nbsp;</a>
+                                }
+                                else
+                                {
+                                    <a class="signup cancelBook" href="javascript:void(0)" data-id="@order.ID">&nbsp;退 订&nbsp;</a>
+                                    <a class="signup remarkBook" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" data-id="@order.ID" data-remark="@order.Remark">&nbsp;备 注&nbsp;</a>
+                                }
+                            </div>
+                        }*@
 
-                    @if (ViewBag.Orders.Count == 0)
-                    {
-                        <div style="height:156px;text-align:center;color:gray;padding-top:150px;">您暂无即将到期的订单信息！</div>
-                    }
+                    @*@if (ViewBag.Orders.Count == 0)
+                        {
+                            <div style="height:156px;text-align:center;color:gray;padding-top:150px;">您暂无即将到期的订单信息！</div>
+                        }*@
+                    <div style="height:156px;text-align:center;color:gray;padding-top:150px;">7天内暂无变动过的订单！</div>
                 </div>
             </td>
         </tr>
@@ -314,6 +315,54 @@
             }
         }
 
+        $.post("/Member/LoadChangedOrder", { ran: Math.random() }, function (r) {
+            var list = $.toJsResult(r);
+            var html = "";
+            $(list).each(function (i) {
+                var planClass = "plan" + (i % 4 + 1);
+                if (this.OStatus == 2 || this.OStatus == 4) {
+                    planClass += " planDisabled";
+                }
+
+                var status = "";
+                if (this.OStatus == 0) {
+                    status = "<span class='label label-info'>待处理</span>";
+                }
+                else if (this.OStatus == 1 || this.OStatus == 3) {
+                    status = "<span class='label label-success'>预订成功</span>";
+                }
+                else if (this.OStatus == 2) {
+                    status = "<span class='label label-warning' style='cursor:pointer;' onclick='$.alert(\"" + this.Remark + "\")'>预订失败</span>";
+                }
+                else if (this.OStatus == 4) {
+                    status = "<span class='label'>已退订</span>";
+                }
+
+                html += '<div class="plan ' + planClass + '"><div class="header"><p>' + this.RoomName_G + "  " + status + '</p></div>' +
+            '<div class="price">￥' + this.AllPrice_G + ' <span>/ 共 ' + this.BookDays_G + ' 天</span></div><ul>' +
+                '<li>入住日期 <b>' + this.BookStartTime_G + '</b></li>' +
+                '<li>退房日期 <b>' + this.BookEndTime_G + '</b></li>' +
+                '<li>预订日期 <b>' + this.CreateOn_G + '</b> </li></ul>';
+
+                if (this.CanCancelBook_G == 1) {
+                    html += ' <a class="signup cancelBook" href="javascript:void(0)" data-id="' + this.ID + '">&nbsp;退 订&nbsp;</a> ';
+                }
+                else {
+                    if (this.OStatus == 2 || this.OStatus == 4) {
+                        html += ' <a class="signup" style="background-color:gray;">&nbsp;退 订&nbsp;</a> ';
+                    }
+                }
+
+                if (this.OStatus == 0 || this.OStatus == 1 || this.OStatus == 3) {
+                    html += ' <a class="signup remarkBook" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" data-id="' + this.ID + '" data-remark="' + (this.Remark ? this.Remark : '') + '">&nbsp;备 注&nbsp;</a> ';
+                }
+                html += "</div>";
+            });
+            if (html.length > 0) {
+                $("#fdw-pricing-table").html(html);
+            }
+        });
+
         $(".cancelBook").bind('click', function () {
             var bid = $(this).attr("data-id");
             $.confirm("确定要退订吗?", function () {
@@ -322,11 +371,8 @@
                         $.msg("退订成功。");
                         location.reload();
                     }
-                    else if (r == -1) {
-                        $.error("对不起，该房间不在可允许的退订时间范围内！");
-                    }
                     else {
-                        $.error("退订失败，请刷新后重试！");
+                        $.error("退订失败，请重试！");
                     }
                 });
             });
@@ -347,5 +393,11 @@
                 });
             });
         });
+
+        function LoginOut() {
+            $.confirm("确定要退出系统吗？", function () {
+                location.href = "/Base/LoginOut";
+            });
+        }
     </script>
 }

@@ -55,6 +55,38 @@ namespace EntityLibrary.Entities
             set { SetValue("Remark", value); }
         }
 
+        [JsonIgnore]
+        public DateTime LastOperateTime
+        {
+            get { return GetDateTime("LastOperateTime"); }
+            set { SetValue("LastOperateTime", value); }
+        }
+
+        public int ShowPay_G
+        {
+            get
+            {
+                if (DateTime.Now.AddDays(AppConfig.DaysBeforePay) >= BookStartTime)
+                {
+                    if (OStatus == 1)
+                    {
+                        return 1;
+                    }
+                }
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 0:待处理(是否通过预订);1:通过预定;2:未通过预定;3:已付款;4:已退订
+        /// </summary>
+        [JsonIgnore]
+        public int OStatus
+        {
+            get { return GetInt32("OStatus"); }
+            set { SetValue("OStatus", value); }
+        }
+
         public string BookStartTime_G
         {
             get { return BookStartTime.ToString("yyyy-MM-dd"); }
@@ -68,6 +100,11 @@ namespace EntityLibrary.Entities
         public string CreateOn_G
         {
             get { return CreateOn.ToString("yyyy-MM-dd"); }
+        }
+
+        public string LongCreateOn_G
+        {
+            get { return CreateOn.ToString("yyyy-MM-dd HH:mm:ss"); }
         }
 
         [JsonIgnore]
@@ -104,11 +141,14 @@ namespace EntityLibrary.Entities
         {
             get
             {
-                if (BookStartTime.AddDays(1) < DateTime.Now)
+                if (OStatus == 1)
                 {
-                    return 0;
+                    if (DateTime.Now.AddDays(AppConfig.DaysBeforePay) < BookStartTime)
+                    {
+                        return 1;
+                    }
                 }
-                return 1;
+                return 0;
             }
         }
 

@@ -90,8 +90,21 @@ namespace EntityLibrary.Entities
         [JsonIgnore]
         public decimal Balance_G
         {
-            get { return GetDecimal("Balance_G"); }
+            get
+            {
+                var balance = GetDecimal("Balance_G");
+                balance = decimal.Round(balance, 2);
+                return balance;
+            }
             set { SetValue("Balance_G", value); }
+        }
+
+        public decimal ShortBalance_C
+        {
+            get
+            {
+                return Balance_G;
+            }
         }
 
         [JsonIgnore]

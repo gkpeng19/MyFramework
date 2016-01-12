@@ -77,13 +77,44 @@
                 var list = $.toJsResult(r.Data);
                 var html = "";
                 $(list).each(function (i) {
-                    html += '<div class="plan plan' + (i % 4 + 1) + '"><div class="header"><p>' + this.RoomName_G + '</p></div>' +
+                    var planClass = "plan" + (i % 4 + 1);
+                    if (this.OStatus == 2 || this.OStatus == 4) {
+                        planClass += " planDisabled";
+                    }
+
+                    var status = "";
+                    if (this.OStatus == 0) {
+                        status = "<span class='label label-info'>待处理</span>";
+                    }
+                    else if (this.OStatus == 1 || this.OStatus == 3) {
+                        status = "<span class='label label-success'>预订成功</span>";
+                    }
+                    else if (this.OStatus == 2) {
+                        status = "<span class='label label-warning' style='cursor:pointer;' onclick='$.alert(\"" + this.Remark + "\")'>预订失败</span>";
+                    }
+                    else if (this.OStatus == 4) {
+                        status = "<span class='label'>已退订</span>";
+                    }
+
+                    html += '<div class="plan ' + planClass + '"><div class="header"><p>' + this.RoomName_G + "  " + status + '</p></div>' +
                 '<div class="price">￥' + this.AllPrice_G + ' <span>/ 共 ' + this.BookDays_G + ' 天</span></div><ul>' +
                     '<li>入住日期 <b>' + this.BookStartTime_G + '</b></li>' +
                     '<li>退房日期 <b>' + this.BookEndTime_G + '</b></li>' +
-                    '<li>预订日期 <b>' + this.CreateOn_G + '</b> </li></ul>' +
-                    (this.CanCancelBook_G == 0 ? '<a class="signup" style="background-color:gray;">&nbsp;退 订&nbsp;</a>' : '<a class="signup cancelBook" href="javascript:void(0)" data-id="' + this.ID + '">&nbsp;退 订&nbsp;</a> <a class="signup remarkBook" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" data-id="' + this.ID + '" data-remark="' + (this.Remark ? this.Remark : '') + '">&nbsp;备 注&nbsp;</a>') +
-            '</div>';
+                    '<li>预订日期 <b>' + this.CreateOn_G + '</b> </li></ul>';
+
+                    if (this.CanCancelBook_G == 1) {
+                        html += ' <a class="signup cancelBook" href="javascript:void(0)" data-id="' + this.ID + '">&nbsp;退 订&nbsp;</a> ';
+                    }
+                    else {
+                        if (this.OStatus == 2 || this.OStatus == 4) {
+                            html += ' <a class="signup" style="background-color:gray;">&nbsp;退 订&nbsp;</a> ';
+                        }
+                    }
+
+                    if (this.OStatus == 0 || this.OStatus == 1 || this.OStatus == 3) {
+                        html += ' <a class="signup remarkBook" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" data-id="' + this.ID + '" data-remark="' + (this.Remark ? this.Remark : '') + '">&nbsp;备 注&nbsp;</a> ';
+                    }
+                    html += "</div>";
                 });
                 if (html.length > 0) {
                     $("#fdw-pricing-table").html(html);
@@ -97,9 +128,6 @@
                             if (r > 0) {
                                 $.msg("退订成功。");
                                 location.reload();
-                            }
-                            else if (r == -1) {
-                                $.error("对不起，该房间不在可允许的退订时间范围内！");
                             }
                             else {
                                 $.error("退订失败，请重试！");
