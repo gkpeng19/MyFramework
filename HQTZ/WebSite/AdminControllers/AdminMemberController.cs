@@ -136,32 +136,86 @@ namespace HQWZ.Controllers
 
         public JsonResult SaveMember(HQ_Member entity)
         {
-            if (entity.ID == 0)
+            #region 用户名、手机号码是否重复
+
+            SearchModel sm = SearchEntity.FormSql<SearchModel>("select count(id) from hq_member where username=@uname and isnull(isdelete,0)=0 and id<>@id",
+                new SqlParameter("uname", entity.UserName), new SqlParameter("id", entity.ID));
+            int count = sm.LoadValue<int>();
+            if (count > 0)
             {
-                #region 维护新增数据
-
-                entity.UserPsw = MD5.EncryptString("123456");
-                entity.CreateBy = LoginInfo.Current.UserName;
-                entity.CreateOn = DateTime.Now;
-
-                #endregion
+                return ExController.JsonNet(new { ID = -1 });
             }
-            else
+            sm = SearchEntity.FormSql<SearchModel>("select count(id) from hq_member where phonenum=@pnum and isnull(isdelete,0)=0 and id<>@id",
+                new SqlParameter("pnum", entity.PhoneNum), new SqlParameter("id", entity.ID));
+            count = sm.LoadValue<int>();
+            if (count > 0)
             {
-                #region 维护修改数据
-
-                entity.EditBy = LoginInfo.Current.UserName;
-                entity.EditOn = DateTime.Now;
-
-                #endregion
+                return ExController.JsonNet(new { ID = -2 });
             }
 
-            var r = entity.Save();
-            if (r > 0)
+            #endregion
+
+            try
             {
+                using (var scope = new TransactionScope())
+                {
+                    if (entity.ID == 0)
+                    {
+                        var password = "123456";
+
+                        #region 维护新增数据
+
+                        entity.UserPsw = MD5.EncryptString(password);
+                        entity.ShopPsw = entity.UserPsw;
+                        entity.CreateBy = LoginInfo.Current.UserName;
+                        entity.CreateOn = DateTime.Now;
+
+                        #endregion
+
+                        entity.Save();
+
+                        HttpClient _httpClient = new HttpClient();
+                        _httpClient.BaseAddress = new Uri("http://123.57.153.47:8099/");
+                        var dic = new Dictionary<string, string>();
+                        dic.Add("UserName", entity.PhoneNum);
+                        dic.Add("NickName", entity.UserName);
+                        dic.Add("Password", password);
+                        dic.Add("ConfirmPassword", password);
+
+                        _httpClient.PostAsync("Account/Register", new FormUrlEncodedContent(dic));
+                    }
+                    else
+                    {
+                        #region 维护修改数据
+
+                        entity.EditBy = LoginInfo.Current.UserName;
+                        entity.EditOn = DateTime.Now;
+
+                        #endregion
+
+                        sm = new SearchModel("uv_MemberWithAmount");
+                        sm["id"] = entity.ID;
+                        var oldMem = sm.LoadEntity<HQ_Member>();
+                        if (oldMem.PhoneNum != entity.PhoneNum)
+                        {
+                            Shop_Member s_mem = new Shop_Member();
+                            s_mem["UserID"] = oldMem.ShopUserID_G;
+                            s_mem["UserName"] = entity.PhoneNum;
+                            s_mem.Save();
+                        }
+
+                        entity.Save();
+                    }
+
+                    scope.Complete();
+                }
+
                 return ExController.JsonNet(entity);
             }
-            return ExController.JsonNet(new { ID = 0 });
+            catch
+            {
+                return ExController.JsonNet(new { ID = 0 });
+            }
         }
 
         public int AddBlance(int shopUserId, decimal amount)

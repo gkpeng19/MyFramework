@@ -199,8 +199,6 @@
 }
 
 @section scripts{
-    <script src="~/Scripts/layer/layer.js"></script>
-    <script src="~/Scripts/website/page.js"></script>
     <script type="text/javascript">
         setCurrMenu(3);
 
@@ -309,12 +307,16 @@
                     $.error("用户名或密码错误！");
                 }
                 else if (r == 1) {
-                    layer.close(layerLogin);
-                    changeUIWhenIsLogin();
                     @if(ViewBag.ReturnUrl !=null)
                     {
                         <text>
                     location.href = "@ViewBag.ReturnUrl";
+                    </text>
+                    }
+                    else
+                    {
+                        <text>
+                    location.reload();
                     </text>
                     }
                 }

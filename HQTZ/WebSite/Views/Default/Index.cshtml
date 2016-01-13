@@ -13,6 +13,21 @@
 <body>
     <div class="page">
         <div class="content">
+            <div id="toptop">
+                <span>欢迎您，</span>
+                @if (!G.Util.Web.Permission.LoginVerify.IsLogin("Client"))
+                {
+                    <a href="~/Member/Index?op=login"><img src="~/Images/topLogin.png" width="15" height="15" /> &nbsp;<span>快捷登陆</span></a>
+                    <span>&nbsp;</span>
+                    <a href="~/Member/Index?op=reg"><img src="~/Images/topReg.png" width="21" height="21" /> <span>免费注册</span></a>
+                }
+                else
+                {
+                    <a href="~/Member/MemberIndex"><img src="~/Images/topUser.png" width="16" height="16" /> <span>@G.Util.Account.LoginInfo.Current.UserName</span></a>
+                    <span>&nbsp;</span>
+                    <a href="#" onclick="LoginOut()"><span style="position:relative;top:2px;">[退出]</span></a>
+                }
+            </div>
             <div id="top">
                 <a href="/">
                     <img src="~/Images/logo.gif" style="margin-left:50px;" />
@@ -145,6 +160,7 @@
     </div>
 
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/layer/layer.js"></script>
     <script src="~/Scripts/GOMFrameWork.js"></script>
     <script src="~/Scripts/website/slider/js/slider.js"></script>
     <script src="~/Scripts/website/page.js"></script>

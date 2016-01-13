@@ -185,6 +185,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\server-tel.gif" />
+    <Content Include="Images\topLogin.png" />
+    <Content Include="Images\topOut.png" />
+    <Content Include="Images\topReg.png" />
+    <Content Include="Images\topUser.png" />
     <Content Include="Images\tou.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

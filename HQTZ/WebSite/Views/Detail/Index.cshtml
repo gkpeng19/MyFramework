@@ -61,7 +61,7 @@
             <td><textarea id="remark" rows="3"></textarea></td>
         </tr>
     </table>
-</div>
+</div> 
 
 
 @section styles{
@@ -128,8 +128,6 @@
 @section scripts{
     <script src="~/Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script src="~/Scripts/bootstrap/bootstrap-datepicker.min.js"></script>
-    <script src="~/Scripts/layer/layer.js"></script>
-    <script src="~/Scripts/GOMFrameWork.js"></script>
     <script src="~/Scripts/jquery.floatDiv.js"></script>
     <script src="~/Scripts/website/slider/js/slider.js"></script>
     <script type="text/javascript">
@@ -174,6 +172,16 @@
 
                 $(".rbook").bind("click",function()
                 {
+                    @if (!G.Util.Web.Permission.LoginVerify.IsLogin("Client"))
+                    {
+                        <text>
+                    layer.alert("未登录，请先登录系统！", { icon: 2 },function()
+                    {
+                        location.href="/Member/Index?op=login&ReturnUrl="+location.href;
+                    });
+                    return;
+                    </text>
+                    }
                     targetRoomId=$(this).attr("data-id");
 
                     $("#startDate").val("");
@@ -201,7 +209,7 @@
                                 }
                                 else if(r==-3)
                                 {
-                                    ShowMsg("您的余额已不足！");
+                                    ShowMsg("您的余额已不足！<a target='_blank' href='http://123.57.153.47:8099/product/118' style='padding:0px;margin:0px;color:blue;background:transparent;border:none;'>[请充值]</a>");
                                 }
                                 else if(r>0)
                                 {

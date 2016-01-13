@@ -181,9 +181,6 @@
 }
 
 @section scripts{
-    <script src="~/Scripts/layer/layer.js"></script>
-    <script src="~/Scripts/website/page.js"></script>
-    <script src="~/Scripts/GOMFrameWork.js"></script>
     <script type="text/javascript">
         $("#btnUploadHeaderImg").upload({
             filter: 'image',
@@ -361,43 +358,37 @@
             if (html.length > 0) {
                 $("#fdw-pricing-table").html(html);
             }
-        });
 
-        $(".cancelBook").bind('click', function () {
-            var bid = $(this).attr("data-id");
-            $.confirm("确定要退订吗?", function () {
-                $.post("/Member/CancelBook", { ID: bid }, function (r) {
-                    if (r > 0) {
-                        $.msg("退订成功。");
-                        location.reload();
-                    }
-                    else {
-                        $.error("退订失败，请重试！");
-                    }
+            $(".cancelBook").bind('click', function () {
+                var bid = $(this).attr("data-id");
+                $.confirm("确定要退订吗?", function () {
+                    $.post("/Member/CancelBook", { ID: bid }, function (r) {
+                        if (r > 0) {
+                            $.msg("退订成功。");
+                            location.reload();
+                        }
+                        else {
+                            $.error("退订失败，请重试！");
+                        }
+                    });
+                });
+            });
+            $(".remarkBook").bind('click', function () {
+                var target = $(this);
+                var bid = target.attr("data-id");
+                $("#remark").val(target.attr("data-remark"));
+                $("#div_orderRemark").open("备注信息", function () {
+                    $.post("/Member/SaveBRoomRemark", { id: bid, Remark: $("#remark").val() }, function (r) {
+                        if (r > 0) {
+                            target.attr("data-remark", $("#remark").val());
+                            $.msg("备注信息保存成功。");
+                        }
+                        else {
+                            $.error("备注信息保存失败，请重试！");
+                        }
+                    });
                 });
             });
         });
-        $(".remarkBook").bind('click', function () {
-            var target = $(this);
-            var bid = target.attr("data-id");
-            $("#remark").val(target.attr("data-remark"));
-            $("#div_orderRemark").open("备注信息", function () {
-                $.post("/Member/SaveBRoomRemark", { id: bid, Remark: $("#remark").val() }, function (r) {
-                    if (r > 0) {
-                        target.attr("data-remark", $("#remark").val());
-                        $.msg("备注信息保存成功。");
-                    }
-                    else {
-                        $.error("备注信息保存失败，请重试！");
-                    }
-                });
-            });
-        });
-
-        function LoginOut() {
-            $.confirm("确定要退出系统吗？", function () {
-                location.href = "/Base/LoginOut";
-            });
-        }
     </script>
 }

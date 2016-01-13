@@ -29,6 +29,22 @@ body .page {
     margin: 0px auto;
 }
 
+#toptop {
+    font-size: 12px;
+    text-align: right;
+    padding:3px 32px 3px 0px;
+}
+
+    #toptop img {
+        border: none;
+        vertical-align: middle;
+    }
+
+    #toptop a, #toptop a:link, #toptop a:active, #toptop a:visited, #toptop a:active {
+        text-decoration: none;
+        color: #08c;
+    }
+
 #menu div {
     width: 140px;
     line-height: 70px;
@@ -315,21 +331,20 @@ body .page {
     }
 
 
-    .btnHotMore{
-        width:120px;
-        padding:8px 10px;
-        color:#888;
-        font-weight:normal;
-        font-size:14px;
-        border:solid 1px #888;
-        text-align:center;
-        cursor:pointer;
-        margin:0px auto 30px auto;
-        display:none;
-    }
+.btnHotMore {
+    width: 120px;
+    padding: 8px 10px;
+    color: #888;
+    font-weight: normal;
+    font-size: 14px;
+    border: solid 1px #888;
+    text-align: center;
+    cursor: pointer;
+    margin: 0px auto 30px auto;
+    display: none;
+}
 
-    .btnHotMore:hover
-    {
-        color:#C73937;
-        border-color:#C73937;
+    .btnHotMore:hover {
+        color: #C73937;
+        border-color: #C73937;
     }
