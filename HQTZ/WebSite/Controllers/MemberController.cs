@@ -25,10 +25,7 @@ namespace WebSite.Controllers
         {
             if (LoginInfo.Current == null || !"Client".Equals(LoginInfo.Current.SystemID))
             {
-                if ("login" == op)
-                {
-                    ViewBag.Action = "login";
-                }
+                ViewBag.Action = op;
             }
             else
             {
@@ -198,6 +195,7 @@ namespace WebSite.Controllers
         {
             sm.SearchID = "uv_bookroom";
             sm["MemberID"] = LoginInfo.Current.UserID;
+            sm.OrderStateNotDelete = (int)EnumOrderState.Deleted;
             sm.OrderBy("id", EnumOrderBy.Desc);
             sm.PageIndex = page_g;
             sm.PageSize = psize_g;
@@ -212,7 +210,7 @@ namespace WebSite.Controllers
             //var sm = new SearchModel("uv_bookroom");
             sm["id"] = broom.ID;
             var room = sm.LoadEntity<HQ_BookRoom>();
-            if (room.CanCancelBook_G == 1)
+            if (room.OStatus == 0 || room.CanCancelBook_G == 1)
             {
                 #region NoUse
 
@@ -550,10 +548,27 @@ namespace WebSite.Controllers
         {
             var sm = new SearchModel("uv_bookroom");
             sm.LastOperateTime = DateTime.Now.Subtract(new TimeSpan(7, 0, 0, 0));
+            sm.OrderStateNotDelete = (int)EnumOrderState.Deleted;
             sm["MemberID"] = LoginInfo.Current.UserID;
             sm.OrderBy("LastOperateTime", EnumOrderBy.Desc);
             var list = sm.Load<HQ_BookRoom>().Data;
             return this.JsonNet(list);
+        }
+        [LoginVerify("Client")]
+        public int DeleteOrder(int orderid)
+        {
+            try
+            {
+                HQ_BookRoom broom = new HQ_BookRoom();
+                broom["id"] = orderid;
+                broom.OStatus = (int)EnumOrderState.Deleted;
+                broom.Save();
+            }
+            catch
+            {
+                return 0;
+            }
+            return 1;
         }
 
         public long SaveMemberInfo(HQ_Member member)

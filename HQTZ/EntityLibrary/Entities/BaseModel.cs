@@ -196,6 +196,12 @@ namespace EntityLibrary.Entities
             set { SetValue("LastOperateTime", value); }
         }
 
+        [Search(Field = "OStatus", Operator = SearchOperator.NotEqual)]
+        public int OrderStateNotDelete
+        {
+            set { SetValue("OrderStateNotDelete", value); }
+        }
+
         #endregion
 
         #region 会员订单按状态查询

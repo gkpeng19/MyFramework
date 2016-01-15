@@ -21,14 +21,14 @@
                 }
                 else
                 {
-                    <a href="~/Member/MemberIndex"><img src="~/Images/topUser.png" width="16" height="16" /> <span>@G.Util.Account.LoginInfo.Current.UserName</span></a>
+                    <a href="~/Member/MemberIndex"><img src="~/Images/topUser.png" width="16" height="16" id="img_luser" /> <span>@G.Util.Account.LoginInfo.Current.UserName</span></a>
                     <span>&nbsp;</span>
-                    <a href="#" onclick="LoginOut()"><span style="position:relative;top:2px;">[退出]</span></a>
+                    <a href="#" onclick="LoginOut()"><span>[退出]</span></a>
                 }
             </div>
             <div id="top">
                 <a href="/"><img src="~/Images/logo.gif" style="margin-left:35px;" /></a>
-                <img src="~/Images/server-tel.gif" style="margin-right:25px; float:right;" />
+                <img src="~/Images/server-tel.gif" style="margin-right:25px; float:right;margin-top:5px;" />
             </div>
             <div id="menu">
                 <a href="/">
@@ -52,7 +52,7 @@
                 <a href="/NewCheaper">
                     <div class="menu-normal" data-class="green-menu-curr"><span>最新优惠</span></div>
                 </a>
-                <a href="http://123.57.153.47:8099/" onclick="toShop()" target="_blank" id="linkToShop">
+                <a href="http://123.57.153.47:8099/" onclick="toShop(this)" target="_blank" id="linkToShop">
                     <div class="menu-normal" data-class="menu-curr"><span>旅居商城</span></div>
                 </a>
             </div>
@@ -163,19 +163,6 @@
         $("#close2code").bind("click", function () {
             $("#div2code").hide();
         });
-
-        function toShop() {
-            $.ajaxSetup({ async: false });
-            $.get("/Member/LoadCurrUserInfo", { ran: Math.random() }, function (r) {
-                if (r.Phone.length > 0) {
-                    var ppp = "su=" + r.Phone + "&sp=" + r.Pwd;
-                    ppp = new Base64().encode(ppp);
-                    var url = "http://123.57.153.47:8099/Account/Login?ppp=" + ppp;
-                    $("#linkToShop").attr("href", url);
-                }
-            });
-            $.ajaxSetup({ async: true });
-        }
     </script>
     @RenderSection("scripts", required: false)
 </body>

@@ -105,3 +105,88 @@ function LoginOut() {
         location.href = "/Base/LoginOut";
     });
 }
+
+function toShop(src, targetUrl) {
+    $.ajaxSetup({ async: false });
+    $.get("/Member/LoadCurrUserInfo", { ran: Math.random() }, function (r) {
+        if (r.Phone.length > 0) {
+            var ppp = "su=" + r.Phone + "&sp=" + r.Pwd;
+            ppp = new Base64().encode(ppp);
+            var url = "http://123.57.153.47:8099/Account/Login?ppp=" + ppp + "&toLink=" + targetUrl;
+            $(src).attr("href", url);
+        }
+    });
+    $.ajaxSetup({ async: true });
+}
+
+function initOrderHtml(orders) {
+    var html = "";
+    $(orders).each(function (i) {
+        var planClass = "plan" + (i % 4 + 1);
+        if (this.OStatus == 2 || this.OStatus == 4) {
+            planClass += " planDisabled";
+        }
+
+        var status = "";
+        if (this.OStatus == 0) {
+            status = "<span class='label label-info'>待处理</span>";
+        }
+        else if (this.OStatus == 1) {
+            status = "<span class='label label-success' style='background:#7db553;'>预订成功</span>";
+        }
+        else if (this.OStatus == 3) {
+            status = "<span class='label label-success'>支付成功</span>";
+        }
+        else if (this.OStatus == 2) {
+            status = "<span class='label label-warning'>预订失败</span>";
+        }
+        else if (this.OStatus == 4) {
+            status = "<span class='label'>已退订</span>";
+        }
+
+        html += '<div class="plan ' + planClass + '"><div class="header"><p>' + this.RoomName_G + "  " + status + '</p></div>' +
+    '<div class="price">￥' + this.AllPrice_G + ' <span>/ 共 ' + this.BookDays_G + ' 天</span></div><ul>' +
+        '<li>入住日期 <b>' + this.BookStartTime_G + '</b></li>' +
+        '<li>退房日期 <b>' + this.BookEndTime_G + '</b></li>' +
+        '<li>预订日期 <b>' + this.CreateOn_G + '</b> </li></ul>';
+
+        if (this.CanCancelBook_G == 1) {
+            html += ' <a class="signup cancelBook" href="javascript:void(0)" data-id="' + this.ID + '">&nbsp;退 订&nbsp;</a> ';
+        }
+        else {
+            if (this.OStatus == 2) {//预定失败
+                html += ' <a class="signup deleteBook" style="background:#f89406;" href="javascript:void(0)" onclick="deleteOrder(this,' + this.ID + ')">&nbsp;删 除&nbsp;</a> ';
+                html += ' <a class="signup" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" onclick="$.alert(\'' + this.Remark + '\')">查看详情</a> ';
+            }
+            else if (this.OStatus == 4) {
+                html += ' <a class="signup" style="background-color:gray;">&nbsp;退 订&nbsp;</a> ';
+            }
+        }
+
+        if (this.OStatus == 0) {
+            html += ' <a class="signup cancelBook" href="javascript:void(0)" data-id="' + this.ID + '">&nbsp;退 订&nbsp;</a> ';
+            html += ' <a class="signup remarkBook" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" data-id="' + this.ID + '" data-remark="' + (this.Remark ? this.Remark : '') + '">修改备注</a> ';
+        }
+        else if (this.OStatus == 1 || this.OStatus == 3) {
+            html += ' <a class="signup viewRemark" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" data-id="' + this.ID + '" data-remark="' + (this.Remark ? this.Remark : '') + '">查看备注</a> ';
+        }
+        html += "</div>";
+    });
+    return html;
+}
+
+function deleteOrder(src, oid) {
+    if (oid) {
+        $.confirm("确定要删除该订单吗？", function () {
+            $.post("/Member/DeleteOrder", { orderid: oid, ran: Math.random() }, function (r) {
+                if (r == 1) {
+                    $.success("删除订单成功。");
+                    $(src).parent().remove();
+                }
+                else {
+                    $.error("删除订单失败，请重试！");
+                }
+            });
+        });
+    }
+}

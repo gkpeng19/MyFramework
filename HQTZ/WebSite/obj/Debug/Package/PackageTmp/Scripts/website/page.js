@@ -99,3 +99,9 @@ function IsValidEmail(email) {
     var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
     return reg.test(email);
 }
+
+function LoginOut() {
+    $.confirm("确定要退出系统吗？", function () {
+        location.href = "/Base/LoginOut";
+    });
+}

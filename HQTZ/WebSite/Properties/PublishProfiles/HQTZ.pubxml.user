@@ -40,7 +40,7 @@
       <publishTime>10/16/2015 15:38:06</publishTime>
     </File>
     <File Include="AdminPages/Member.html">
-      <publishTime>01/12/2016 17:26:45</publishTime>
+      <publishTime>01/13/2016 15:41:47</publishTime>
     </File>
     <File Include="AdminPages/MemberAsk.html">
       <publishTime>11/20/2015 09:39:04</publishTime>
@@ -49,7 +49,7 @@
       <publishTime>11/10/2015 20:44:23</publishTime>
     </File>
     <File Include="AdminPages/MemberOrder.html">
-      <publishTime>01/12/2016 18:15:06</publishTime>
+      <publishTime>01/14/2016 09:54:55</publishTime>
     </File>
     <File Include="AdminPages/MemberService.html">
       <publishTime>11/10/2015 20:44:23</publishTime>
@@ -202,10 +202,10 @@
       <publishTime>08/07/2015 17:31:20</publishTime>
     </File>
     <File Include="bin/WebSite.dll">
-      <publishTime>01/13/2016 09:56:47</publishTime>
+      <publishTime>01/14/2016 09:31:56</publishTime>
     </File>
     <File Include="bin/WebSite.pdb">
-      <publishTime>01/13/2016 09:56:47</publishTime>
+      <publishTime>01/14/2016 09:31:56</publishTime>
     </File>
     <File Include="bin/zh-Hans/System.Web.Helpers.resources.dll">
       <publishTime>08/07/2015 17:31:20</publishTime>
@@ -347,6 +347,18 @@
     </File>
     <File Include="Images/server-tel.gif">
       <publishTime>09/23/2015 09:37:52</publishTime>
+    </File>
+    <File Include="Images/topLogin.png">
+      <publishTime>01/13/2016 11:36:44</publishTime>
+    </File>
+    <File Include="Images/topOut.png">
+      <publishTime>01/13/2016 13:59:19</publishTime>
+    </File>
+    <File Include="Images/topReg.png">
+      <publishTime>01/13/2016 11:36:44</publishTime>
+    </File>
+    <File Include="Images/topUser.png">
+      <publishTime>01/13/2016 14:03:06</publishTime>
     </File>
     <File Include="Images/tou.png">
       <publishTime>08/17/2015 09:24:28</publishTime>
@@ -1054,7 +1066,7 @@
       <publishTime>08/07/2015 17:31:19</publishTime>
     </File>
     <File Include="Scripts/website/page.js">
-      <publishTime>01/04/2016 09:27:51</publishTime>
+      <publishTime>01/13/2016 13:55:37</publishTime>
     </File>
     <File Include="Scripts/website/slider/css/silder.css">
       <publishTime>12/03/2015 13:43:12</publishTime>
@@ -1108,7 +1120,7 @@
       <publishTime>01/12/2016 18:23:49</publishTime>
     </File>
     <File Include="Styles/website/page.css">
-      <publishTime>12/29/2015 10:22:42</publishTime>
+      <publishTime>01/14/2016 09:48:34</publishTime>
     </File>
     <File Include="test.html">
       <publishTime>10/14/2015 17:37:21</publishTime>
@@ -1117,22 +1129,22 @@
       <publishTime>10/15/2015 16:15:48</publishTime>
     </File>
     <File Include="Views/Default/Index.cshtml">
-      <publishTime>12/31/2015 09:32:59</publishTime>
+      <publishTime>01/14/2016 09:49:44</publishTime>
     </File>
     <File Include="Views/Destination/Index.cshtml">
       <publishTime>12/29/2015 10:30:28</publishTime>
     </File>
     <File Include="Views/Detail/Index.cshtml">
-      <publishTime>01/12/2016 14:41:23</publishTime>
+      <publishTime>01/13/2016 17:00:34</publishTime>
     </File>
     <File Include="Views/Member/Index.cshtml">
-      <publishTime>01/12/2016 16:58:47</publishTime>
+      <publishTime>01/14/2016 09:44:41</publishTime>
     </File>
     <File Include="Views/Member/MemberIndex.cshtml">
-      <publishTime>01/12/2016 19:04:09</publishTime>
+      <publishTime>01/13/2016 17:06:50</publishTime>
     </File>
     <File Include="Views/Member/OrderIndex.cshtml">
-      <publishTime>01/12/2016 18:41:46</publishTime>
+      <publishTime>01/13/2016 14:12:33</publishTime>
     </File>
     <File Include="Views/Member/TraveGuide.cshtml">
       <publishTime>12/29/2015 11:10:33</publishTime>
@@ -1153,7 +1165,7 @@
       <publishTime>08/07/2015 17:31:19</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>12/31/2015 09:32:59</publishTime>
+      <publishTime>01/14/2016 09:49:26</publishTime>
     </File>
     <File Include="Views/web.config">
       <publishTime>01/11/2016 15:43:04</publishTime>

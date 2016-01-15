@@ -11,9 +11,24 @@
 <body>
     <div class="page">
         <div class="content">
+            <div id="toptop">
+                <span>欢迎您，</span>
+                @if (!G.Util.Web.Permission.LoginVerify.IsLogin("Client"))
+                {
+                    <a href="~/Member/Index?op=login"><img src="~/Images/topLogin.png" width="15" height="15" /> &nbsp;<span>快捷登陆</span></a>
+                    <span>&nbsp;</span>
+                    <a href="~/Member/Index?op=reg"><img src="~/Images/topReg.png" width="21" height="21" /> <span>免费注册</span></a>
+                }
+                else
+                {
+                    <a href="~/Member/MemberIndex"><img src="~/Images/topUser.png" width="16" height="16" id="img_luser" /> <span>@G.Util.Account.LoginInfo.Current.UserName</span></a>
+                    <span>&nbsp;</span>
+                    <a href="#" onclick="LoginOut()"><span>[退出]</span></a>
+                }
+            </div>
             <div id="top">
-                <a href="/"><img src="~/Images/logo.gif" style="margin-left:50px;" /></a>
-                <img src="~/Images/server-tel.gif" style="margin-left:300px;" />
+                <a href="/"><img src="~/Images/logo.gif" style="margin-left:35px;" /></a>
+                <img src="~/Images/server-tel.gif" style="margin-right:25px; float:right;margin-top:5px;" />
             </div>
             <div id="menu">
                 <a href="/">
@@ -26,8 +41,8 @@
                     <div class="menu-normal" data-class="green-menu-curr"><span>旅居卡</span></div>
                 </a>
                 @*<a href="/MemberBenefit">
-                    <div class="menu-normal" data-class="green-menu-curr"><span>得天独厚</span></div>
-                </a>*@
+                        <div class="menu-normal" data-class="green-menu-curr"><span>得天独厚</span></div>
+                    </a>*@
                 <a href="/Member">
                     <div class="menu-normal" data-class="menu-curr"><span>会员中心</span></div>
                 </a>
@@ -100,6 +115,7 @@
     </div>
 
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/layer/layer.js"></script>
     <script src="~/Scripts/GOMFrameWork.js"></script>
     <script src="~/Scripts/website/page.js"></script>
     <script src="~/Scripts/Base64.js"></script>

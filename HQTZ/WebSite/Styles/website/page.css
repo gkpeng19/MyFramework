@@ -2,6 +2,7 @@
     margin: 0px;
     padding: 0px;
     background-color: #eef3f9;
+    font-size: 14px;
     font-family: "Microsoft YaHei", "微软雅黑",Arial,Helvetica, Tahoma, STXihei, "华文细黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
 }
 
@@ -32,7 +33,7 @@ body .page {
 #toptop {
     font-size: 12px;
     text-align: right;
-    padding:3px 32px 3px 0px;
+    padding: 3px 32px 0px 0px;
 }
 
     #toptop img {
@@ -45,6 +46,11 @@ body .page {
         color: #08c;
     }
 
+#img_luser {
+    position: relative;
+    bottom: 2px;
+}
+
 #menu div {
     width: 140px;
     line-height: 70px;
@@ -56,7 +62,8 @@ body .page {
 }
 
 #top {
-    padding: 10px 0px;
+    height: 46px;
+    padding: 0px 0px 10px 0px;
 }
 
 #menu div span {

@@ -78,7 +78,7 @@ namespace EntityLibrary.Entities
         }
 
         /// <summary>
-        /// 0:待处理(是否通过预订);1:通过预定;2:未通过预定;3:已付款;4:已退订
+        /// 0:待处理(是否通过预订);1:通过预定;2:未通过预定;3:已付款;4:已退订;5:已删除
         /// </summary>
         [JsonIgnore]
         public int OStatus

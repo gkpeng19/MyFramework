@@ -24,4 +24,14 @@ namespace EntityLibrary.Entities
         ContactUs = 2,
         SilderImg = 3
     }
+
+    public enum EnumOrderState
+    {
+        Wainting = 0,
+        Booked = 1,
+        UnBooked = 2,
+        Payed = 3,
+        Canceled = 4,
+        Deleted = 5
+    }
 }

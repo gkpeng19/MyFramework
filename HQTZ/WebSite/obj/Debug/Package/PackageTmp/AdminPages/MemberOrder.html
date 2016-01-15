@@ -98,7 +98,7 @@
                     html += ' <a href="javascript:void(0)" class="btn btn-minier btn-info" onclick="ViewRemark(\'' + json.Remark + '\')">查看备注</a> ';
                 }
             }
-            else if (json.OStatus == 1) {//预定通过，未付款
+            else if (json.OStatus == 1) {//预订通过，未付款
                 if (json.ShowPay_G == 1) {
                     html += ' <a href="javascript:void(0)" class="btn btn-minier btn-primary" onclick="Pay(' + json.ID + ')">扣款</a> ';
                 }
@@ -109,13 +109,13 @@
                     html += ' <a href="javascript:void(0)" class="btn btn-minier btn-info" onclick="ViewRemark(\'' + json.Remark + '\')">查看备注</a> ';
                 }
             }
-            else if (json.OStatus == 3) {//预定通过,已付款
+            else if (json.OStatus == 3) {//预订通过,已付款
                 html += '<span class="label label-success">已扣款</span>';
                 if (json.Remark) {
                     html += ' <a href="javascript:void(0)" class="btn btn-minier btn-info" onclick="ViewRemark(\'' + json.Remark + '\')">查看备注</a> ';
                 }
             }
-            else if (json.OStatus == 2) {//预定不通过
+            else if (json.OStatus == 2) {//预订不通过
                 html += '<span class="label label-info" style="cursor:pointer;" onclick="$.alert(\'' + json.Remark + '\')">预订未通过</span>';
             }
             else if (json.OStatus == 4) {
@@ -129,7 +129,7 @@
             $.confirm("确定要通过预订吗？", function () {
                 $.post("/MemberOrder/BookOk", { bid: bid }, function (r) {
                     if (r == 1) {
-                        $.success("通过预定成功。");
+                        $.success("通过预订成功。");
                         var sel = $("#07132892003594021").datagrid("getCurrData");
                         var update = {};
                         for (var i in sel) {
@@ -139,7 +139,7 @@
                         $("#07132892003594021").datagrid("updateRow", sel, update);
                     }
                     else {
-                        $.error("通过预定失败，请重试！");
+                        $.error("通过预订失败，请重试！");
                     }
                 });
             });
@@ -169,7 +169,7 @@
                         $("#div_BookNoRemark textarea").val("");
                     }
                     else {
-                        $.error("不通过该预定失败，请重试！");
+                        $.error("不通过该预订失败，请重试！");
                     }
                 });
 

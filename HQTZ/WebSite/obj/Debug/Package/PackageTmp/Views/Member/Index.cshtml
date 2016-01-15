@@ -169,6 +169,11 @@
 @section styles{
     <link href="~/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <style type="text/css">
+        body {
+            font-size: initial;
+            line-height: initial;
+            background-color: #eef3f9;
+        }
         .form-horizontal .control-label {
             width: 120px;
         }
@@ -199,8 +204,6 @@
 }
 
 @section scripts{
-    <script src="~/Scripts/layer/layer.js"></script>
-    <script src="~/Scripts/website/page.js"></script>
     <script type="text/javascript">
         setCurrMenu(3);
 
@@ -309,12 +312,16 @@
                     $.error("用户名或密码错误！");
                 }
                 else if (r == 1) {
-                    layer.close(layerLogin);
-                    changeUIWhenIsLogin();
                     @if(ViewBag.ReturnUrl !=null)
                     {
                         <text>
                     location.href = "@ViewBag.ReturnUrl";
+                    </text>
+                    }
+                    else
+                    {
+                        <text>
+                    location.reload();
                     </text>
                     }
                 }
@@ -515,11 +522,16 @@
             });
         });
 
-        @if(ViewBag.Action!=null&&ViewBag.Action=="login")
+        @if(ViewBag.Action!=null)
         {
-            <text>
-        LoginClick();
-        </text>
+            if(ViewBag.Action=="login")
+            {
+                <text>LoginClick();</text>
+            }
+            else if (ViewBag.Action == "reg")
+            {
+                <text>RegClick();</text>
+            }
         }
     </script>
 }

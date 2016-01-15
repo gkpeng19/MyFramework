@@ -60,7 +60,7 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <label>用户名</label>
-                            <input type="text" readonly="readonly" name="UserName" id="06113260950252164" class="span11" />
+                            <input type="text" name="UserName" id="06113260950252164" class="span11" />
                         </div>
                         <div class="span12">
                             <label>手机号码</label>
@@ -189,8 +189,8 @@
 
             $("#9739148752935891").datagrid({ url: "/AdminMember/LoadMemberList", search: '#table_search', psize: 10 });
 
-
             $("#9739148752935891").parent().prev().find(".btn-table-add").bind('click', function () {
+                $("#06113260950252164").removeAttr("readonly");
                 $("#8328234406241097").bindEntity({});
                 $("#8328234406241097").open("新增", function (win) {
                     if (!tt.validateForm("8328234406241097")) {
@@ -202,6 +202,12 @@
                         if (r.ID > 0) {
                             $("#9739148752935891").datagrid("addRow", r);
                             layer.close(win);
+                        }
+                        else if (r.ID == -1) {
+                            $.error("用户名已存在，请更换用户名！");
+                        }
+                        else if (r.ID == -2) {
+                            $.error("手机号码已存在！");
                         }
                         else {
                             $.error("保存失败，请重试！");
@@ -215,6 +221,7 @@
 
             $("#9739148752935891").datagrid("onEdit", function () {
                 var json = $("#9739148752935891").datagrid("getCurrData");
+                $("#06113260950252164").attr("readonly", "readonly");
                 $("#8328234406241097").bindEntity(json);
                 $("#8328234406241097").open("编辑", function (win) {
                     if (!tt.validateForm("8328234406241097")) {
@@ -226,6 +233,12 @@
                         if (r.ID > 0) {
                             $("#9739148752935891").datagrid("updateRow", json, newjson);
                             layer.close(win);
+                        }
+                        else if (r.ID == -1) {
+                            $.error("用户名已存在，请更换用户名！");
+                        }
+                        else if (r.ID == -2) {
+                            $.error("手机号码已存在！");
                         }
                         else {
                             $.error("保存失败，请重试！");

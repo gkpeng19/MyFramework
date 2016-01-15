@@ -98,7 +98,7 @@
                     html += ' <a href="javascript:void(0)" class="btn btn-minier btn-info" onclick="ViewRemark(\'' + json.Remark + '\')">查看备注</a> ';
                 }
             }
-            else if (json.OStatus == 1) {//预定通过，未付款
+            else if (json.OStatus == 1) {//预订通过，未付款
                 if (json.ShowPay_G == 1) {
                     html += ' <a href="javascript:void(0)" class="btn btn-minier btn-primary" onclick="Pay(' + json.ID + ')">扣款</a> ';
                 }
@@ -109,13 +109,13 @@
                     html += ' <a href="javascript:void(0)" class="btn btn-minier btn-info" onclick="ViewRemark(\'' + json.Remark + '\')">查看备注</a> ';
                 }
             }
-            else if (json.OStatus == 3) {//预定通过,已付款
+            else if (json.OStatus == 3) {//预订通过,已付款
                 html += '<span class="label label-success">已扣款</span>';
                 if (json.Remark) {
                     html += ' <a href="javascript:void(0)" class="btn btn-minier btn-info" onclick="ViewRemark(\'' + json.Remark + '\')">查看备注</a> ';
                 }
             }
-            else if (json.OStatus == 2) {//预定不通过
+            else if (json.OStatus == 2 || json.OStatus == 5) {//预订不通过
                 html += '<span class="label label-info" style="cursor:pointer;" onclick="$.alert(\'' + json.Remark + '\')">预订未通过</span>';
             }
             else if (json.OStatus == 4) {
@@ -129,17 +129,11 @@
             $.confirm("确定要通过预订吗？", function () {
                 $.post("/MemberOrder/BookOk", { bid: bid }, function (r) {
                     if (r == 1) {
-                        $.success("通过预定成功。");
-                        var sel = $("#07132892003594021").datagrid("getCurrData");
-                        var update = {};
-                        for (var i in sel) {
-                            update[i] = sel[i];
-                        }
-                        update.OStatus = 1;
-                        $("#07132892003594021").datagrid("updateRow", sel, update);
+                        $.success("通过预订成功。");
+                        $("#07132892003594021").datagrid("refresh");
                     }
                     else {
-                        $.error("通过预定失败，请重试！");
+                        $.error("通过预订失败，请重试！");
                     }
                 });
             });
@@ -157,19 +151,12 @@
                     if (r == 1) {
                         layer.closeAll();
                         $.success("不通过该预订成功。");
-                        var sel = $("#07132892003594021").datagrid("getCurrData");
-                        var update = {};
-                        for (var i in sel) {
-                            update[i] = sel[i];
-                        }
-                        update.OStatus = 2;
-                        update.Remark = txt;
-                        $("#07132892003594021").datagrid("updateRow", sel, update);
+                        $("#07132892003594021").datagrid("refresh");
 
                         $("#div_BookNoRemark textarea").val("");
                     }
                     else {
-                        $.error("不通过该预定失败，请重试！");
+                        $.error("不通过该预订失败，请重试！");
                     }
                 });
 
@@ -181,7 +168,7 @@
             $.confirm("确定要退订吗？", function () {
                 $.post("/Member/CancelBook", { ID: bid }, function (r) {
                     if (r > 0) {
-                        $("#07132892003594021").datagrid("removeCurrRow");
+                        $("#07132892003594021").datagrid("refresh");
                     }
                     else {
                         $.error("退订失败，请重试！");
@@ -199,6 +186,7 @@
                 $.post("/MemberOrder/Pay", { bid: bid }, function (r) {
                     if (r == 1) {
                         $.success("扣款成功。");
+                        $("#07132892003594021").datagrid("refresh");
                     }
                     else if (r == -1) {
                         $.error("用户余额不足，请联系用户充值！");
@@ -210,24 +198,12 @@
             });
         }
 
-        function BindToSelect(data) {
-
-        }
-
-        function BindToDiv(data) {
-        }
-
         $(function () {
 
 
             $("#07132892003594021").datagrid({ url: "/MemberOrder/LoadOrders", search: '#7170233057698347', psize: 10 });
 
         });
-
-        /*增加验证信息----------Start*/
-
-        /*增加验证信息----------End*/
-
     </script>
 </body>
 </html>
