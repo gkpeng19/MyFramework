@@ -105,6 +105,7 @@ namespace WebSite.Controllers
         {
             SearchModel sm = new SearchModel("uv_memberorder");
             sm["MemberID"] = uid;
+            sm.OrderStateNotDelete = (int)EnumOrderState.Deleted;
             sm.OrderBy("id", EnumOrderBy.Desc);
             sm.PageIndex = page;
             sm.PageSize = psize;
@@ -114,18 +115,26 @@ namespace WebSite.Controllers
 
         public void CancelBook(HQ_BookRoom broom)
         {
-            var sm = new SearchModel("hq_bookroom");
-            sm["id"] = broom.ID;
-            var room = sm.LoadEntity<HQ_BookRoom>();
-            if (room.CanCancelBook_G == 1)
-            {
-                broom.Delete();
-                OutResult(1);
-            }
-            else
-            {
-                OutResult(0);
-            }
+            MemberController controller = new MemberController();
+            var r = controller.CancelBook(broom);
+            OutResult(r);
+        }
+
+        public void DeleteOrder(int orderid)
+        {
+            MemberController controller = new MemberController();
+            var r = controller.DeleteOrder(orderid);
+            OutResult(r);
+        }
+
+        public void UpdateOrderRemark(int orderid, string remark)
+        {
+            MemberController controller = new MemberController();
+            var order = new HQ_BookRoom();
+            order["ID"] = orderid;
+            order.Remark = remark;
+            var r = controller.SaveBRoomRemark(order);
+            OutResult(r);
         }
 
         public void LoadArticleDetail(int ptype, int vid)
@@ -177,35 +186,36 @@ namespace WebSite.Controllers
             }
         }
 
-        public void BookRoom(int roomid, int userid, DateTime sdate, DateTime edate)
+        public void BookRoom(int roomid, int userid, DateTime sdate, DateTime edate, string remark)
         {
             if (sdate.AddDays(1) < DateTime.Now)
             {
-                OutResult(-1);
+                OutResult("入住日期必须大于等于当前日期！");
                 return;
             }
             if (edate < sdate)
             {
-                OutResult(-2);
+                OutResult("离开日期必须大于入住日期！");
                 return;
             }
-            lock (MemberController._object)
+
+            MemberController controller = new MemberController();
+            var r = controller.BookRoom(roomid, sdate, edate, remark, userid);
+            if (r == 1)
             {
-                if (MemberController.IsRoomEnough(roomid, sdate, edate) > 0)
-                {
-                    HQ_BookRoom entity = new HQ_BookRoom();
-                    entity.MemberID = userid;
-                    entity.RoomID = roomid;
-                    entity.BookStartTime = sdate;
-                    entity.BookEndTime = edate;
-                    entity.CreateOn = DateTime.Now;
-                    var rid = entity.Save();
-                    OutResult(1);
-                }
-                else
-                {
-                    OutResult(0);
-                }
+                OutResult(1);
+            }
+            else if (r == -2)
+            {
+                OutResult("该时段的房间已全部被预订！");
+            }
+            else if (r == -3)
+            {
+                OutResult("您的余额已不足！请登录旅居中国官网充值。");
+            }
+            else
+            {
+                OutResult("预定失败，请重试！");
             }
         }
 

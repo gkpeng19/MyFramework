@@ -20,7 +20,7 @@ http://www.freshdesignweb.com/free-beautiful-css3-table-style.html
 	/* --------------- */	
 
 	#fdw-pricing-table .plan {
-        height:266px;
+        height:255px;
 		background: #fff;      
 		border: 1px solid #ddd;
 		color: #333;
@@ -142,7 +142,7 @@ http://www.freshdesignweb.com/free-beautiful-css3-table-style.html
 		
 	#fdw-pricing-table .signup {
 		position: relative;
-		padding: 10px 20px;
+		padding: 8px 12px;
 		color: #fff;
 		text-transform: uppercase;
 		text-decoration: none;

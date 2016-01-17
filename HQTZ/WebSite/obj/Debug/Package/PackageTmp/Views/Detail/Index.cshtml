@@ -41,7 +41,11 @@
     <a href="#tagBookRoom" id="a_book" style="display:none;">
         <div id="book"></div>
     </a>
-    <div id="tagBookRoom" class="header blue" style="margin-bottom:5px;font-size:18px;font-weight:bold;"><i class="fa fa-cart-plus"></i> 预订房间</div>
+    <div id="tagBookRoom" class="header blue" style="margin-bottom:5px;font-size:18px;font-weight:bold;">
+        <i class="fa fa-cart-plus"></i> 预订房间
+
+        <span class="label label-warning">温馨提示：该基地下的所有房间在入住前 <span style="font-weight:bolder;font-size:14px;">@Model.DaysBeforePay</span> 天内，不能退订</span>
+    </div>
     <div id="roomlist" class="accordion">
     </div>
 }
@@ -61,7 +65,7 @@
             <td><textarea id="remark" rows="3"></textarea></td>
         </tr>
     </table>
-</div> 
+</div>
 
 
 @section styles{
@@ -209,7 +213,7 @@
                                 }
                                 else if(r==-3)
                                 {
-                                    ShowMsg("您的余额已不足！<a target='_blank' href='http://123.57.153.47:8099/product/118' style='padding:0px;margin:0px;color:blue;background:transparent;border:none;'>[请充值]</a>");
+                                    ShowMsg("您的余额已不足！<a target='_blank' href='javascript:void(0)' onclick='ToAddBalance(this)' style='padding:0px;margin:0px;color:blue;background:transparent;border:none;'>[请充值]</a>");
                                 }
                                 else if(r>0)
                                 {
@@ -241,6 +245,12 @@
             });
         });
 
+        function ToAddBalance(src)
+        {
+            toShop(src,"http://123.57.153.47:8099/product/118");
+            ShowMsg();
+        }
+
         function GetRoomItem(id,name,price,count,desc,isopen)
         {
             return  '<div class="accordion-group">'+
@@ -262,7 +272,7 @@
 
         function ShowMsg(msg)
         {
-            if(msg.length==0)
+            if(!msg||msg.length==0)
             {
                 $("#layer-error-msg").html("");
             }

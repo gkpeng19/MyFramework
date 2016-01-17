@@ -55,5 +55,12 @@ namespace EntityLibrary.Entities
             get { return GetString("Images"); }
             set { SetValue("Images", value); }
         }
+
+        [JsonIgnore]
+        public int DaysBeforePay
+        {
+            get { return GetInt32("DaysBeforePay"); }
+            set { SetValue("DaysBeforePay", value); }
+        }
     }
 }

@@ -15,12 +15,12 @@
 				margin-top: 20px;
 			}
 			.mui-input-group label {
-				width: 38%;
+				width: 32%;
 			}
 			.mui-input-row label~input,
 			.mui-input-row label~select,
 			.mui-input-row label~textarea {
-				width: 62%;
+				width: 68%;
 			}
 			.mui-checkbox input[type=checkbox],
 			.mui-radio input[type=radio] {
@@ -31,6 +31,11 @@
 			}
 			.mui-btn {
 				padding: 10px;
+			}
+			
+			textarea.noscrollbars {
+  				overflow: hidden;
+  				height: 63px;
 			}
 		</style>
 	</head>
@@ -44,11 +49,15 @@
 			<form class="mui-input-group">
 				<div class="mui-input-row">
 					<label>入住日期</label>
-					<input id='startdate' type="date" class="mui-input-clear mui-input" placeholder="请输入入住日期">
+					<input id='startdate' type="text" class="mui-input-clear mui-input" placeholder="请选择入住日期">
 				</div>
 				<div class="mui-input-row">
 					<label>离开日期</label>
-					<input id='enddate' type="date" class="mui-input-clear mui-input" placeholder="请输入离开日期">
+					<input id='enddate' type="text" class="mui-input-clear mui-input" placeholder="请选择离开日期">
+				</div>
+				<div class="mui-input-row" style="height: auto;">
+					<label>备注信息</label>
+					<textarea class="noscrollbars mui-input-clear mui-input" onkeyup="autoGrow(this);" id="textarea" placeholder="请输入备注信息"></textarea>
 				</div>
 			</form>
 			<div class="mui-content-padded">
@@ -62,6 +71,24 @@
 		<script src="js/app.js"></script>
 		<script type="text/javascript" src="js/GOMFrameWork.js" ></script>
 		<script>
+			function autoGrow (oField) {
+	  			if (oField.scrollHeight > oField.clientHeight) {
+	    			oField.style.height = oField.scrollHeight + "px";
+	  			}
+			}
+			
+			function pickDate(title,src){
+				plus.nativeUI.pickDate( function(e){
+					var d=e.date;
+					var month=(d.getMonth()+1).toString();
+					month=month.length==1?("0"+month):month;
+					var day=d.getDate().toString();
+					day=day.length==1?("0"+day):day;
+					src.value=d.getFullYear()+"-"+month+"-"+day;
+				},function(e){},{title:title});
+			}
+
+			
 			(function($, doc) {
 				$.init();
 				
@@ -80,7 +107,14 @@
 					};
 					
 					var startInput=doc.getElementById("startdate");
+					startInput.addEventListener("tap",function(){
+						pickDate("",startInput);
+					});
 					var endInput=doc.getElementById("enddate");
+					endInput.addEventListener("tap",function(){
+						pickDate("",endInput);
+					});
+					var remarkInput=doc.getElementById("textarea");
 					
 					var bookInput=doc.getElementById("book");
 					bookInput.addEventListener("tap",function(){
@@ -100,24 +134,17 @@
 								showError("请输入离开日期！");
 								return;
 							}
-							$.post(getUrl("/Phone/BookRoom"),{roomid:roomid,userid:state.uid,sdate:startInput.value,edate:endInput.value,ran:Math.random()},
+							$.post(getUrl("/Phone/BookRoom"),
+							{roomid:roomid,userid:state.uid,sdate:startInput.value,edate:endInput.value,
+								remark:remarkInput.value, ran:Math.random()},
 							function(r){
-								if(r=="1"){
+								if(r==1){
 									showError("");
-									plus.nativeUI.toast('恭喜您，预定房间成功。');
+									plus.nativeUI.toast('您的订单已经提交，我们将在24小时内告诉您预订结果。');
 									$.back();
 								}
-								else if(r=="0"){
-									showError("对不起，房间已全部被预定！");
-								}
-								else if(r=="-1"){
-									showError("入住日期必须大于等于当前日期！");
-								}
-								else if(r=="-2"){
-									showError("离开日期必须大于等于入住日期！");
-								}
 								else{
-									showError("系统错误，请返回重试！");
+									showError(r);
 								}
 							});
 						}

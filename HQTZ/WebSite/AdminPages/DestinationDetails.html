@@ -91,13 +91,17 @@
                 <div>
                     <input type="hidden" name="ID" />
                     <div class="row-fluid">
-                        <div class="span6">
+                        <div class="span4">
                             <label>名称</label>
                             <input type="text" name="Name" id="16296441543887158" class="span11" />
                         </div>
-                        <div class="span6">
+                        <div class="span4">
                             <label>目的地</label>
                             <select name="DPanelID" id="9482227414632911" class="span11" data-exname="DPanel_G"></select>
+                        </div>
+                        <div class="span4">
+                            <label>不能退订提前天数</label>
+                            <input type="text" name="DaysBeforePay" id="16296441543887160" class="span11" />
                         </div>
                         <!--<div class="span4">
                             <label>封面图片</label>
@@ -303,21 +307,18 @@
         /*增加验证信息----------Start*/
 
         var f16296441543887158 = new tt.Field("名称", "", "16296441543887158").setMsgId("layer-error-msg");
-
-
         tt.vf.req.add(f16296441543887158);
 
 
         var f9482227414632911 = new tt.Field("目的地", "", "9482227414632911").setMsgId("layer-error-msg");
-
-
         tt.vf.req.add(f9482227414632911);
 
+        var f16296441543887160 = new tt.Field("不能退订提前天数", "", "16296441543887160").setMsgId("layer-error-msg");
+        tt.vf.req.add(f16296441543887160);
+        tt.vf.int.add(f16296441543887160);
+
         var f3280650432639937 = new tt.Field("详细信息", "", "3280650432639937").setMsgId("layer-error-msg");
-
-
         tt.vf.req.add(f3280650432639937);
-
 
         /*增加验证信息----------End*/
 

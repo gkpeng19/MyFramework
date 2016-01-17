@@ -272,10 +272,11 @@ namespace WebSite.Controllers
             return 1;
         }
 
-        public static int IsMoneyEnouth(int roomid, long userid, DateTime sdate, DateTime edate, out decimal balance, out int shopUserId)
+        public static int IsMoneyEnouth(int roomid, long userid, DateTime sdate, DateTime edate, out decimal balance, out int shopUserId, out string phoneNum)
         {
             balance = 0;
             shopUserId = 0;
+            phoneNum = string.Empty;
 
             var days = edate.Subtract(sdate).Days;
             if (days <= 0)
@@ -298,12 +299,13 @@ namespace WebSite.Controllers
 
             sm = new SearchModel("uv_MemberWithAmount");
             sm["id"] = userid;
-            sm.AddSearch("ShopUserID_G", "Balance_G");
+            sm.AddSearch("PhoneNum", "ShopUserID_G", "Balance_G");
             var member = sm.LoadEntity<HQ_Member>();
             if (member != null)
             {
                 balance = member.Balance_G;
                 shopUserId = member.ShopUserID_G;
+                phoneNum = member.PhoneNum;
             }
 
             balance = balance - price * days;
@@ -315,26 +317,32 @@ namespace WebSite.Controllers
         }
 
         public static object _object = new object();
-        public long BookRoom(int roomid, DateTime sdate, DateTime edate, string remark)
+        public long BookRoom(int roomid, DateTime sdate, DateTime edate, string remark,long? userid)
         {
-            if (!LoginVerify.IsLogin("Client"))
+            if (userid == null && !LoginVerify.IsLogin("Client"))
             {
-                return -1;
+                return -1;//未登录
+            }
+
+            if(userid==null)
+            {
+                userid = LoginInfo.Current.UserID;
             }
 
             lock (_object)
             {
                 if (IsRoomEnough(roomid, sdate, edate) <= 0)
                 {
-                    return -2;
+                    return -2;//房间数量不足
                 }
 
                 decimal balance = 0;
                 int shopUserId = 0;
-                var r = IsMoneyEnouth(roomid, LoginInfo.Current.UserID, sdate, edate, out balance, out shopUserId);
+                string phoneNum = null;
+                var r = IsMoneyEnouth(roomid, userid.Value, sdate, edate, out balance, out shopUserId, out phoneNum);
                 if (r == 0)
                 {
-                    return 0;
+                    return 0;//预定日期填写错误
                 }
 
                 if (r == -1)
@@ -343,7 +351,7 @@ namespace WebSite.Controllers
                 }
 
                 HQ_BookRoom entity = new HQ_BookRoom();
-                entity.MemberID = (int)LoginInfo.Current.UserID;
+                entity.MemberID = (int)userid.Value;
                 entity.RoomID = roomid;
                 entity.BookStartTime = sdate;
                 entity.BookEndTime = edate;

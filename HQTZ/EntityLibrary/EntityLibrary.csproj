@@ -54,7 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppConfig.cs" />
     <Compile Include="Entities\BaseModel.cs" />
     <Compile Include="Entities\HQ_Advertisement.cs" />
     <Compile Include="Entities\HQ_Agenter.cs" />

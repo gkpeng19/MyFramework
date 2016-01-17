@@ -7,6 +7,43 @@
     <link href="css/mui.min.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="css/icon.custom.css"/>
     <link rel="stylesheet" type="text/css" href="css/page.css"/>
+    <style type="text/css">
+    .mui-table-view-cell
+    {
+    	text-align: left !important;
+    }
+    	.oneOrder{
+    		border: solid 1px #ccc;
+    		border-radius: 8px;
+    		background: white;
+    		margin-bottom: 8px;
+    	}
+    	.orderTitle{
+			font-size: 18px !important;
+			height: 18px !important;
+			line-height: 20px !important;
+			margin-top: 0px !important;
+    	}
+    	.orderPrice{
+    		color:coral;
+    		text-align: right !important;
+    	}
+    	.orderPrice span{
+    		font-size:20px;
+    	}
+    	.orderDesc p{
+    		font-size: 14px !important;
+    	}
+    	.orderStatus{
+    		text-align: right !important;
+    	}
+    	.orderStatus span{
+    		color: white;
+			padding: 0px 5px;
+    		border-radius: 3px;
+    		padding-top: 3px;
+    	}
+    </style>
 </head>
 <body> 
 	<header class="mui-bar mui-bar-nav top-bar">
@@ -19,9 +56,7 @@
 		<div id="loading">
     		<img src="images/loading.gif" />
     	</div>
-    	<div class="mui-card">
-    	    <ul class="mui-table-view" id="orderList">
-    	    </ul>
+    	<div style="padding: 8px;" id="orderList">
     	</div>
 	    <div style="height: 51px;"></div>
 	</div>
@@ -47,6 +82,46 @@
 	<script src="js/app.js"></script>
 	<script src="js/GOMFrameWork.js" ></script>
 	<script type="text/javascript">
+		var currpage=0;
+		var loadOrder=null;
+		
+		function CancelBook(bid){
+			plus.nativeUI.confirm("确定要取消预定吗？",function(event){
+				if(event.index==0){
+					mui.post(getUrl("/Phone/CancelBook"),{ID:bid,ran_g:Math.random()},function(r){
+						if(r==1){
+							plus.nativeUI.toast('已成功退订房间');
+							loadOrder(currpage);
+						}
+						else{
+							plus.nativeUI.toast('对不起,该房间不能退订');
+						}
+					});
+				}
+			},"消息提示",['确定','取消']);
+		}
+		
+		function DeleteOrder(bid){
+			plus.nativeUI.confirm("确定要删除该订单吗？",function(event){
+				if(event.index==0){
+					mui.post(getUrl("/Phone/DeleteOrder"),{orderid:bid,ran_g:Math.random()},function(r){
+						if(r==1){
+							plus.nativeUI.toast('已成功删除订单');
+							loadOrder(currpage);
+						}
+						else{
+							plus.nativeUI.toast('删除失败，请重试');
+						}
+					});
+				}
+			},"消息提示",['确定','取消']);
+		}
+		
+		function ViewDetail(remark){
+			remark=remark.length==0?"该订单未添加备注信息":remark;
+			plus.nativeUI.alert(remark);
+		}
+	
 		(function($,doc){
 			$.init();
 			
@@ -54,7 +129,7 @@
 				var state=app.getState();
 				
 				var prevBtn=doc.getElementById("prev");
-				var nextBtn=doc.getElementById("next");
+				var nextBtn=doc.getElementById("next"); 
 				var backBtn=doc.getElementById("back");
 				
 				prevBtn.addEventListener("tap",function(){
@@ -65,20 +140,16 @@
 					loadOrder(currpage+1);
 				},false);
 				
-				var cancelBook=function(bookid,srcLi){
-					$.post(getUrl("/Phone/CancelBook"),{ID:bookid,ran_g:Math.random()},function(r){
-						if(r==1){
-							plus.nativeUI.toast('已成功退订房间');
-							srcLi.remove();
-						}
-						else if(r==0){
-							plus.nativeUI.toast('对不起,该房间不能退订');
-						}
-					});
-				};
+				window.addEventListener("refresh",function(event){
+    				loadOrder(currpage);
+    			});
+    			
+    			var changeORemarkPage=$.preload({
+    				id:'changeORemark',
+    				url:'ChangeOrderRemark.html'
+    			});
 				
-				var currpage=0;
-				var loadOrder=function(page){
+				loadOrder=function(page){
 					currpage=page;
 					$.getJSON(getUrl("/Phone/LoadUserOrders"),{uid:state.uid,page:page,ran:Math.random()},function(r){
 						doc.getElementById("loading").style.display="none";
@@ -102,8 +173,54 @@
 						var html="";
 						var list=toJsResult(r.List);
 						for (var i = 0; i < list.length; ++i) {
-	                    	html += '<li class="mui-table-view-cell"><table width="100%"><tr><td colspan="3">'+list[i].RoomName_G+'<a class="mui-pull-right">'+list[i].VillageName_G+'</a></td></tr><tr><td><p>入住日期：'+list[i].BookStartTime_G+'</p><p>离开日期：'+list[i].BookEndTime_G+'</p></td><td><a>共 '+list[i].BookDays_G+' 天&nbsp;&nbsp;&nbsp;&nbsp;￥'+list[i].AllPrice_G+'</a></td><td align="right" width="1%">'+(list[i].CanCancelBook_G==1?'<button type="button" class="mui-btn mui-btn-blue cancelbook" data-id="'+list[i].ID+'">退订</button>':'<button type="button" class="mui-btn"  disabled="disabled">退订</button>')+'</td></tr></table></li>';
-	                	}
+							var order=list[i];
+							var status = "";
+					        if (order.OStatus == 0) {
+					        	status='<span style="background: #3a87ad;">待处理</span>';
+					        }
+					        else if (order.OStatus == 1) {
+					        	status='<span style="background: #7db553;">预订成功</span>';
+					        }
+					        else if (order.OStatus == 3) {
+					        	status='<span style="background: green;">支付成功</span>';
+					        }
+					        else if (order.OStatus == 2) {
+					        	status='<span style="background: orange;">预订失败</span>';
+					        }
+					        else if (order.OStatus == 4) {
+					        	status='<span style="background: #ddd;">已退订</span>';
+					        }
+					        
+					        html+='<div class="oneOrder mui-table-view mui-grid-view"><div class="mui-table-view-cell mui-col-xs-9">'+
+    							'<div class="mui-media-body orderTitle">'+order.RoomName_G+'</div></div>'+
+    							'<div class="mui-table-view-cell mui-col-xs-3 orderPrice">￥<span>'+order.AllPrice_G+'</span></div>'+
+				    		 	'<div class="mui-table-view-cell mui-col-xs-8 orderDesc"><p>'+order.VillageName_G+'</p></div>'+
+				    		 	'<div class="mui-table-view-cell mui-col-xs-4 orderStatus">'+status+'</div>'+
+				    			'<div class="mui-table-view-cell mui-col-xs-12 orderDesc"><p>'+order.BookStartTime_G+' 至 '+order.BookEndTime_G+'  共'+order.BookDays_G+'晚</p></div>';
+				    		
+				    		var btnstr="";
+				    		if (order.CanCancelBook_G == 1) {
+				    			btnstr+=' <button type="button" class="mui-btn mui-btn-blue mui-btn-outlined" onclick="CancelBook('+order.ID+')">退订</button> ';
+					        }
+					        else {
+					            if (order.OStatus == 2) {//预定失败
+					            	btnstr+=' <button type="button" class="mui-btn mui-btn-blue mui-btn-outlined" onclick="DeleteOrder('+order.ID+')">删除</button> ';
+					            	btnstr+=' <button type="button" class="mui-btn mui-btn-blue mui-btn-outlined" onclick="ViewDetail(\''+(order.Remark?order.Remark:'')+'\')">查看详情</button> ';
+					            }
+					            else if (order.OStatus == 4) {
+					            	//btnstr+=' <button type="button" class="mui-btn">退订</button> ';
+					            }
+					        }
+					
+					        if (order.OStatus == 0) {
+					        	btnstr+=' <button type="button" class="mui-btn mui-btn-blue mui-btn-outlined" onclick="CancelBook('+order.ID+')">退订</button> ';
+					        	btnstr+=' <button type="button" class="mui-btn mui-btn-blue mui-btn-outlined changeDetail" data-bid="'+order.ID+'" data-remark="'+(order.Remark?order.Remark:'')+'">修改备注</button> ';
+					       	}
+					        else if (order.OStatus == 1 || order.OStatus == 3) {
+					        	btnstr+=' <button type="button" class="mui-btn mui-btn-blue mui-btn-outlined" onclick="ViewDetail(\''+(order.Remark?order.Remark:'')+'\')">查看备注</button> ';
+					        }
+					        html+='<div style="text-align: right;">'+btnstr+'</div></div>';
+	                    }
 						
 						if(html.length==0){
 							doc.getElementById("orderList").innerHTML="<p style='padding-top: 10px;text-align: center;'>暂无订单信息！</p>";
@@ -111,16 +228,21 @@
 						}
 						
 						doc.getElementById("orderList").innerHTML=html;
-						var cbooks= doc.getElementsByClassName("cancelbook");
-						for(var i=0;i<cbooks.length;++i){
-							cbooks[i].addEventListener("tap",function(){
-								var srcLi=this.parentElement.parentElement.parentElement.parentElement.parentElement;
-								var bookid=this.getAttribute("data-id");
-								plus.nativeUI.confirm("确定要取消预定吗？",function(event){
-									if(event.index==0){
-										cancelBook(bookid,srcLi);
-									}
-								},"消息提示",['确定','取消']);
+						
+						var changeRs=doc.getElementsByClassName("changeDetail");
+						for(var i=0;i<changeRs.length;++i){
+							changeRs[i].addEventListener("tap",function(){
+								var bid=this.getAttribute("data-bid");
+								var remark=this.getAttribute("data-remark");
+								$.fire(changeORemarkPage,'show',{orderid:bid,remark:remark});
+								setTimeout(function() {
+									mui.openWindow({
+										id: 'changeORemark',
+										waiting: {
+											autoShow: false
+										}
+									});
+								}, 50);
 							},false);
 						}
 					});

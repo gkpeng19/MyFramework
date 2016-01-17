@@ -37,12 +37,27 @@ namespace WebSite.AdminControllers
                 book.OStatus = 1;
                 book.LastOperateTime = DateTime.Now;
                 book.Save();
-                return 1;
             }
             catch
             {
                 return 0;
             }
+
+            try
+            {
+                SearchModel sm = new SearchModel("uv_bookroom");
+                sm["id"] = bid;
+                sm.AddSearch("RoomName_G", "PhoneNum_G");
+                var broom = sm.LoadValue<HQ_BookRoom>();
+                if (broom != null)
+                {
+                    NM.Util.SendUserInfo _U = new NM.Util.SendUserInfo() { isLog = 1, orgid = 555, username = broom.PhoneNum_G };
+                    NM.Util.MsgSend.DirectSend(string.Format("尊敬的会员您好，您已成功预定 {0} 。", broom.RoomName_G), broom.PhoneNum_G, _U);
+                }
+            }
+            catch { }
+
+            return 1;
         }
 
         public int BookNo(int bid, string remark)
@@ -77,7 +92,8 @@ namespace WebSite.AdminControllers
 
                 int shopUserId = 0;
                 decimal balance = 0;
-                var isMoneyEnough = WebSite.Controllers.MemberController.IsMoneyEnouth(bookRoom.RoomID, bookRoom.MemberID, bookRoom.BookStartTime, bookRoom.BookEndTime, out balance, out shopUserId);
+                string phoneNum = null;
+                var isMoneyEnough = WebSite.Controllers.MemberController.IsMoneyEnouth(bookRoom.RoomID, bookRoom.MemberID, bookRoom.BookStartTime, bookRoom.BookEndTime, out balance, out shopUserId, out phoneNum);
 
                 if (isMoneyEnough == -1)//余额不足
                 {
@@ -103,6 +119,16 @@ namespace WebSite.AdminControllers
 
                     scope.Complete();
                 }
+
+                try
+                {
+                    if (balance < 500)
+                    {
+                        NM.Util.SendUserInfo _U = new NM.Util.SendUserInfo() { isLog = 1, orgid = 555, username = phoneNum };
+                        NM.Util.MsgSend.DirectSend("尊敬的会员您好，您的账户余额已低于500元，请尽快充值。", phoneNum, _U);
+                    }
+                }
+                catch { }
 
                 return 1;
             }

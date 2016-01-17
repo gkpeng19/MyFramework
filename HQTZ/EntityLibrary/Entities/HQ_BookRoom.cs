@@ -62,11 +62,18 @@ namespace EntityLibrary.Entities
             set { SetValue("LastOperateTime", value); }
         }
 
+        [JsonIgnore]
+        public int DaysBeforePay_G
+        {
+            get { return GetInt32("DaysBeforePay_G"); }
+            set { SetValue("DaysBeforePay_G", value); }
+        }
+
         public int ShowPay_G
         {
             get
             {
-                if (DateTime.Now.AddDays(AppConfig.DaysBeforePay) >= BookStartTime)
+                if (DateTime.Now.AddDays(DaysBeforePay_G) >= BookStartTime)
                 {
                     if (OStatus == 1)
                     {
@@ -143,7 +150,7 @@ namespace EntityLibrary.Entities
             {
                 if (OStatus == 1)
                 {
-                    if (DateTime.Now.AddDays(AppConfig.DaysBeforePay) < BookStartTime)
+                    if (DateTime.Now.AddDays(DaysBeforePay_G) < BookStartTime)
                     {
                         return 1;
                     }
@@ -158,6 +165,13 @@ namespace EntityLibrary.Entities
             get { return GetString("MemberName_G"); }
             set { SetValue("MemberName_G", value); }
         }
+        [JsonIgnore]
+        public string PhoneNum_G
+        {
+            get { return GetString("PhoneNum_G"); }
+            set { SetValue("PhoneNum_G", value); }
+        }
+
         [JsonIgnore]
         public string VillageName_G
         {

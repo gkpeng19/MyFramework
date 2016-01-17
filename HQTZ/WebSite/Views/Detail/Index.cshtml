@@ -41,7 +41,11 @@
     <a href="#tagBookRoom" id="a_book" style="display:none;">
         <div id="book"></div>
     </a>
-    <div id="tagBookRoom" class="header blue" style="margin-bottom:5px;font-size:18px;font-weight:bold;"><i class="fa fa-cart-plus"></i> 预订房间</div>
+    <div id="tagBookRoom" class="header blue" style="margin-bottom:5px;font-size:18px;font-weight:bold;">
+        <i class="fa fa-cart-plus"></i> 预订房间
+
+        <span class="label label-warning">温馨提示：该基地下的所有房间在入住前 <span style="font-weight:bolder;font-size:14px;">@Model.DaysBeforePay</span> 天内，不能退订</span>
+    </div>
     <div id="roomlist" class="accordion">
     </div>
 }

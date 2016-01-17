@@ -112,8 +112,13 @@ function toShop(src, targetUrl) {
         if (r.Phone.length > 0) {
             var ppp = "su=" + r.Phone + "&sp=" + r.Pwd;
             ppp = new Base64().encode(ppp);
-            var url = "http://123.57.153.47:8099/Account/Login?ppp=" + ppp + "&toLink=" + targetUrl;
-            $(src).attr("href", url);
+            var url = "http://123.57.153.47:8099/ExAccount/Login?ppp=" + ppp + "&toLink=" + targetUrl;
+            if (src) {
+                $(src).attr("href", url);
+            }
+            else {
+                location.href = url;
+            }
         }
     });
     $.ajaxSetup({ async: true });
@@ -190,3 +195,28 @@ function deleteOrder(src, oid) {
         });
     }
 }
+
+
+var _pageParameters = { init: false };
+$.extend({
+    getUrlParam: function (pname) {
+        if (_pageParameters.init) {
+            return _pageParameters[pname];
+        }
+
+        var hrefs = location.href.split('?');
+        if (hrefs.length > 1) {
+            var params = hrefs[1].split('&');
+            $(params).each(function () {
+                var strs = this.split('=');
+                if (strs.length > 1) {
+                    _pageParameters[strs[0]] = strs[1];
+                }
+            });
+        }
+
+        _pageParameters.init = true;
+
+        return _pageParameters[pname];
+    }
+});
