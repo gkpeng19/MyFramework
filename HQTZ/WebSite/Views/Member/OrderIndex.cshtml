@@ -3,12 +3,48 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div style="padding:0px 35px;">
+<div style="padding:0px 25px;">
     <img src="~/Images/leader.gif" />
-    <div style="margin-top:10px;" id="fdw-pricing-table">
-        <div style="text-align: center; min-height: 100px; color: gray; padding-top: 80px;">您暂无订单信息！</div>
+    <!--待处理-->
+    <div style="border-bottom: solid 1px #3A87AD;" class="div_price">
+        <span class="label label-info arrowed-in-right arrowed-in label-status">待处理</span>
+        <span class="label-more" style="color: #3a87ad;" data-status="0"><i class="fa fa-refresh"></i> 更多</span>
     </div>
-    <div class="pager" style="text-align:center;padding-top:30px;"></div>
+    <div style="margin-top:10px;" class="fdw-pricing-table" id="div_waiting">
+        <div style="text-align: center; min-height: 100px; color: gray; padding-top: 80px;">暂无待处理订单！</div>
+    </div>
+    <!--预定成功-->
+    <div style="border-bottom: solid 1px #7db553;" class="div_price">
+        <span class="label label-success arrowed-in-right arrowed-in label-status" style="background: #7db553 !important;">预定成功</span>
+        <span class="label-more" style="color: #7db553;" data-status="1"><i class="fa fa-refresh"></i> 更多</span>
+    </div>
+    <div style="margin-top:10px;" class="fdw-pricing-table" id="div_bookok">
+        <div style="text-align: center; min-height: 100px; color: gray; padding-top: 80px;">暂无预定成功订单！</div>
+    </div>
+    <!--支付成功-->
+    <div style="border-bottom: solid 1px #468847; " class="div_price">
+        <span class="label label-success arrowed-in-right arrowed-in label-status" style="background: #468847!important;">支付成功</span>
+        <span class="label-more" style="color: #468847;" data-status="3"><i class="fa fa-refresh"></i> 更多</span>
+    </div>
+    <div style="margin-top:10px;" class="fdw-pricing-table" id="div_payok">
+        <div style="text-align: center; min-height: 100px; color: gray; padding-top: 80px;">暂无支付成功订单！</div>
+    </div>
+    <!--预定失败-->
+    <div style="border-bottom: solid 1px #f89406;" class="div_price">
+        <span class="label label-warning arrowed-in-right arrowed-in label-status">预定失败</span>
+        <span class="label-more" style="color: #f89406;" data-status="2"><i class="fa fa-refresh"></i> 更多</span>
+    </div>
+    <div style="margin-top:10px;" class="fdw-pricing-table" id="div_canclebook">
+        <div style="text-align: center; min-height: 100px; color: gray; padding-top: 80px;">暂无已退订订单！</div>
+    </div>
+    <!--已退订-->
+    <div style="border-bottom: solid 1px #abbac3;" class="div_price">
+        <span class="label arrowed-in-right arrowed-in label-status">已退订</span>
+        <span class="label-more" style="color: #abbac3;" data-status="4"><i class="fa fa-refresh"></i> 更多</span>
+    </div>
+    <div style="margin-top:10px;" class="fdw-pricing-table" id="div_canclebook">
+        <div style="text-align: center; min-height: 100px; color: gray; padding-top: 80px;">暂无已退订订单！</div>
+    </div>
 </div>
 
 <div class="layerout" id="div_orderRemark" style="width:350px;padding-top:20px;">
@@ -22,9 +58,30 @@
 
 @section styles{
     <link href="~/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Scripts/ace/css/ace.min.css" rel="stylesheet" />
     <link href="~/Styles/website/orderstyles.css" rel="stylesheet" />
     <link href="~/Styles/GOMFrameWork.css" rel="stylesheet" />
     <style type="text/css">
+        .div_price {
+            margin-top: 10px;
+        }
+
+        .label-success {
+            background: #468847 !important;
+        }
+
+        .label-status {
+            padding: 7px 10px;
+            font-size: 15px;
+        }
+
+        .label-more {
+            font-size: 14px;
+            float: right;
+            position: relative;
+            line-height: 27px;
+            cursor: pointer;
+        }
         /*Pager*/
         .pager a {
             padding: 6px 12px;
@@ -78,47 +135,93 @@
                     $("#fdw-pricing-table").html(html);
                     $(".pager").html(r.pager);
                 }
-
-                $(".cancelBook").bind('click', function () {
-                    var bid = $(this).attr("data-id");
-                    $.confirm("确定要退订吗?", function () {
-                        $.post("/Member/CancelBook", { ID: bid }, function (r) {
-                            if (r > 0) {
-                                $.msg("退订成功。");
-                                location.reload();
-                            }
-                            else {
-                                $.error("退订失败，请重试！");
-                            }
-                        });
-                    });
-                });
-                $(".remarkBook").bind('click', function () {
-                    var target = $(this);
-                    var bid = target.attr("data-id");
-                    $("#remark").val(target.attr("data-remark"));
-                    $("#div_orderRemark").open("备注信息", function () {
-                        $.post("/Member/SaveBRoomRemark", { id: bid, Remark: $("#remark").val() }, function (r) {
-                            if (r > 0) {
-                                target.attr("data-remark", $("#remark").val());
-                                $.msg("备注信息保存成功。");
-                            }
-                            else {
-                                $.error("备注信息保存失败，请重试！");
-                            }
-                        });
-                    });
-                });
-                $(".viewRemark").bind('click', function () {
-                    var remark = $(this).attr("data-remark");
-                    if (remark.length == 0) {
-                        remark = "没有添加备注信息！";
-                    }
-                    $.alert(remark);
-                });
             });
         }
 
-        loadOrders(1);
+        $(".label-more").bind("click", function () {
+            var nextPage = $(this).attr("data-page");
+            if (!nextPage) {
+                nextPage = 0;
+            }
+            nextPage += 1;
+            var target = $(this);
+            $.post("/Member/LoadOrderByStatus", { status: $(this).attr("data-status"), page: nextPage }, function (r) {
+                target.attr("data-page", nextPage);
+                if (nextPage >= r.PageCount && nextPage > 1) {
+                    $.msg("没有更多" + target.prev().text() + "订单了");
+                }
+
+                var html = initOrderHtml($.toJsResult(r.Data));
+                if (html.length > 0) {
+                    if (nextPage == 1) {
+                        target.parent().next().html("");
+                    }
+                    target.parent().next().append(html);
+
+                    initBtnFunc(target.parent().next());
+                }
+            });
+        });
+
+        function initBtnFunc(container) {
+            container.find(".cancelBook").bind('click', function () {
+                if ($(this).attr("data-event")) {
+                    return;
+                }
+                $(this).attr("data-event", 1);
+
+                var bid = $(this).attr("data-id");
+                $.confirm("确定要退订吗?", function () {
+                    $.post("/Member/CancelBook", { ID: bid }, function (r) {
+                        if (r > 0) {
+                            $.msg("退订成功。");
+                            location.reload();
+                        }
+                        else {
+                            $.error("退订失败，请重试！");
+                        }
+                    });
+                });
+            });
+
+            container.find(".remarkBook").bind('click', function () {
+                if ($(this).attr("data-event")) {
+                    return;
+                }
+                $(this).attr("data-event", 1);
+
+                var target = $(this);
+                var bid = target.attr("data-id");
+                $("#remark").val(target.attr("data-remark"));
+                $("#div_orderRemark").open("备注信息", function () {
+                    $.post("/Member/SaveBRoomRemark", { id: bid, Remark: $("#remark").val() }, function (r) {
+                        if (r > 0) {
+                            target.attr("data-remark", $("#remark").val());
+                            $.msg("备注信息保存成功。");
+                        }
+                        else {
+                            $.error("备注信息保存失败，请重试！");
+                        }
+                    });
+                });
+            });
+
+            container.find(".viewRemark").bind('click', function () {
+                if ($(this).attr("data-event")) {
+                    return;
+                }
+                $(this).attr("data-event", 1);
+
+                var remark = $(this).attr("data-remark");
+                if (remark.length == 0) {
+                    remark = "没有添加备注信息！";
+                }
+                $.alert(remark);
+            });
+        }
+
+        $(".label-more").each(function () {
+            this.click();
+        });
     </script>
 }
