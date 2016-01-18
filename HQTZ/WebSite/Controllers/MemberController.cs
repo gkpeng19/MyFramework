@@ -317,14 +317,14 @@ namespace WebSite.Controllers
         }
 
         public static object _object = new object();
-        public long BookRoom(int roomid, DateTime sdate, DateTime edate, string remark,long? userid)
+        public long BookRoom(int roomid, DateTime sdate, DateTime edate, string remark, long? userid)
         {
             if (userid == null && !LoginVerify.IsLogin("Client"))
             {
                 return -1;//未登录
             }
 
-            if(userid==null)
+            if (userid == null)
             {
                 userid = LoginInfo.Current.UserID;
             }
@@ -428,11 +428,36 @@ namespace WebSite.Controllers
                 return -2;//输入的短信验证码错误
             }
 
+            SearchModel sm = new SearchModel("uv_MemberWithAmount");
+            sm["ID"] = LoginInfo.Current.UserID;
+            sm.AddSearch("PhoneNum", "ShopUserID_G");
+            var mem = sm.LoadEntity<HQ_Member>();
 
-            HQ_Member user = new HQ_Member();
-            user["ID"] = LoginInfo.Current.UserID;
-            user.PhoneNum = phone;
-            return user.Save();
+            try
+            {
+                using (var scope = new TransactionScope())
+                {
+                    if (mem.PhoneNum != phone)
+                    {
+                        Shop_Member s_mem = new Shop_Member();
+                        s_mem["UserID"] = mem.ShopUserID_G;
+                        s_mem["UserName"] = phone;
+                        s_mem.Save();
+                    }
+
+                    HQ_Member user = new HQ_Member();
+                    user["ID"] = LoginInfo.Current.UserID;
+                    user.PhoneNum = phone;
+                    user.Save();
+
+                    scope.Complete();
+                }
+            }
+            catch
+            {
+                return 0;
+            }
+            return 1;
         }
 
         public int SendMsgCode(string phone, string type)

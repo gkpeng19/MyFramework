@@ -48,7 +48,7 @@ namespace WebSite.AdminControllers
                 SearchModel sm = new SearchModel("uv_bookroom");
                 sm["id"] = bid;
                 sm.AddSearch("RoomName_G", "PhoneNum_G");
-                var broom = sm.LoadValue<HQ_BookRoom>();
+                var broom = sm.LoadEntity<HQ_BookRoom>();
                 if (broom != null)
                 {
                     NM.Util.SendUserInfo _U = new NM.Util.SendUserInfo() { isLog = 1, orgid = 555, username = broom.PhoneNum_G };
