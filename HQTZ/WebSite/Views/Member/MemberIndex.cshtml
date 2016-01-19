@@ -35,7 +35,11 @@
                 </div>
                 <div class="ctxLine">
                     <img src="/Images/money.png" style="width:20px;" />
-                    <span>余额：<a style="text-decoration:none;">@ViewBag.Member.Balance_G</a> 元</span>
+                    <span>
+                        余额：<a style="text-decoration:none;">@ViewBag.Member.Balance_G</a> 元
+                        <a target="_blank" href="javascript:void(0)" onclick="toShop(this, 'http://123.57.153.47:8099/UserCenter/Recharge')">[充值]</a>
+                    </span>
+
                 </div>
                 <div class="ctxLine">
                     <img src="/Images/locker.png" style="width:20px;" />
@@ -57,31 +61,31 @@
                 </div>
                 <div class="fdw-pricing-table" id="fdw-pricing-table" style="width: 699px; padding:10px; border-bottom: solid 1px #DDDDDD;">
                     @*@for (int i = 0; i < ViewBag.Orders.Count; ++i)
-            {
-                EntityLibrary.Entities.HQ_BookRoom order = ViewBag.Orders[i];
-                <div class="plan plan@(i % 3 + 1)">
-                    <div class="header"><p>@order.RoomName_G</p></div>
-                    <div class="price">￥@order.AllPrice_G <span>/ 共 @order.BookDays_G 天</span></div><ul>
-                        <li>入住日期 <b>@order.BookStartTime_G</b></li>
-                        <li>退房日期 <b>@order.BookEndTime_G</b></li>
-                        <li>预订日期 <b>@order.CreateOn_G</b> </li>
-                    </ul>
-                    @if (order.CanCancelBook_G == 0)
-                    {
-                        <a class="signup" style="background-color:gray;">&nbsp;退 订&nbsp;</a>
-                    }
-                    else
-                    {
-                        <a class="signup cancelBook" href="javascript:void(0)" data-id="@order.ID">&nbsp;退 订&nbsp;</a>
-                        <a class="signup remarkBook" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" data-id="@order.ID" data-remark="@order.Remark">&nbsp;备 注&nbsp;</a>
-                    }
-                </div>
-            }*@
+                        {
+                            EntityLibrary.Entities.HQ_BookRoom order = ViewBag.Orders[i];
+                            <div class="plan plan@(i % 3 + 1)">
+                                <div class="header"><p>@order.RoomName_G</p></div>
+                                <div class="price">￥@order.AllPrice_G <span>/ 共 @order.BookDays_G 天</span></div><ul>
+                                    <li>入住日期 <b>@order.BookStartTime_G</b></li>
+                                    <li>退房日期 <b>@order.BookEndTime_G</b></li>
+                                    <li>预订日期 <b>@order.CreateOn_G</b> </li>
+                                </ul>
+                                @if (order.CanCancelBook_G == 0)
+                                {
+                                    <a class="signup" style="background-color:gray;">&nbsp;退 订&nbsp;</a>
+                                }
+                                else
+                                {
+                                    <a class="signup cancelBook" href="javascript:void(0)" data-id="@order.ID">&nbsp;退 订&nbsp;</a>
+                                    <a class="signup remarkBook" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" data-id="@order.ID" data-remark="@order.Remark">&nbsp;备 注&nbsp;</a>
+                                }
+                            </div>
+                        }*@
 
                     @*@if (ViewBag.Orders.Count == 0)
-            {
-                <div style="height:156px;text-align:center;color:gray;padding-top:150px;">您暂无即将到期的订单信息！</div>
-            }*@
+                        {
+                            <div style="height:156px;text-align:center;color:gray;padding-top:150px;">您暂无即将到期的订单信息！</div>
+                        }*@
                     <div style="height:156px;text-align:center;color:gray;padding-top:150px;">7天内暂无变动过的订单！</div>
                 </div>
             </td>
