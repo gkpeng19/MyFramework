@@ -204,6 +204,19 @@ namespace WebSite.Controllers
             return this.JsonNet(new { Data = result.Data, pager = Pager.InitPager(page_g, result.PageCount, "loadOrders") });
         }
 
+        [LoginVerify("Client")]
+        public JsonResult LoadOrderByStatus(int status,int page,int psize=4)
+        {
+            SearchModel sm = new SearchModel("uv_bookroom");
+            sm["MemberID"] = LoginInfo.Current.UserID;
+            sm["OStatus"] = status;
+            sm.OrderBy("id", EnumOrderBy.Desc);
+            sm.PageIndex = page;
+            sm.PageSize = psize;
+            var result = sm.Load<HQ_BookRoom>();
+            return this.JsonNet(new { Data = result.Data, PageCount = result.PageCount });
+        }
+
         public long CancelBook(HQ_BookRoom broom)
         {
             var sm = new SearchModel("hq_bookroom");

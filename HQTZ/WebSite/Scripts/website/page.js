@@ -149,7 +149,7 @@ function initOrderHtml(orders) {
             status = "<span class='label'>已退订</span>";
         }
 
-        html += '<div class="plan ' + planClass + '"><div class="header"><p>' + this.RoomName_G + "  " + status + '</p></div>' +
+        html += '<div class="plan ' + planClass + '"><div class="priceheader"><p>' + this.RoomName_G + "  " + status + '</p></div>' +
     '<div class="price">￥' + this.AllPrice_G + ' <span>/ 共 ' + this.BookDays_G + ' 天</span></div><ul>' +
         '<li>入住日期 <b>' + this.BookStartTime_G + '</b></li>' +
         '<li>退房日期 <b>' + this.BookEndTime_G + '</b></li>' +
