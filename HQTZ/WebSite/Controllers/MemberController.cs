@@ -205,7 +205,7 @@ namespace WebSite.Controllers
         }
 
         [LoginVerify("Client")]
-        public JsonResult LoadOrderByStatus(int status,int page,int psize=4)
+        public JsonResult LoadOrderByStatus(int status, int page, int psize = 4)
         {
             SearchModel sm = new SearchModel("uv_bookroom");
             sm["MemberID"] = LoginInfo.Current.UserID;
@@ -625,11 +625,10 @@ namespace WebSite.Controllers
 
         public JsonResult LoadCurrUserInfo()
         {
-            var user = LoginInfo.Current;
-            if (user != null && user.UserID > 0)
+            if (LoginVerify.IsLogin("Client"))
             {
                 SearchModel sm = new SearchModel("hq_member");
-                sm["id"] = user.UserID;
+                sm["id"] = LoginInfo.Current.UserID;
                 var member = sm.LoadEntity<HQ_Member>();
                 if (member != null)
                 {

@@ -318,8 +318,11 @@
                         var shopurl = $.getUrlParam("shopurl");
                         if (shopurl && shopurl.length > 0) {
                             toShop(null, shopurl);
-                            return;
                         }
+                        else {
+                            toShop();
+                        }
+                        return;
                     }
                     @if(ViewBag.ReturnUrl !=null)
                     {

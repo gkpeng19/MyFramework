@@ -107,18 +107,26 @@ function LoginOut() {
 }
 
 function toShop(src, targetUrl) {
+    if (!targetUrl) {
+        targetUrl = '/';
+    }
     $.ajaxSetup({ async: false });
     $.get("/Member/LoadCurrUserInfo", { ran: Math.random() }, function (r) {
+        var url = null;
         if (r.Phone.length > 0) {
             var ppp = "su=" + r.Phone + "&sp=" + r.Pwd;
             ppp = new Base64().encode(ppp);
-            var url = "http://123.57.153.47:8099/ExAccount/Login?ppp=" + ppp + "&toLink=" + targetUrl;
-            if (src) {
-                $(src).attr("href", url);
-            }
-            else {
-                location.href = url;
-            }
+            url = "http://123.57.153.47:8099/ExAccount/Login?ppp=" + ppp + "&returnUrl=" + targetUrl;
+        }
+        else {
+            url = "http://123.57.153.47:8099" + targetUrl;
+        }
+
+        if (src) {
+            $(src).attr("href", url);
+        }
+        else {
+            location.href = url;
         }
     });
     $.ajaxSetup({ async: true });

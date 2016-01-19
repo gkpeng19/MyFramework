@@ -167,6 +167,7 @@
     <Content Include="Images\locker.png" />
     <Content Include="Images\login.jpg" />
     <Content Include="Images\logo.gif" />
+    <Content Include="Images\logo.jpg" />
     <Content Include="Images\menubg.jpg" />
     <Content Include="Images\menudbg.jpg" />
     <Content Include="Images\money.png" />

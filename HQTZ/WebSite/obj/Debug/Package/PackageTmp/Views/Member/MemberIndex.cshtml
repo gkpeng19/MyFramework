@@ -35,7 +35,11 @@
                 </div>
                 <div class="ctxLine">
                     <img src="/Images/money.png" style="width:20px;" />
-                    <span>余额：<a style="text-decoration:none;">@ViewBag.Member.Balance_G</a> 元</span>
+                    <span>
+                        余额：<a style="text-decoration:none;">@ViewBag.Member.Balance_G</a> 元
+                        <a target="_blank" href="javascript:void(0)" onclick="toShop(this, '/UserCenter/Recharge')">[充值]</a>
+                    </span>
+
                 </div>
                 <div class="ctxLine">
                     <img src="/Images/locker.png" style="width:20px;" />
@@ -55,7 +59,7 @@
                 <div class="headerLine">
                     订单提醒
                 </div>
-                <div id="fdw-pricing-table" style="width: 699px; padding:10px; border-bottom: solid 1px #DDDDDD;">
+                <div class="fdw-pricing-table" id="fdw-pricing-table" style="width: 699px; padding:10px; border-bottom: solid 1px #DDDDDD;">
                     @*@for (int i = 0; i < ViewBag.Orders.Count; ++i)
                         {
                             EntityLibrary.Entities.HQ_BookRoom order = ViewBag.Orders[i];
