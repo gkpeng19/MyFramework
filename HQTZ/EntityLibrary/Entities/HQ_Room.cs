@@ -30,6 +30,13 @@ namespace EntityLibrary.Entities
             set { SetValue("Price", value); }
         }
         [JsonIgnore]
+        public decimal VipPrice
+        {
+            get { return GetDecimal("VipPrice"); }
+            set { SetValue("VipPrice", value); }
+        }
+
+        [JsonIgnore]
         public int RCount
         {
             get { return GetInt32("RCount"); }

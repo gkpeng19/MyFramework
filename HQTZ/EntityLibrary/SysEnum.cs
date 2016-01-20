@@ -15,7 +15,8 @@ namespace EntityLibrary.Entities
 
     public enum EnumUserType
     {
-        Normal = 1
+        Normal = 1,
+        Vip = 2
     }
 
     public enum EnumArticleCategory

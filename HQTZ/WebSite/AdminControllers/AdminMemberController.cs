@@ -169,6 +169,10 @@ namespace HQWZ.Controllers
                         entity.ShopPsw = entity.UserPsw;
                         entity.CreateBy = LoginInfo.Current.UserName;
                         entity.CreateOn = DateTime.Now;
+                        if (entity.UserType == 2)
+                        {
+                            entity.OpenVipDate = DateTime.Now.Date;
+                        }
 
                         #endregion
 
@@ -190,6 +194,10 @@ namespace HQWZ.Controllers
 
                         entity.EditBy = LoginInfo.Current.UserName;
                         entity.EditOn = DateTime.Now;
+                        if (entity.UserType == 2)
+                        {
+                            entity.OpenVipDate = DateTime.Now.Date;
+                        }
 
                         #endregion
 

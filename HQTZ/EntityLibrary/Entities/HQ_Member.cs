@@ -42,6 +42,26 @@ namespace EntityLibrary.Entities
             get { return GetInt32("UserType"); }
             set { SetValue("UserType", value); }
         }
+
+        public string UserType_G
+        {
+            get
+            {
+                if (UserType == 1)
+                {
+                    return "普通会员";
+                }
+                else if (UserType == 2)
+                {
+                    return "VIP会员";
+                }
+                else
+                {
+                    return "未知";
+                }
+            }
+        }
+
         [JsonIgnore]
         public int UserRole
         {
@@ -133,6 +153,13 @@ namespace EntityLibrary.Entities
         {
             get { return GetInt32("IsDelete"); }
             set { SetValue("IsDelete", value); }
+        }
+
+        [JsonIgnore]
+        public DateTime OpenVipDate
+        {
+            get { return GetDateTime("OpenVipDate"); }
+            set { SetValue("OpenVipDate", value); }
         }
     }
 }

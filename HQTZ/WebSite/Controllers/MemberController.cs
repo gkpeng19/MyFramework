@@ -62,8 +62,16 @@ namespace WebSite.Controllers
             LoginInfo info = new LoginInfo(username);
             info.SystemID = "Client";
             info.UserID = member.ID;
-            info.UserType = member.UserType;
-
+            var userType = member.UserType;
+            if (userType == 2 && member.OpenVipDate.AddYears(3) < DateTime.Now.Date)
+            {
+                userType = 1;
+                HQ_Member mem = new HQ_Member();
+                mem["ID"] = member.ID;
+                mem.UserType = 1;
+                mem.Save();
+            }
+            info.UserType = userType;
 
             LoginInfo.SetLoginToken(info, isrem == 1 ? true : false);
 
@@ -299,11 +307,11 @@ namespace WebSite.Controllers
             decimal price = 0;
             SearchModel sm = new SearchModel("hq_room");
             sm["id"] = roomid;
-            sm.AddSearch("price");
+            sm.AddSearch("price", "vipprice");
             var room = sm.LoadEntity<HQ_Room>();
             if (room != null)
             {
-                price = room.Price;
+                price = LoginInfo.Current.UserType == 2 ? room.VipPrice : room.Price;
             }
             if (price == 0)
             {

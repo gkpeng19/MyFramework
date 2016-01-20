@@ -125,6 +125,11 @@ namespace EntityLibrary.Entities
         {
             get { return Convert.ToInt32(GetDecimal("RoomPrice_G")); }
         }
+        [JsonIgnore]
+        public int RoomVipPrice_G
+        {
+            get { return Convert.ToInt32(GetDecimal("RoomVipPrice_G")); }
+        }
 
         int _days = 0;
         public int BookDays_G
@@ -142,6 +147,11 @@ namespace EntityLibrary.Entities
         public int AllPrice_G
         {
             get { return RoomPrice_G * BookDays_G; }
+        }
+
+        public int AllVipPrice_G
+        {
+            get { return RoomVipPrice_G * BookDays_G; }
         }
 
         public int CanCancelBook_G
