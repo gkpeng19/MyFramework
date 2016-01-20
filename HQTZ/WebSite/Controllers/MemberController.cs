@@ -293,11 +293,12 @@ namespace WebSite.Controllers
             return 1;
         }
 
-        public static int IsMoneyEnouth(int roomid, long userid, DateTime sdate, DateTime edate, out decimal balance, out int shopUserId, out string phoneNum)
+        public static int IsMoneyEnouth(int roomid, long userid, DateTime sdate, DateTime edate, out decimal balance, out int shopUserId, out string phoneNum, out decimal cost)
         {
             balance = 0;
             shopUserId = 0;
             phoneNum = string.Empty;
+            cost = 0;
 
             var days = edate.Subtract(sdate).Days;
             if (days <= 0)
@@ -329,7 +330,8 @@ namespace WebSite.Controllers
                 phoneNum = member.PhoneNum;
             }
 
-            balance = balance - price * days;
+            cost = price * days;
+            balance = balance - cost;
             if (balance < 0)
             {
                 return -1;
@@ -360,7 +362,8 @@ namespace WebSite.Controllers
                 decimal balance = 0;
                 int shopUserId = 0;
                 string phoneNum = null;
-                var r = IsMoneyEnouth(roomid, userid.Value, sdate, edate, out balance, out shopUserId, out phoneNum);
+                decimal cost = 0;
+                var r = IsMoneyEnouth(roomid, userid.Value, sdate, edate, out balance, out shopUserId, out phoneNum, out cost);
                 if (r == 0)
                 {
                     return 0;//预定日期填写错误

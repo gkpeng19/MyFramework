@@ -232,13 +232,46 @@ namespace HQWZ.Controllers
             {
                 return 0;
             }
-            ShopSearchEntity sse = new ShopSearchEntity("Accounts_UsersExp");
-            sse["UserID"] = shopUserId;
-            sse.AddSearch("Balance");
-            var uexp = sse.LoadEntity<Shop_Accounts_UsersExp>();
-            uexp["UserID"] = shopUserId;
-            uexp.Balance = uexp.Balance + amount;
-            uexp.Save();
+
+            try
+            {
+                ShopSearchEntity sse = new ShopSearchEntity("Accounts_UsersExp");
+                sse["UserID"] = shopUserId;
+                sse.AddSearch("Balance");
+                var uexp = sse.LoadEntity<Shop_Accounts_UsersExp>();
+
+                using (var scope = new TransactionScope())
+                {
+                    #region 更新余额
+
+                    var balance = uexp.Balance + amount;
+                    uexp["UserID"] = shopUserId;
+                    uexp.Balance = balance;
+                    uexp.Save();
+
+                    #endregion
+
+                    #region 添加充值记录
+
+                    Shop_Pay_BalanceDetails detail = new Shop_Pay_BalanceDetails();
+                    detail.UserId = shopUserId;
+                    detail.TradeDate = DateTime.Now;
+                    detail.TradeType = 1;
+                    detail.Income = amount;
+                    detail.Balance = balance;
+                    detail.Remark = "线下充值";
+                    detail.Save();
+
+                    #endregion
+
+                    scope.Complete();
+                }
+            }
+            catch
+            {
+                return 0;
+            }
+
             return 1;
         }
     }

@@ -93,7 +93,8 @@ namespace WebSite.AdminControllers
                 int shopUserId = 0;
                 decimal balance = 0;
                 string phoneNum = null;
-                var isMoneyEnough = WebSite.Controllers.MemberController.IsMoneyEnouth(bookRoom.RoomID, bookRoom.MemberID, bookRoom.BookStartTime, bookRoom.BookEndTime, out balance, out shopUserId, out phoneNum);
+                decimal cost = 0;
+                var isMoneyEnough = WebSite.Controllers.MemberController.IsMoneyEnouth(bookRoom.RoomID, bookRoom.MemberID, bookRoom.BookStartTime, bookRoom.BookEndTime, out balance, out shopUserId, out phoneNum, out cost);
 
                 if (isMoneyEnough == -1)//余额不足
                 {
@@ -112,10 +113,27 @@ namespace WebSite.AdminControllers
                     updateBRoom.LastOperateTime = DateTime.Now;
                     updateBRoom.Save();
 
+                    #region 更改余额
+
                     Shop_Accounts_UsersExp uexp = new Shop_Accounts_UsersExp();
                     uexp["UserID"] = shopUserId;
                     uexp["Balance"] = balance;
                     uexp.Save();
+
+                    #endregion
+
+                    #region 记录扣款记录
+
+                    Shop_Pay_BalanceDetails detail = new Shop_Pay_BalanceDetails();
+                    detail.UserId = shopUserId;
+                    detail.TradeDate = DateTime.Now;
+                    detail.TradeType = 2;
+                    detail.Expenses = cost;
+                    detail.Balance = balance;
+                    detail.Remark = "订房扣款";
+                    detail.Save();
+
+                    #endregion
 
                     scope.Complete();
                 }
