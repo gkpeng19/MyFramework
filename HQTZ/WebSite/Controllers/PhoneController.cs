@@ -259,6 +259,7 @@ namespace WebSite.Controllers
             HQ_Member member = new HQ_Member();
             member.UserName = uname;
             member.UserPsw = MD5.EncryptString(psw);
+            member.ShopPsw = member.UserPsw;
             member.PhoneNum = phone;
             member.UserType = (int)EnumUserType.Normal;
             if (member.Save() > 0)
