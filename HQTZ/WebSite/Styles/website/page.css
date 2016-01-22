@@ -189,7 +189,7 @@ body .page {
     font-size: 15px;
 }
 
-#dcontent {
+.dcontent {
     padding: 0px 10px;
 }
 
@@ -224,14 +224,14 @@ body .page {
         top: 50%;
     }
 
-#SpecialLevelOneCategoryContainer {
+.SpecialLevelOneCategoryContainer {
     margin-top: 20px;
     text-align: center;
     font-size: 0;
     color: #d9d9d9;
 }
 
-    #SpecialLevelOneCategoryContainer a {
+    .SpecialLevelOneCategoryContainer a {
         display: inline-block;
         line-height: 30px;
         padding: 0 22px;
@@ -242,12 +242,12 @@ body .page {
         border-right: solid 1px #ddd;
     }
 
-        #SpecialLevelOneCategoryContainer a:hover, #SpecialLevelOneCategoryContainer a.current {
+        .SpecialLevelOneCategoryContainer a:hover, .SpecialLevelOneCategoryContainer a.current {
             background-color: #C73937;
             color: white;
         }
 
-        #SpecialLevelOneCategoryContainer a:last-child {
+        .SpecialLevelOneCategoryContainer a:last-child {
             border-right: none;
         }
 

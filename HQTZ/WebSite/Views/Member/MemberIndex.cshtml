@@ -17,7 +17,7 @@
                                 <img src="/@ViewBag.Member.HeaderImg_G" alt="头像" width="80" height="80" id="headerImg" />
                             </td>
                             <td>
-                                @ViewBag.Member.UserName
+                                @ViewBag.Member.UserName <a href="#" onclick="toChangeUserName()">[修改]</a>
                             </td>
                         </tr>
                         <tr>
@@ -110,6 +110,15 @@
                 <input type="text" id="u_yzm" maxlength="6" style="width:105px;" />
                 <input type="button" value="获取验证码" class="btn noradius" id="btn-getcode" style="position:relative;top:-5px;" />
             </td>
+        </tr>
+    </table>
+</div>
+
+<div id="div_ChangeUserName" class="layerout" style="width:350px;padding-top:20px;">
+    <table>
+        <tr>
+            <td valign="top" style="padding-top:3px;">新用户名：</td>
+            <td><input type="text" id="txt_NewName" /></td>
         </tr>
     </table>
 </div>
@@ -360,5 +369,30 @@
                 $.alert(remark);
             });
         });
+
+        function toChangeUserName() {
+            var oldName = "@G.Util.Account.LoginInfo.Current.UserName";
+            $("#div_ChangeUserName").show("修改用户名", function () {
+                var newName = $.trim($("#txt_NewName").val());
+                if (newName.length == 0) {
+                    $.error("请填写新用户名。");
+                    return false;
+                }
+                if (oldName == newName) {
+                    $.error("新用户名不能与旧用户名相同！");
+                    return false;
+                }
+                $.post("/Member/ChangeUserName", { newName: newName }, function (r) {
+                    if (r.ResultID == 1) {
+                        $.success("修改用户名成功。");
+                        layer.closeAll();
+                    }
+                    else {
+                        $.error(r.Message);
+                    }
+                });
+                return false;
+            });
+        }
     </script>
 }

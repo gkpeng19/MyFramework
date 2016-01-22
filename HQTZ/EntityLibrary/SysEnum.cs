@@ -23,7 +23,8 @@ namespace EntityLibrary.Entities
     {
         TravelGuide = 1,
         ContactUs = 2,
-        SilderImg = 3
+        SilderImg = 3,
+        AboutUs = 4
     }
 
     public enum EnumOrderState
@@ -34,5 +35,11 @@ namespace EntityLibrary.Entities
         Payed = 3,
         Canceled = 4,
         Deleted = 5
+    }
+
+    public enum EnumVillageType
+    {
+        Village = 1,
+        BeadHouse = 2
     }
 }

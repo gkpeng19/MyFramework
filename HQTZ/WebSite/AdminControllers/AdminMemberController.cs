@@ -226,6 +226,19 @@ namespace HQWZ.Controllers
             }
         }
 
+        public int UseNMember(HQ_Member entity)
+        {
+            try
+            {
+                entity.Save();
+            }
+            catch
+            {
+                return 0;
+            }
+            return 1;
+        }
+
         public int AddBlance(int shopUserId, decimal amount)
         {
             if (amount <= 0)

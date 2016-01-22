@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using G.Util.Account;
 using System.Configuration;
 using NM.Util;
+using System.Net.Http;
 
 namespace WebSite.Controllers
 {
@@ -235,40 +236,55 @@ namespace WebSite.Controllers
 
         public void Register(string uname, string psw, string phone, string yzm)
         {
-            SearchModel sm = new SearchModel("HQ_Member");
-            sm.MemberName = uname;
-            var entity = sm.LoadEntity<HQ_Member>();
-            if (entity != null)
+            try
             {
-                OutResult(new { ResultID = -1 });
-                return;
-            }
+                lock (MemberController.memRegLockObj)
+                {
+                    SearchModel sm = new SearchModel("HQ_Member");
+                    sm.MemberName = uname;
+                    var entity = sm.LoadEntity<HQ_Member>();
+                    if (entity != null)
+                    {
+                        OutResult(new { ResultID = -1 });
+                        return;
+                    }
 
-            var omcode = base.HttpContext.Cache["msg-" + phone];
-            if (omcode == null || omcode.ToString().Length == 0)
-            {
-                OutResult(new { ResultID = -3 });
-                return;
-            }
-            if (yzm == null || yzm.Length == 0 || !yzm.Equals(omcode.ToString()))
-            {
-                OutResult(new { ResultID = -4 });
-                return;
-            }
+                    var omcode = base.HttpContext.Cache["msg-" + phone];
+                    if (omcode == null || omcode.ToString().Length == 0)
+                    {
+                        OutResult(new { ResultID = -3 });
+                        return;
+                    }
+                    if (yzm == null || yzm.Length == 0 || !yzm.Equals(omcode.ToString()))
+                    {
+                        OutResult(new { ResultID = -4 });
+                        return;
+                    }
 
-            HQ_Member member = new HQ_Member();
-            member.UserName = uname;
-            member.UserPsw = MD5.EncryptString(psw);
-            member.ShopPsw = member.UserPsw;
-            member.PhoneNum = phone;
-            member.UserType = (int)EnumUserType.Normal;
-            if (member.Save() > 0)
+                    HQ_Member member = new HQ_Member();
+                    member.UserName = uname;
+                    member.UserPsw = MD5.EncryptString(psw);
+                    member.ShopPsw = member.UserPsw;
+                    member.PhoneNum = phone;
+                    member.UserType = (int)EnumUserType.Normal;
+                    member.Save();
+                }
+                //注册商城用户
+                HttpClient _httpClient = new HttpClient();
+                _httpClient.BaseAddress = new Uri("http://123.57.153.47:8099/");
+                var dic = new Dictionary<string, string>();
+                dic.Add("UserName", phone);
+                dic.Add("NickName", uname);
+                dic.Add("Password", psw);
+                dic.Add("ConfirmPassword", psw);
+                _httpClient.PostAsync("Account/Register", new FormUrlEncodedContent(dic));
+            }
+            catch
             {
-                OutResult(new { ResultID = 1 });
+                OutResult(new { ResultID = 0 });
                 return;
             }
-            OutResult(new { ResultID = 0 });
-            return;
+            OutResult(new { ResultID = 1 });
         }
 
         public void FindPsw(string phone, string psw, string msgcode)

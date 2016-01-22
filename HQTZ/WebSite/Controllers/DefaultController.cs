@@ -27,17 +27,18 @@ namespace WebSite.Controllers
             sm = new SearchModel("HQ_DisplayPanel");
             sm["DPanelType"] = (int)EnumDPanelType.Distination;
             sm.PageIndex = 1;
-            sm.PageSize = 10;
+            sm.PageSize = 12;
             sm.OrderBy("id");
             ViewBag.DistList = sm.Load<HQ_DisplayPanel>().Data;
 
             return View();
         }
 
-        public JsonResult LoadHotRoom(int destinationid, int pindex = 1, int psize = 3)
+        public JsonResult LoadHotRoom(int destinationid, int dtype, int pindex = 1, int psize = 3)
         {
             SearchModel sm = new SearchModel("uv_VillageRoom_Hot");
             sm["DPanelID"] = destinationid;
+            sm["DType"] = dtype;
             sm.PageIndex = pindex;
             sm.PageSize = psize;
             sm.OrderBy("bcount", GOMFrameWork.DataEntity.EnumOrderBy.Desc);

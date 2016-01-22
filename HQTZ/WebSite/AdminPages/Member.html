@@ -152,10 +152,10 @@
             $.confirm("确定要" + title + "该用户吗？", function () {
                 var json = $("#9739148752935891").datagrid("getCurrData");
                 var newjson = { ID: json.ID, IsDelete: toState };
-                $.post("/AdminMember/SaveMember", newjson, function (r) {
-                    var newjson = $.combineJson(json, newjson, $.toJsResult(r));
-                    if (r.ID > 0) {
-                        $("#9739148752935891").datagrid("updateRow", json, newjson);
+                $.post("/AdminMember/UseNMember", newjson, function (r) {
+                    if (r > 0) {
+                        $("#9739148752935891").datagrid("refresh");
+                        $.success(title + "成功。");
                     }
                     else {
                         $.error(title + "失败，请重试！");

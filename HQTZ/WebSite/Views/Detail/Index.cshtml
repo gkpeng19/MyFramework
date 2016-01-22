@@ -82,7 +82,7 @@
 
         .rprice {
             position: absolute;
-            left: 520px;
+            left: 400px;
         }
 
         .rcount {
@@ -160,14 +160,14 @@
                 r=$.toJsResult(r);
                 var html="";
                 $(r).each(function(idx) {
-                    var trueprice=isVip?this.VipPrice:this.Price;
+                    //var trueprice=isVip?this.VipPrice:this.Price;
                     if(idx==0)
                     {
-                        html+=GetRoomItem(this.ID,this.Name,trueprice,this.RCount,this.Description,true);
+                        html+=GetRoomItem(this.ID,this.Name,this.Price,this.VipPrice,this.RCount,this.Description,true);
                     }
                     else
                     {
-                        html+=GetRoomItem(this.ID,this.Name,trueprice,this.RCount,this.Description);
+                        html+=GetRoomItem(this.ID,this.Name,this.Price,this.VipPrice,this.RCount,this.Description);
                     }
                 });
                 $("#roomlist").html(html);
@@ -258,13 +258,14 @@
             ShowMsg();
         }
 
-        function GetRoomItem(id,name,price,count,desc,isopen)
+        function GetRoomItem(id,name,price,vipprice,count,desc,isopen)
         {
             return  '<div class="accordion-group">'+
             '<div class="accordion-heading">'+
                 '<div class="accordion-toggle">'+
                     '<span>'+name+'</span>'+
-                    '<span class="rprice label label-success">￥'+price+' / 晚</span>'+
+                    '<span class="rprice label">门店价：￥'+price+' / 晚</span>'+
+                    '<span class="rprice label label-success" style="left:570px;">VIP价：￥'+vipprice+' / 晚</span>'+
                     '<span class="label label-info rbook" data-id="'+id+'">预订</span>'+
                     (isopen?('<a href="#collapse'+id+'" data-toggle="collapse" data-parent="#roomlist" class="rdesc">查看详情</a>'):('<a href="#collapse'+id+'" data-toggle="collapse" data-parent="#roomlist" class="collapsed rdesc">查看详情</a>'))+
                 '</div>'+

@@ -49,7 +49,8 @@
     <script src="/Scripts/GOMFrameWork.js"></script>
     <script type="text/javascript">
 
-        $.post("/ClientBase/GetContactUs", { ran: Math.random() }, function (r) {
+        var atype = $.getUrlParam("atype");
+        $.post("/ClientBase/GetArticle", { atype: atype, ran: Math.random() }, function (r) {
             $(function () {
                 if (r) {
                     r = $.toJsResult(r);
@@ -80,8 +81,9 @@
                 return false;
             }
             var update = $("#28865852561780303").getContext();
+            update.ACategory = atype;
             update.ran_g = Math.random();
-            $.post("/ClientBase/SaveContactUs", update, function (r) {
+            $.post("/ClientBase/SaveArticle", update, function (r) {
                 if (r > 0) {
                     $.msg("保存成功。");
                     $("#txt_Id").val(r);

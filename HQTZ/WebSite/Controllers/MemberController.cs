@@ -16,6 +16,7 @@ using NM.Util;
 using System.Text.RegularExpressions;
 using G.Util.Web.Permission;
 using System.Transactions;
+using GOMFrameWork;
 
 namespace WebSite.Controllers
 {
@@ -94,36 +95,48 @@ namespace WebSite.Controllers
             return 1;
         }
 
+        public static object memRegLockObj = new object();
         public long MemberReg(string username, string userpsw, string phone, string msgcode)
         {
-            var exist = IsMemberExist(username);
-            if (exist == -1)
+            try
             {
-                return -2;
-            }
-            if (exist == 1)
-            {
-                return -1;
-            }
+                lock (memRegLockObj)
+                {
+                    var exist = IsMemberExist(username);
+                    if (exist == -1)
+                    {
+                        return -2;
+                    }
+                    if (exist == 1)
+                    {
+                        return -1;
+                    }
 
-            var omcode = base.HttpContext.Cache["msg-" + phone];
-            if (omcode == null || omcode.ToString().Length == 0)
-            {
-                return -3;
-            }
-            if (msgcode == null || msgcode.Length == 0 || !msgcode.Equals(omcode.ToString()))
-            {
-                return -4;
-            }
+                    var omcode = base.HttpContext.Cache["msg-" + phone];
+                    if (omcode == null || omcode.ToString().Length == 0)
+                    {
+                        return -3;
+                    }
+                    if (msgcode == null || msgcode.Length == 0 || !msgcode.Equals(omcode.ToString()))
+                    {
+                        return -4;
+                    }
 
-            HQ_Member member = new HQ_Member();
-            member.UserName = username;
-            member.UserPsw = MD5.EncryptString(userpsw);
-            member.ShopPsw = member.UserPsw;
-            member.PhoneNum = phone;
-            member.UserType = (int)EnumUserType.Normal;
-            member.CreateOn = DateTime.Now;
-            return member.Save();
+                    HQ_Member member = new HQ_Member();
+                    member.UserName = username;
+                    member.UserPsw = MD5.EncryptString(userpsw);
+                    member.ShopPsw = member.UserPsw;
+                    member.PhoneNum = phone;
+                    member.UserType = (int)EnumUserType.Normal;
+                    member.CreateOn = DateTime.Now;
+                    member.Save();
+                }
+            }
+            catch
+            {
+                return 0;
+            }
+            return 1;
         }
 
         public long SaveMemberHis(HQ_Member member)
@@ -647,6 +660,58 @@ namespace WebSite.Controllers
                 }
             }
             return this.JsonNet(new { Phone = "" });
+        }
+
+        public static object changeUNameLockObj = new object();
+        public JsonResult ChangeUserName(string newName)
+        {
+            if (newName.Length == 0)
+            {
+                return this.JsonNet(new CommonResult() { ResultID = 0, Message = "新用户名不能为空！" });
+            }
+            if (newName == LoginInfo.Current.UserName)
+            {
+                return this.JsonNet(new CommonResult() { ResultID = 0, Message = "新用户名不能与旧用户名相同！" });
+            }
+
+            try
+            {
+                lock (changeUNameLockObj)
+                {
+                    SearchModel sm = new SearchModel("hq_member");
+                    sm["username"] = newName;
+                    sm.AddSearch("count(id)");
+                    var mcount = sm.LoadValue<int>();
+                    if (mcount > 0)
+                    {
+                        return this.JsonNet(new CommonResult() { ResultID = 0, Message = "新用户名已被其他用户使用！" });
+                    }
+
+                    using (var scope = new TransactionScope())
+                    {
+                        sm = new SearchModel("uv_MemberWithAmount");
+                        sm["username"] = LoginInfo.Current.UserName;
+                        sm.AddSearch("shopuserid_g");
+                        var shopuserid = sm.LoadValue<int>();
+                        Shop_Member smember = new Shop_Member();
+                        smember["UserID"] = shopuserid;
+                        smember["NickName"] = newName;
+                        smember.Save();
+
+                        HQ_Member mem = new HQ_Member();
+                        mem["ID"] = LoginInfo.Current.UserID;
+                        mem.UserName = newName;
+                        mem.Save();
+
+                        scope.Complete();
+                    }
+                }
+            }
+            catch
+            {
+                return this.JsonNet(new CommonResult() { ResultID = 0, Message = "修改用户名失败，请重试！" });
+            }
+            return this.JsonNet(new { ResultID = 1 });
         }
     }
 }
