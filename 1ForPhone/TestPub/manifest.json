@@ -224,7 +224,8 @@
 					"css/page.css",
 					"images/topbg.png",
 					"images/bottombg.png",
-					"fonts/mui.ttf"
+					"fonts/mui.ttf",
+					"fonts/iconfont.ttf"
 				],
 				"refer": [
 					"room.html",

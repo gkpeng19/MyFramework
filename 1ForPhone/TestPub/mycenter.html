@@ -110,6 +110,9 @@
      			});
 					
 					var btnUpdate=doc.getElementById("checkUpdate");
+					if(mui.os.ios){
+						 btnUpdate.parentNode.removeChild(btnUpdate);
+					}
 					btnUpdate.addEventListener("tap",function(){
 						app.checkUpdate();
 					},false);

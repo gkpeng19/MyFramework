@@ -52,7 +52,7 @@ namespace WebSite.AdminControllers
                 if (broom != null)
                 {
                     NM.Util.SendUserInfo _U = new NM.Util.SendUserInfo() { isLog = 1, orgid = 555, username = broom.PhoneNum_G };
-                    NM.Util.MsgSend.DirectSend(string.Format("尊敬的会员您好，您已成功预定 {0} 。", broom.RoomName_G), broom.PhoneNum_G, _U);
+                    NM.Util.MsgSend.DirectSend(string.Format("尊敬的会员您好，您已成功预订 {0} 。", broom.RoomName_G), broom.PhoneNum_G, _U);
                 }
             }
             catch { }
@@ -125,7 +125,7 @@ namespace WebSite.AdminControllers
                     if (balance < 500)
                     {
                         NM.Util.SendUserInfo _U = new NM.Util.SendUserInfo() { isLog = 1, orgid = 555, username = phoneNum };
-                        NM.Util.MsgSend.DirectSend("尊敬的会员您好，您的账户余额已低于500元，请尽快充值。", phoneNum, _U);
+                        NM.Util.MsgSend.DirectSend("尊敬的会员您好，您的账户余额已不足500元，为不影响您度假旅行，请及时充值。", phoneNum, _U);
                     }
                 }
                 catch { }

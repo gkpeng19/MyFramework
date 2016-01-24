@@ -167,7 +167,7 @@ function initOrderHtml(orders) {
             html += ' <a class="signup cancelBook" href="javascript:void(0)" data-id="' + this.ID + '">&nbsp;退 订&nbsp;</a> ';
         }
         else {
-            if (this.OStatus == 2) {//预定失败
+            if (this.OStatus == 2) {//预订失败
                 html += ' <a class="signup deleteBook" style="background:#f89406;" href="javascript:void(0)" onclick="deleteOrder(this,' + this.ID + ')">&nbsp;删 除&nbsp;</a> ';
                 html += ' <a class="signup" style="background-color:white;color:#404a58;border:1px solid #c0c4cd;" href="javascript:void(0)" onclick="$.alert(\'' + this.Remark + '\')">查看详情</a> ';
             }

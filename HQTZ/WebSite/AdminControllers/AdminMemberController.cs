@@ -233,5 +233,32 @@ namespace HQWZ.Controllers
             uexp.Save();
             return 1;
         }
+
+        public int HelpMemBook(int memid, int roomid, DateTime sdate, DateTime edate, string remark)
+        {
+            try
+            {
+                var r = MemberController.IsRoomEnough(roomid, sdate, edate);
+                if (r == 0)
+                {
+                    return -1;
+                }
+                HQ_BookRoom broom = new HQ_BookRoom();
+                broom.MemberID = memid;
+                broom.RoomID = roomid;
+                broom.BookStartTime = sdate;
+                broom.BookEndTime = edate;
+                broom.CreateOn = DateTime.Now;
+                broom.Remark = remark;
+                broom.OStatus = 0;
+                broom.LastOperateTime = DateTime.Now;
+                broom.Save();
+            }
+            catch
+            {
+                return 0;
+            }
+            return 1;
+        }
     }
 }

@@ -267,9 +267,11 @@ mhea<!DOCTYPE html>
 			initBottomBarFunc(doc);
 			
 			//自动更新
-			setTimeout(function(){
-				app.autoUpdate();
-			},5000);
+			if(mui.os.android){
+				setTimeout(function(){
+					app.autoUpdate();
+				},5000);
+			}
 			
 			window.addEventListener("refresh",function(){
 				initPage();

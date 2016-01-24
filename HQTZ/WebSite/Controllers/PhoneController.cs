@@ -215,7 +215,7 @@ namespace WebSite.Controllers
             }
             else
             {
-                OutResult("预定失败，请重试！");
+                OutResult("预订失败，请重试！");
             }
         }
 

@@ -87,9 +87,11 @@
 	    			} 
 	    		};
 	    		
-	    		var getListItem=function(id,imgpath,name,description,price){
-	    			return '<li class="mui-table-view-cell"><a class="mui-navigate-right link" data-id="'+id+'"><img style="width:42px;" class="mui-media-object mui-pull-left" src="' + getUrl(imgpath) + '?size=42"><div class="mui-media-body">' + name + '<p class="mui-ellipsis">' + description + '</p></div></a><span class="price">￥'+price+'</span></li>';
-	    		};
+	    		var getListItem=function(id,imgpath,name,description,price,vipprice){
+	    			return '<li class="mui-table-view-cell"><a class="mui-navigate-right link" data-id="'+id+'"><img style="width:60px;height:60px;margin-right:10px;" class="mui-pull-left" src="' + getUrl(imgpath) + '?size=60">'+
+	    			'<div class="mui-media-body">' + name + '<p class="mui-ellipsis">' + description + '</p>'+
+	    			'<p class="mui-ellipsis"><span style="color:blue;">门店价:￥'+price+'</span><span style="color:green;margin-left:20px;">VIP价:￥'+vipprice+'</span></p></div></a></li>';
+	    		}; 
 				
 				$.getJSON(getUrl("/Phone/LoadAllRooms"), { ran:Math.random() }, function (r) {
 	                doc.getElementById("loading").style.display="none";
@@ -97,7 +99,7 @@
 	                var list = toJsResult(r.Data);
 	                var html = "";
 	                for (var i = 0; i < list.length; ++i) {
-	                    html += getListItem(list[i].ID,list[i].ImgName_G,list[i].Name,list[i].Village_G,parseInt(list[i].Price));
+	                    html += getListItem(list[i].ID,list[i].ImgName_G,list[i].Name,list[i].Village_G,parseInt(list[i].Price),list[i].VipPrice);
 	                }
 	                doc.getElementById("roomList").innerHTML=html;
 	                

@@ -355,7 +355,7 @@ namespace WebSite.Controllers
                 var r = IsMoneyEnouth(roomid, userid.Value, sdate, edate, out balance, out shopUserId, out phoneNum);
                 if (r == 0)
                 {
-                    return 0;//预定日期填写错误
+                    return 0;//预订日期填写错误
                 }
 
                 if (r == -1)
