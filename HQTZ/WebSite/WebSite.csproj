@@ -144,6 +144,7 @@
     <Content Include="Images\book.jpg" />
     <Content Include="Images\book-over.jpg" />
     <Content Include="Images\changePsw.jpg" />
+    <Content Include="Images\cont.png" />
     <Content Include="Images\contact.jpg" />
     <Content Include="Images\contactus.jpg" />
     <Content Include="Images\contactus.png" />
@@ -501,7 +502,7 @@
     <Content Include="Views\MemberService\Index.cshtml" />
     <Content Include="Views\Member\TraveGuide.cshtml" />
     <Content Include="Views\Member\ViewGuidInfo.cshtml" />
-    <Content Include="Views\ClientBase\ContactIndex.cshtml" />
+    <Content Include="Views\ClientBase\ArticleIndex.cshtml" />
     <Content Include="Views\Member\MemberIndex.cshtml" />
     <Content Include="Views\Default\Index.cshtml" />
     <Content Include="Views\web.config" />

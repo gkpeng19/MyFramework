@@ -30,4 +30,49 @@ namespace EntityLibrary.Entities
             set { SetValue("Balance", value); }
         }
     }
+
+    public class Shop_Pay_BalanceDetails : EntityBase
+    {
+        public Shop_Pay_BalanceDetails()
+        {
+            base.TableName = "DrShop.dbo.Pay_BalanceDetails";
+            base.PrimaryKey = "JournalNumber";
+        }
+        public int UserId
+        {
+            get { return GetInt32("UserId"); }
+            set { SetValue("UserId", value); }
+        }
+
+        public DateTime TradeDate
+        {
+            get { return GetDateTime("TradeDate"); }
+            set { SetValue("TradeDate", value); }
+        }
+        public int TradeType
+        {
+            get { return GetInt32("TradeType"); }
+            set { SetValue("TradeType", value); }
+        }
+        public decimal Income
+        {
+            get { return GetDecimal("Income"); }
+            set { SetValue("Income", value); }
+        }
+        public decimal Expenses
+        {
+            get { return GetDecimal("Expenses"); }
+            set { SetValue("Expenses", value); }
+        }
+        public decimal Balance
+        {
+            get { return GetDecimal("Balance"); }
+            set { SetValue("Balance", value); }
+        }
+        public string Remark
+        {
+            get { return GetString("Remark"); }
+            set { SetValue("Remark", value); }
+        }
+    }
 }

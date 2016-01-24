@@ -62,5 +62,28 @@ namespace EntityLibrary.Entities
             get { return GetInt32("DaysBeforePay"); }
             set { SetValue("DaysBeforePay", value); }
         }
+
+        [JsonIgnore]
+        public int DType
+        {
+            get { return GetInt32("DType"); }
+            set { SetValue("DType", value); }
+        }
+
+        public string DType_G
+        {
+            get
+            {
+                if (DType == 1)
+                {
+                    return "度假村";
+                }
+                else if (DType == 2)
+                {
+                    return "养老院";
+                }
+                return "";
+            }
+        }
     }
 }

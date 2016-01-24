@@ -45,6 +45,7 @@
                         <th data-option="{sequence:true}">房间序号</th>
                         <th data-option="{bind:'Name'}">名称</th>
                         <th data-option="{bind:'Price'}">单价</th>
+                        <th data-option="{bind:'VipPrice'}">VIP单价</th>
                         <th data-option="{bind:'RCount'}">数量</th>
                         <th data-option="{bind:'Village_G'}">所属度假村</th>
                         <th data-option="{bind:'CreateBy'}">创建人</th>
@@ -65,17 +66,21 @@
                 <div>
                     <input type="hidden" name="ID" />
                     <div class="row-fluid">
-                        <div class="span6">
+                        <div class="span4">
                             <label>房间名称</label>
                             <input type="text" name="Name" id="22367539479414933" class="span11" />
                         </div>
-                        <div class="span6">
+                        <div class="span4">
                             <label>所属度假村</label>
                             <select name="VillageID" id="9247951704099395" class="span11" data-exname="Village_G"></select>
                         </div>
                         <div class="span4">
                             <label>单价</label>
                             <input type="text" name="Price" id="7912347175185488" class="span11" />
+                        </div>
+                        <div class="span4">
+                            <label>VIP单价</label>
+                            <input type="text" name="VipPrice" id="7912347175185489" class="span11" />
                         </div>
                         <div class="span4">
                             <label>数量</label>
@@ -222,6 +227,11 @@
         tt.vf.req.add(f7912347175185488);
         tt.vf.int.add(f7912347175185488);
         new tt.LV().set('--', '8').add(f7912347175185488);
+
+        var f7912347175185489 = new tt.Field("VIP单价", "", "7912347175185489").setMsgId("layer-error-msg");
+        tt.vf.req.add(f7912347175185489);
+        tt.vf.int.add(f7912347175185489);
+        new tt.LV().set('--', '8').add(f7912347175185489);
 
         var f7912347175185489 = new tt.Field("数量", "", "7912347175185489").setMsgId("layer-error-msg");
         tt.vf.req.add(f7912347175185489);

@@ -164,6 +164,13 @@
     <script src="~/Scripts/website/page.js"></script>
     <script src="~/Scripts/Base64.js"></script>
     <script type="text/javascript">
+        var isVip = false;
+        @{
+            if (G.Util.Web.Permission.LoginVerify.IsLogin("Client") && G.Util.Account.LoginInfo.Current.UserType == 2)
+            {
+                <text> isVip = true; </text>
+            }
+        }
         var defaultMenu = null;
         var lastMenu = null;
         $("#menu div").bind("mouseover", function () {
@@ -238,8 +245,9 @@
                 }
                 r = $.toJsResult(r.Data);
                 $(r).each(function () {
+                    var price = isVip ? this.VipPrice : this.Price;
                     var name = this.Name.length > 12 ? this.Name.substring(0, 12) : this.Name;
-                    html += '<li><a href="/Detail/RoomIndex/' + this.VillageID + '" target="_blank" class="pic-box"><img src="/' + this.CoverImg + '" /></a><div class="house-info"><h2><a href="/Detail/RoomIndex/' + this.VillageID + '" class="house-tit" target="_blank" title="' + this.Name + '">' + name + '</a></h2><span class="price-box"><dfn>¥</dfn><b>' + this.Price + '</b>/晚</span></div></li>';
+                    html += '<li><a href="/Detail/RoomIndex/' + this.VillageID + '" target="_blank" class="pic-box"><img src="/' + this.CoverImg + '" /></a><div class="house-info"><h2><a href="/Detail/RoomIndex/' + this.VillageID + '" class="house-tit" target="_blank" title="' + this.Name + '">' + name + '</a></h2><span class="price-box"><dfn>¥</dfn><b>' + price + '</b>/晚</span></div></li>';
                 });
                 if (currIndex == 1) {
                     $("#hotroomlist").html(html);

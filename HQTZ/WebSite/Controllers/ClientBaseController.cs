@@ -26,10 +26,10 @@ namespace WebSite.Controllers
             return LoginInfo.Current.UserName;
         }
 
-        public JsonResult GetContactUs()
+        public JsonResult GetArticle(int atype)
         {
             SearchModel sm = new SearchModel("HQ_Article");
-            sm["ACategory"] = (int)EnumArticleCategory.ContactUs;
+            sm["ACategory"] = atype;
             var entity = sm.LoadEntity<HQ_Article>();
             if (entity != null)
             {
@@ -39,7 +39,7 @@ namespace WebSite.Controllers
         }
 
         [ValidateInput(false)]
-        public long SaveContactUs(HQ_Article entity)
+        public long SaveArticle(HQ_Article entity)
         {
             if (entity.ID > 0)
             {
@@ -48,7 +48,6 @@ namespace WebSite.Controllers
             }
             else
             {
-                entity.ACategory = (int)EnumArticleCategory.ContactUs;
                 entity.CreateBy = LoginInfo.Current.UserName;
                 entity.CreateOn = DateTime.Now;
             }
@@ -56,10 +55,10 @@ namespace WebSite.Controllers
             return entity.Save();
         }
 
-        public ActionResult ContactIndex()
+        public ActionResult ArticleIndex(int atype)
         {
             SearchModel sm = new SearchModel("HQ_Article");
-            sm["ACategory"] = (int)EnumArticleCategory.ContactUs;
+            sm["ACategory"] = atype;
             var entity = sm.LoadEntity<HQ_Article>();
             if (entity == null)
             {

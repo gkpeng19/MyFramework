@@ -164,59 +164,65 @@
         });
 
         function initBtnFunc(container) {
-            container.find(".cancelBook").bind('click', function () {
+            container.find(".cancelBook").each(function () {
                 if ($(this).attr("data-event")) {
                     return;
                 }
                 $(this).attr("data-event", 1);
 
-                var bid = $(this).attr("data-id");
-                $.confirm("确定要退订吗?", function () {
-                    $.post("/Member/CancelBook", { ID: bid }, function (r) {
-                        if (r > 0) {
-                            $.msg("退订成功。");
-                            location.reload();
-                        }
-                        else {
-                            $.error("退订失败，请重试！");
-                        }
+                $(this).bind("click", function () {
+                    var bid = $(this).attr("data-id");
+                    $.confirm("确定要退订吗?", function () {
+                        $.post("/Member/CancelBook", { ID: bid }, function (r) {
+                            if (r > 0) {
+                                $.msg("退订成功。");
+                                location.reload();
+                            }
+                            else {
+                                $.error("退订失败，请重试！");
+                            }
+                        });
                     });
                 });
             });
 
-            container.find(".remarkBook").bind('click', function () {
+            container.find(".remarkBook").each(function () {
                 if ($(this).attr("data-event")) {
                     return;
                 }
                 $(this).attr("data-event", 1);
 
-                var target = $(this);
-                var bid = target.attr("data-id");
-                $("#remark").val(target.attr("data-remark"));
-                $("#div_orderRemark").open("备注信息", function () {
-                    $.post("/Member/SaveBRoomRemark", { id: bid, Remark: $("#remark").val() }, function (r) {
-                        if (r > 0) {
-                            target.attr("data-remark", $("#remark").val());
-                            $.msg("备注信息保存成功。");
-                        }
-                        else {
-                            $.error("备注信息保存失败，请重试！");
-                        }
+                $(this).bind("click", function () {
+                    var target = $(this);
+                    var bid = target.attr("data-id");
+                    $("#remark").val(target.attr("data-remark"));
+                    $("#div_orderRemark").open("备注信息", function () {
+                        $.post("/Member/SaveBRoomRemark", { id: bid, Remark: $("#remark").val() }, function (r) {
+                            if (r > 0) {
+                                target.attr("data-remark", $("#remark").val());
+                                $.msg("备注信息保存成功。");
+                            }
+                            else {
+                                $.error("备注信息保存失败，请重试！");
+                            }
+                        });
                     });
                 });
             });
 
-            container.find(".viewRemark").bind('click', function () {
+            container.find(".viewRemark").each(function () {
                 if ($(this).attr("data-event")) {
                     return;
                 }
                 $(this).attr("data-event", 1);
 
-                var remark = $(this).attr("data-remark");
-                if (remark.length == 0) {
-                    remark = "没有添加备注信息！";
-                }
-                $.alert(remark);
+                $(this).bind('click', function () {
+                    var remark = $(this).attr("data-remark");
+                    if (remark.length == 0) {
+                        remark = "没有添加备注信息！";
+                    }
+                    $.alert(remark);
+                });
             });
         }
 

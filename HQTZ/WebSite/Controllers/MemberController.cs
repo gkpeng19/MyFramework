@@ -16,6 +16,7 @@ using NM.Util;
 using System.Text.RegularExpressions;
 using G.Util.Web.Permission;
 using System.Transactions;
+using GOMFrameWork;
 
 namespace WebSite.Controllers
 {
@@ -62,8 +63,16 @@ namespace WebSite.Controllers
             LoginInfo info = new LoginInfo(username);
             info.SystemID = "Client";
             info.UserID = member.ID;
-            info.UserType = member.UserType;
-
+            var userType = member.UserType;
+            if (userType == 2 && member.OpenVipDate.AddYears(3) < DateTime.Now.Date)
+            {
+                userType = 1;
+                HQ_Member mem = new HQ_Member();
+                mem["ID"] = member.ID;
+                mem.UserType = 1;
+                mem.Save();
+            }
+            info.UserType = userType;
 
             LoginInfo.SetLoginToken(info, isrem == 1 ? true : false);
 
@@ -86,36 +95,48 @@ namespace WebSite.Controllers
             return 1;
         }
 
+        public static object memRegLockObj = new object();
         public long MemberReg(string username, string userpsw, string phone, string msgcode)
         {
-            var exist = IsMemberExist(username);
-            if (exist == -1)
+            try
             {
-                return -2;
-            }
-            if (exist == 1)
-            {
-                return -1;
-            }
+                lock (memRegLockObj)
+                {
+                    var exist = IsMemberExist(username);
+                    if (exist == -1)
+                    {
+                        return -2;
+                    }
+                    if (exist == 1)
+                    {
+                        return -1;
+                    }
 
-            var omcode = base.HttpContext.Cache["msg-" + phone];
-            if (omcode == null || omcode.ToString().Length == 0)
-            {
-                return -3;
-            }
-            if (msgcode == null || msgcode.Length == 0 || !msgcode.Equals(omcode.ToString()))
-            {
-                return -4;
-            }
+                    var omcode = base.HttpContext.Cache["msg-" + phone];
+                    if (omcode == null || omcode.ToString().Length == 0)
+                    {
+                        return -3;
+                    }
+                    if (msgcode == null || msgcode.Length == 0 || !msgcode.Equals(omcode.ToString()))
+                    {
+                        return -4;
+                    }
 
-            HQ_Member member = new HQ_Member();
-            member.UserName = username;
-            member.UserPsw = MD5.EncryptString(userpsw);
-            member.ShopPsw = member.UserPsw;
-            member.PhoneNum = phone;
-            member.UserType = (int)EnumUserType.Normal;
-            member.CreateOn = DateTime.Now;
-            return member.Save();
+                    HQ_Member member = new HQ_Member();
+                    member.UserName = username;
+                    member.UserPsw = MD5.EncryptString(userpsw);
+                    member.ShopPsw = member.UserPsw;
+                    member.PhoneNum = phone;
+                    member.UserType = (int)EnumUserType.Normal;
+                    member.CreateOn = DateTime.Now;
+                    member.Save();
+                }
+            }
+            catch
+            {
+                return 0;
+            }
+            return 1;
         }
 
         public long SaveMemberHis(HQ_Member member)
@@ -285,11 +306,12 @@ namespace WebSite.Controllers
             return 1;
         }
 
-        public static int IsMoneyEnouth(int roomid, long userid, DateTime sdate, DateTime edate, out decimal balance, out int shopUserId, out string phoneNum)
+        public static int IsMoneyEnouth(int roomid, long userid, DateTime sdate, DateTime edate, out decimal balance, out int shopUserId, out string phoneNum, out decimal cost)
         {
             balance = 0;
             shopUserId = 0;
             phoneNum = string.Empty;
+            cost = 0;
 
             var days = edate.Subtract(sdate).Days;
             if (days <= 0)
@@ -299,11 +321,11 @@ namespace WebSite.Controllers
             decimal price = 0;
             SearchModel sm = new SearchModel("hq_room");
             sm["id"] = roomid;
-            sm.AddSearch("price");
+            sm.AddSearch("price", "vipprice");
             var room = sm.LoadEntity<HQ_Room>();
             if (room != null)
             {
-                price = room.Price;
+                price = LoginInfo.Current.UserType == 2 ? room.VipPrice : room.Price;
             }
             if (price == 0)
             {
@@ -321,7 +343,8 @@ namespace WebSite.Controllers
                 phoneNum = member.PhoneNum;
             }
 
-            balance = balance - price * days;
+            cost = price * days;
+            balance = balance - cost;
             if (balance < 0)
             {
                 return -1;
@@ -352,7 +375,8 @@ namespace WebSite.Controllers
                 decimal balance = 0;
                 int shopUserId = 0;
                 string phoneNum = null;
-                var r = IsMoneyEnouth(roomid, userid.Value, sdate, edate, out balance, out shopUserId, out phoneNum);
+                decimal cost = 0;
+                var r = IsMoneyEnouth(roomid, userid.Value, sdate, edate, out balance, out shopUserId, out phoneNum, out cost);
                 if (r == 0)
                 {
                     return 0;//预订日期填写错误
@@ -636,6 +660,58 @@ namespace WebSite.Controllers
                 }
             }
             return this.JsonNet(new { Phone = "" });
+        }
+
+        public static object changeUNameLockObj = new object();
+        public JsonResult ChangeUserName(string newName)
+        {
+            if (newName.Length == 0)
+            {
+                return this.JsonNet(new CommonResult() { ResultID = 0, Message = "新用户名不能为空！" });
+            }
+            if (newName == LoginInfo.Current.UserName)
+            {
+                return this.JsonNet(new CommonResult() { ResultID = 0, Message = "新用户名不能与旧用户名相同！" });
+            }
+
+            try
+            {
+                lock (changeUNameLockObj)
+                {
+                    SearchModel sm = new SearchModel("hq_member");
+                    sm["username"] = newName;
+                    sm.AddSearch("count(id)");
+                    var mcount = sm.LoadValue<int>();
+                    if (mcount > 0)
+                    {
+                        return this.JsonNet(new CommonResult() { ResultID = 0, Message = "新用户名已被其他用户使用！" });
+                    }
+
+                    using (var scope = new TransactionScope())
+                    {
+                        sm = new SearchModel("uv_MemberWithAmount");
+                        sm["username"] = LoginInfo.Current.UserName;
+                        sm.AddSearch("shopuserid_g");
+                        var shopuserid = sm.LoadValue<int>();
+                        Shop_Member smember = new Shop_Member();
+                        smember["UserID"] = shopuserid;
+                        smember["NickName"] = newName;
+                        smember.Save();
+
+                        HQ_Member mem = new HQ_Member();
+                        mem["ID"] = LoginInfo.Current.UserID;
+                        mem.UserName = newName;
+                        mem.Save();
+
+                        scope.Complete();
+                    }
+                }
+            }
+            catch
+            {
+                return this.JsonNet(new CommonResult() { ResultID = 0, Message = "修改用户名失败，请重试！" });
+            }
+            return this.JsonNet(new { ResultID = 1 });
         }
     }
 }

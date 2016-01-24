@@ -147,20 +147,27 @@
         //});
 
         var villageId = @(ViewBag.VillageID == null ? "0" : ViewBag.VillageID);
+        var isVip = false;
+        @{
+            if (G.Util.Web.Permission.LoginVerify.IsLogin("Client") && G.Util.Account.LoginInfo.Current.UserType == 2)
+            {
+                <text> isVip = true; </text>
+            }
+        }
 
         $(function () {
             $.post("/Detail/LoadRooms", {villageId:villageId, ran: Math.random() }, function (r) {
                 r=$.toJsResult(r);
                 var html="";
-                $(r).each(function(idx)
-                {
+                $(r).each(function(idx) {
+                    var trueprice=isVip?this.VipPrice:this.Price;
                     if(idx==0)
                     {
-                        html+=GetRoomItem(this.ID,this.Name,this.Price,this.RCount,this.Description,true);
+                        html+=GetRoomItem(this.ID,this.Name,trueprice,this.RCount,this.Description,true);
                     }
                     else
                     {
-                        html+=GetRoomItem(this.ID,this.Name,this.Price,this.RCount,this.Description);
+                        html+=GetRoomItem(this.ID,this.Name,trueprice,this.RCount,this.Description);
                     }
                 });
                 $("#roomlist").html(html);

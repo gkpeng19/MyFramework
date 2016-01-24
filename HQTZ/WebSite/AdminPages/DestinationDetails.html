@@ -72,6 +72,7 @@
                     <tr>
                         <th data-option="{sequence:true}">序号</th>
                         <th data-option="{bind:'Name'}">名称</th>
+                        <th data-option="{bind:'DType_G'}">基地类型</th>
                         <th data-option="{bind:'DPanel_G'}">目的地</th>
                         <th data-option="{bind:'CreateBy'}">创建人</th>
                         <th data-option="{bind:'CreateOn_G'}">创建时间</th>
@@ -91,15 +92,22 @@
                 <div>
                     <input type="hidden" name="ID" />
                     <div class="row-fluid">
-                        <div class="span4">
+                        <div class="span3">
                             <label>名称</label>
                             <input type="text" name="Name" id="16296441543887158" class="span11" />
                         </div>
-                        <div class="span4">
+                        <div class="span3">
+                            <label>基地类型</label>
+                            <select name="DType" class="span11">
+                                <option value="1">度假村</option>
+                                <option value="2">养老院</option>
+                            </select>
+                        </div>
+                        <div class="span3">
                             <label>目的地</label>
                             <select name="DPanelID" id="9482227414632911" class="span11" data-exname="DPanel_G"></select>
                         </div>
-                        <div class="span4">
+                        <div class="span3">
                             <label>不能退订提前天数</label>
                             <input type="text" name="DaysBeforePay" id="16296441543887160" class="span11" />
                         </div>
@@ -177,14 +185,14 @@
             var id = json.ID;
             var imagepaths = json.Images;
             $(".rightImgDiv").remove();
-            if (imagepaths &&imagepaths.length > 0) {
+            if (imagepaths && imagepaths.length > 0) {
                 var paths = imagepaths.split(';');
                 $(paths).each(function () {
                     addImgItem(this);
                 })
             }
 
-            var layerout= $("#div_images").open("设置轮播图片(980*422)", function () {
+            var layerout = $("#div_images").open("设置轮播图片(980*422)", function () {
                 var paths = "";
                 $("#div_images .imgDiv img").each(function (idx) {
                     if (idx == 0) {
