@@ -372,7 +372,7 @@
 
         function toChangeUserName() {
             var oldName = "@G.Util.Account.LoginInfo.Current.UserName";
-            $("#div_ChangeUserName").show("修改用户名", function () {
+            $("#div_ChangeUserName").open("修改用户名", function () {
                 var newName = $.trim($("#txt_NewName").val());
                 if (newName.length == 0) {
                     $.error("请填写新用户名。");
@@ -384,8 +384,11 @@
                 }
                 $.post("/Member/ChangeUserName", { newName: newName }, function (r) {
                     if (r.ResultID == 1) {
-                        $.success("修改用户名成功。");
                         layer.closeAll();
+                        $.success("修改用户名成功，请重新登陆系统。");
+                        setTimeout(function () {
+                            location.href = "/Base/LoginOut";
+                        }, 800);
                     }
                     else {
                         $.error(r.Message);

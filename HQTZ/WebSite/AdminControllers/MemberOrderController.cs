@@ -82,19 +82,11 @@ namespace WebSite.AdminControllers
         {
             try
             {
-                SearchModel sm = new SearchModel("hq_bookroom");
-                sm["ID"] = bid;
-                var bookRoom = sm.LoadEntity<HQ_BookRoom>();
-                if (bookRoom == null)
-                {
-                    return 0;
-                }
-
                 int shopUserId = 0;
                 decimal balance = 0;
                 string phoneNum = null;
                 decimal cost = 0;
-                var isMoneyEnough = WebSite.Controllers.MemberController.IsMoneyEnouth(bookRoom.RoomID, bookRoom.MemberID, bookRoom.BookStartTime, bookRoom.BookEndTime, out balance, out shopUserId, out phoneNum, out cost);
+                var isMoneyEnough = WebSite.Controllers.MemberController.IsMoneyEnouth(bid, out balance, out shopUserId, out phoneNum, out cost);
 
                 if (isMoneyEnough == -1)//余额不足
                 {

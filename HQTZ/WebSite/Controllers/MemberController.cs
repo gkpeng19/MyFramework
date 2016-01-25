@@ -306,12 +306,13 @@ namespace WebSite.Controllers
             return 1;
         }
 
-        public static int IsMoneyEnouth(int roomid, long userid, DateTime sdate, DateTime edate, out decimal balance, out int shopUserId, out string phoneNum, out decimal cost)
+        public static int IsMoneyEnouth(int roomid, long userid, DateTime sdate, DateTime edate, out decimal balance, out int shopUserId, out string phoneNum, out decimal cost,out decimal price)
         {
             balance = 0;
             shopUserId = 0;
             phoneNum = string.Empty;
             cost = 0;
+            price = 0;
 
             var days = edate.Subtract(sdate).Days;
             if (days <= 0)
@@ -336,7 +337,6 @@ namespace WebSite.Controllers
                 return 0;
             }
 
-            decimal price = 0;
             sm = new SearchModel("hq_room");
             sm["id"] = roomid;
             sm.AddSearch("price", "vipprice");
@@ -346,6 +346,58 @@ namespace WebSite.Controllers
                 price = userType == 2 ? room.VipPrice : room.Price;
             }
             if (price == 0)
+            {
+                return 0;
+            }
+
+            cost = price * days;
+            balance = balance - cost;
+            if (balance < 0)
+            {
+                return -1;
+            }
+            return 1;
+        }
+
+        public static int IsMoneyEnouth(int orderid,out decimal balance, out int shopUserId, out string phoneNum, out decimal cost)
+        {
+            balance = 0;
+            shopUserId = 0;
+            phoneNum = string.Empty;
+            cost = 0;
+
+            var price = 0;
+            var userid = 0;
+
+            var sm = new SearchModel("hq_bookroom");
+            sm["ID"] = orderid;
+            var order = sm.LoadEntity<HQ_BookRoom>();
+            if (order == null)
+            {
+                return 0;
+            }
+            price = order.Price;
+            userid = order.MemberID;
+            var sdate = order.BookStartTime;
+            var edate = order.BookEndTime;
+
+            var days = edate.Subtract(sdate).Days;
+            if (days <= 0)
+            {
+                return 0;
+            }
+
+            sm = new SearchModel("uv_MemberWithAmount");
+            sm["id"] = userid;
+            sm.AddSearch("PhoneNum", "ShopUserID_G", "Balance_G");
+            var member = sm.LoadEntity<HQ_Member>();
+            if (member != null)
+            {
+                balance = member.Balance_G;
+                shopUserId = member.ShopUserID_G;
+                phoneNum = member.PhoneNum;
+            }
+            else
             {
                 return 0;
             }
@@ -383,7 +435,8 @@ namespace WebSite.Controllers
                 int shopUserId = 0;
                 string phoneNum = null;
                 decimal cost = 0;
-                var r = IsMoneyEnouth(roomid, userid.Value, sdate, edate, out balance, out shopUserId, out phoneNum, out cost);
+                decimal price = 0;
+                var r = IsMoneyEnouth(roomid, userid.Value, sdate, edate, out balance, out shopUserId, out phoneNum, out cost, out price);
                 if (r == 0)
                 {
                     return 0;//预订日期填写错误
@@ -403,6 +456,7 @@ namespace WebSite.Controllers
                 var nowTime = DateTime.Now;
                 entity.CreateOn = nowTime;
                 entity.LastOperateTime = nowTime;
+                entity.Price = (int)price;
                 if (remark != null && remark.Length > 0)
                 {
                     entity.Remark = remark;

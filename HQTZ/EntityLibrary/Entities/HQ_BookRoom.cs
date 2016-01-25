@@ -120,15 +120,12 @@ namespace EntityLibrary.Entities
             get { return GetString("RoomName_G"); }
             set { SetValue("RoomName_G", value); }
         }
+
         [JsonIgnore]
-        public int RoomPrice_G
+        public int Price
         {
-            get { return Convert.ToInt32(GetDecimal("RoomPrice_G")); }
-        }
-        [JsonIgnore]
-        public int RoomVipPrice_G
-        {
-            get { return Convert.ToInt32(GetDecimal("RoomVipPrice_G")); }
+            get { return GetInt32("Price"); }
+            set { SetValue("Price", value); }
         }
 
         int _days = 0;
@@ -146,12 +143,7 @@ namespace EntityLibrary.Entities
 
         public int AllPrice_G
         {
-            get { return RoomPrice_G * BookDays_G; }
-        }
-
-        public int AllVipPrice_G
-        {
-            get { return RoomVipPrice_G * BookDays_G; }
+            get { return Price * BookDays_G; }
         }
 
         public int CanCancelBook_G
