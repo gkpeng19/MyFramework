@@ -12,6 +12,7 @@
     <link href="/Scripts/ace/css/ace.min.css" rel="stylesheet" />
     <link href="/Scripts/ace/css/ace-responsive.min.css" rel="stylesheet" />
     <link href="/Styles/GOMFrameWork.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/bootstrap-datepicker.css" rel="stylesheet" />
 
     <script src="/Scripts/jquery-1.10.2.min.js"></script>
 </head>
@@ -107,8 +108,47 @@
         </div>
     </div>
 
+    <div class="row-fluid">
+        <div class="span7">
+            <form id="div_book" class=" layerout form-layer">
+                <div>
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <label>度假村</label>
+                            <select id="sel_vallige" class="span11" name="n_v"></select>
+                        </div>
+                        <div class="span6">
+                            <label>房  间</label>
+                            <select id="sel_room" class="span11" name="n_r"></select>
+                        </div>
+                        <div class="span6">
+                            <label>入住日期</label>
+                            <input type="text" id="startDate" class="datepicker span11" name="n_bd" data-date-format="yyyy-mm-dd" />
+                        </div>
+                        <div class="span6">
+                            <label>退房日期</label>
+                            <input type="text" id="endDate" class="datepicker span11" name="n_ed" data-date-format="yyyy-mm-dd" />
+                        </div>
+                        <div class="span12">
+                            <label>备  注</label>
+                            <textarea rows="3" class="span11" name="n_rmk" id="txt_remark"></textarea>
+                        </div>
+                        <div class="span12" style="margin-top:5px;">
+                            会员余额：<span id="span_balance"></span> &nbsp;&nbsp;
+                            门店价：<span id="span_price">...</span> &nbsp;&nbsp;
+                            VIP价：<span id="span_vipprice">...</span> &nbsp;&nbsp;
+                            入住天数： <span id="span_days">0</span>天 &nbsp;&nbsp;
+                            总消费：<span id="span_amount">0</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <script src="/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../Scripts/bootstrap/bootstrap-datepicker.min.js"></script>
     <script src="/Scripts/layer/layer.js"></script>
     <script src="/Scripts/umeditor/umeditor.config.js"></script>
     <script src="/Scripts/umeditor/umeditor.min.js"></script>
@@ -136,6 +176,62 @@
             }
         });
 
+        var _isVip = false;
+        $("#startDate").datepicker({ startDate: new Date().toLocaleDateString(), autoclose: true });
+        $("#endDate").datepicker({ startDate: new Date().toLocaleDateString(), autoclose: true });
+        $("#startDate").bind("change", function () {
+            onDateChanged();
+        });
+        $("#endDate").bind("change", function () {
+            onDateChanged();
+        });
+
+        function onDateChanged() {
+            var start = $("#startDate").val();
+            var end = $("#endDate").val();
+            if (start.length == 0 || end.length == 0 || start == end) {
+                $("#span_days").text(0);
+                $("#span_amount").text(0);
+            }
+            else {
+                start = new Date(start.replace("-", "/").replace("-", "/"));
+                end = new Date(end.replace("-", "/").replace("-", "/"));
+                var days = (end - start) / 1000 / 3600 / 24;
+                $("#span_days").text(days);
+                var price = _isVip ? $("#span_vipprice").text() : $("#span_price").text();
+                $("#span_amount").text(days * price);
+            }
+        };
+
+        $("#sel_vallige").bind("change", function () {
+            $.post("/VillageRoom/LoadRoomList", { VillageID: this.value, page_g: 1, psize_g: 9999 }, function (r) {
+                var sel = $("#sel_room");
+                r = $.toJsResult(r.Data);
+                sel.find("option").remove();
+                $(r).each(function () {
+                    sel.append("<option value='" + this.ID + "' data-price='" + this.Price + "' data-vipprice='" + this.VipPrice + "'>" + this.Name + "</option>");
+                });
+                $("#sel_room").trigger("change");
+                $("#endDate").trigger("change");
+            });
+        });
+
+        $("#sel_room").bind("change", function () {
+            var price = $(this).find("option:selected").attr("data-price");
+            var vipprice = $(this).find("option:selected").attr("data-vipprice");
+            $("#span_price").text(price);
+            $("#span_vipprice").text(vipprice);
+        });
+
+        $.post("/VillageRoom/LoadJsonData", { ran: Math.random() }, function (data) {
+            var sel = $("#sel_vallige");
+            var items = data.Villages;
+            $(items).each(function () {
+                sel.append("<option value='" + this.v + "'>" + this.k + "</option>");
+            });
+            $("#sel_vallige").trigger("change");
+        });
+
         function OnOptLoading(json, html) {
             if (json.IsDelete == 1) {
                 html += ' <a href="javascript:void(0)" class="btn btn-minier btn-danger" onclick="UseNMember(0)">启用</a> ';
@@ -144,6 +240,7 @@
                 html += ' <a href="javascript:void(0)" class="btn btn-minier btn-danger" onclick="UseNMember(1)">禁用</a> ';
             }
             html += ' <a href="javascript:void(0)" class="btn btn-minier btn-success" onclick="AddBalance(' + json.ShopUserID_G + ',' + json.Balance_G + ')">充值</a> ';
+            html += ' <a href="javascript:void(0)" class="btn btn-minier btn-info" onclick="Book(' + json.ID + ',' + json.ShortBalance_C + ',' + json.UserType + ')">预订</a> ';
             return html;
         }
 
@@ -153,9 +250,9 @@
                 var json = $("#9739148752935891").datagrid("getCurrData");
                 var newjson = { ID: json.ID, IsDelete: toState };
                 $.post("/AdminMember/UseNMember", newjson, function (r) {
-                    var newjson = $.combineJson(json, newjson, $.toJsResult(r));
-                    if (r.ID > 0) {
-                        $("#9739148752935891").datagrid("updateRow", json, newjson);
+                    if (r > 0) {
+                        $("#9739148752935891").datagrid("refresh");
+                        $.success(title + "成功。");
                     }
                     else {
                         $.error(title + "失败，请重试！");
@@ -189,11 +286,51 @@
             });
         }
 
-        function BindToSelect(data) {
+        function Book(userid, balance, utype) {
+            _isVip = utype == 1 ? false : true;
+            $("#span_balance").text(balance);
+            $("#div_book").bindEntity({});
+            $("#div_book").open("预订", function () {
+                var start = $("#startDate").val();
+                var end = $("#endDate").val();
+                if (start.length == 0) {
+                    $.error("请填写入住日期！");
+                    return false;
+                }
+                if (end.length == 0) {
+                    $.error("请填写退房日期！");
+                    return false;
+                }
+                start = new Date(start.replace("-", "/").replace("-", "/"));
+                end = new Date(end.replace("-", "/").replace("-", "/"));
+                var days = (end - start) / 1000 / 3600 / 24;
+                if (days <= 0) {
+                    $.error("退房日期必须大于入住日期！");
+                    return false;
+                }
+                var balance = $("#span_balance").text() - $("#span_amount").text();
+                if (balance < 0) {
+                    $.error("会员余额不足，请联系会员充值！");
+                    return false;
+                }
+                $.post("/AdminMember/HelpMemBook", {
+                    memid: userid, roomid: $("#sel_room").val(),
+                    sdate: $("#startDate").val(), edate: $("#endDate").val(), remark: $("#txt_remark").val()
+                }, function (r) {
+                    if (r == -1) {
+                        $.error("房间数量不足！");
+                    }
+                    else if (r == 1) {
+                        layer.closeAll();
+                        $.success("预订成功。");
+                    }
+                    else {
+                        $.error("预订失败，请重试！");
+                    }
+                });
 
-        }
-
-        function BindToDiv(data) {
+                return false;
+            });
         }
 
         $(function () {

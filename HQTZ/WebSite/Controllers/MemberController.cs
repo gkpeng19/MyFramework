@@ -318,21 +318,9 @@ namespace WebSite.Controllers
             {
                 return 0;
             }
-            decimal price = 0;
-            SearchModel sm = new SearchModel("hq_room");
-            sm["id"] = roomid;
-            sm.AddSearch("price", "vipprice");
-            var room = sm.LoadEntity<HQ_Room>();
-            if (room != null)
-            {
-                price = LoginInfo.Current.UserType == 2 ? room.VipPrice : room.Price;
-            }
-            if (price == 0)
-            {
-                return 0;
-            }
 
-            sm = new SearchModel("uv_MemberWithAmount");
+            var userType = 1;
+            var sm = new SearchModel("uv_MemberWithAmount");
             sm["id"] = userid;
             sm.AddSearch("PhoneNum", "ShopUserID_G", "Balance_G");
             var member = sm.LoadEntity<HQ_Member>();
@@ -341,6 +329,25 @@ namespace WebSite.Controllers
                 balance = member.Balance_G;
                 shopUserId = member.ShopUserID_G;
                 phoneNum = member.PhoneNum;
+                userType = member.UserType;
+            }
+            else
+            {
+                return 0;
+            }
+
+            decimal price = 0;
+            sm = new SearchModel("hq_room");
+            sm["id"] = roomid;
+            sm.AddSearch("price", "vipprice");
+            var room = sm.LoadEntity<HQ_Room>();
+            if (room != null)
+            {
+                price = userType == 2 ? room.VipPrice : room.Price;
+            }
+            if (price == 0)
+            {
+                return 0;
             }
 
             cost = price * days;

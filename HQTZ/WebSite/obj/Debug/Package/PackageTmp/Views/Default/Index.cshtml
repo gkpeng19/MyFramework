@@ -5,6 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>旅居中国-首页</title>
     <link href="~/Styles/website/page.css" rel="stylesheet" />
     <link href="~/Scripts/website/slider/css/silder.css" rel="stylesheet" />
@@ -66,11 +67,11 @@
                         {
                             var pls = img.Split(':');
                             var classstr = pls[1].Length > 0 ? ("href=" + pls[1] + " target=_blank") : "href=javascript:void(0)";
-                            <li>
-                                <a @classstr>
-                                    <div style="width:980px;height:488px; background: url(../../@pls[0]) no-repeat center;"></div>
-                                </a>
-                            </li>
+                        <li>
+                            <a @classstr>
+                                <div style="width:980px;height:488px; background: url(../../@pls[0]) no-repeat center;"></div>
+                            </a>
+                        </li>
                         }
                     </ul>
                     <ul class="flex-direction-nav">
@@ -80,28 +81,49 @@
                     <ol id="bannerCtrl" class="flex-control-nav flex-control-paging">
                         @for (var i = 1; i <= imgs.Length; ++i)
                         {
-                            <li><a>@i</a></li>
+                        <li><a>@i</a></li>
                         }
                     </ol>
                 </div>
             }
         </div>
-        <div id="dcontent">
+        <div class="dcontent">
             <div class="m-column-name">
                 <h2>度假村推荐</h2>
                 <i class="line"></i>
             </div>
-            <div class="m-tabs-link" id="SpecialLevelOneCategoryContainer">
+            <div class="m-tabs-link SpecialLevelOneCategoryContainer" dtype="1">
                 @foreach (EntityLibrary.Entities.HQ_DisplayPanel d in ViewBag.DistList)
                 {
                     <a data-id="@d.ID" href="javascript:;">@d.Name</a>
                 }
             </div>
             <div class="destn-house-list j-specialunit-container" style="min-height:280px;padding-bottom:30px;">
-                <div style="text-align: center;display:none;" id="loading">
+                <div style="text-align: center;display:none;" class="loading">
                     <img src="images/loading2.gif" style="position:relative;top:70px;width:100px;height:100px;" />
                 </div>
-                <ul id="hotroomlist"></ul>
+                <ul></ul>
+            </div>
+            <div>
+                <div class="btnHotMore">查看更多  <i class="fa fa-arrow-right" style="font-size:12px;"></i></div>
+            </div>
+        </div>
+        <div class="dcontent">
+            <div class="m-column-name">
+                <h2>养老院推荐</h2>
+                <i class="line"></i>
+            </div>
+            <div class="m-tabs-link SpecialLevelOneCategoryContainer" dtype="2">
+                @foreach (EntityLibrary.Entities.HQ_DisplayPanel d in ViewBag.DistList)
+                {
+                    <a data-id="@d.ID" href="javascript:;">@d.Name</a>
+                }
+            </div>
+            <div class="destn-house-list j-specialunit-container" style="min-height:280px;padding-bottom:30px;">
+                <div style="text-align: center;display:none;" class="loading">
+                    <img src="images/loading2.gif" style="position:relative;top:70px;width:100px;height:100px;" />
+                </div>
+                <ul></ul>
             </div>
             <div>
                 <div class="btnHotMore">查看更多  <i class="fa fa-arrow-right" style="font-size:12px;"></i></div>
@@ -133,9 +155,15 @@
                                 </a>
                             </td>
                             <td class="contact_ctx">
-                                <a href="/ClientBase/ContactIndex">
-                                    <img class="contact_ctx_icon" src="~/Images/contactus.jpg" />
+                                <a href="/ClientBase/ArticleIndex?atype=2">
+                                    <img class="contact_ctx_icon" src="~/Images/cont.png" style="width:45px;height:45px;" />
                                     <span>&nbsp;联系我们</span>
+                                </a>
+                            </td>
+                            <td class="contact_ctx">
+                                <a href="/ClientBase/ArticleIndex?atype=4">
+                                    <img class="contact_ctx_icon" src="~/Images/contactus.jpg" />
+                                    <span>&nbsp;关于我们</span>
                                 </a>
                             </td>
                             <td class="contact_ctx">
@@ -220,28 +248,22 @@
             bannerSlider.next()
         });
 
-        var currIndex = 0;
-        var lastDid = 0;
+        var lastDType = null;
         $(".btnHotMore").bind("click", function () {
-            LoadRoomsByDist(lastDid, currIndex + 1);
+            $(this).parent().prev().prev().find(".current").click();
         });
 
-        function LoadRoomsByDist(did, pindex) {
-            if (lastDid != did) {
-                lastDid = did;
-                pindex = 1;
-            }
-            currIndex = pindex;
-            $("#hotroomlist").hide();
-            $("#loading").show();
+        function LoadRoomsByDist(did, pindex, dtype, container, loading, btnMore) {
+            container.hide();
+            loading.show();
             var html = "";
-            $.post("/Default/LoadHotRoom", { destinationid: did, pindex: currIndex }, function (r) {
-                $("#loading").hide();
+            $.post("/Default/LoadHotRoom", { destinationid: did, dtype: dtype, pindex: pindex }, function (r) {
+                loading.hide();
                 if (r.PageCount > r.PageIndex) {
-                    $(".btnHotMore").show();
+                    btnMore.show();
                 }
                 else {
-                    $(".btnHotMore").hide();
+                    btnMore.hide();
                 }
                 r = $.toJsResult(r.Data);
                 $(r).each(function () {
@@ -249,24 +271,42 @@
                     var name = this.Name.length > 12 ? this.Name.substring(0, 12) : this.Name;
                     html += '<li><a href="/Detail/RoomIndex/' + this.VillageID + '" target="_blank" class="pic-box"><img src="/' + this.CoverImg + '" /></a><div class="house-info"><h2><a href="/Detail/RoomIndex/' + this.VillageID + '" class="house-tit" target="_blank" title="' + this.Name + '">' + name + '</a></h2><span class="price-box"><dfn>¥</dfn><b>' + price + '</b>/晚</span></div></li>';
                 });
-                if (currIndex == 1) {
-                    $("#hotroomlist").html(html);
+                if (pindex == 1) {
+                    container.html(html);
                 }
                 else {
-                    $(html).insertAfter($("#hotroomlist li:last"));
+                    $(html).insertAfter(container.find("li:last"));
                 }
 
-                $("#hotroomlist").show();
+                container.show();
             });
         }
 
-        $("#SpecialLevelOneCategoryContainer a:first").addClass("current");
-        LoadRoomsByDist($("#SpecialLevelOneCategoryContainer a:first").attr("data-id"), 1);
-        $("#SpecialLevelOneCategoryContainer a").bind("click", function () {
-            $("#SpecialLevelOneCategoryContainer a.current").removeClass("current");
-            $(this).addClass("current");
-            LoadRoomsByDist($(this).attr("data-id"), 1);
+        $(".SpecialLevelOneCategoryContainer a").bind("mouseover", function () {
+            var pindex = $(this).attr("pindex");
+            if (!pindex || pindex == 0) {
+                pindex = 1;
+            }
+            if ($(this).hasClass("current")) {
+                pindex += 1;
+            }
+            else {
+                pindex = 1;
+                $(this).attr("pindex", pindex);
+
+                $(this).parent().find(".current").removeClass("current");
+                $(this).addClass("current");
+            }
+
+            LoadRoomsByDist($(this).attr("data-id"), pindex, $(this).parent().attr("dtype"),
+                $(this).parent().next().find("ul"), $(this).parent().next().find(".loading"),
+                $(this).parent().next().next().find(".btnHotMore"));
         });
+
+        $(".SpecialLevelOneCategoryContainer").each(function () {
+            $(this).find("a:first").mouseover();
+        });
+
 
         initBottomFlow();
 
