@@ -24,7 +24,8 @@ namespace EntityLibrary.Entities
         TravelGuide = 1,
         ContactUs = 2,
         SilderImg = 3,
-        AboutUs = 4
+        AboutUs = 4,
+        Copyright = 5
     }
 
     public enum EnumOrderState

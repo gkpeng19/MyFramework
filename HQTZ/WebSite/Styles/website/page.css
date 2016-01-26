@@ -62,20 +62,20 @@ body .page {
 }
 
 #top {
-    margin-top:-15px;
+    margin-top: -15px;
     height: 70px;
     padding: 0px 0px 10px 0px;
 }
 
-#top #logo{
-    margin-left:20px;
-}
+    #top #logo {
+        margin-left: 20px;
+    }
 
-#top #servertel{
-    margin-right:20px; 
-    float:right;
-    margin-top:30px;
-}
+    #top #servertel {
+        margin-right: 20px;
+        float: right;
+        margin-top: 30px;
+    }
 
 #menu div span {
     font-size: 16px;
@@ -322,7 +322,7 @@ body .page {
 #div2code {
     display: none;
     position: fixed;
-    bottom: 66px;
+    bottom: 225px;
     width: 200px;
     border: solid 1px #888888;
     border-radius: 5px;
@@ -366,3 +366,23 @@ body .page {
         color: #C73937;
         border-color: #C73937;
     }
+
+.flink {
+    width: 6em;
+    float:left;
+}
+
+    .flink a:link, .flink a:visited, .flink a:active, .flink a:hover {
+        color: white;
+    }
+    .flink a:hover {
+        text-decoration: underline;
+    }
+
+    #div_copyright{
+        color:white;
+    }
+
+        #div_copyright a:link, #div_copyright a:visited, #div_copyright a:active, #div_copyright a:hover {
+            color: white;
+        }

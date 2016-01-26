@@ -60,6 +60,7 @@
     <Compile Include="Entities\HQ_Article.cs" />
     <Compile Include="Entities\HQ_Ask.cs" />
     <Compile Include="Entities\HQ_BookRoom.cs" />
+    <Compile Include="Entities\HQ_FLink.cs" />
     <Compile Include="Entities\HQ_Member.cs" />
     <Compile Include="Entities\HQ_DisplayContent.cs" />
     <Compile Include="Entities\HQ_DisplayPanel.cs" />

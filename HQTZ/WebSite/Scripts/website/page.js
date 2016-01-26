@@ -204,6 +204,21 @@ function deleteOrder(src, oid) {
     }
 }
 
+$(function () {
+    $.post("/ClientBase/GetFLink", {}, function (r) {
+        r = $.toJsResult(r);
+        var div_flink = $("#div_flink");
+        $(r).each(function () {
+            div_flink.append("<div class='flink'><a href='" + this.Link + "' target='_blank'>" + this.Name + "</a></div>");
+        });
+        div_flink.append("<div style='clear:both;'></div>");
+    });
+
+    $.post("/ClientBase/GetCopyright", {}, function (r) {
+        $("#div_copyright").html(r);
+    });
+});
+
 
 var _pageParameters = { init: false };
 $.extend({

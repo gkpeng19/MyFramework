@@ -182,6 +182,18 @@ namespace WebSite.Controllers
             }
         }
 
+        public JsonResult GetFLink()
+        {
+            SearchModel sm = new SearchModel("hq_flink");
+            var links = sm.Load<HQ_FLink>().Data;
+            return ExController.JsonNet(links);
+        }
 
+        public string GetCopyright()
+        {
+            SearchModel sm = new SearchModel("hq_article");
+            sm["ACategory"] = (int)EnumArticleCategory.Copyright;
+            return sm.LoadEntity<HQ_Article>().AContent;
+        }
     }
 }

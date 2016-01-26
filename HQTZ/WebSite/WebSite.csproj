@@ -124,6 +124,7 @@
     <Content Include="AdminPages\Agenter.html" />
     <Content Include="AdminPages\CheaperDetails.html" />
     <Content Include="AdminPages\ContactUs.html" />
+    <Content Include="AdminPages\FLink.html" />
     <Content Include="AdminPages\Member.html" />
     <Content Include="AdminPages\MemberAsk.html" />
     <Content Include="AdminPages\MemberOrder.html" />
@@ -433,6 +434,7 @@
     <Compile Include="AdminControllers\AgenterController.cs" />
     <Compile Include="AdminControllers\ArticleController.cs" />
     <Compile Include="AdminControllers\AdminMemberController.cs" />
+    <Compile Include="AdminControllers\FLinkController.cs" />
     <Compile Include="AdminControllers\MemberAskController.cs" />
     <Compile Include="AdminControllers\MemberOrderController.cs" />
     <Compile Include="AdminControllers\VillageRoomController.cs" />

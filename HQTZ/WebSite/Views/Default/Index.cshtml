@@ -67,11 +67,11 @@
                         {
                             var pls = img.Split(':');
                             var classstr = pls[1].Length > 0 ? ("href=" + pls[1] + " target=_blank") : "href=javascript:void(0)";
-                        <li>
-                            <a @classstr>
-                                <div style="width:980px;height:488px; background: url(../../@pls[0]) no-repeat center;"></div>
-                            </a>
-                        </li>
+                            <li>
+                                <a @classstr>
+                                    <div style="width:980px;height:488px; background: url(../../@pls[0]) no-repeat center;"></div>
+                                </a>
+                            </li>
                         }
                     </ul>
                     <ul class="flex-direction-nav">
@@ -81,7 +81,7 @@
                     <ol id="bannerCtrl" class="flex-control-nav flex-control-paging">
                         @for (var i = 1; i <= imgs.Length; ++i)
                         {
-                        <li><a>@i</a></li>
+                            <li><a>@i</a></li>
                         }
                     </ol>
                 </div>
@@ -172,6 +172,20 @@
                                     <span>&nbsp;手机App下载</span>
                                 </a>
                             </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <table width="100%">
+                        <tr><td style="height:10px;"></td></tr>
+                        <tr>
+                            <td style="width:6em;">
+                                <span style="margin-left:10px;">友情链接：</span>
+                            </td>
+                            <td id="div_flink"></td>
+                        </tr>
+                        <tr><td style="height:10px;"></td></tr>
+                        <tr>
+                            <td align="center" colspan="2" id="div_copyright"></td>
                         </tr>
                     </table>
                 </div>
