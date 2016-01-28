@@ -368,8 +368,9 @@ body .page {
     }
 
 .flink {
-    width: 6em;
     float:left;
+    margin-right:10px;
+    margin-bottom:8px;
 }
 
     .flink a:link, .flink a:visited, .flink a:active, .flink a:hover {
