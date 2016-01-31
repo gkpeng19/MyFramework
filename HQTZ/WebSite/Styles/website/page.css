@@ -107,6 +107,8 @@ body .page {
 
 .bottomflow {
     position: fixed;
+    opacity: 0.9;
+    z-index: 999;
 }
 
 .flow_tab {
@@ -322,7 +324,7 @@ body .page {
 #div2code {
     display: none;
     position: fixed;
-    bottom: 225px;
+    bottom: 330px;
     width: 200px;
     border: solid 1px #888888;
     border-radius: 5px;
@@ -368,22 +370,71 @@ body .page {
     }
 
 .flink {
-    float:left;
-    margin-right:10px;
-    margin-bottom:8px;
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 8px;
 }
 
     .flink a:link, .flink a:visited, .flink a:active, .flink a:hover {
         color: white;
     }
+
     .flink a:hover {
         text-decoration: underline;
     }
 
-    #div_copyright{
-        color:white;
+#div_copyright {
+    color: white;
+}
+
+    #div_copyright a:link, #div_copyright a:visited, #div_copyright a:active, #div_copyright a:hover {
+        color: white;
     }
 
-        #div_copyright a:link, #div_copyright a:visited, #div_copyright a:active, #div_copyright a:hover {
-            color: white;
+    #div_copyright p{
+        margin:13px;
+    }
+
+    .bottomflow hr{
+        margin:7px auto;
+    }
+/*---合作伙伴滚动----------*/
+#Marquee_x {
+    overflow: hidden;
+}
+
+    #Marquee_x a {
+        text-align: center;
+        color: white;
+        font-size: 11px;
+    }
+
+    #Marquee_x ul {
+        margin-left: -40px;
+    }
+
+        #Marquee_x ul li, #Marquee_x ul li div {
+            float: left;
+            line-height: 25px;
+            overflow: hidden;
+            list-style-type: none;
         }
+            /* 横向滚动必须让所有li左浮动 */
+            #Marquee_x ul li div {
+                float: left;
+                line-height: 25px;
+                overflow: hidden;
+            }
+
+                #Marquee_x ul li div img {
+                    border: 1px solid #DADADA;
+                    width: 42px;
+                    height: 42px;
+                    display: block;
+                    border: 0;
+                    vertical-align: middle;
+                }
+
+                #Marquee_x ul li div span {
+                    display: block;
+                }

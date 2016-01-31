@@ -20,12 +20,16 @@ namespace WebSite.Controllers
 
         public ActionResult RoomIndex(int id)
         {
-            ViewBag.IsBookRoom = 1;
             SearchModel sm = new SearchModel("HQ_DisplayContent");
             sm["ID"] = id;
             var entity = sm.LoadEntity<HQ_DisplayContent>();
             ViewBag.VillageID = id;
-            return View("Index", entity);
+
+            sm = new SearchModel("hq_article");
+            sm["refid"] = id;
+            ViewBag.Descs = sm.Load<HQ_Article>().Data;
+
+            return View(entity);
         }
 
         public JsonResult LoadRooms(int villageId)

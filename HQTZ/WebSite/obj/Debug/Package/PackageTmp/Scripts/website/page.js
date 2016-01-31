@@ -65,7 +65,7 @@ function initBottomFlow() {
                 isFlow = true;
 
                 $(".flow_ctx").show();
-                $(".bottomflow").animate({ top: $(window).height() - $(".bottomflow").height() }, 500);
+                $(".bottomflow").animate({ top: $(window).height() - $(".bottomflow").height()+12 }, 10);
                 $(".flow_tab_icon").removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
             }
             else {
@@ -116,10 +116,10 @@ function toShop(src, targetUrl) {
         if (r.Phone.length > 0) {
             var ppp = "su=" + r.Phone + "&sp=" + r.Pwd;
             ppp = new Base64().encode(ppp);
-            url = "http://123.57.153.47:8099/ExAccount/Login?ppp=" + ppp + "&returnUrl=" + targetUrl;
+            url = "http://mall.chinalvju.com/ExAccount/Login?ppp=" + ppp + "&returnUrl=" + targetUrl;
         }
         else {
-            url = "http://123.57.153.47:8099" + targetUrl;
+            url = "http://mall.chinalvju.com" + targetUrl;
         }
 
         if (src) {
@@ -203,6 +203,42 @@ function deleteOrder(src, oid) {
         });
     }
 }
+
+$(function () {
+    var adv_pbottom = $("#adv_pbottom");
+    if (adv_pbottom.length > 0) {
+        $.post("/ClientBase/GetAdvPBottom", {}, function (r) {
+            r = $.toJsResult(r);
+            adv_pbottom.append("<a target='_blank' href='" + r.Link + "' title='" + r.Description + "'><img src='/" + r.ImgPath + "' width='980' /></a>");
+        });
+    }
+
+    //获得合作伙伴
+    $.post("/ClientBase/GetFLink", { ltype: 2 }, function (r) {
+        r = $.toJsResult(r);
+        var div_flink = $("#Marquee_x ul li");
+        $(r).each(function () {
+            div_flink.append('<div><a href="' + this.Link + '" target="_blank"><img src="/' + this.Img + '" /><span>' + this.Name + '</span></a></div>');
+        });
+        $('#Marquee_x').jcMarquee({ 'marquee': 'x', 'margin_right': '10px', 'speed': 20 });
+    });
+
+    //获得友情链接
+    $.post("/ClientBase/GetFLink", { ltype: 1 }, function (r) {
+        r = $.toJsResult(r);
+        var div_flink = $("#div_flink");
+        $(r).each(function () {
+            div_flink.append("<div class='flink'><a href='" + this.Link + "' target='_blank'>" + this.Name + "</a></div>");
+        });
+        div_flink.append("<div style='clear:both;'></div>");
+    });
+
+    $.post("/ClientBase/GetCopyright", {}, function (r) {
+        $("#div_copyright").html(r);
+        var href = $("#mailto").attr("href");
+        $("#mailto").attr("href", href.substr(7));
+    });
+});
 
 
 var _pageParameters = { init: false };

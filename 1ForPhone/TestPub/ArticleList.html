@@ -108,8 +108,8 @@
 	    	};
 	    	
 	    	var loadMemberBenefit=function(page){
-	    		doc.getElementById("title").innerText="得天独厚";
-	        	$.getJSON(getUrl("/Phone/LoadMemberBenefit"), { page: page }, function (r) {
+	    		doc.getElementById("title").innerText="尊享服务";
+	        	$.getJSON(getUrl("/Phone/LoadMemberService"), { page: page }, function (r) {
 	        		doc.getElementById("loading").style.display="none";
 	                
 	                var list = toJsResult(r.Data);
@@ -123,9 +123,9 @@
 	            });
 	    	};
 	    	
-	    	var loadMemberService=function(page){
-	    		doc.getElementById("title").innerText="旅居尊享";
-	        	$.getJSON(getUrl("/Phone/LoadMemberService"), { page: page }, function (r) {
+	    	var loadBeadHouse=function(page){
+	    		doc.getElementById("title").innerText="养老院";
+	        	$.getJSON(getUrl("/Phone/LoadAllBeadHouse"), { page: page,ran:Math.random() }, function (r) {
 	        		doc.getElementById("loading").style.display="none";
 	                
 	                var list = toJsResult(r.Data);
@@ -167,7 +167,7 @@
 			    		loadMemberBenefit(pindex);
 			    		break;
 			    		case "4":
-			    		loadMemberService(pindex);
+			    		loadBeadHouse(pindex);
 			    		break;
 			    		case "5":
 			    		loadNewCheaper(pindex);

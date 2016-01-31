@@ -25,7 +25,8 @@ namespace EntityLibrary.Entities
         ContactUs = 2,
         SilderImg = 3,
         AboutUs = 4,
-        Copyright = 5
+        Copyright = 5,
+        RoomDesc = 6
     }
 
     public enum EnumOrderState
@@ -42,5 +43,11 @@ namespace EntityLibrary.Entities
     {
         Village = 1,
         BeadHouse = 2
+    }
+
+    public enum EnumFLinkType
+    {
+        Normal = 1,
+        HasImage = 2
     }
 }

@@ -70,7 +70,7 @@ namespace HQWZ.Controllers
                 });
 
             HttpClient _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("http://123.57.153.47:8099/");
+            _httpClient.BaseAddress = new Uri("http://mall.chinalvju.com/");
 
             try
             {
@@ -179,7 +179,7 @@ namespace HQWZ.Controllers
                         entity.Save();
 
                         HttpClient _httpClient = new HttpClient();
-                        _httpClient.BaseAddress = new Uri("http://123.57.153.47:8099/");
+                        _httpClient.BaseAddress = new Uri("http://mall.chinalvju.com/");
                         var dic = new Dictionary<string, string>();
                         dic.Add("UserName", entity.PhoneNum);
                         dic.Add("NickName", entity.UserName);

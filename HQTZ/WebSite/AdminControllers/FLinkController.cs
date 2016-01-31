@@ -10,10 +10,12 @@ namespace WebSite.AdminControllers
 {
     public class FLinkController : Controller
     {
-        public JsonResult GetLinks(SearchModel sm)
+        public JsonResult GetLinks(SearchModel sm, int page_g, int psize_g)
         {
             sm.SearchID = "HQ_FLink";
             sm.OrderBy("ID", GOMFrameWork.DataEntity.EnumOrderBy.Desc);
+            sm.PageIndex = page_g;
+            sm.PageSize = psize_g;
             var result = sm.Load<HQ_FLink>();
             return ExController.JsonNet(result);
         }
