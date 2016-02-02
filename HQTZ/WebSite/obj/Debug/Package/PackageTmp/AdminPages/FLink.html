@@ -52,6 +52,10 @@
                             <label>链接</label>
                             <input type="text" name="Link" class="span11" id="flink_link" />
                         </div>
+                        <div class="span12" style="display:none;" id="div_flink_img">
+                            <label>图片(最佳尺寸 42*42)</label>
+                            <input type="file" name="Img" class="span11" id="flink_img" />
+                        </div>
                     </div>
                 </div>
             </form>
@@ -68,7 +72,19 @@
     <script src="/Scripts/GOMFrameWork.js"></script>
     <script type="text/javascript">
         $(function () {
-            $("#5914595064846124").datagrid({ url: "/FLink/GetLinks", psize: 10 });
+            var lType = $.getUrlParam("ltype");
+            if (lType == "2") {
+                $("#div_flink_img").show();
+                $("#flink_img").upload({
+                    filter: "image",
+                    success: function (result) {
+                        $("#flink_img").val(result.path);
+                    }
+                });
+                tt.vf.req.add(new tt.Field("图片", "", "flink_img").setMsgId("layer-error-msg"));
+            }
+
+            $("#5914595064846124").datagrid({ url: "/FLink/GetLinks", search: { LinkType: lType }, psize: 10 });
 
             $("#5914595064846124").parent().prev().find(".btn-table-add").bind('click', function () {
                 $("#17000349911353668").bindEntity({ Link: 'http://' });
@@ -77,6 +93,7 @@
                         return false;
                     }
                     var update = $("#17000349911353668").getContext();
+                    update.LinkType = lType;
                     $.post("/FLink/SaveLink", update, function (r) {
                         r = $.combineJson(update, $.toJsResult(r));
                         if (r.ID > 0) {
@@ -129,13 +146,6 @@
                 });
             });
         });
-
-        function checkForm() {
-            var name = $.trim($("#flink_name").val());
-            if (name.length == 0) {
-                $("#layer-error-msg").text("");
-            }
-        }
 
         tt.vf.req.add(new tt.Field("名称", "", "flink_name").setMsgId("layer-error-msg"));
         tt.vf.req.add(new tt.Field("链接", "", "flink_link").setMsgId("layer-error-msg"));

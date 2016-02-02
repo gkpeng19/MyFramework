@@ -386,6 +386,10 @@ datatable.prototype.initByData = function (data, page, pagecount) {
         }
     });
 
+    if (this.selectChanged && this.datasource.length > 0) {
+        this.selectChanged(this.datasource[0]);
+    }
+
     /*----Init Pager Start--------------------------*/
     this.datagrid.parent().find(".pager").remove();
 
@@ -546,12 +550,12 @@ datatable.prototype.insertRow = function (index, json) {
     if (index == 0) {
         //在该元素前插入
         var identity = this.datasource[index][this.trIdentity];
-        $("#" + identity + this.trIdentity).before(tr);
+        this.datagrid.find("#" + identity + this.trIdentity).before(tr);
     }
     else {
         //在该元素前的一个元素后插入
         var identity = this.datasource[index - 1][this.trIdentity];
-        $("#" + identity + this.trIdentity).after(tr);
+        this.datagrid.find("#" + identity + this.trIdentity).after(tr);
     }
 
     //维护数据源

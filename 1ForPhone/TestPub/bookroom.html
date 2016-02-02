@@ -140,11 +140,11 @@
 							function(r){
 								if(r==1){
 									showError("");
-									plus.nativeUI.toast('您的订单已经提交，我们将在24小时内告诉您预订结果。');
+									plus.nativeUI.toast('您的订单已经提交，我们将在24小时内告诉您预订结果');
 									$.back();
 								}
 								else{
-									showError(r);
+									showError(r.substr(1,r.length-1));
 								}
 							});
 						}

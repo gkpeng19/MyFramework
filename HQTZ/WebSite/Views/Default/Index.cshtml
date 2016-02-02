@@ -37,7 +37,7 @@
                 <a href="/">
                     <div class="menu-normal" data-class="menu-curr"><span>首 页</span></div>
                 </a>
-                <a href="/Destination"><div class="menu-normal" data-class="menu-curr"><span>目的地</span></div></a>
+                <a href="/Destination"><div class="menu-normal" data-class="menu-curr"><span>旅居佳地</span></div></a>
                 <a href="javascript:void(0)" target="_blank" onclick="toShop(this, '/product/118')">
                     <div class="menu-normal" data-class="green-menu-curr"><span>旅居卡</span></div>
                 </a>
@@ -53,7 +53,7 @@
                 <a href="/NewCheaper">
                     <div class="menu-normal" data-class="green-menu-curr"><span>最新优惠</span></div>
                 </a>
-                <a href="http://123.57.153.47:8099/" onclick="toShop(this)" target="_blank" id="linkToShop">
+                <a href="http://mall.chinalvju.com/" onclick="toShop(this)" target="_blank" id="linkToShop">
                     <div class="menu-normal" data-class="menu-curr"><span>旅居商城</span></div>
                 </a>
             </div>
@@ -175,19 +175,18 @@
                             <td></td>
                         </tr>
                     </table>
-                    <table width="100%">
-                        <tr><td style="height:10px;"></td></tr>
-                        <tr>
-                            <td style="width:6em;">
-                                <span style="margin-left:10px;">友情链接：</span>
-                            </td>
-                            <td id="div_flink"></td>
-                        </tr>
-                        <tr><td style="height:10px;"></td></tr>
-                        <tr>
-                            <td align="center" colspan="2" id="div_copyright"></td>
-                        </tr>
-                    </table>
+                    <hr style="border-color:#888;" />
+                    <div style="margin-top: 10px; color: #C73937; font-weight: bold; ">合作伙伴</div>
+                    <div id="Marquee_x">
+                        <ul>
+                            <li></li>
+                        </ul>
+                    </div>
+                    <hr style="border-color:#888;" />
+                    <div style="margin: 10px auto 5px; color: #C73937; font-weight: bold; ">友情链接</div>
+                    <div id="div_flink"></div>
+                    <hr style="border-color:#888;" />
+                    <div id="div_copyright" style="text-align:center;"></div>
                 </div>
             </div>
         </div>
@@ -205,6 +204,7 @@
     <script src="~/Scripts/website/slider/js/slider.js"></script>
     <script src="~/Scripts/website/page.js"></script>
     <script src="~/Scripts/Base64.js"></script>
+    <script src="~/Scripts/jQuery-jcMarquee.js"></script>
     <script type="text/javascript">
         var isVip = false;
         @{

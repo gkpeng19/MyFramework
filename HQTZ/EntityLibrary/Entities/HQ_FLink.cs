@@ -29,5 +29,17 @@ namespace EntityLibrary.Entities
             get { return GetString("Link"); }
             set { SetValue("Link", value); }
         }
+        [JsonIgnore]
+        public string Img
+        {
+            get { return GetString("Img"); }
+            set { SetValue("Img", value); }
+        }
+        [JsonIgnore]
+        public int LinkType
+        {
+            get { return GetInt32("LinkType"); }
+            set { SetValue("LinkType", value); }
+        }
     }
 }

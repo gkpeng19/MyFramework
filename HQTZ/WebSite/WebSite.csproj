@@ -265,6 +265,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jQuery-jcMarquee.js" />
     <Content Include="Scripts\jquery.floatDiv.js" />
     <Content Include="Scripts\website\page.js" />
     <Content Include="Scripts\website\slider\css\silder.css" />
@@ -508,6 +509,7 @@
     <Content Include="Views\Member\MemberIndex.cshtml" />
     <Content Include="Views\Default\Index.cshtml" />
     <Content Include="Views\web.config" />
+    <Content Include="Views\Detail\RoomIndex.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -182,9 +182,10 @@ namespace WebSite.Controllers
             }
         }
 
-        public JsonResult GetFLink()
+        public JsonResult GetFLink(int ltype)
         {
             SearchModel sm = new SearchModel("hq_flink");
+            sm["LinkType"] = ltype;
             var links = sm.Load<HQ_FLink>().Data;
             return ExController.JsonNet(links);
         }
@@ -194,6 +195,14 @@ namespace WebSite.Controllers
             SearchModel sm = new SearchModel("hq_article");
             sm["ACategory"] = (int)EnumArticleCategory.Copyright;
             return sm.LoadEntity<HQ_Article>().AContent;
+        }
+
+        public JsonResult GetAdvPBottom()
+        {
+            SearchModel sm = new SearchModel("HQ_Advertisement");
+            sm["ID"] = 1;
+            HQ_Advertisement adv = sm.LoadEntity<HQ_Advertisement>();
+            return this.JsonNet(adv);
         }
     }
 }

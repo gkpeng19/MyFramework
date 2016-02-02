@@ -24,6 +24,20 @@ namespace WebSite.Controllers
         {
             SearchModel sm = new SearchModel("uv_DisplayContent");
             sm["DPanelType"] = (int)EnumDPanelType.Distination;
+            sm["DType"] = (int)EnumVillageType.Village;
+            sm.OrderBy("id");
+            sm.PageIndex = page;
+            sm.PageSize = psize;
+            sm.AddSearch("id", "DPanel_G", "Name", "ImgName_G");
+            var result = sm.Load<HQ_DisplayContent>();
+            OutResult(result);
+        }
+
+        public void LoadAllBeadHouse(int page = 1, int psize = 999)
+        {
+            SearchModel sm = new SearchModel("uv_DisplayContent");
+            sm["DPanelType"] = (int)EnumDPanelType.Distination;
+            sm["DType"] = (int)EnumVillageType.BeadHouse;
             sm.OrderBy("id");
             sm.PageIndex = page;
             sm.PageSize = psize;
@@ -194,7 +208,7 @@ namespace WebSite.Controllers
                 OutResult("入住日期必须大于等于当前日期！");
                 return;
             }
-            if (edate < sdate)
+            if (edate <= sdate)
             {
                 OutResult("离开日期必须大于入住日期！");
                 return;
@@ -271,7 +285,7 @@ namespace WebSite.Controllers
                 }
                 //注册商城用户
                 HttpClient _httpClient = new HttpClient();
-                _httpClient.BaseAddress = new Uri("http://123.57.153.47:8099/");
+                _httpClient.BaseAddress = new Uri("http://mall.chinalvju.com/");
                 var dic = new Dictionary<string, string>();
                 dic.Add("UserName", phone);
                 dic.Add("NickName", uname);

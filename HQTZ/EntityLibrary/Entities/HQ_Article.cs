@@ -35,11 +35,39 @@ namespace EntityLibrary.Entities
             get { return GetString("AContent"); }
             set { SetValue("AContent", value); }
         }
+
+        public string AContent_G
+        {
+            get
+            {
+                var content = System.Text.RegularExpressions.Regex.Replace(AContent, "<[^>]*>", "");
+                content = System.Text.RegularExpressions.Regex.Replace(content, @"&(nbsp|#160);", "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                content = System.Text.RegularExpressions.Regex.Replace(content, @"　+", "");
+                content = System.Text.RegularExpressions.Regex.Replace(content, @" +", "");
+                if (content.Length >40)
+                {
+                    content = content.Substring(0, 30);
+                }
+                var cindex = content.LastIndexOf('<');
+                if (cindex >= 0)
+                {
+                    content = content.Substring(0, cindex);
+                }
+                return content;
+            }
+        }
+
         [JsonIgnore]
         public int ACategory
         {
             get { return GetInt32("ACategory"); }
             set { SetValue("ACategory", value); }
+        }
+        [JsonIgnore]
+        public int RefID
+        {
+            get { return GetInt32("RefID"); }
+            set { SetValue("RefID", value); }
         }
     }
 }
