@@ -30,11 +30,13 @@
         return this.each(function () {
             var $marquee = $(this),
 			$marquee_scroll = $marquee.children('ul');
-            var length = 1;
-            while (324 * length <= 980) {
+            var liCount = $marquee_scroll.find("li div").length;
+
+            var copyLen = 1;
+            while (54 * liCount * copyLen <= 980) {
                 $marquee_scroll.append("<li class='clone'>" + "</li>");
                 $marquee_scroll.find('li').eq(0).children().clone().appendTo('.clone');
-                ++length;
+                ++copyLen;
             }
             var $marquee_left = $marquee_scroll.find('li');
             if (options.marquee == 'x') {

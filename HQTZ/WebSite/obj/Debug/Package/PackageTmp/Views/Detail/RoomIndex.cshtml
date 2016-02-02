@@ -9,11 +9,11 @@
 
 <table width="100%">
     <tr>
-        <td>
+        <td valign="top" style='@(ViewBag.Descs.Count > 0?"max-width:650px;":"max-width:980px;")'>
             @if (Model.Images.Length > 0)
             {
                 var imgs = Model.Images.Split(';');
-                <div id="banner_tabs" class="flexslider" style="position:relative;top:-10px;height:422px;">
+                <div id="banner_tabs" class="flexslider" style="position:relative;height:422px;">
                     <ul class="slides">
                         @foreach (var img in imgs)
                         {
@@ -143,12 +143,12 @@
         #book {
             width: 71px;
             height: 71px;
-            background-image: url('/Images/book-over.jpg');
+            background-image: url('/Images/book-over.png');
             background-repeat: no-repeat;
         }
 
             #book:hover {
-                background-image: url('/Images/book.jpg');
+                background-image: url('/Images/book.png');
             }
 
         .widget-box:nth-child(n+2) {

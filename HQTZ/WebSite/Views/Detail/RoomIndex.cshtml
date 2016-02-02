@@ -9,7 +9,7 @@
 
 <table width="100%">
     <tr>
-        <td valign="top">
+        <td valign="top" style='@(ViewBag.Descs.Count > 0?"max-width:650px;":"max-width:980px;")'>
             @if (Model.Images.Length > 0)
             {
                 var imgs = Model.Images.Split(';');
@@ -143,19 +143,17 @@
         #book {
             width: 71px;
             height: 71px;
-            background-image: url('/Images/book-over.jpg');
+            background-image: url('/Images/book-over.png');
             background-repeat: no-repeat;
         }
 
             #book:hover {
-                background-image: url('/Images/book.jpg');
+                background-image: url('/Images/book.png');
             }
 
         .widget-box:nth-child(n+2) {
             margin-top: 15px;
         }
-
-
     </style>
 }
 
