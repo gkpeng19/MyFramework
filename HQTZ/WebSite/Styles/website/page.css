@@ -337,6 +337,7 @@ body .page {
 }
 
     #div2code .text {
+        margin-top:-10px;
         text-align: center;
         font-size: 12px;
         padding-bottom: 3px;
