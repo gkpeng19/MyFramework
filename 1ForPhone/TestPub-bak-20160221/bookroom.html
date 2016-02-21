@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/style.css" rel="stylesheet" />
+		<style>
+			.area {
+				margin: 20px auto 0px auto;
+			}
+			.mui-input-group:first-child {
+				margin-top: 20px;
+			}
+			.mui-input-group label {
+				width: 32%;
+			}
+			.mui-input-row label~input,
+			.mui-input-row label~select,
+			.mui-input-row label~textarea {
+				width: 68%;
+			}
+			.mui-checkbox input[type=checkbox],
+			.mui-radio input[type=radio] {
+				top: 6px;
+			}
+			.mui-content-padded {
+				margin-top: 25px;
+			}
+			.mui-btn {
+				padding: 10px;
+			}
+			
+			textarea.noscrollbars {
+  				overflow: hidden;
+  				height: 63px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" id="back"></a>
+			<h1 class="mui-title">房间预订</h1>
+		</header>
+		<div class="mui-content">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>入住日期</label>
+					<input id='startdate' type="text" class="mui-input-clear mui-input" placeholder="请选择入住日期">
+				</div>
+				<div class="mui-input-row">
+					<label>离开日期</label>
+					<input id='enddate' type="text" class="mui-input-clear mui-input" placeholder="请选择离开日期">
+				</div>
+				<div class="mui-input-row" style="height: auto;">
+					<label>备注信息</label>
+					<textarea class="noscrollbars mui-input-clear mui-input" onkeyup="autoGrow(this);" id="textarea" placeholder="请输入备注信息"></textarea>
+				</div>
+			</form>
+			<div class="mui-content-padded">
+				<button id='book' class="mui-btn mui-btn-block mui-btn-primary">预定</button>
+			</div>
+			<div class="mui-content-padded">
+				<span style="color: red;display: none;font-size: 12px;" id="errormsg"></span>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script type="text/javascript" src="js/GOMFrameWork.js" ></script>
+		<script>
+			function autoGrow (oField) {
+	  			if (oField.scrollHeight > oField.clientHeight) {
+	    			oField.style.height = oField.scrollHeight + "px";
+	  			}
+			}
+			
+			function pickDate(title,src){
+				plus.nativeUI.pickDate( function(e){
+					var d=e.date;
+					var month=(d.getMonth()+1).toString();
+					month=month.length==1?("0"+month):month;
+					var day=d.getDate().toString();
+					day=day.length==1?("0"+day):day;
+					src.value=d.getFullYear()+"-"+month+"-"+day;
+				},function(e){},{title:title});
+			}
+
+			
+			(function($, doc) {
+				$.init();
+				
+				$.plusReady(function(){
+					var state=app.getState();
+					
+					var errorInput=doc.getElementById("errormsg");
+					var showError=function(err){
+						if(err.length>0){
+							errorInput.style.display="block";
+							errorInput.innerText=err;
+						}
+						else{
+							errorInput.style.display="none";
+						}
+					};
+					
+					var startInput=doc.getElementById("startdate");
+					startInput.addEventListener("tap",function(){
+						pickDate("",startInput);
+					});
+					var endInput=doc.getElementById("enddate");
+					endInput.addEventListener("tap",function(){
+						pickDate("",endInput);
+					});
+					var remarkInput=doc.getElementById("textarea");
+					
+					var bookInput=doc.getElementById("book");
+					bookInput.addEventListener("tap",function(){
+						if(!state.uid){
+							showError("用户未登录，请先登录系统！");
+							return;
+						}
+						if(roomid==0){
+							showError("系统错误，请返回重试！");
+						}
+						else{
+							if(startInput.value==""){
+								showError("请输入入住日期！");
+								return;
+							}
+							if(endInput.value==""){
+								showError("请输入离开日期！");
+								return;
+							}
+							$.post(getUrl("/Phone/BookRoom"),
+							{roomid:roomid,userid:state.uid,sdate:startInput.value,edate:endInput.value,
+								remark:remarkInput.value, ran:Math.random()},
+							function(r){
+								if(r==1){
+									showError("");
+									plus.nativeUI.toast('您的订单已经提交，我们将在24小时内告诉您预订结果');
+									$.back();
+								}
+								else{
+									showError(r.substr(1,r.length-1));
+								}
+							});
+						}
+					});
+					
+					var roomid=0;
+					window.addEventListener("show",function(event){
+						roomid=event.detail.roomid;
+					});
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+</html>

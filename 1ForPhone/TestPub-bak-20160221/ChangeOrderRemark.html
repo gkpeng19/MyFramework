@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			textarea.noscrollbars {
+  				overflow: hidden;
+  				height: 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">修改备注</h1>
+		</header>
+		<div class="mui-content">
+			<div name="myForm" style="padding: 5px;">
+  				<fieldset>
+    				<legend>备注信息</legend>
+    				<p><textarea class="noscrollbars" onkeyup="autoGrow(this);" id="textarea"></textarea></p>
+    				<button id='sendMsg' class="mui-btn mui-btn-block mui-btn-primary" style="margin-top: -15px;float: right;padding: 5px;">确定</button>
+  				</fieldset>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script type="text/javascript" src="js/GOMFrameWork.js" ></script>
+		<script>
+		function autoGrow (oField) {
+  		if (oField.scrollHeight > oField.clientHeight) {
+    			oField.style.height = oField.scrollHeight + "px";
+  			}
+		}
+		
+		(function($, doc) {
+			$.init();
+			
+			$.plusReady(function() {
+				var uid=app.getState().uid;
+				if(uid){
+					var submitBtn=doc.getElementById("sendMsg");
+					submitBtn.addEventListener("tap",function(){
+						$.getJSON(getUrl("/Phone/UpdateOrderRemark"),{orderid:orderid,remark:doc.getElementById("textarea").value.trim(),ran:Math.random()},function(r){
+								if(r>0){
+									doc.getElementById("textarea").value="";
+									var orderPage = plus.webview.getWebviewById('order');
+									$.fire(orderPage, 'refresh', {});
+									$.back();
+									plus.nativeUI.toast("备注信息保存成功");
+								}
+								else{
+									plus.nativeUI.toast("备注信息保存失败，请重试");
+								}
+							});
+					},false);
+				}
+				
+				var orderid=0;
+				window.addEventListener("show",function(event){
+					orderid=event.detail.orderid;
+					doc.getElementById("textarea").value=event.detail.remark;
+				});
+			});
+		}(mui, document));
+		</script>
+	</body>
+</html>

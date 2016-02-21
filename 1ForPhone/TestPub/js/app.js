@@ -236,4 +236,102 @@
         	});
         });
 	}
+	
+	//sliders:[{src:'networkSrc',localStr:'localStr'}];
+	owner.setSliders=function(sliders){
+		if(sliders&&sliders.length&&sliders.length>0){
+			localStorage.setItem('$slider', JSON.stringify(sliders));
+		}
+	}
+	
+	owner.getSliders=function(){
+		var target=[];
+		var silderText = localStorage.getItem('$slider');
+		if(silderText&&silderText.length>0){
+			var sliders= JSON.parse(silderText);
+			for(var i=0;i<sliders.length;++i){
+				var localSrc=sliders[i].localSrc;
+				if(localSrc&&localSrc.length>0){
+					target.push(sliders[i]);
+				}
+			}
+		}
+		return target;
+	}
+	
+	owner.findExistsSlider=function(sliders, networkSrc){
+		for(var i=0;i<sliders.length;++i){
+			if(sliders[i].src==networkSrc){
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	owner.updateSliders=function(newSliders){
+		var isFirstLoad=true;
+		
+		var sliders=owner.getSliders();
+		if(newSliders&&newSliders.length&&newSliders.length>0){
+			isFirstLoad=false;
+			
+			for(var i=0;i<newSliders.length;++i){
+				var index=owner.findExistsSlider(sliders,newSliders[i].src)
+				if(index!=-1){
+					newSliders[i].localSrc=sliders[i].localSrc;
+				}
+			}
+			
+			sliders=newSliders;
+			
+			for(var i=0;i<sliders.length;++i){
+				var localSrc=sliders[i].localSrc;
+				if(!localSrc||localSrc.length==0){
+					var filename=sliders[i].src.split('?')[0];
+					var extName=filename.substr(filename.lastIndexOf('.'));
+					filename='_downloads/ljzg/'+Math.random().toString().split('.')[1]+extName;
+					sliders[i].localSrc=filename;
+					var sTask= plus.downloader.createDownload(sliders[i].src, {filename:filename}, function ( d, status ) {
+						if ( status == 200 ) { // 下载成功
+							//alert(d.filename);
+						}
+					});
+					sTask.start();
+				}
+			}
+			
+			owner.setSliders(sliders);
+		}
+		
+		var timeOutInterval=10;
+		if(!isFirstLoad){
+			timeOutInterval=1000*60*1;
+		}
+		setTimeout(function(){
+			var targetSliders=owner.getSliders();
+			var simgs=document.getElementById("divslider").getElementsByTagName("img");
+			var sbottoms=document.getElementById("divsliderbottom").getElementsByTagName('div');
+			for(var j=0;j<simgs.length;++j){
+				if(j<targetSliders.length){
+					simgs[j].src=plus.io.convertLocalFileSystemURL(targetSliders[j].localSrc);
+				}
+				else{
+					simgs[j].src='';
+				}
+			}
+			
+			for(var i=simgs.length-1;i>=0;--i){
+				if(simgs[i].src.length==97){
+					var ele= simgs[i].parentNode.parentNode;
+					ele.parentNode.removeChild(ele);
+					sbottoms[i].parentNode.removeChild(sbottoms[i]);
+				}
+				else{
+					break;
+				}
+			}
+		},timeOutInterval);
+	}
+	
+	
 }(mui, window.app = {}));

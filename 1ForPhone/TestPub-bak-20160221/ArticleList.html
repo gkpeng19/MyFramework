@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <link href="css/mui.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/icon.custom.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+</head>
+<body>
+    <header class="mui-bar mui-bar-nav top-bar">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title" id="title">旅居佳地</h1>
+    </header>
+    <div class="mui-content">
+    	<div id="loading">
+    		<img src="images/loading.gif" />
+    	</div>
+        <ul class="mui-table-view" id="traveList">
+        </ul>
+        <div style="height: 51px;"></div>
+    </div>
+    <nav class="mui-bar mui-bar-tab bottom-bar">
+		<a class="mui-tab-item" id="home">
+			<span class="mui-icon iconfont icon-dingwei"></span>
+			<span class="mui-tab-label">旅居首页</span>
+		</a>
+		<a class="mui-tab-item" id="msg">
+			<span class="mui-icon iconfont icon-youjian"></span>
+			<span class="mui-tab-label">信息咨询</span>
+		</a>
+		<a class="mui-tab-item" id="tel"> 
+			<span class="mui-icon iconfont icon-dianhua"></span>
+			<span class="mui-tab-label">电话咨询</span>
+		</a>
+		<a class="mui-tab-item" id="qq">
+			<span class="mui-icon iconfont icon-qq"></span>
+			<span class="mui-tab-label">QQ客服</span>
+		</a>
+	</nav>
+    <script src="js/mui.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/GOMFrameWork.js" ></script>
+    <script>
+    (function($,doc){
+    	$.init();
+    	
+    	$.plusReady(function(){
+    		var articlePage=$.preload({
+    			id:'articlecontent',
+    			url:'ArticleDetail.html'
+    		});
+    		
+    		var initLink=function(){
+    			var links=doc.getElementsByClassName("link");
+    			for(var i=0;i<links.length;++i){
+    				if(links[i].getAttribute("data-id")&&!links[i].getAttribute("data-exist")){
+    					links[i].setAttribute("data-exist",1);
+    					links[i].addEventListener("tap",function(event){
+    						$.fire(articlePage, 'show', {ptype:ptype, vid:this.getAttribute("data-id")});
+    						setTimeout(function() {
+								$.openWindow({
+									id: 'articlecontent',
+									waiting: {
+										autoShow: false
+									}
+								});
+							},50);
+    					},false);
+    				}
+    			}
+    		};
+    		
+    		var getListItem=function(id,imgpath,name,description){
+				return '<li class="mui-table-view-cell"><a class="mui-navigate-right link" data-id="'+id+'"><img style="width:42px;" class="mui-media-object mui-pull-left" src="' + getUrl(imgpath) + '?size=42"><div class="mui-media-body">' + description + '<p class="mui-ellipsis">' + name + '</p></div></a></li>';
+			};
+    	
+    		var loadValliges=function(page){
+    			$.getJSON(getUrl("/Phone/LoadAllValliages"), { page: page,ran:Math.random() }, function (r) {
+	                doc.getElementById("loading").style.display="none";
+	                
+	                var list = toJsResult(r.Data);
+	                var html = "";
+	                for (var i = 0; i < list.length; ++i) {
+	                    html += getListItem(list[i].ID,list[i].ImgName_G,list[i].DPanel_G,list[i].Name);
+	                }
+	                doc.getElementById("traveList").innerHTML=html;
+	                
+	                initLink();
+	            });
+	    	};
+	    	
+	    	var loadTraveGuide=function(page){
+	    		doc.getElementById("title").innerText="旅居资讯";
+	        	$.getJSON(getUrl("/Phone/LoadTraveGuides"), { page: page }, function (r) {
+	        		doc.getElementById("loading").style.display="none";
+	                
+	                var list = toJsResult(r.Data);
+	                var html = "";
+	                for (var i = 0; i < list.length; ++i) {
+	                    html += getListItem(list[i].ID,list[i].TitleImg,list[i].AContent,list[i].Title);
+	                }
+	                doc.getElementById("traveList").innerHTML=html;
+	                
+	                initLink();
+	            });
+	    	};
+	    	
+	    	var loadMemberBenefit=function(page){
+	    		doc.getElementById("title").innerText="尊享服务";
+	        	$.getJSON(getUrl("/Phone/LoadMemberService"), { page: page }, function (r) {
+	        		doc.getElementById("loading").style.display="none";
+	                
+	                var list = toJsResult(r.Data);
+	                var html = "";
+	                for (var i = 0; i < list.length; ++i) {
+	                    html += getListItem(list[i].ID,list[i].ImgName_G,list[i].DPanel_G,list[i].Name);
+	                }
+	                doc.getElementById("traveList").innerHTML=html;
+	                
+	                initLink();
+	            });
+	    	};
+	    	
+	    	var loadBeadHouse=function(page){
+	    		doc.getElementById("title").innerText="养老院";
+	        	$.getJSON(getUrl("/Phone/LoadAllBeadHouse"), { page: page,ran:Math.random() }, function (r) {
+	        		doc.getElementById("loading").style.display="none";
+	                
+	                var list = toJsResult(r.Data);
+	                var html = "";
+	                for (var i = 0; i < list.length; ++i) {
+	                    html += getListItem(list[i].ID,list[i].ImgName_G,list[i].DPanel_G,list[i].Name);
+	                }
+	                doc.getElementById("traveList").innerHTML=html;
+	                
+	                initLink();
+	            });
+	    	};
+	    	
+	    	var loadNewCheaper=function(page){
+	    		doc.getElementById("title").innerText="最新优惠";
+	        	$.getJSON(getUrl("/Phone/LoadNewCheaper"), { page: page }, function (r) {
+	        		doc.getElementById("loading").style.display="none";
+	                
+	                var list = toJsResult(r.Data);
+	                var html = "";
+	                for (var i = 0; i < list.length; ++i) {
+	                    html += getListItem(list[i].ID,list[i].ImgName_G,list[i].DPanel_G,list[i].Name);
+	                }
+	                doc.getElementById("traveList").innerHTML=html;
+	                
+	                initLink();
+	            });
+	    	};
+	    	
+	    	var initPage=function(pindex){
+	    		switch (ptype){
+			    	case "1":
+			    		loadValliges(pindex);
+			    		break;
+			    		case "2":
+			    		loadTraveGuide(pindex);
+			    		break;
+			    		case "3":
+			    		loadMemberBenefit(pindex);
+			    		break;
+			    		case "4":
+			    		loadBeadHouse(pindex);
+			    		break;
+			    		case "5":
+			    		loadNewCheaper(pindex);
+			    		break;
+			    	default:
+			    		break;
+			    }
+	    	};
+	    	
+	    	var ptype=0;
+	    	window.addEventListener("show",function(event){
+	    		doc.getElementById("traveList").innerHTML="";
+				ptype=event.detail.ptype
+				initPage(1);
+	    	});
+	    	
+	    	var home=doc.getElementById("home");
+	    	home.addEventListener("tap",function(){
+	    		$.back();
+	    	},false);
+	    	
+			//初始化底部Bar功能
+			initBottomBarFunc(doc);
+			
+    	});
+    }(mui,document));
+    </script>
+</body>
+</html>

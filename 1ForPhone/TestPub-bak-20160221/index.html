@@ -1,0 +1,337 @@
+mhea<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title> 
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="css/icon.custom.css"/>
+    <link rel="stylesheet" type="text/css" href="css/page.css"/>
+    <style>
+    	.mui-bar-tab .mui-tab-item:first-child{
+			color:#88d05b;
+		}
+    </style>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav top-bar"> 
+		<a class="mui-icon mui-pull-left" id="user" style="display: none;">
+			<img src="images/user-photo.png" width="20" />
+			<span id="uname" style="position: relative;top:-5px;"></span>
+		</a>
+		<h1 class="mui-title">旅居中国</h1> 
+	</header>
+	
+	<div class="mui-content" style="padding-top: 0px;">
+		<div class="mui-slider">
+		    <div class="mui-slider-group" id="divslider">
+		    	<div class="mui-slider-item"><a href="#"><img src="images/default.jpg"></a></div>
+		    	<div class="mui-slider-item"><a href="#"><img></a></div>
+		    	<div class="mui-slider-item"><a href="#"><img></a></div>
+		    	<div class="mui-slider-item"><a href="#"><img></a></div>
+		    	<div class="mui-slider-item"><a href="#"><img></a></div>
+		    	<div class="mui-slider-item"><a href="#"><img></a></div>
+		    	<div class="mui-slider-item"><a href="#"><img></a></div>
+		    	<div class="mui-slider-item"><a href="#"><img></a></div>
+		    </div>
+		    <div class="mui-slider-indicator" id="divsliderbottom">
+		    	<div class="mui-indicator mui-active"></div>
+		    	<div class="mui-indicator"></div>
+		    	<div class="mui-indicator"></div>
+		    	<div class="mui-indicator"></div>
+		    	<div class="mui-indicator"></div>
+		    	<div class="mui-indicator"></div>
+		    	<div class="mui-indicator"></div>
+		    	<div class="mui-indicator"></div>
+		    </div>
+		</div>
+
+		<div class="mui-card">
+			<ul class="mui-table-view mui-grid-view mui-grid-9" style="background-color: white;">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4 article" data-id = "1">
+					<a>
+						<img src="images/ljjd1.png"/>
+						<div class="mui-media-body">旅居佳地</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4 article" data-id = "4">
+					<a>
+						<img src="images/ljzx1.png" />
+						<div class="mui-media-body">养老院</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="book">
+					<a>
+						<img src="images/wyyd1.png" />
+						<div class="mui-media-body">我要预订</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4 article" data-id = "2">
+					<a>
+						<img src="images/ljzx1.png" />
+						<div class="mui-media-body">旅居资讯</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4 article" data-id = "3">
+					<a>
+						<img src="images/dtdh1.png" />
+						<div class="mui-media-body">尊享服务</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4 article" data-id = "5">
+					<a>
+						<img src="images/ljtj1.png" />
+						<div class="mui-media-body">最新优惠</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="order">
+					<a>
+						<img src="images/jssp1.png" />
+						<div class="mui-media-body">个人订单</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="map">
+					<a>
+						<img src="images/lxss1.png" />
+						<div class="mui-media-body">我的位置</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" id="userState">
+				</li>
+			</ul>
+		</div>
+		<div style="height: 51px;"></div>
+	</div>
+	<nav class="mui-bar mui-bar-tab bottom-bar">
+		<a class="mui-tab-item mui-active">
+			<span class="mui-icon iconfont icon-dingwei"></span>
+			<span class="mui-tab-label">旅居首页</span>
+		</a>
+		<a class="mui-tab-item" id="msg">
+			<span class="mui-icon iconfont icon-youjian"></span>
+			<span class="mui-tab-label">信息咨询</span>
+		</a>
+		<a class="mui-tab-item" id="tel"> 
+			<span class="mui-icon iconfont icon-dianhua"></span>
+			<span class="mui-tab-label">电话咨询</span>
+		</a>
+		<a class="mui-tab-item" id="qq">
+			<span class="mui-icon iconfont icon-qq"></span>
+			<span class="mui-tab-label">QQ客服</span>
+		</a>
+	</nav>
+	<script src="js/mui.min.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/GOMFrameWork.js" ></script>
+	<script>
+	(function($,doc){
+		$.get(getUrl("/Phone/LoadSilderImgs"),function(r){
+			r=r.substr(1,r.length-2).split(';');
+			var html="";
+			var bottom="";
+			for(var i=0;i<r.length;++i){
+				var path= r[i].split(':')[0];
+				path=getUrl("/"+path)+"?size=500";
+				html+='<div class="mui-slider-item"><a href="#"><img src="'+path+'"></a></div>';
+				if(i==0){
+					bottom+='<div class="mui-indicator mui-active"></div>';
+				}
+				else{
+					bottom+='<div class="mui-indicator"></div>';
+				}
+			}
+			doc.getElementById("divslider").innerHTML=html;
+			doc.getElementById("divsliderbottom").innerHTML=bottom;
+		});
+		
+		$.init();
+
+		$.plusReady(function() {
+			// close splash
+			setTimeout(function() {
+				//关闭 splash
+				plus.navigator.closeSplashscreen();
+			}, 200);
+			
+			//如果未设置自动登陆，则自动退出登录
+			var settings = app.getSettings();
+			if(!settings.autoLogin){
+				app.setState({});
+			}
+			
+			initPage();
+			
+			var areaUserName=doc.getElementById("user");
+			areaUserName.addEventListener("tap",function(){
+				$.openWindow({
+					id: 'mycenter',
+					url:'mycenter.html'
+				});
+			},false);
+			
+			var articleListPage = $.preload({
+				"id": 'articles',
+				"url": 'ArticleList.html'
+			});
+					
+			var articles=doc.getElementsByClassName("article");
+			for(var i=0;i<articles.length;++i){
+				articles[i].addEventListener('tap', function(event) {
+					$.fire(articleListPage, 'show', {ptype:this.getAttribute("data-id")});
+					setTimeout(function() {
+						$.openWindow({
+							id: 'articles',
+							waiting: {
+								autoShow: false
+							}
+						});
+					}, 50);
+				},false);
+			}
+			
+			$.preload({
+				id:'book',
+				url:'book.html'
+			});
+			
+			var book=doc.getElementById("book");
+			book.addEventListener("tap",function(){
+				state=app.getState();
+				if (state.token){
+					mui.openWindow({
+						id: 'book',
+						waiting: {
+							autoShow: false
+						}
+					});
+				}
+				else{
+					mui.openWindow({
+						url:'login.html',
+						id: 'login',
+						waiting: {
+							autoShow: false
+						}
+					});
+				}
+			},false);
+			
+			$.preload({
+				url:'map.html',
+				id:'map'
+			});
+			var mapBtn=doc.getElementById("map");
+			mapBtn.addEventListener("tap",function(){
+				mui.openWindow({
+						id: 'map',
+						waiting: {
+							autoShow: false
+						}
+					});
+			},false);
+			
+			var orderBtn= doc.getElementById("order");
+			orderBtn.addEventListener("tap",function(){
+				state=app.getState();
+				if (state.uid){
+					$.openWindow({
+						url:'order.html',
+						id:'order',
+						waiting: {
+							autoShow: false
+						}
+					});
+				}
+				else{
+					mui.openWindow({
+						url:'login.html',
+						id: 'login',
+						waiting: {
+							autoShow: false
+						}
+					});
+				}
+			},false);
+			
+			//双击返回键退出
+			$.oldBack = mui.back;
+			var backButtonPress = 0;
+			$.back = function(event) {
+				backButtonPress++;
+				if (backButtonPress > 1) {
+					plus.runtime.quit();
+				} else {
+					plus.nativeUI.toast('再按一次退出应用');
+				}
+				setTimeout(function() {
+					backButtonPress = 0;
+				}, 1000);
+				return false;
+			};
+			
+			//初始化底部Bar功能
+			initBottomBarFunc(doc);
+			
+			//自动更新
+			if(mui.os.android){
+				setTimeout(function(){
+					app.autoUpdate();
+				},5000);
+			}
+			
+			window.addEventListener("refresh",function(){
+				initPage();
+			});
+		});
+			
+		function initPage(){
+			var initLoginIn=function(){
+				doc.getElementById("userState").innerHTML='<a href="javascript:void(0)" id="login"><img src="images/hydl1.png" /><div class="mui-media-body">会员登录</div></a>';
+      			doc.getElementById('login').addEventListener('tap', function() {
+					mui.openWindow({
+						url:'login.html',
+						id: 'login',
+						waiting: {
+							autoShow: false
+						}
+					});
+				},false);
+			};
+		
+			var initLoginOut=function(){
+				doc.getElementById("userState").innerHTML='<a href="javascript:void(0)" id="exit"><img src="images/hydl1.png" /><div class="mui-media-body">退出登录</div></a>';
+      			doc.getElementById('exit').addEventListener('tap', function() {
+      				plus.nativeUI.confirm("确定要退出登录吗？",function(event){
+						if(event.index==0){
+							app.setState({});
+							initLoginIn();
+							plus.nativeUI.toast('已成功退出');
+							
+							doc.getElementById("user").style.display="none";
+						}
+					});
+     			});
+			};
+			 
+			var state = app.getState();
+			if (state.token){
+				doc.getElementById("user").style.display="block";
+				doc.getElementById("uname").innerText=state.account;
+				
+				initLoginOut();
+			}
+			else{
+				initLoginIn();
+			}
+			
+			if(state.uid){
+				$.preload({
+					id: 'mycenter',
+					url:'mycenter.html'
+				});
+			}
+		}
+	}(mui, document));
+    </script>
+</body>
+</html>

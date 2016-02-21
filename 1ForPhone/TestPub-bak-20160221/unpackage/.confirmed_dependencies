@@ -1,0 +1,102 @@
+{
+	"index.html": {
+		"resources": [
+			"images/topbg.png",
+			"js/app.js",
+			"images/ljjd1.png",
+			"images/dtdh1.png",
+			"css/page.css",
+			"images/default.jpg",
+			"images/hydl1.png",
+			"images/bottombg.png",
+			"images/lxss1.png",
+			"js/GOMFrameWork.js",
+			"css/mui.min.css",
+			"css/icon.custom.css",
+			"images/ljtj1.png",
+			"images/jssp1.png",
+			"fonts/iconfont.ttf",
+			"images/wyyd1.png",
+			"images/user-photo.png",
+			"images/ljzx1.png",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"map.html",
+			"book.html",
+			"ArticleList.html",
+			"login.html",
+			"mycenter.html",
+			"order.html"
+		]
+	},
+	"home.html": {
+		"resources": [
+			"js/mui.min.js"
+		],
+		"refer": [
+			"index.html"
+		]
+	},
+	"book.html": {
+		"refer": [
+			"room.html"
+		],
+		"resources": [
+			"images/loading.gif",
+			"fonts/mui.ttf"
+		]
+	},
+	"ArticleList.html": {
+		"resources": [
+			"images/loading.gif",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"ArticleDetail.html"
+		]
+	},
+	"room.html": {
+		"resources": [
+			"images/add_to_shoppingcart.png"
+		],
+		"refer": [
+			"bookroom.html"
+		]
+	},
+	"login.html": {
+		"resources": [
+			"js/mui.enterfocus.js",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"js/GOMFrameWork.js",
+			"css/mui.min.css",
+			"css/style.css"
+		]
+	},
+	"bookroom.html": {
+		"resources": [
+			"css/style.css"
+		]
+	},
+	"mycenter.html": {
+		"resources": [
+			"images/loginout.png",
+			"images/aboutus.png",
+			"images/update.png",
+			"images/user-photo.png",
+			"css/style.css"
+		]
+	},
+	"map.html": {
+		"resources": [
+			"fonts/mui.ttf"
+		]
+	},
+	"order.html": {
+		"refer": [
+			"ChangeOrderRemark.html"
+		]
+	}
+}

@@ -125,33 +125,33 @@ mhea<!DOCTYPE html>
 	<script src="js/GOMFrameWork.js" ></script>
 	<script>
 	(function($,doc){
-		$.get(getUrl("/Phone/LoadSilderImgs"),function(r){
-			r=r.substr(1,r.length-2).split(';');
-			var html="";
-			var bottom="";
-			for(var i=0;i<r.length;++i){
-				var path= r[i].split(':')[0];
-				path=getUrl("/"+path)+"?size=500";
-				html+='<div class="mui-slider-item"><a href="#"><img src="'+path+'"></a></div>';
-				if(i==0){
-					bottom+='<div class="mui-indicator mui-active"></div>';
-				}
-				else{
-					bottom+='<div class="mui-indicator"></div>';
-				}
-			}
-			doc.getElementById("divslider").innerHTML=html;
-			doc.getElementById("divsliderbottom").innerHTML=bottom;
-		});
-		
 		$.init();
 
 		$.plusReady(function() {
+			app.updateSliders();
+			var newSliders=[];
+			$.get(getUrl("/Phone/LoadSilderImgs"),function(r){
+				r=r.substr(1,r.length-2).split(';');
+				for(var i=0;i<r.length;++i){
+					var path= r[i].split(':')[0];
+					path=getUrl("/"+path)+"?size=500";
+					newSliders.push({src:path,localSrc:''});
+				}
+			
+				app.updateSliders(newSliders);
+			});
+			
 			// close splash
 			setTimeout(function() {
 				//关闭 splash
 				plus.navigator.closeSplashscreen();
 			}, 200);
+			
+			//如果未设置自动登陆，则自动退出登录
+			var settings = app.getSettings();
+			if(!settings.autoLogin){
+				app.setState({});
+			}
 			
 			initPage();
 			

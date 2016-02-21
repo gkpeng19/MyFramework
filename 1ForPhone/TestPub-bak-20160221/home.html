@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body> 
+		<script src="js/mui.min.js"></script>
+		<script>
+		mui.init();
+		mui.plusReady(function(){
+			mui.openWindow({
+				url:'index.html',
+				id:'index',
+				waiting: {
+					autoShow: false
+				}
+			});
+		});
+		</script>
+	</body>
+</html>
