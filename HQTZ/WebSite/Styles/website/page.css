@@ -440,6 +440,7 @@ body .page {
                     display: block;
                     border: 0;
                     vertical-align: middle;
+                    margin:0px auto;
                 }
 
                 #Marquee_x ul li div span {

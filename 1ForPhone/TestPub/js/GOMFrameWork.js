@@ -66,13 +66,13 @@ function openQQ() {
 		var main = plus.android.runtimeMainActivity();
 		var Intent = plus.android.importClass('android.content.Intent');
 		var Uri = plus.android.importClass('android.net.Uri');
-		var intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=1002934864"));
+		var intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin="+lxQq));
 		main.startActivity(intent);
 	}
 	
 	if (plus.os.name == "iOS") {
 		plus.runtime.launchApplication({
-			action: "mqq://im/chat?chat_type=wpa&uin=1002934864&version=1&src_type=web"
+			action: "mqq://im/chat?chat_type=wpa&uin="+lxQq+"&version=1&src_type=web"
 		}, function(e) {
 			plus.nativeUI.confirm("检查到您未安装qq，请先到appstore搜索下载？", function(i) {
 				if (i.index == 0) {
@@ -83,7 +83,8 @@ function openQQ() {
 	}
 }
 
-
+var lxPhone="";
+var lxQq="";
 function initBottomBarFunc(doc){
 	var msg=doc.getElementById("msg");
 	if(msg){
@@ -111,10 +112,15 @@ function initBottomBarFunc(doc){
 		},false);
 	}
 	
+	mui.getJSON(getUrl("/Phone/GetLxInfo"),{ran:Math.random()},function(r){
+		lxPhone=r.phone;
+		lxQq=r.qq;
+	});
+	
 	var tel=doc.getElementById("tel");
 	if(tel){
 		tel.addEventListener("tap",function(){
-			plus.device.dial("13126704233");
+			plus.device.dial(lxPhone);
 		},false);
 	}
 

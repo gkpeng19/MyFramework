@@ -488,6 +488,13 @@ namespace WebSite.Controllers
             return File(path, "application/vnd.android.package-archive", "ljzgapp.apk");
         }
 
+        public void GetLxInfo()
+        {
+            var phone = ConfigurationManager.AppSettings["lxphone"];
+            var qq = ConfigurationManager.AppSettings["lxqq"];
+            OutResult(new { phone = phone, qq = qq });
+        }
+
         void OutResult(object result)
         {
             HttpResponseBase response = this.HttpContext.Response;
