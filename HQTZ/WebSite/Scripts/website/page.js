@@ -220,7 +220,7 @@ $(function () {
         $(r).each(function () {
             div_flink.append('<div><a href="' + this.Link + '" target="_blank"><img src="/' + this.Img + '" /><span>' + this.Name + '</span></a></div>');
         });
-        $('#Marquee_x').jcMarquee({ 'marquee': 'x', 'margin_right': '0px', 'speed': 20 });
+        $('#Marquee_x').jcMarquee({ 'marquee': 'x', 'margin_right': '10px', 'speed': 20 });
     });
 
     //获得友情链接

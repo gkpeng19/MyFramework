@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width" />
+    <title>旅居中国-@ViewBag.Title</title>
+    <link href="~/Styles/website/page.css" rel="stylesheet" />
+    <link href="~/Scripts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <div class="page">
+        <div class="content">
+            <div id="toptop">
+                <span>欢迎您，</span>
+                @if (!G.Util.Web.Permission.LoginVerify.IsLogin("Client"))
+                {
+                    <a href="~/Member/Index?op=login"><img src="~/Images/topLogin.png" width="15" height="15" /> &nbsp;<span>快捷登陆</span></a>
+                    <span>&nbsp;</span>
+                    <a href="~/Member/Index?op=reg"><img src="~/Images/topReg.png" width="21" height="21" /> <span>免费注册</span></a>
+                }
+                else
+                {
+                    <a href="~/Member/MemberIndex"><img src="~/Images/topUser.png" width="16" height="16" id="img_luser" /> <span>@G.Util.Account.LoginInfo.Current.UserName</span></a>
+                    <span>&nbsp;</span>
+                    <a href="#" onclick="LoginOut()"><span>[退出]</span></a>
+                }
+            </div>
+            <div id="top">
+                <a href="/"><img src="~/Images/logo.jpg" id="logo" /></a>
+                <img src="~/Images/server-tel.gif" id="servertel" />
+            </div>
+            <div id="menu">
+                <a href="/">
+                    <div class="menu-normal" data-class="menu-curr"><span>首 页</span></div>
+                </a>
+                <a href="/Destination">
+                    <div class="menu-normal" data-class="menu-curr"><span>旅居佳地</span></div>
+                </a>
+                <a href="javascript:void(0)" target="_blank" onclick="toShop(this, '/product/118')">
+                    <div class="menu-normal" data-class="green-menu-curr"><span>旅居卡</span></div>
+                </a>
+                @*<a href="/MemberBenefit">
+                        <div class="menu-normal" data-class="green-menu-curr"><span>得天独厚</span></div>
+                    </a>*@
+                <a href="/Member">
+                    <div class="menu-normal" data-class="menu-curr"><span>会员中心</span></div>
+                </a>
+                <a href="/MemberService">
+                    <div class="menu-normal" data-class="menu-curr"><span>尊享服务</span></div>
+                </a>
+                <a href="/NewCheaper">
+                    <div class="menu-normal" data-class="green-menu-curr"><span>最新优惠</span></div>
+                </a>
+                <a href="http://mall.chinalvju.com/" onclick="toShop(this)" target="_blank" id="linkToShop">
+                    <div class="menu-normal" data-class="menu-curr"><span>旅居商城</span></div>
+                </a>
+            </div>
+            <div class="clear"></div>
+            <div style="margin-top:10px;" id="childPageContent">
+                @RenderBody()
+            </div>
+            <div style="margin-top:30px;" id="adv_pbottom">
+                <!--底部广告栏-->
+            </div>
+            <div id="trave" style="margin-top:20px;">
+                <img src="~/Images/trave.gif" />
+            </div>
+        </div>
+        <div id="div_copyright" style="text-align:center;"></div>
+        <div id="bottom" class="bottomflow">
+            <div class="flow_tab">
+                <span>联络我们</span><i class="flow_tab_icon fa fa-angle-double-down" style="position:relative;left:8px;"></i>
+            </div>
+            <div class="flow_content">
+                <div class="flow_ctx">
+                    <table>
+                        <tr>
+                            <td>
+                                <img class="contact_ctx_icon" src="~/Images/phonecall.png" />
+                            </td>
+                            <td class="contact_ctx">
+                                <span>咨询您的假期顾问</span>
+                                <br />
+                                <span>400 0112 916</span>
+                            </td>
+                            <td class="contact_ctx">
+                                <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1002934864&site=qq&menu=yes">
+                                    <i class="contact_ctx_icon fa fa-qq" style="font-size:35px;"></i>
+                                    <span>&nbsp;QQ交谈</span>
+                                </a>
+                            </td>
+                            <td class="contact_ctx">
+                                <a href="/ClientBase/ArticleIndex?atype=2">
+                                    <img class="contact_ctx_icon" src="~/Images/cont.png" style="width:45px;height:45px;" />
+                                    <span>&nbsp;联系我们</span>
+                                </a>
+                            </td>
+                            <td class="contact_ctx">
+                                <a href="/ClientBase/ArticleIndex?atype=4">
+                                    <img class="contact_ctx_icon" src="~/Images/contactus.jpg" />
+                                    <span>&nbsp;关于我们</span>
+                                </a>
+                            </td>
+                            <td class="contact_ctx">
+                                <a href="javascript:void(0)" id="2codelink">
+                                    <img class="contact_ctx_icon" src="~/Images/2codesmall.png" width="35" />
+                                    <span>&nbsp;手机App下载</span>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr style="border-color:#888;" />
+                    <div style="margin-top: 10px; color: #C73937; font-weight: bold; ">合作伙伴</div>
+                    <div id="Marquee_x">
+                        <ul>
+                            <li></li>
+                        </ul>
+                    </div>
+                    <hr style="border-color:#888;" />
+                    <div style="margin: 10px auto 5px; color: #C73937; font-weight: bold; ">友情链接</div>
+                    <div id="div_flink"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="div2code">
+        <img src="~/Images/2code.png" width="200" />
+        <div class="text">
+            手机扫一扫<i class="fa fa-close" id="close2code"></i>
+        </div>
+    </div>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/layer/layer.js"></script>
+    <script src="~/Scripts/GOMFrameWork.js"></script>
+    <script src="~/Scripts/website/page.js"></script>
+    <script src="~/Scripts/Base64.js"></script>
+    <script src="~/Scripts/jQuery-jcMarquee.js"></script>
+    <script type="text/javascript">
+        var defaultMenu = null;
+        var lastMenu = null;
+        $("#menu div").bind("mouseover", function () {
+            var toClass = $(this).attr("data-class");
+            if (!$(this).hasClass(toClass)) {
+                if (lastMenu) {
+                    lastMenu.removeClass(lastMenu.attr("data-class"));
+                }
+
+                $(this).addClass(toClass);
+                lastMenu = $(this);
+            }
+        });
+
+        $("#menu").bind("mouseout", function () {
+            lastMenu.removeClass(lastMenu.attr("data-class"));
+            lastMenu = null;
+            if (defaultMenu) {
+                var toClass = defaultMenu.attr("data-class");
+                if (!defaultMenu.hasClass(toClass)) {
+                    defaultMenu.addClass(toClass);
+                }
+                lastMenu = defaultMenu;
+            }
+        });
+
+        function setCurrMenu(idx) {
+            defaultMenu = $("#menu div").eq(idx);
+            defaultMenu.addClass(defaultMenu.attr("data-class"));
+            lastMenu = defaultMenu;
+        }
+
+        initBottomFlow();
+
+        $("#2codelink").bind("mouseover", function () {
+            var left = $(this).offset().left;
+            $("#div2code").css({ left: left });
+            $("#div2code").show();
+        });
+
+        $("#close2code").bind("click", function () {
+            $("#div2code").hide();
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,125 @@
+﻿@model EntityLibrary.Entities.HQ_DisplayContent
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model.Images.Length > 0)
+{
+    var imgs = Model.Images.Split(';');
+    <div id="banner_tabs" class="flexslider" style="position:relative;top:-10px;height:422px;">
+        <ul class="slides">
+            @foreach (var img in imgs)
+            {
+                <li>
+                    <a href="#">
+                        <div style="width:980px;height:422px; background: url(../../@img) no-repeat center;"></div>
+                    </a>
+                </li>
+            }
+        </ul>
+        <ul class="flex-direction-nav">
+            <li><a class="flex-prev" href="javascript:;">Previous</a></li>
+            <li><a class="flex-next" href="javascript:;">Next</a></li>
+        </ul>
+        <ol id="bannerCtrl" class="flex-control-nav flex-control-paging">
+            @for (var i = 1; i <= imgs.Length; ++i)
+            {
+                <li><a>@i</a></li>
+            }
+        </ol>
+    </div>
+}
+
+<div style="margin:0px 20px;">
+    <div class="header blue" style="margin-bottom:5px;font-size:18px;font-weight:bold;"><i class="fa fa-info-circle"></i> @Model.Name</div>
+    <div style="padding-top:10px;">
+        <div id="div_desc">@(new HtmlString(Model.DContent))</div>
+    </div>
+</div>
+
+
+@section styles{
+    <link href="~/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Scripts/ace/css/ace.min.css" rel="stylesheet" />
+    <link href="~/Scripts/website/slider/css/silder.css" rel="stylesheet" />
+    <style type="text/css">
+        #a_book:hover {
+            text-decoration: none;
+        }
+
+        .rprice {
+            position: absolute;
+            left: 400px;
+        }
+
+        .rcount {
+            position: absolute;
+            left: 650px;
+        }
+
+        .rbook {
+            position: absolute;
+            left: 800px;
+            padding: 3px 8px;
+        }
+
+        .rdesc:link {
+            position: absolute;
+            left: 910px;
+            text-decoration: underline;
+        }
+
+        .rdesc:hover, .rdesc:visited, .rdesc:active {
+            text-decoration: underline;
+        }
+
+        .accordion {
+            margin-bottom: 0px;
+        }
+
+        .accordion-inner {
+            max-height: 450px;
+            overflow-y: auto;
+            padding: 0px 50px;
+        }
+
+        #book {
+            width: 71px;
+            height: 71px;
+            background-image: url('/Images/book-over.jpg');
+            background-repeat: no-repeat;
+        }
+
+            #book:hover {
+                background-image: url('/Images/book.jpg');
+            }
+    </style>
+}
+
+@section scripts{
+    <script src="~/Scripts/jquery.floatDiv.js"></script>
+    <script src="~/Scripts/website/slider/js/slider.js"></script>
+    <script type="text/javascript">
+        if($("#banner_tabs").length>0)
+        {
+            var bannerSlider = new Slider($('#banner_tabs'), {
+                time: 5000,
+                delay: 400,
+                event: 'hover',
+                auto: true,
+                mode: 'fade',
+                controller: $('#bannerCtrl'),
+                activeControllerCls: 'active'
+            });
+            $('#banner_tabs .flex-prev').click(function () {
+                bannerSlider.prev()
+            });
+            $('#banner_tabs .flex-next').click(function () {
+                bannerSlider.next()
+            });
+        }
+    </script>
+}
+
+

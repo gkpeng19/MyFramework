@@ -269,11 +269,11 @@
 	}
 	
 	owner.updateSliders=function(newSliders){
-		var isFirstLoad=true;
+		var simgs=document.getElementById("divslider").getElementsByTagName("img");
+		var sbottoms=document.getElementById("divsliderbottom").getElementsByTagName('div');
 		
-		var sliders=owner.getSliders();
 		if(newSliders&&newSliders.length&&newSliders.length>0){
-			isFirstLoad=false;
+			var sliders=owner.getSliders();
 			
 			for(var i=0;i<newSliders.length;++i){
 				var index=owner.findExistsSlider(sliders,newSliders[i].src)
@@ -289,11 +289,14 @@
 				if(!localSrc||localSrc.length==0){
 					var filename=sliders[i].src.split('?')[0];
 					var extName=filename.substr(filename.lastIndexOf('.'));
-					filename='_downloads/ljzg/'+Math.random().toString().split('.')[1]+extName;
+					filename='_downloads/ljzg/'+Math.random().toString().split('.')[1]+'['+i+']'+extName;
 					sliders[i].localSrc=filename;
 					var sTask= plus.downloader.createDownload(sliders[i].src, {filename:filename}, function ( d, status ) {
-						if ( status == 200 ) { // 下载成功
-							//alert(d.filename);
+						if (status == 200 ) { // 下载成功
+							var index=d.filename.split('[')[1].split(']')[0];
+							if(simgs.length>index){
+								simgs[index].src=plus.io.convertLocalFileSystemURL(d.filename);
+							}
 						}
 					});
 					sTask.start();
@@ -301,37 +304,36 @@
 			}
 			
 			owner.setSliders(sliders);
-		}
-		
-		var timeOutInterval=10;
-		if(!isFirstLoad){
-			timeOutInterval=1000*60*1;
-		}
-		setTimeout(function(){
-			var targetSliders=owner.getSliders();
-			var simgs=document.getElementById("divslider").getElementsByTagName("img");
-			var sbottoms=document.getElementById("divsliderbottom").getElementsByTagName('div');
-			for(var j=0;j<simgs.length;++j){
-				if(j<targetSliders.length){
-					simgs[j].src=plus.io.convertLocalFileSystemURL(targetSliders[j].localSrc);
-				}
-				else{
-					simgs[j].src='';
-				}
-			}
 			
-			for(var i=simgs.length-1;i>=0;--i){
-				if(simgs[i].src.length==97){
-					var ele= simgs[i].parentNode.parentNode;
-					ele.parentNode.removeChild(ele);
-					sbottoms[i].parentNode.removeChild(sbottoms[i]);
+			setTimeout(function(){
+				owner.removeNoUseSlider(simgs,sbottoms);
+			},1000*10);
+		}
+		else{
+			var targetSliders=owner.getSliders();
+			if(targetSliders.length>0){
+				for(var j=0;j<simgs.length;++j){
+					if(j<targetSliders.length){
+						simgs[j].src=plus.io.convertLocalFileSystemURL(targetSliders[j].localSrc);
+					}
 				}
-				else{
-					break;
-				}
+				
+				owner.removeNoUseSlider(simgs,sbottoms);
 			}
-		},timeOutInterval);
+		}
 	}
 	
+	owner.removeNoUseSlider=function(simgs,sbottoms){
+		for(var i=simgs.length-1;i>=0;--i){
+			if(simgs[i].src.length==0||simgs[i].src.length==97){
+				var ele= simgs[i].parentNode.parentNode;
+				ele.parentNode.removeChild(ele);
+				sbottoms[i].parentNode.removeChild(sbottoms[i]);
+			}
+			else{
+				break;
+			}
+		}
+	}
 	
 }(mui, window.app = {}));
