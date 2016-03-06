@@ -53,6 +53,5 @@ D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\log4net.xml
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OOXML.xml
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\NPOI.OpenXml4Net.xml
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll
-D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.csprojResolveAssemblyReference.cache
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.dll
 D:\Gkpeng\MyFramework\HQTZ\EntityLibrary\obj\Debug\EntityLibrary.pdb

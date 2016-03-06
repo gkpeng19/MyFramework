@@ -3,6 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
     <link href="/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/Scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
@@ -317,15 +318,12 @@
                     memid: userid, roomid: $("#sel_room").val(),
                     sdate: $("#startDate").val(), edate: $("#endDate").val(), remark: $("#txt_remark").val()
                 }, function (r) {
-                    if (r == -1) {
-                        $.error("房间数量不足！");
-                    }
-                    else if (r == 1) {
+                    if (r.ResultID == 1) {
                         layer.closeAll();
-                        $.success("预订成功。");
+                        $.success(r.Message);
                     }
                     else {
-                        $.error("预订失败，请重试！");
+                        $.error(r.Message);
                     }
                 });
 

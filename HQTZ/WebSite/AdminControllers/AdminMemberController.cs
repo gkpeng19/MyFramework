@@ -288,31 +288,32 @@ namespace HQWZ.Controllers
             return 1;
         }
 
-        public int HelpMemBook(int memid, int roomid, DateTime sdate, DateTime edate, string remark)
+        public JsonNetResult HelpMemBook(int memid, int roomid, DateTime sdate, DateTime edate, string remark)
         {
-            try
+            if (sdate.AddDays(1) < DateTime.Now)
             {
-                var r = MemberController.IsRoomEnough(roomid, sdate, edate);
-                if (r == 0)
-                {
-                    return -1;
-                }
-                HQ_BookRoom broom = new HQ_BookRoom();
-                broom.MemberID = memid;
-                broom.RoomID = roomid;
-                broom.BookStartTime = sdate;
-                broom.BookEndTime = edate;
-                broom.CreateOn = DateTime.Now;
-                broom.Remark = remark;
-                broom.OStatus = 0;
-                broom.LastOperateTime = DateTime.Now;
-                broom.Save();
+                return this.JsonNet(new { ResultID = 0, Message = "入住日期必须大于等于当前日期！" });
             }
-            catch
+            if (edate <= sdate)
             {
-                return 0;
+                return this.JsonNet(new { ResultID = 0, Message = "离开日期必须大于入住日期！" });
             }
-            return 1;
+
+            MemberController mctr = new MemberController();
+            var r = mctr.BookRoom(roomid, sdate, edate, remark, memid);
+            if (r == -2)
+            {
+                return this.JsonNet(new { ResultID = 0, Message = "房间数量不足！" });
+            }
+            else if (r == -3)
+            {
+                return this.JsonNet(new { ResultID = 0, Message = "余额不足！" });
+            }
+            else if (r == 0)
+            {
+                return this.JsonNet(new { ResultID = 0, Message = "预定失败，请重试！" });
+            }
+            return this.JsonNet(new { ResultID = 1, Message = "预定成功。" });
         }
     }
 }

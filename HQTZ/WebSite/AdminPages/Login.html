@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>系统登录</title>
     <script src="../Scripts/jquery-1.10.2.min.js"></script>
     <script src="../Scripts/layer/layer.js"></script>
@@ -208,7 +209,7 @@
             }
             var isRemember = $("#remember")[0].checked ? 1 : 0;
             $.post("/Base/LoginIn", { uname: name, psw: psw, remember: isRemember, ran: Math.random() }, function (r) {
-                if (r.result == 1) {
+                if (r.result > 0) {
                     location.href = "/AdminPages/Admin.html";
                 }
                 else {

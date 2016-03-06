@@ -3,6 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
     <link href="/Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/Scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
@@ -273,15 +274,26 @@
                     var update = $("#6205585000903778").getContext();
                     var selNode = $("#660632428805211").gtree("getSelected");
                     update["UserRole"] = selNode.id;
-                    $.post("/User/SaveUser", update, function (r) {
-                        r = $.toJsResult(r);
-                        r["UserRole_G"] = selNode.text;
-                        if (r.ID > 0) {
-                            $("#8821854757205532").datagrid("addRow", r);
-                            layer.close(win);
+                    $.ajaxSetup({ async: false });
+                    $.post("/User/LoadUsers", { LoginUserName: update.UserName, page_g: 1, psize_g: 999, ran_g: Math.random() }, function (r) {
+                        $.ajaxSetup({ async: true });
+
+                        r = $.toJsResult(r.Data);
+                        if (r.length > 0) {
+                            $.error("用户名已存在！");
                         }
                         else {
-                            $.error("保存失败，请重试！");
+                            $.post("/User/SaveUser", update, function (r) {
+                                r = $.toJsResult(r);
+                                r["UserRole_G"] = selNode.text;
+                                if (r.ID > 0) {
+                                    $("#8821854757205532").datagrid("addRow", r);
+                                    layer.close(win);
+                                }
+                                else {
+                                    $.error("保存失败，请重试！");
+                                }
+                            });
                         }
                     });
 
