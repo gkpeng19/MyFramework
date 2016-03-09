@@ -172,10 +172,11 @@
                         height = minHeight;
                     }
 
-                    if (width != lastWidth) {
-                        iframe.width(width);
-                        lastWidth = width;
-                    }
+                    //if (width != lastWidth) {
+                    //    iframe.width(width);
+                    //    lastWidth = width;
+                    //}
+
                     if (height != lastHeight) {
                         iframe.height(height);
                         lastHeight = height;
@@ -184,7 +185,15 @@
             }, 100);
         }
 
-        startInit($('#page-content'), 800, 560);
+        //startInit($('#page-content'), 800, 560);
+
+        setInterval(function () {
+            var height = $('#page-content')[0].contentWindow.document.body.clientHeight;
+            if (lastHeight != height) {
+                lastHeight = height;
+                $('#page-content').height(height);
+            }
+        }, 150);
 
         $.post("/ClientBase/GetLoginUserName", {}, function (name) {
             $("#username").text(name);
