@@ -116,7 +116,7 @@
 					var bookInput=doc.getElementById("book");
 					bookInput.addEventListener("tap",function(){
 						var state=app.getState();
-						if(!state.uid){
+						if(state.uid){
 							if(roomid==0){
 								showError("系统错误，请返回重试！");
 							}
@@ -138,7 +138,7 @@
 										$.back();
 									}
 									else{
-										showError(r.substr(1,r.length-1));
+										showError(r.substr(1,r.length-2));
 									}
 								});
 							}
