@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html class="ui-page-login">
-
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
@@ -93,8 +92,6 @@
 				$.init();
 				
 				$.plusReady(function(){
-					var state=app.getState();
-					
 					var errorInput=doc.getElementById("errormsg");
 					var showError=function(err){
 						if(err.length>0){
@@ -118,35 +115,36 @@
 					
 					var bookInput=doc.getElementById("book");
 					bookInput.addEventListener("tap",function(){
+						var state=app.getState();
 						if(!state.uid){
-							showError("用户未登录，请先登录系统！");
-							return;
-						}
-						if(roomid==0){
-							showError("系统错误，请返回重试！");
+							if(roomid==0){
+								showError("系统错误，请返回重试！");
+							}
+							else{
+								if(startInput.value==""){
+									showError("请输入入住日期！");
+									return;
+								}
+								if(endInput.value==""){
+									showError("请输入离开日期！");
+									return;
+								}
+								$.post(getUrl("/Phone/BookRoom"),{roomid:roomid,userid:state.uid,sdate:startInput.value,edate:endInput.value,
+									remark:remarkInput.value, ran:Math.random()},
+									function(r){
+									if(r==1){
+										showError("");
+										plus.nativeUI.toast('您的订单已经提交，我们将在24小时内告诉您预订结果');
+										$.back();
+									}
+									else{
+										showError(r.substr(1,r.length-1));
+									}
+								});
+							}
 						}
 						else{
-							if(startInput.value==""){
-								showError("请输入入住日期！");
-								return;
-							}
-							if(endInput.value==""){
-								showError("请输入离开日期！");
-								return;
-							}
-							$.post(getUrl("/Phone/BookRoom"),
-							{roomid:roomid,userid:state.uid,sdate:startInput.value,edate:endInput.value,
-								remark:remarkInput.value, ran:Math.random()},
-							function(r){
-								if(r==1){
-									showError("");
-									plus.nativeUI.toast('您的订单已经提交，我们将在24小时内告诉您预订结果');
-									$.back();
-								}
-								else{
-									showError(r.substr(1,r.length-1));
-								}
-							});
+							showError("用户未登录，请先登录系统！");
 						}
 					});
 					
@@ -158,5 +156,4 @@
 			}(mui, document));
 		</script>
 	</body>
-
 </html>
